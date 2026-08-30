@@ -1,0 +1,4 @@
+# Optional Thai zero-shot voice engine (Bird/F5-TTS-THAI)
+# Install in the runtime that will execute AutoClip:
+f5-tts-th==1.0.9
+soundfile>=0.12.1

@@ -1,0 +1,104 @@
+{
+  "project": {
+    "id": "lake-natron-mamase-v3",
+    "title": "Lake Natron ทะเลสาบที่เปลี่ยนสัตว์เป็นหินจริงหรือ?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "local",
+    "voice": "thai-male-01",
+    "speed": 1.0
+  },
+  "scenes": [
+    {
+      "id": "scene-01",
+      "image": "images/scene-01.png",
+      "narration": "คุณเชื่อไหม... บนโลกของเรามีทะเลสาบแห่งหนึ่ง ที่สัตว์บางตัวถูกพบในสภาพแข็งราวกับรูปปั้นหิน",
+      "subtitle": "ทะเลสาบที่เปลี่ยนสัตว์เป็นหิน\\nมีอยู่จริงหรือ?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-02",
+      "image": "images/scene-02.png",
+      "narration": "สถานที่แห่งนี้คือ Lake Natron ตั้งอยู่ทางตอนเหนือของประเทศแทนซาเนีย ใกล้กับชายแดนประเทศเคนยา",
+      "subtitle": "Lake Natron\\nตอนเหนือของแทนซาเนีย",
+      "motion": "pan_down",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "top",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03",
+      "image": "images/scene-03.png",
+      "narration": "สีแดงและสีส้มที่เห็น เกิดจากจุลินทรีย์ที่เจริญเติบโตได้ดีในน้ำเค็มจัด ทำให้ทะเลสาบแห่งนี้ดูราวกับอยู่บนดาวดวงอื่น",
+      "subtitle": "สีแดงเกิดจากจุลินทรีย์\\nที่อยู่ในน้ำเค็มจัด",
+      "motion": "pan_left_to_right_zoom_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-04",
+      "image": "images/scene-04.png",
+      "narration": "น้ำในทะเลสาบมีทั้งเกลือและแร่ธาตุเข้มข้น รวมถึงมีความเป็นด่างสูงมาก จึงเป็นสภาพแวดล้อมที่สัตว์ส่วนใหญ่เอาชีวิตรอดได้ยาก",
+      "subtitle": "น้ำเค็มและเป็นด่างสูง\\nสภาพแวดล้อมสุดขั้ว",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "left",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-05",
+      "image": "images/scene-05.png",
+      "narration": "แต่ทะเลสาบไม่ได้ทำให้สัตว์มีชีวิตกลายเป็นหินทันที เมื่อสัตว์ตาย เกลือและแร่ธาตุสามารถเกาะและช่วยรักษาสภาพซากไว้ จนดูคล้ายรูปปั้น",
+      "subtitle": "ไม่ได้กลายเป็นหินทันที\\nแร่ธาตุช่วยรักษาสภาพซากไว้",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade_white"
+    },
+    {
+      "id": "scene-06",
+      "image": "images/scene-06.png",
+      "narration": "แต่สิ่งที่น่าเหลือเชื่อกว่าคือ สถานที่ที่ดูอันตรายแห่งนี้กลับเป็นแหล่งเพาะพันธุ์สำคัญของนกฟลามิงโก เพราะช่วยป้องกันนักล่าหลายชนิดไม่ให้เข้าถึงรังได้ง่าย",
+      "subtitle": "ดินแดนอันตราย\\nกลับปกป้องนกฟลามิงโก",
+      "motion": "pan_right_to_left_zoom_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_right"
+    },
+    {
+      "id": "scene-07",
+      "image": "images/scene-07.png",
+      "narration": "Lake Natron จึงเป็นทั้งสถานที่อันโหดร้าย และแหล่งกำเนิดชีวิตในเวลาเดียวกัน โลกของเรายังมีเรื่องน่าพิศวงซ่อนอยู่อีกมาก",
+      "subtitle": "ทั้งโหดร้าย\\nและให้กำเนิดชีวิต",
+      "motion": "drift_top_right",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "bottom_left",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-08",
+      "image": "images/scene-08-brand-outro.png",
+      "narration": "ค้นพบโลก ค้นพบใจ กับ Mamase",
+      "subtitle": "Mamase\\nจักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "fade_black"
+    }
+  ]
+}

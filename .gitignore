@@ -1,0 +1,57 @@
+# Python & Environments
+.venv/
+.native-venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment & Secrets
+.env
+*.env
+*.local
+
+# System & Editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.ses
+
+# AutoClip Runtime, Workspaces & Artifacts
+workspaces/*
+!workspaces/.gitkeep
+dist/
+temp/
+
+# Binary Media & Archives (Strict No-Binary Policy)
+*.zip
+*.tar
+*.gz
+*.rar
+*.7z
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.bmp
+*.ico
+*.wav
+*.mp3
+*.m4a
+*.ogg
+*.aac
+*.flac
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+*.onnx
+*.pt
+*.bin
+*.safetensors
+input-sources/
+sounds/

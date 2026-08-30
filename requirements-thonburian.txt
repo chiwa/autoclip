@@ -1,0 +1,4 @@
+# Optional ThonburianTTS/F5-TTS provider dependencies.
+# Install this only in a compatible Linux/GPU image; the upstream dependency
+# graph currently pulls very large CUDA wheels on ARM64 Docker hosts.
+git+https://github.com/biodatlab/thonburian-tts.git

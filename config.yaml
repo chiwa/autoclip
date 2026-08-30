@@ -1,0 +1,32 @@
+app:
+  name: autoclip
+  workspace: /app/workspaces
+  max_upload_mb: 100
+  max_extracted_mb: 500
+  cleanup_on_startup: false
+server:
+  host: 0.0.0.0
+  port: 8000
+video:
+  width: 1080
+  height: 1920
+  fps: 30
+  codec: libx264
+  pixel_format: yuv420p
+  scene_padding_seconds: 0.25
+  transition: "fade"
+  transition_seconds: 0.45
+tts:
+  provider: bird-f5
+  language: th-TH
+  thonburian_ref_voice: /app/voices/thonburian-reference.wav
+  thonburian_ref_text: "สวัสดีครับ นี่คือเสียงตัวอย่างสำหรับระบบออโต้คลิป วันนี้เราจะพาทุกคนออกเดินทางไปค้นพบเรื่องราวแปลกประหลาดจากทั่วโลก ทั้งความลับของ"
+audio:
+  narration_volume: 1.0
+  background_volume: 0.12
+subtitle:
+  enabled: true
+  font_size: 72
+  margin_bottom: 180
+  outline: 3
+  font_file: /usr/share/fonts/truetype/noto/NotoSansThai-Regular.ttf

@@ -1,0 +1,5 @@
+# ARM64-friendly CPU pins. These avoid the latest CUDA bundle pulled by the
+# unpinned upstream requirements on Docker Desktop ARM hosts.
+torch==2.5.1
+torchvision==0.20.1
+torchaudio==2.5.1

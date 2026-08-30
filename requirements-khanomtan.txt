@@ -1,0 +1,4 @@
+# Optional KhanomTan YourTTS provider.
+# This is intentionally not part of the default install because Coqui-TTS is large.
+# coqui-tts is the maintained fork and supports the native Python 3.14 setup.
+coqui-tts==0.27.5

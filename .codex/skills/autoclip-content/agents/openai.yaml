@@ -1,0 +1,4 @@
+interface:
+  display_name: "AutoClip Content"
+  short_description: "สร้างและดูแลบท ภาพ JSON และ ZIP สำหรับ AutoClip"
+  default_prompt: "ช่วยสร้างหรือแก้ไขคอนเทนต์ AutoClip ตามขั้นตอนรีวิวของ Mamase"

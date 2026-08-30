@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AutoClip</title><link rel="stylesheet" href="/static/style.css?v=6"></head>
+<body><main><header><a class="brand" href="/">AutoClip</a><nav class="app-nav"><a class="active" href="/">สร้างวิดีโอ</a><a href="/ai">สร้างด้วย AI</a><a href="/history">History</a><a href="/tts">Thai TTS</a></nav></header>
+<section id="uploadView"><div class="tool-card hero-card"><span class="eyebrow">VIDEO WORKSPACE</span><h1>เปลี่ยนเรื่องราวให้เป็นวิดีโอสั้น</h1><p class="muted">สร้างคอนเทนต์แนวตั้งพร้อมเสียงบรรยาย ภาพเคลื่อนไหว และซับไทยในไม่กี่ขั้นตอน</p><label class="picker">เลือก ZIP Package<input id="file" type="file" accept=".zip,application/zip"></label>
+<div id="fileInfo" class="muted">No file selected</div><label for="videoTtsProvider">เสียงบรรยาย<select id="videoTtsProvider"><option value="local" selected>Vachana Thai (ONNX - ชัดเจน แนะนำ)</option><option value="bird-f5">Bird F5-TTS-THAI</option><option value="thonburian">Thonburian F5</option><option value="dummy">Dummy tone (ทดสอบเท่านั้น)</option></select></label><label for="videoSubtitleMode">ซับไตเติล (Subtitles)<select id="videoSubtitleMode"><option value="auto" selected>ตามที่กำหนดใน script.json (ค่าเริ่มต้น)</option><option value="disable">🚫 ไม่ใส่ซับไตเติล (ปิดทุกฉาก / มีคำในภาพแล้ว)</option><option value="enable">💬 แสดงซับไตเติลทุกฉาก (เปิดทั้งหมด)</option></select></label><button id="generate" hidden disabled>Generate Video</button></div>
+<section id="packagePreview" class="tool-card" hidden><div class="section-head"><div><span class="eyebrow">PACKAGE REVIEW</span><h2>ตรวจสอบ Scenes ก่อนสร้างวิดีโอ</h2></div><span id="previewProject" class="muted"></span></div><div id="previewTabs" class="preview-tabs" role="tablist"></div><div id="previewScenes" class="scene-list"></div><p id="previewError" class="error" hidden></p><button id="generateFromPreview" class="preview-generate">Generate Video</button></section>
+</div></section>
+<!-- Thai TTS is available on the dedicated /tts page; legacy selectors remain
+     documented here for clients that still reference the original home UI. -->
+<!-- Text to Speech ภาษาไทย id="ttsText" <audio id="ttsAudio" controls> id="ttsDownload" -->
+<section id="progressView" hidden><h1 id="progressTitle">Generating video…</h1>
+<div class="row"><strong>Progress</strong><span id="percent">0%</span></div><progress id="progress" max="100" value="0"></progress>
+<dl class="status-grid"><div><dt>Status</dt><dd id="state">RECEIVED</dd></div><div><dt>Current Step</dt><dd id="step">Package uploaded</dd></div></dl>
+<div id="error" class="error" hidden><h2>Generation Failed</h2><p><strong id="errorCode"></strong></p><p id="errorMessage"></p><div><button id="retry">Retry</button><a class="button secondary" href="/">Back</a></div></div>
+<div class="log-heading"><h2>Live Log</h2><button id="toggleTechnical" class="secondary log-toggle" type="button" aria-expanded="false">แสดง Live technical log</button></div>
+<div id="logs" class="logs" role="log" aria-live="polite"></div>
+<section id="technicalLogSection" class="technical-log" hidden><h3>Live technical log</h3><p class="muted">รายละเอียดขั้นตอนจาก server แบบปลอดภัย (ไม่แสดงคำสั่ง shell หรือข้อมูลลับ)</p><div id="technicalLogs" class="logs technical" role="log"></div></section></section>
+</main><script src="/static/app.js?v=4"></script></body></html>

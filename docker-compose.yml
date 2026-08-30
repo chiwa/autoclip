@@ -1,0 +1,25 @@
+services:
+  autoclip:
+    build:
+      context: .
+      args:
+        INSTALL_THONBURIAN: "1"
+        INSTALL_BIRD: "1"
+    container_name: autoclip
+    ports:
+      - "9999:8000"
+    volumes:
+      - ./workspaces:/app/workspaces
+      - ./voices:/app/voices
+    environment:
+      AUTOCLIP_CONFIG: /app/config.yaml
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      AUTOCLIP_OPENAI_MODEL: ${AUTOCLIP_OPENAI_MODEL:-gpt-5-mini}
+      AUTOCLIP_IMAGE_MODEL: ${AUTOCLIP_IMAGE_MODEL:-gpt-image-1}
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped

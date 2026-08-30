@@ -1,0 +1,164 @@
+from __future__ import annotations
+
+import json
+import sqlite3
+import threading
+from datetime import datetime
+from pathlib import Path
+from typing import Any
+
+
+class Persistence:
+    """Small SQLite metadata store; media remains on the filesystem."""
+    def __init__(self, workspace: Path):
+        self.path = workspace / "autoclip.db"
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self._lock = threading.RLock()
+        self._init()
+
+    def _connect(self) -> sqlite3.Connection:
+        db = sqlite3.connect(self.path, timeout=30, check_same_thread=False)
+        db.row_factory = sqlite3.Row
+        db.execute("PRAGMA foreign_keys=ON")
+        db.execute("PRAGMA journal_mode=WAL")
+        return db
+
+    def _init(self) -> None:
+        with self._connect() as db:
+            db.executescript("""
+            CREATE TABLE IF NOT EXISTS schema_version(version INTEGER NOT NULL);
+            INSERT INTO schema_version(version) SELECT 1 WHERE NOT EXISTS (SELECT 1 FROM schema_version);
+            CREATE TABLE IF NOT EXISTS projects(
+              id TEXT PRIMARY KEY, title TEXT NOT NULL, topic TEXT NOT NULL DEFAULT '',
+              status TEXT NOT NULL, created_at TEXT NOT NULL, updated_at TEXT NOT NULL,
+              last_opened_at TEXT, keep_flag INTEGER NOT NULL DEFAULT 0,
+              current_revision INTEGER NOT NULL DEFAULT 0, confirmed_revision INTEGER,
+              trashed_at TEXT, state_json TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS chat_messages(
+              id INTEGER PRIMARY KEY AUTOINCREMENT, project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+              role TEXT NOT NULL, content TEXT NOT NULL, timestamp TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS scenes(
+              project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+              scene_id TEXT NOT NULL, position INTEGER NOT NULL, data_json TEXT NOT NULL,
+              PRIMARY KEY(project_id, scene_id)
+            );
+            CREATE TABLE IF NOT EXISTS packages(
+              id INTEGER PRIMARY KEY AUTOINCREMENT, project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+              revision INTEGER NOT NULL, zip_path TEXT NOT NULL, validation_state TEXT NOT NULL,
+              created_at TEXT NOT NULL, size_bytes INTEGER NOT NULL DEFAULT 0
+            );
+            CREATE TABLE IF NOT EXISTS jobs(
+              id TEXT PRIMARY KEY, project_id TEXT, package_id INTEGER, status TEXT NOT NULL,
+              progress INTEGER NOT NULL, final_path TEXT, error_json TEXT, created_at TEXT NOT NULL, completed_at TEXT
+            );
+            CREATE INDEX IF NOT EXISTS idx_projects_updated ON projects(updated_at DESC);
+            CREATE INDEX IF NOT EXISTS idx_jobs_project ON jobs(project_id);
+            """)
+            # Incremental, non-destructive migration for databases created by
+            # the first MVP schema.
+            cols = {r[1] for r in db.execute("PRAGMA table_info(jobs)")}
+            if "metadata_json" not in cols: db.execute("ALTER TABLE jobs ADD COLUMN metadata_json TEXT")
+            if "source_path" not in cols: db.execute("ALTER TABLE jobs ADD COLUMN source_path TEXT")
+            if "interrupted" not in cols: db.execute("ALTER TABLE jobs ADD COLUMN interrupted INTEGER NOT NULL DEFAULT 0")
+
+    def upsert_project(self, project: Any) -> None:
+        payload = project.model_dump(mode="json")
+        now = payload["updated_at"]
+        with self._lock, self._connect() as db:
+            db.execute("""INSERT INTO projects(id,title,topic,status,created_at,updated_at,current_revision,confirmed_revision,trashed_at,state_json)
+              VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET title=excluded.title,topic=excluded.topic,status=excluded.status,updated_at=excluded.updated_at,current_revision=excluded.current_revision,confirmed_revision=excluded.confirmed_revision,trashed_at=excluded.trashed_at,state_json=excluded.state_json""",
+              (project.project_id, project.topic or "Mamase Project", project.topic, project.status.value, payload["created_at"], now, project.revision, project.confirmed_revision, None, json.dumps(payload, ensure_ascii=False)))
+            db.execute("DELETE FROM chat_messages WHERE project_id=?", (project.project_id,))
+            db.executemany("INSERT INTO chat_messages(project_id,role,content,timestamp) VALUES(?,?,?,?)", [(project.project_id,m.role,m.content,m.timestamp.isoformat()) for m in project.messages])
+            db.execute("DELETE FROM scenes WHERE project_id=?", (project.project_id,))
+            db.executemany("INSERT INTO scenes(project_id,scene_id,position,data_json) VALUES(?,?,?,?)", [(project.project_id,s.id,i,json.dumps(s.model_dump(mode="json"), ensure_ascii=False)) for i,s in enumerate(project.scenes)])
+
+    def list_projects(self, include_trashed: bool = False) -> list[dict]:
+        with self._connect() as db:
+            rows = db.execute("SELECT * FROM projects WHERE (? OR trashed_at IS NULL) ORDER BY updated_at DESC", (include_trashed,)).fetchall()
+            result=[]
+            for row in rows:
+                item=dict(row); item.pop("state_json", None); item["keep"]=bool(item.pop("keep_flag")); result.append(item)
+            return result
+
+    def list_trashed(self) -> list[dict]:
+        with self._connect() as db:
+            rows = db.execute("SELECT id,title,topic,status,created_at,updated_at,trashed_at,keep_flag FROM projects WHERE trashed_at IS NOT NULL ORDER BY trashed_at DESC").fetchall()
+            return [{**dict(r), "keep": bool(r["keep_flag"])} for r in rows]
+
+    def project_exists(self, project_id: str) -> bool:
+        with self._connect() as db:
+            return db.execute("SELECT 1 FROM projects WHERE id=?", (project_id,)).fetchone() is not None
+
+    def mark_trash(self, project_id: str, trashed_at: str | None) -> None:
+        with self._lock, self._connect() as db: db.execute("UPDATE projects SET trashed_at=?,status=? WHERE id=?", (trashed_at, "TRASHED" if trashed_at else "CHATTING", project_id))
+
+    def delete_project(self, project_id: str) -> None:
+        with self._lock, self._connect() as db: db.execute("DELETE FROM projects WHERE id=?", (project_id,))
+
+    def project_job_paths(self, project_id: str) -> list[str]:
+        with self._connect() as db:
+            return [r[0] for r in db.execute("SELECT final_path FROM jobs WHERE project_id=? AND final_path IS NOT NULL", (project_id,)).fetchall()]
+
+    def add_package(self, project_id: str, revision: int, path: Path, state: str) -> None:
+        with self._lock, self._connect() as db: db.execute("INSERT INTO packages(project_id,revision,zip_path,validation_state,created_at,size_bytes) VALUES(?,?,?,?,?,?)", (project_id,revision,str(path),state,datetime.now().astimezone().isoformat(),path.stat().st_size if path.exists() else 0))
+
+    def upsert_job(self, record: Any, final_path: Path | None = None, metadata: dict | None = None) -> None:
+        with self._lock, self._connect() as db:
+            db.execute("""INSERT INTO jobs(id,project_id,status,progress,final_path,error_json,created_at,completed_at,metadata_json)
+              VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET
+              project_id=COALESCE(excluded.project_id,jobs.project_id), status=excluded.status,
+              progress=excluded.progress, final_path=COALESCE(excluded.final_path,jobs.final_path),
+              error_json=excluded.error_json, completed_at=COALESCE(excluded.completed_at,jobs.completed_at),
+              metadata_json=COALESCE(excluded.metadata_json,jobs.metadata_json)""",
+              (record.job_id,record.project_id,record.status,record.progress,str(final_path) if final_path else None,json.dumps(record.error) if record.error else None,record.created_at.isoformat(),datetime.now().astimezone().isoformat() if record.status=="COMPLETED" else None,json.dumps(metadata,ensure_ascii=False) if metadata else (json.dumps(record.metadata,ensure_ascii=False) if getattr(record,"metadata",None) else None)))
+
+    def get_job(self, job_id: str) -> dict | None:
+        with self._connect() as db:
+            row = db.execute("SELECT * FROM jobs WHERE id=?", (job_id,)).fetchone()
+            if not row: return None
+            result = dict(row)
+            result["error"] = json.loads(result.pop("error_json")) if result.get("error_json") else None
+            result["metadata"] = json.loads(result.pop("metadata_json")) if result.get("metadata_json") else None
+            return result
+
+    def mark_interrupted_jobs(self) -> int:
+        with self._lock, self._connect() as db:
+            cur = db.execute("UPDATE jobs SET status='FAILED',interrupted=1,error_json=? WHERE status IN ('RECEIVED','VALIDATING','GENERATING_AUDIO','RENDERING_SCENES','COMPOSING')", (json.dumps({"code":"JOB_INTERRUPTED","message":"งานหยุดลงเมื่อ server restart กรุณาสั่งสร้างใหม่"}, ensure_ascii=False),))
+            return cur.rowcount
+
+    def ensure_project(self, project_id: str, title: str, scene_count: int, status: str = "RENDERING") -> None:
+        now = datetime.now().astimezone().isoformat()
+        with self._lock, self._connect() as db:
+            db.execute("""INSERT INTO projects(id,title,topic,status,created_at,updated_at,state_json)
+              VALUES(?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET title=excluded.title,status=excluded.status,updated_at=excluded.updated_at""", (project_id,title,title,status,now,now,json.dumps({"project_id":project_id,"topic":title,"status":status,"scenes":scene_count})))
+
+    def update_project_status(self, project_id: str, status: str) -> None:
+        with self._lock, self._connect() as db:
+            db.execute("UPDATE projects SET status=?,updated_at=? WHERE id=?", (status, datetime.now().astimezone().isoformat(), project_id))
+
+    def set_keep(self, project_id: str, keep: bool) -> bool:
+        with self._lock, self._connect() as db:
+            cur=db.execute("UPDATE projects SET keep_flag=? WHERE id=?", (1 if keep else 0, project_id))
+            if cur.rowcount == 0: raise KeyError(project_id)
+        return keep
+
+    def history(self) -> list[dict]:
+        with self._connect() as db:
+            rows=db.execute("SELECT p.*, (SELECT COUNT(*) FROM scenes s WHERE s.project_id=p.id) scene_count FROM projects p WHERE p.trashed_at IS NULL ORDER BY p.updated_at DESC").fetchall()
+            result = []
+            for row in rows:
+                item = dict(row)
+                raw_state = item.pop("state_json", None)
+                state = json.loads(raw_state) if raw_state else {}
+                item["scene_count"] = item.get("scene_count") or (len(state.get("scenes", [])) if isinstance(state.get("scenes"), list) else int(state.get("scenes", 0) or 0))
+                latest = db.execute("SELECT * FROM jobs WHERE project_id=? ORDER BY created_at DESC LIMIT 1", (item["id"],)).fetchone()
+                if latest:
+                    j=dict(latest); video=bool(j.get("final_path") and Path(j["final_path"]).is_file())
+                    item["latestJob"]={"id":j["id"],"status":j["status"],"progress":j["progress"],"videoAvailable":video,"videoUrl":f"/api/jobs/{j['id']}/video" if video else None,"previewUrl":f"/jobs/{j['id']}/preview" if video else None,"createdAt":j["created_at"],"completedAt":j.get("completed_at")}
+                    if j["status"] == "COMPLETED": item["status"] = "COMPLETED"
+                else: item["latestJob"] = None
+                result.append(item)
+            return result

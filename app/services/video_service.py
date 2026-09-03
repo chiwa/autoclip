@@ -128,6 +128,39 @@ class SceneRenderer:
         self.ffmpeg.run(args, "SCENE_RENDER_FAILED")
         return output
 
+    def render_wan_video(self, scene: Scene, source_video: Path, narration: Path, subtitle: Path | None, duration: float, output: Path) -> Path:
+        """Normalize an AI clip and attach AutoClip narration/subtitles.
+
+        Wan's render is visual-only.  Keeping narration, subtitles and final
+        timing here means the existing composer can treat FFmpeg and Wan
+        scenes identically, including transitions and BGM ducking.
+        """
+        video = self.settings.video
+        subtitle_filter = ""
+        if self.settings.subtitle.enabled and subtitle and subtitle.is_file() and getattr(scene, "show_subtitle", True) and self.ffmpeg.has_filter("subtitles"):
+            escaped = str(subtitle).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
+            ass_scale = 288 / video.height
+            style = (
+                f"FontName=Noto Sans Thai,FontSize={max(1, self.settings.subtitle.font_size * ass_scale):.2f},"
+                f"PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,BorderStyle=1,"
+                f"Outline={max(0, self.settings.subtitle.outline * ass_scale):.2f},Shadow=0.5,Alignment=2,"
+                f"MarginV={round(self.settings.subtitle.margin_bottom * ass_scale)},"
+                f"MarginL={round(70 * ass_scale)},MarginR={round(70 * ass_scale)}"
+            ).replace(",", r"\,")
+            subtitle_filter = f",subtitles={escaped}:original_size={video.width}x{video.height}:charenc=UTF-8:force_style={style}"
+        vf = (
+            f"scale={video.width}:{video.height}:force_original_aspect_ratio=increase,"
+            f"crop={video.width}:{video.height},setsar=1{subtitle_filter},fps={video.fps},format={video.pixel_format}"
+        )
+        self.ffmpeg.run(
+            ["-stream_loop", "-1", "-i", str(source_video), "-i", str(narration), "-t", f"{duration:.3f}",
+             "-vf", vf, "-c:v", video.codec, "-preset", "veryfast", "-crf", "23", "-pix_fmt", video.pixel_format,
+             "-r", str(video.fps), "-c:a", "aac", "-ar", "48000", "-ac", "2", "-b:a", "160k",
+             "-movflags", "+faststart", "-shortest", str(output)],
+            "WAN_SCENE_NORMALIZATION_FAILED",
+        )
+        return output
+
 
 class VideoComposer:
     TRANSITIONS = {

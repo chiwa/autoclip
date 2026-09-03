@@ -22,6 +22,7 @@ from app.services.pronunciation_service import PronunciationService
 from app.services.bgm_service import ensure_default_bgm
 from app.services.video_service import SceneRenderer, SubtitleRenderer, VideoComposer
 from app.services.persistence import Persistence
+from app.services.wan_service import ComfyWanClient
 
 logger = logging.getLogger("autoclip.jobs")
 SUPPORTED_RENDER_ENGINES = {"ffmpeg_motion", "wan2.2"}
@@ -188,12 +189,15 @@ class JobService:
                 if current: self.persistence.upsert_job(current)
             self._log(job_id, "INFO", "script.json validated")
             self._log(job_id, "INFO", f"{len(script.scenes)} scenes detected")
+            wan_client: ComfyWanClient | None = None
             if render_engine == "wan2.2":
                 self._progress(job_id, JobStatus.VALIDATING, 10, "Checking Wan 2.2 connection")
                 self._investigation_log(job_id, "wan_connection_check", configured=self.settings.wan.enabled, comfy_url_configured=bool(self.settings.wan.comfy_url))
-                if not self.settings.wan.enabled:
-                    raise AppError("WAN_NOT_CONFIGURED", "Wan 2.2 ยังไม่ได้เชื่อมต่อกับ AutoClip กรุณาเลือก FFmpeg Motion หรือกำหนด RunPod connector ก่อน")
-                raise AppError("WAN_NOT_IMPLEMENTED", "Wan 2.2 connector is configured but has not been implemented yet")
+                wan_client = ComfyWanClient(self.settings)
+                wan_client.check_connection()
+                if any(scene.wan is None for scene in script.scenes):
+                    raise AppError("WAN_SCENE_CONFIG_MISSING", "ทุก scene ต้องมี Wan prompt เมื่อเลือก Wan 2.2")
+                self._log(job_id, "SUCCESS", "Connected to ComfyUI Wan 2.2")
             selected_provider = self.registry.get(job_id).tts_provider or self.settings.tts.provider
             provider = create_tts_provider(selected_provider, self.settings)
             count = len(script.scenes)
@@ -252,7 +256,15 @@ class JobService:
                 else:
                     self._log(job_id, "INFO", f"Skipping subtitles for scene {index + 1} ({'disabled by global setting' if sub_mode == 'disable' else 'disabled in scene'})")
                     subtitle = None
-                rendered.append(scene_renderer.render(scene, workspace.extracted / scene.image, workspace.generated_audio / f"{scene.id}.wav", subtitle, duration, workspace.rendered_scenes / f"{scene.id}.mp4"))
+                if wan_client:
+                    self._progress(job_id, JobStatus.RENDERING_SCENES, render_progress, f"Rendering Wan scene {index + 1} of {count} (in progress)")
+                    self._log(job_id, "INFO", f"Submitting scene {index + 1} to Wan 2.2")
+                    wan_output = workspace.rendered_scenes / f"{scene.id}.wan.mp4"
+                    wan_client.render_scene(job_id, scene, workspace.extracted / scene.image, wan_output)
+                    self._log(job_id, "INFO", f"Wan scene {index + 1} received; adding narration and subtitles")
+                    rendered.append(scene_renderer.render_wan_video(scene, wan_output, workspace.generated_audio / f"{scene.id}.wav", subtitle, duration, workspace.rendered_scenes / f"{scene.id}.mp4"))
+                else:
+                    rendered.append(scene_renderer.render(scene, workspace.extracted / scene.image, workspace.generated_audio / f"{scene.id}.wav", subtitle, duration, workspace.rendered_scenes / f"{scene.id}.mp4"))
                 self._investigation_log(job_id, "scene_render_completed", render_engine=render_engine, scene_id=scene.id, output=rendered[-1].name, elapsed_ms=round((time.monotonic() - scene_started) * 1000))
                 self._log(job_id, "SUCCESS", f"Scene rendered {index + 1} of {count}")
                 self._progress(job_id, JobStatus.RENDERING_SCENES, 40 + round(35 * (index + 1) / count), f"Rendered scene {index + 1} of {count}")

@@ -58,6 +58,8 @@ class WanSettings(BaseModel):
     enabled: bool = False
     comfy_url: str | None = None
     request_timeout_seconds: int = Field(120, gt=0, le=3600)
+    generation_timeout_seconds: int = Field(900, gt=0, le=7200)
+    poll_interval_seconds: float = Field(2.0, ge=0.5, le=30)
 
 
 class SubtitleSettings(BaseModel):
@@ -133,6 +135,8 @@ def load_settings(path: str | Path | None = None) -> Settings:
         "AUTOCLIP_WAN_ENABLED": ("wan", "enabled"),
         "AUTOCLIP_WAN_COMFY_URL": ("wan", "comfy_url"),
         "AUTOCLIP_WAN_REQUEST_TIMEOUT_SECONDS": ("wan", "request_timeout_seconds"),
+        "AUTOCLIP_WAN_GENERATION_TIMEOUT_SECONDS": ("wan", "generation_timeout_seconds"),
+        "AUTOCLIP_WAN_POLL_INTERVAL_SECONDS": ("wan", "poll_interval_seconds"),
     }
     openai_key = os.getenv("OPENAI_API_KEY")
     # Native development does not get Docker Compose's automatic .env

@@ -334,6 +334,8 @@ AutoClip native reads these gitignored `.env` values:
 AUTOCLIP_WAN_ENABLED=false
 AUTOCLIP_WAN_COMFY_URL=http://127.0.0.1:18188
 AUTOCLIP_WAN_REQUEST_TIMEOUT_SECONDS=120
+AUTOCLIP_WAN_GENERATION_TIMEOUT_SECONDS=900
+AUTOCLIP_WAN_POLL_INTERVAL_SECONDS=2
 ```
 
 - AutoClip uses the fixed localhost URL; the SSH tunnel absorbs changing Pod
@@ -373,18 +375,26 @@ short-form documentary/anime content; use `dissolve` only deliberately.
 5. State accurately whether Wan is a UI/contract only or is connected and
    smoke-tested against the current RunPod.
 
-### Current boundary and next milestone
+### RunPod live monitor
 
-AutoClip currently has engine selection, SQLite `render_engine` persistence,
-editable Wan Preview data, structured investigation logs, and FFmpeg final
-composition. It does not yet contain the ComfyUI/Wan client. After the current
-RunPod install completes:
+Use the tracked read-only monitor rather than pasting a host/key into a shell
+command. It reads only `RUNPOD_SSH_*` fields from ignored `.env` (or explicit
+shell variables) and shows ComfyUI queue, GPU usage, recent outputs and the
+latest ComfyUI log lines. It never prints `.env` values or private keys.
 
-```text
-start ComfyUI :8188 → create local SSH tunnel :18188 → health check
-→ implement ComfyUI upload/prompt/history client → one-scene smoke test
-→ download scene artifacts → compose final AutoClip video
+```bash
+./scripts/monitor-runpod.sh
 ```
+
+### Current Wan capability
+
+AutoClip now has engine selection, SQLite `render_engine` persistence,
+editable Wan Preview data, structured investigation logs, and FFmpeg final
+composition. The native Wan client has been smoke-tested against the current
+RunPod: upload image → queue native ComfyUI Wan 2.2 workflow → poll history →
+download MP4 → add narration/subtitles → compose final video. `lip_sync: true`
+is still an explicit future F5 + LatentSync stage, not a claim that lip sync
+has already occurred.
 
 ## Mamase editorial playbook and clip-generation procedure
 

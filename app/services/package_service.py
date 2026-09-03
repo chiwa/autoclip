@@ -54,7 +54,7 @@ class PackageService:
             raise AppError("ZIP_SECURITY_VIOLATION", "ZIP symbolic links are not allowed")
         if not entry.is_dir() and path.suffix.lower() in REJECTED_TYPES:
             raise AppError("ZIP_SECURITY_VIOLATION", "ZIP contains a prohibited file type")
-        if not entry.is_dir() and path.as_posix() != "script.json" and path.suffix.lower() not in IMAGE_TYPES | AUDIO_TYPES:
+        if not entry.is_dir() and path.as_posix() not in {"script.json", "video-metadata.json"} and path.suffix.lower() not in IMAGE_TYPES | AUDIO_TYPES:
             raise AppError("UNSUPPORTED_ASSET_TYPE", "ZIP contains an unsupported file type", {"path": path.as_posix()})
         if entry.file_size > 10 * 1024 * 1024 and entry.compress_size and entry.file_size / entry.compress_size > 1000:
             raise AppError("ZIP_SECURITY_VIOLATION", "ZIP entry has a suspicious compression ratio")
@@ -82,7 +82,9 @@ class PackageService:
             content = path.read_text(encoding="utf-8")
             return Script.model_validate(json.loads(content))
         except (UnicodeDecodeError, json.JSONDecodeError, ValidationError) as exc:
-            raise AppError("SCRIPT_JSON_INVALID", "script.json is invalid", {"validation": str(exc)[:1000]}) from exc
+            # Keep the public error actionable while avoiding absolute paths or a traceback.
+            validation = str(exc).replace("\\n", " ")[:500]
+            raise AppError("SCRIPT_JSON_INVALID", f"script.json is invalid: {validation}", {"validation": validation}) from exc
 
     def _validate_assets(self, script: Script, root: Path) -> None:
         for scene in script.scenes:

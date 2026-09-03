@@ -55,6 +55,18 @@ class Persistence:
             );
             CREATE INDEX IF NOT EXISTS idx_projects_updated ON projects(updated_at DESC);
             CREATE INDEX IF NOT EXISTS idx_jobs_project ON jobs(project_id);
+            CREATE TABLE IF NOT EXISTS youtube_connections(
+              id TEXT PRIMARY KEY, channel_id TEXT NOT NULL, channel_title TEXT NOT NULL,
+              channel_handle TEXT, refresh_token TEXT NOT NULL, is_default INTEGER NOT NULL DEFAULT 0,
+              connected_at TEXT NOT NULL, updated_at TEXT NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS youtube_publishes(
+              id TEXT PRIMARY KEY, project_id TEXT NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
+              connection_id TEXT NOT NULL REFERENCES youtube_connections(id), channel_id TEXT NOT NULL,
+              channel_title TEXT NOT NULL, status TEXT NOT NULL, youtube_video_id TEXT,
+              youtube_url TEXT, error_message TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+            );
+            CREATE INDEX IF NOT EXISTS idx_youtube_publish_project ON youtube_publishes(project_id);
             """)
             # Incremental, non-destructive migration for databases created by
             # the first MVP schema.
@@ -62,6 +74,7 @@ class Persistence:
             if "metadata_json" not in cols: db.execute("ALTER TABLE jobs ADD COLUMN metadata_json TEXT")
             if "source_path" not in cols: db.execute("ALTER TABLE jobs ADD COLUMN source_path TEXT")
             if "interrupted" not in cols: db.execute("ALTER TABLE jobs ADD COLUMN interrupted INTEGER NOT NULL DEFAULT 0")
+            if "render_engine" not in cols: db.execute("ALTER TABLE jobs ADD COLUMN render_engine TEXT NOT NULL DEFAULT 'ffmpeg_motion'")
 
     def upsert_project(self, project: Any) -> None:
         payload = project.model_dump(mode="json")
@@ -107,13 +120,13 @@ class Persistence:
 
     def upsert_job(self, record: Any, final_path: Path | None = None, metadata: dict | None = None) -> None:
         with self._lock, self._connect() as db:
-            db.execute("""INSERT INTO jobs(id,project_id,status,progress,final_path,error_json,created_at,completed_at,metadata_json)
-              VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET
+            db.execute("""INSERT INTO jobs(id,project_id,status,progress,final_path,error_json,created_at,completed_at,metadata_json,render_engine)
+              VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET
               project_id=COALESCE(excluded.project_id,jobs.project_id), status=excluded.status,
               progress=excluded.progress, final_path=COALESCE(excluded.final_path,jobs.final_path),
               error_json=excluded.error_json, completed_at=COALESCE(excluded.completed_at,jobs.completed_at),
-              metadata_json=COALESCE(excluded.metadata_json,jobs.metadata_json)""",
-              (record.job_id,record.project_id,record.status,record.progress,str(final_path) if final_path else None,json.dumps(record.error) if record.error else None,record.created_at.isoformat(),datetime.now().astimezone().isoformat() if record.status=="COMPLETED" else None,json.dumps(metadata,ensure_ascii=False) if metadata else (json.dumps(record.metadata,ensure_ascii=False) if getattr(record,"metadata",None) else None)))
+              metadata_json=COALESCE(excluded.metadata_json,jobs.metadata_json), render_engine=excluded.render_engine""",
+              (record.job_id,record.project_id,record.status,record.progress,str(final_path) if final_path else None,json.dumps(record.error) if record.error else None,record.created_at.isoformat(),datetime.now().astimezone().isoformat() if record.status=="COMPLETED" else None,json.dumps(metadata,ensure_ascii=False) if metadata else (json.dumps(record.metadata,ensure_ascii=False) if getattr(record,"metadata",None) else None),getattr(record,"render_engine","ffmpeg_motion")))
 
     def get_job(self, job_id: str) -> dict | None:
         with self._connect() as db:
@@ -123,6 +136,11 @@ class Persistence:
             result["error"] = json.loads(result.pop("error_json")) if result.get("error_json") else None
             result["metadata"] = json.loads(result.pop("metadata_json")) if result.get("metadata_json") else None
             return result
+
+    def update_job_metadata(self, job_id: str, metadata: dict) -> bool:
+        with self._lock, self._connect() as db:
+            cur = db.execute("UPDATE jobs SET metadata_json=? WHERE id=?", (json.dumps(metadata, ensure_ascii=False), job_id))
+            return cur.rowcount > 0
 
     def mark_interrupted_jobs(self) -> int:
         with self._lock, self._connect() as db:
@@ -162,3 +180,20 @@ class Persistence:
                 else: item["latestJob"] = None
                 result.append(item)
             return result
+
+    def youtube_connections(self) -> list[dict]:
+        with self._connect() as db:
+            rows = db.execute("SELECT id,channel_id,channel_title,channel_handle,is_default,connected_at,updated_at FROM youtube_connections ORDER BY is_default DESC, channel_title").fetchall()
+            return [dict(r) for r in rows]
+
+    def save_youtube_connection(self, item: dict) -> None:
+        with self._lock, self._connect() as db:
+            db.execute("INSERT INTO youtube_connections(id,channel_id,channel_title,channel_handle,refresh_token,is_default,connected_at,updated_at) VALUES(?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET channel_id=excluded.channel_id,channel_title=excluded.channel_title,channel_handle=excluded.channel_handle,refresh_token=COALESCE(NULLIF(excluded.refresh_token,''),youtube_connections.refresh_token),is_default=excluded.is_default,updated_at=excluded.updated_at", tuple(item[k] for k in ('id','channel_id','channel_title','channel_handle','refresh_token','is_default','connected_at','updated_at')))
+
+    def get_youtube_connection(self, connection_id: str) -> dict | None:
+        with self._connect() as db:
+            row=db.execute("SELECT * FROM youtube_connections WHERE id=?",(connection_id,)).fetchone(); return dict(row) if row else None
+
+    def delete_youtube_connection(self, connection_id: str) -> bool:
+        with self._lock, self._connect() as db:
+            cur=db.execute("DELETE FROM youtube_connections WHERE id=?",(connection_id,)); return cur.rowcount > 0

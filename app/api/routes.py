@@ -4,6 +4,7 @@ import json
 import queue
 import shutil
 import uuid
+from pathlib import Path
 
 from fastapi import APIRouter, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse, StreamingResponse
@@ -13,6 +14,7 @@ from app.domain.enums import JobStatus
 from app.domain.errors import AppError, public_error
 from app.domain.events import JobEvent, JobEventType
 from app.domain.ai_models import AiProject
+from app.services.bgm_service import ensure_default_bgm
 
 router = APIRouter(prefix="/api")
 
@@ -30,6 +32,17 @@ class AiSceneUpdate(BaseModel):
     transition: str | None = None
     estimated_duration: float | None = None
 
+class YouTubeUploadRequest(BaseModel):
+    connectionId: str
+    title: str = Field(min_length=1, max_length=100)
+    description: str = Field(default="", max_length=5000)
+    tags: list[str] = Field(default_factory=list, max_length=30)
+    privacyStatus: str = "private"
+
+class VideoMetadataRequest(BaseModel):
+    title: str = Field(default="-", max_length=100)
+    description: str = Field(default="-", max_length=10000)
+
 
 @router.post("/tts")
 def create_thai_speech(
@@ -43,7 +56,18 @@ def create_thai_speech(
         path = request.app.state.tts_preview_service.synthesize(text, voice, speed, provider)
     except AppError as exc:
         raise HTTPException(400, public_error(exc)) from exc
+    except Exception:
+        # Keep preview failures as a normal API response; never make the browser
+        # see a connection-level "Failed to fetch" for an internal TTS error.
+        raise HTTPException(500, public_error(AppError("TTS_GENERATION_FAILED", "สร้างเสียงตัวอย่างไม่สำเร็จ")))
     return FileResponse(path, media_type="audio/wav", filename="autoclip-thai-speech.wav")
+
+
+@router.get("/bgm-preview")
+def preview_background_music(request: Request) -> FileResponse:
+    """Play the same system fallback BGM used when a ZIP has no bgm asset."""
+    path = ensure_default_bgm(request.app.state.settings.app.workspace)
+    return FileResponse(path, media_type="audio/wav", filename="autoclip-default-bgm.wav")
 
 
 @router.post("/jobs", status_code=202)
@@ -52,12 +76,13 @@ def create_job(
     file: UploadFile = File(...),
     tts_provider: str | None = Form(None),
     subtitle_mode: str | None = Form(None),
+    render_engine: str | None = Form(None),
     script_json: str | None = Form(None),
 ) -> dict:
     if not file.filename or not file.filename.lower().endswith(".zip"):
         raise HTTPException(400, public_error(AppError("PACKAGE_INVALID", "Exactly one ZIP file is required")))
     try:
-        record = request.app.state.job_service.submit(file, tts_provider, subtitle_mode, script_json)
+        record = request.app.state.job_service.submit(file, tts_provider, subtitle_mode, script_json, render_engine)
     except AppError as exc:
         raise HTTPException(413 if exc.code == "UPLOAD_TOO_LARGE" else 400, public_error(exc)) from exc
     return {"jobId": record.job_id, "status": record.status}
@@ -135,6 +160,22 @@ def job_events(request: Request, job_id: str) -> StreamingResponse:
     return StreamingResponse(stream(), media_type="text/event-stream", headers={"Cache-Control": "no-cache", "Connection": "keep-alive", "X-Accel-Buffering": "no"})
 
 
+@router.get("/jobs/{job_id}/video-metadata")
+def get_video_metadata(request: Request, job_id: str) -> dict:
+    record = request.app.state.job_service.restore(job_id)
+    if not record: raise HTTPException(404, public_error(AppError("JOB_NOT_FOUND", "Job was not found")))
+    return (record.metadata or {}).get("videoMetadata", {"title": "-", "description": "-"})
+
+@router.put("/jobs/{job_id}/video-metadata")
+def save_video_metadata(request: Request, job_id: str, body: VideoMetadataRequest) -> dict:
+    record = request.app.state.job_service.restore(job_id)
+    if not record: raise HTTPException(404, public_error(AppError("JOB_NOT_FOUND", "Job was not found")))
+    metadata = dict(record.metadata or {}); title=body.title.strip() or "-"; description=body.description if body.description else "-"
+    metadata["videoMetadata"]={"title":title,"description":description}
+    request.app.state.job_service.set_metadata(job_id, metadata)
+    if not request.app.state.persistence.update_job_metadata(job_id, metadata): raise HTTPException(404, public_error(AppError("JOB_NOT_FOUND", "Job was not found")))
+    return metadata["videoMetadata"]
+
 @router.get("/jobs/{job_id}/video")
 def get_video(request: Request, job_id: str) -> FileResponse:
     record = request.app.state.job_service.restore(job_id)
@@ -157,6 +198,37 @@ def ai_status(request: Request) -> dict:
 @router.get("/history")
 def history(request: Request) -> dict:
     return {"projects": request.app.state.persistence.history()}
+
+@router.get("/youtube/connections")
+def youtube_connections(request: Request) -> dict:
+    return {"configured": request.app.state.youtube_service.configured(), "connections": request.app.state.persistence.youtube_connections()}
+
+@router.get("/youtube/connect")
+def youtube_connect(request: Request):
+    from fastapi.responses import RedirectResponse
+    try: return RedirectResponse(request.app.state.youtube_service.auth_url())
+    except AppError as exc: raise HTTPException(400, public_error(exc))
+
+@router.get("/youtube/callback")
+def youtube_callback(request: Request, code: str | None = None, state: str | None = None, error: str | None = None):
+    from fastapi.responses import RedirectResponse
+    if error: return RedirectResponse("/history?youtube=denied")
+    try:
+        request.app.state.youtube_service.callback(code or "", state or ""); return RedirectResponse("/history?youtube=connected")
+    except AppError as exc: return RedirectResponse("/history?youtube=error")
+
+@router.delete("/youtube/connections/{connection_id}")
+def youtube_delete(request: Request, connection_id: str) -> dict:
+    if not request.app.state.persistence.delete_youtube_connection(connection_id): raise HTTPException(404, detail="YouTube connection not found")
+    return {"status":"DELETED"}
+
+@router.post("/history/{history_id}/youtube/upload")
+def youtube_upload(request: Request, history_id: str, body: YouTubeUploadRequest) -> dict:
+    item=next((p for p in request.app.state.persistence.history() if p["id"]==history_id),None)
+    if not item or not item.get("latestJob") or not item["latestJob"].get("videoAvailable"): raise HTTPException(400, public_error(AppError("VIDEO_NOT_READY", "ยังไม่มีวิดีโอที่สร้างเสร็จ")))
+    job=request.app.state.persistence.get_job(item["latestJob"]["id"]); path=Path(job["final_path"])
+    try: return request.app.state.youtube_service.upload(body.connectionId,path,body.title,body.description,body.tags,body.privacyStatus)
+    except AppError as exc: raise HTTPException(400, public_error(exc))
 
 
 @router.get("/storage")

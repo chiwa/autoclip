@@ -4,6 +4,7 @@ import math
 import struct
 import threading
 import json
+import subprocess
 import wave
 from pathlib import Path
 from typing import Protocol
@@ -35,6 +36,7 @@ class DummyTtsProvider:
 
 class LocalThaiTtsProvider:
     VOICES = {
+        "default": "th_m_1",
         "thai-female-01": "th_f_1",
         "thai-male-01": "th_m_1",
         "thai-female-02": "th_f_2",
@@ -157,16 +159,36 @@ class BirdF5ThaiTtsProvider:
                 # independently generated chunks, which can sound like
                 # clicks/stutters. A larger bound preserves sentence
                 # continuity; long text is still safely chunked upstream.
+                # Keep Bird/F5 in the natural, stable range for Thai narration.
+                # Values outside this range tend to produce rushed or unstable
+                # prosody even when the caller requests a different speed.
+                bird_speed = min(1.0, max(0.95, float(speed)))
                 wav = self._tts.infer(
                     ref_audio=str(ref_voice),
                     ref_text=ref_text,
                     gen_text=text,
                     step=48,
-                    cfg=1.8,
-                    speed=speed,
+                    cfg=2.2,
+                    speed=bird_speed,
                     max_chars=240,
                 )
                 sf.write(str(output_path), wav, 24000)
+                # Remove only long, low-level edges; retain a small natural
+                # lead-in/out so words are not clipped.
+                try:
+                    import numpy as np
+                    audio, sample_rate = sf.read(str(output_path))
+                    level = np.max(np.abs(audio), axis=1) if getattr(audio, "ndim", 1) > 1 else np.abs(audio)
+                    active = np.flatnonzero(level > 10 ** (-45 / 20))
+                    if active.size:
+                        pad = int(sample_rate * 0.06)
+                        start = max(0, int(active[0]) - pad)
+                        end = min(len(audio), int(active[-1]) + pad + 1)
+                        sf.write(str(output_path), audio[start:end], sample_rate)
+                except Exception:
+                    # Trimming is an enhancement; never fail an otherwise
+                    # valid generated narration because it is unavailable.
+                    pass
         except AppError:
             raise
         except Exception as exc:
@@ -174,6 +196,44 @@ class BirdF5ThaiTtsProvider:
         if not output_path.is_file() or output_path.stat().st_size <= 44:
             raise AppError("TTS_GENERATION_FAILED", "Bird F5-TTS-THAI produced no audio")
         return output_path
+
+
+class KokoroThaiTtsProvider:
+    """Wayu Kokoro Thai ONNX provider running in the dedicated Python 3.12 env."""
+
+    def __init__(self, settings: Settings):
+        self.settings = settings
+
+    def synthesize(self, text: str, language: str, voice: str, speed: float, output_path: Path) -> Path:
+        if language.lower() not in {"th", "th-th"}:
+            raise AppError("TTS_GENERATION_FAILED", "Kokoro Thai currently supports Thai language only")
+        model_dir = Path(self.settings.tts.kokoro_model_dir)
+        if not model_dir.is_absolute():
+            model_dir = (Path.cwd() / model_dir).resolve()
+        python = Path(self.settings.tts.kokoro_worker_python)
+        if not python.is_absolute():
+            # Do not call resolve(): venv/bin/python is a symlink and resolving
+            # it would bypass the virtualenv back to the system interpreter.
+            python = Path.cwd() / python
+        worker = Path(__file__).with_name("kokoro_worker.py")
+        if not model_dir.is_dir() or not python.is_file():
+            raise AppError("TTS_GENERATION_FAILED", "Wayu Kokoro Thai runtime is not configured")
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        command = [str(python), str(worker), "--model-dir", str(model_dir), "--text", text,
+                   "--voice", voice, "--speed", str(min(1.15, max(0.85, float(speed) * self.settings.tts.kokoro_speed))),
+                   "--output", str(output_path)]
+        last_diagnostic = ""
+        for attempt in range(2):
+            try:
+                result = subprocess.run(command, capture_output=True, text=True, timeout=180, check=False)
+            except (OSError, subprocess.TimeoutExpired) as exc:
+                if attempt == 1:
+                    raise AppError("TTS_GENERATION_FAILED", "Wayu Kokoro Thai narration generation timed out") from exc
+                continue
+            if result.returncode == 0 and output_path.is_file() and output_path.stat().st_size > 44:
+                return output_path
+            last_diagnostic = (result.stderr or result.stdout or "").strip()[-400:]
+        raise AppError("TTS_GENERATION_FAILED", "Wayu Kokoro Thai narration generation failed", {"diagnostic": last_diagnostic} if last_diagnostic else None)
 
 
 class KhanomTanTtsProvider:
@@ -252,6 +312,12 @@ def create_tts_provider(name: str, settings: Settings | None = None) -> TtsProvi
         if settings is None:
             raise AppError("TTS_GENERATION_FAILED", "Bird F5-TTS-THAI provider requires application settings")
         return BirdF5ThaiTtsProvider(settings)
+    if name in {"kokoro", "kokoro-thai", "wayu-kokoro-thai"}:
+        if settings is None:
+            raise AppError("TTS_GENERATION_FAILED", "Kokoro Thai provider requires application settings")
+        if not settings.tts.kokoro_enabled:
+            raise AppError("TTS_GENERATION_FAILED", "Wayu Kokoro Thai is disabled in configuration")
+        return KokoroThaiTtsProvider(settings)
     if name in {"khanomtan", "khanom-tan", "khanomtan-tts"}:
         if settings is None:
             raise AppError("TTS_GENERATION_FAILED", "KhanomTan provider requires application settings")

@@ -1,0 +1,14 @@
+# Optional Wayu Kokoro Thai worker (Python 3.12)
+onnxruntime
+numpy==1.26.4
+scipy
+soundfile
+spacy==3.7.5
+en-core-web-sm==3.7.1
+misaki
+tltk
+pythainlp
+nltk
+sklearn-crfsuite
+gensim
+pyyaml

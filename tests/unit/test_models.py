@@ -48,6 +48,32 @@ def test_scene_accepts_supported_transition_and_rejects_unknown():
         Script.model_validate(data)
 
 
+def test_scene_accepts_optional_wan_generation_plan():
+    data = valid_data()
+    data["scenes"][0]["wan"] = {
+        "prompt": "Thai anime presenter with subtle natural motion",
+        "negative_prompt": "text, watermark, flicker",
+        "seed": 42,
+        "frames": 81,
+        "lip_sync": True,
+        "character_id": "mamase-presenter-v1",
+    }
+
+    wan = Script.model_validate(data).scenes[0].wan
+
+    assert wan.seed == 42
+    assert wan.lip_sync is True
+    assert wan.character_id == "mamase-presenter-v1"
+
+
+def test_wan_generation_plan_rejects_unsafe_character_id():
+    data = valid_data()
+    data["scenes"][0]["wan"] = {"prompt": "Lake Natron natural motion", "character_id": "../secret"}
+
+    with pytest.raises(ValidationError):
+        Script.model_validate(data)
+
+
 @pytest.mark.parametrize("mutation", [
     lambda d: d["project"].pop("id"),
     lambda d: d.update(scenes=[]),

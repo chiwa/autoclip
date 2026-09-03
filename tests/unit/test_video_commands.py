@@ -3,7 +3,7 @@ from pathlib import Path
 from app.config.settings import Settings
 from app.domain.models import Scene
 from app.infrastructure.ffmpeg import FfmpegRunner
-from app.services.video_service import SceneRenderer, VideoComposer, srt_timestamp
+from app.services.video_service import SceneRenderer, SubtitleRenderer, VideoComposer, srt_timestamp
 
 
 def test_scene_filter_has_uniform_output_and_thai_subtitles():
@@ -35,6 +35,13 @@ def test_scene_filter_skips_subtitles_when_disabled():
 
 def test_srt_timestamp():
     assert srt_timestamp(4.8) == "00:00:04,800"
+
+
+def test_subtitle_window_can_leave_transition_free():
+    import tempfile
+    with tempfile.TemporaryDirectory() as directory:
+        path = SubtitleRenderer().write("ทดสอบ", 5.0, Path(directory) / "scene.srt", start_seconds=0.45, end_seconds=4.55)
+        assert "00:00:00,450 --> 00:00:04,550" in path.read_text(encoding="utf-8")
 
 
 def test_transition_filter_crossfades_video_and_audio_at_real_offsets():

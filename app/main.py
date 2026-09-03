@@ -15,6 +15,7 @@ from app.services.tts_preview_service import TtsPreviewService
 from app.services.ai_service import AiProjectService
 from app.services.persistence import Persistence
 from app.services.cleanup_service import CleanupService
+from app.services.youtube_service import YouTubeService
 
 
 def create_app() -> FastAPI:
@@ -25,6 +26,7 @@ def create_app() -> FastAPI:
     application.state.ffprobe = FfprobeRunner()
     settings.app.workspace.mkdir(parents=True, exist_ok=True)
     application.state.persistence = Persistence(settings.app.workspace)
+    application.state.youtube_service = YouTubeService(settings, application.state.persistence)
     application.state.persistence.mark_interrupted_jobs()
     application.state.cleanup_service = CleanupService(settings.app.workspace, application.state.persistence)
     application.state.job_service = JobService(settings, persistence=application.state.persistence)
@@ -40,7 +42,7 @@ def create_app() -> FastAPI:
 
     @application.get("/tts", include_in_schema=False)
     def tts_page() -> FileResponse:
-        return FileResponse(static_dir / "tts.html")
+        return FileResponse(static_dir / "tts.html", headers={"Cache-Control": "no-store"})
 
     @application.get("/ai", include_in_schema=False)
     def ai_page() -> FileResponse:

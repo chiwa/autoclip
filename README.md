@@ -128,6 +128,11 @@ docker compose run --rm autoclip python scripts/cleanup_workspaces.py --older-th
 - Automatic cleanup, persistence, cloud providers, authentication, publishing, and content generation are deliberately out of scope.
 
 Next steps are confirming model-weight licensing for the intended deployment, adding pronunciation overrides, and adding an optional GPU provider only for environments where Docker has a supported CUDA runtime.
+
+For the optional RunPod shot-rendering integration (Wan image-to-video, F5 Thai
+narration, and optional LatentSync), see
+[docs/runpod-shot-pipeline.md](docs/runpod-shot-pipeline.md). It deliberately
+keeps the ZIP contract and normal AutoClip review-to-history workflow unchanged.
 # Project History and persistence
 
 AutoClip stores project/job metadata in `workspaces/autoclip.db` (SQLite with foreign keys and WAL); media remains under `workspaces/`. Completed jobs can be opened from `/history` and their video endpoint continues to work after an application restart. Direct ZIP uploads and AI projects are both indexed. Delete moves a project to Trash (`/api/trash/{id}/restore` restores it); permanent deletion is explicit. `GET /api/storage` reports usage and `POST /api/storage/cleanup` removes disposable job intermediates. Keep projects are excluded from automatic retention cleanup.

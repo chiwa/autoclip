@@ -39,6 +39,8 @@ temp/
 *.bmp
 *.ico
 *.wav
+.kokoro-venv/
+voices/wayu-kokoro-thai/
 *.mp3
 *.m4a
 *.ogg

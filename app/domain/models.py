@@ -47,10 +47,33 @@ class Voice(BaseModel):
     speed: float = Field(ge=0.5, le=2.0)
 
 
+class WanSceneOptions(BaseModel):
+    """Optional, portable visual-generation hints for a Wan 2.2 scene.
+
+    These contain creative intent only. Connection details, reference-audio
+    paths, API tokens, and RunPod host details are configuration, never ZIP
+    content.
+    """
+    prompt: str = Field(min_length=3, max_length=2_000)
+    negative_prompt: str = Field(default="text, watermark, flicker, jitter", max_length=2_000)
+    seed: int | None = Field(default=None, ge=0, le=2_147_483_647)
+    frames: int | None = Field(default=None, ge=17, le=241)
+    lip_sync: bool = False
+    character_id: str | None = None
+
+    @field_validator("character_id")
+    @classmethod
+    def safe_character_id(cls, value: str | None) -> str | None:
+        if value is not None and not SAFE_ID.fullmatch(value):
+            raise ValueError("character_id is not filesystem-safe")
+        return value
+
+
 class Scene(BaseModel):
     id: str
     image: str
     narration: str = Field(min_length=1)
+    tts_text: str | None = None
     subtitle: str | bool | None = None
     show_subtitle: bool = True
     motion: str
@@ -58,6 +81,7 @@ class Scene(BaseModel):
     motion_speed: str = "slow"
     motion_intensity: float | None = None
     focus: str = "center"
+    wan: WanSceneOptions | None = None
 
     @field_validator("id")
     @classmethod
@@ -89,8 +113,8 @@ class Scene(BaseModel):
     @field_validator("motion_intensity")
     @classmethod
     def valid_motion_intensity(cls, value: float | None) -> float | None:
-        if value is not None and not 0.05 <= value <= 0.35:
-            raise ValueError("motion_intensity must be between 0.05 and 0.35")
+        if value is not None and not 0.01 <= value <= 0.35:
+            raise ValueError("motion_intensity must be between 0.01 and 0.35")
         return value
 
     @field_validator("focus")
@@ -107,7 +131,7 @@ class Scene(BaseModel):
             "none", "fade", "dissolve", "fade_black", "fade_white", "fade_slow", "fade_fast", "fade_grays",
             "wipe_left", "wipe_right", "wipe_up", "wipe_down", "wipe_top_left", "wipe_top_right",
             "wipe_bottom_left", "wipe_bottom_right", "slide_left", "slide_right", "slide_up", "slide_down",
-            "smooth_left", "smooth_right", "smooth_up", "smooth_down", "circle_open", "circle_close",
+            "smooth", "smooth_left", "smooth_right", "smooth_up", "smooth_down", "circle_open", "circle_close",
             "circle_crop", "rect_crop", "vertical_open", "vertical_close", "horizontal_open", "horizontal_close",
             "zoom_in", "pixelize", "radial", "horizontal_blur", "distance", "squeeze_horizontal",
             "squeeze_vertical", "diagonal_top_left", "diagonal_top_right", "diagonal_bottom_left",
@@ -157,9 +181,10 @@ class JobRecord(BaseModel):
     project_id: str | None = None
     tts_provider: str | None = None
     subtitle_mode: str | None = None
+    render_engine: str = "ffmpeg_motion"
 
     def api_dict(self) -> dict:
-        result = {"jobId": self.job_id, "status": self.status, "progress": self.progress, "currentStep": self.current_step, "error": self.error, "logs": self.logs, "subtitleMode": self.subtitle_mode}
+        result = {"jobId": self.job_id, "status": self.status, "progress": self.progress, "currentStep": self.current_step, "error": self.error, "logs": self.logs, "subtitleMode": self.subtitle_mode, "renderEngine": self.render_engine}
         if self.metadata is not None:
             result["metadata"] = self.metadata
         return result

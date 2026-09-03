@@ -17,8 +17,10 @@ def srt_timestamp(seconds: float) -> str:
 
 
 class SubtitleRenderer:
-    def write(self, text: str, duration: float, output: Path) -> Path:
-        output.write_text(f"1\n00:00:00,000 --> {srt_timestamp(duration)}\n{text}\n", encoding="utf-8")
+    def write(self, text: str, duration: float, output: Path, start_seconds: float = 0, end_seconds: float | None = None) -> Path:
+        end = duration if end_seconds is None else min(duration, end_seconds)
+        start = max(0, min(start_seconds, end))
+        output.write_text(f"1\n{srt_timestamp(start)} --> {srt_timestamp(end)}\n{text}\n", encoding="utf-8")
         return output
 
 
@@ -40,13 +42,28 @@ class SceneRenderer:
         frames = max(1, round(duration * video.fps))
         w, h, fps = video.width, video.height, video.fps
         base = f"scale={w}:{h}:force_original_aspect_ratio=increase,crop={w}:{h},setsar=1"
+        # Keep a larger working canvas for camera motion; an output-sized
+        # frame leaves zoompan with almost no room to pan or zoom visibly.
+        # Do not crop this working canvas: zoompan needs the overscan area to
+        # move even when zoom is exactly 1.0 (pure pan presets).
+        motion_base = f"scale={w * 2}:{h * 2}:force_original_aspect_ratio=increase,setsar=1"
         motion = self.AUTO_MOTIONS[sum(ord(c) for c in scene.id) % len(self.AUTO_MOTIONS)] if scene.motion == "auto" else scene.motion
         if motion == "none":
             animated = base
         else:
-            intensity = scene.motion_intensity or self.MOTION_DEFAULT_INTENSITY.get(motion, 0.10)
+            intensity = min(0.35, max(0.05, scene.motion_intensity or self.MOTION_DEFAULT_INTENSITY.get(motion, 0.10)))
             rate = self.SPEED_FACTOR[scene.motion_speed]
-            delta = min(0.35, max(0.05, intensity)) * rate
+            # Map the user-facing intensity to a visible total scale change.
+            # The old formula treated 0.10 as only a 9% change and pure pans
+            # had no intensity-dependent travel at all. These ranges are
+            # deliberately camera-like while remaining smooth over a scene.
+            if motion in {"zoom_in", "zoom_out"}:
+                delta = min(0.35, (0.20 + intensity * 0.43) * rate)
+            elif motion in {"cinematic_push_in", "cinematic_pull_out"}:
+                delta = min(0.35, (0.16 + intensity * 0.34) * rate)
+            else:
+                delta = min(0.35, (0.12 + intensity * 0.45) * rate)
+            pan_travel = min(0.65, max(0.14, (0.10 + intensity * 0.9) * rate))
             zoom_in = motion not in {"slow_zoom_out", "zoom_out", "cinematic_pull_out"}
             if motion in {"slow_zoom_in", "zoom_in", "cinematic_push_in", "pan_left_to_right_zoom_in", "pan_right_to_left_zoom_in", "pan_up_zoom_in", "pan_down_zoom_in"}:
                 zoom_in = True
@@ -57,17 +74,25 @@ class SceneRenderer:
             }[scene.focus]
             pan_x = "(iw-iw/zoom)*on/{0}".format(max(1, frames - 1))
             pan_y = "(ih-ih/zoom)*on/{0}".format(max(1, frames - 1))
-            if motion in {"pan_right_to_left", "pan_right_to_left_zoom_in", "drift_top_right", "drift_bottom_right"}: pan_x = f"(iw-iw/zoom)*(1-on/{max(1, frames-1)})"
-            elif motion in {"pan_left_to_right", "pan_left_to_right_zoom_in", "drift_top_left", "drift_bottom_left", "documentary_pan"}: pan_x = f"(iw-iw/zoom)*on/{max(1, frames-1)}"
+            if motion in {"pan_right_to_left", "pan_right_to_left_zoom_in", "drift_top_right", "drift_bottom_right"}: pan_x = f"(iw-iw/zoom)*{pan_travel:.4f}*(1-on/{max(1, frames-1)})"
+            elif motion in {"pan_left_to_right", "pan_left_to_right_zoom_in", "drift_top_left", "drift_bottom_left", "documentary_pan"}: pan_x = f"(iw-iw/zoom)*{pan_travel:.4f}*on/{max(1, frames-1)}"
             else: pan_x = f"(iw-iw/zoom)*{focus[0]}"
-            if motion in {"pan_up", "pan_up_zoom_in", "drift_top_left", "drift_top_right"}: pan_y = f"(ih-ih/zoom)*(1-on/{max(1, frames-1)})"
-            elif motion in {"pan_down", "pan_down_zoom_in", "drift_bottom_left", "drift_bottom_right"}: pan_y = f"(ih-ih/zoom)*on/{max(1, frames-1)}"
+            if motion in {"pan_up", "pan_up_zoom_in", "drift_top_left", "drift_top_right"}: pan_y = f"(ih-ih/zoom)*{pan_travel:.4f}*(1-on/{max(1, frames-1)})"
+            elif motion in {"pan_down", "pan_down_zoom_in", "drift_bottom_left", "drift_bottom_right"}: pan_y = f"(ih-ih/zoom)*{pan_travel:.4f}*on/{max(1, frames-1)}"
             else: pan_y = f"(ih-ih/zoom)*{focus[1]}"
             if motion == "gentle_float":
                 pan_x = f"(iw-iw/zoom)*(0.5+0.10*sin(on/{max(1, frames-1)}*PI))"
                 pan_y = f"(ih-ih/zoom)*(0.5+0.10*cos(on/{max(1, frames-1)}*PI))"
+            # Use the oversized canvas for all animated presets; the existing
+            # zoompan expression below then crops it back to the output size.
+            base = motion_base
             x, y = pan_x, pan_y
             animated = f"{base},zoompan=z='{zoom}':x='{x}':y='{y}':d=1:s={w}x{h}:fps={fps}"
+            # Expand the single source image for the complete scene. Using
+            # d=1 with a looping input resets zoompan's frame counter and
+            # freezes the camera after the first frame.
+            animated = animated.replace(":d=1:", f":d={frames}:")
+            animated += f",scale={w}:{h}"
         if self.settings.subtitle.enabled and subtitle and subtitle.is_file() and getattr(scene, "show_subtitle", True) and self.ffmpeg.has_filter("subtitles"):
             escaped = str(subtitle).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
             # Plain SRT has no PlayRes metadata; libass uses a 288-unit vertical
@@ -92,8 +117,9 @@ class SceneRenderer:
 
     def render(self, scene: Scene, image: Path, narration: Path, subtitle: Path | None, duration: float, output: Path) -> Path:
         video = self.settings.video
+        image_input = ["-loop", "1"] if scene.motion == "none" else []
         args = [
-            "-loop", "1", "-i", str(image), "-i", str(narration), "-t", f"{duration:.3f}",
+            *image_input, "-i", str(image), "-i", str(narration), "-t", f"{duration:.3f}",
             "-vf", self.build_filter(scene, duration, subtitle),
             "-c:v", video.codec, "-preset", "veryfast", "-crf", "23", "-pix_fmt", video.pixel_format,
             "-r", str(video.fps), "-c:a", "aac", "-ar", "48000", "-ac", "2", "-b:a", "160k",
@@ -124,6 +150,7 @@ class VideoComposer:
         "slide_right": "slideright",
         "slide_up": "slideup",
         "slide_down": "slidedown",
+        "smooth": "smoothleft",
         "smooth_left": "smoothleft",
         "smooth_right": "smoothright",
         "smooth_up": "smoothup",

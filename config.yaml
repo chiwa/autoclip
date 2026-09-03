@@ -17,13 +17,18 @@ video:
   transition: "fade"
   transition_seconds: 0.45
 tts:
-  provider: bird-f5
+  provider: kokoro-thai
   language: th-TH
+  kokoro_enabled: true
+  kokoro_model_dir: voices/wayu-kokoro-thai
+  kokoro_worker_python: .kokoro-venv/bin/python
+  # Slightly slower default for clearer, more natural Thai narration.
+  kokoro_speed: 0.85
   thonburian_ref_voice: /app/voices/thonburian-reference.wav
-  thonburian_ref_text: "สวัสดีครับ นี่คือเสียงตัวอย่างสำหรับระบบออโต้คลิป วันนี้เราจะพาทุกคนออกเดินทางไปค้นพบเรื่องราวแปลกประหลาดจากทั่วโลก ทั้งความลับของ"
+  thonburian_ref_text: "สวัสดีครับ ผมพี จาก Mamase จักรวาลของใจ วันนี้เราจะพาไปค้นพบเรื่องราวที่น่าสนใจจากทั่วโลก ทั้งเรื่องลึกลับ วิทยาศาสตร์ อวกาศ"
 audio:
   narration_volume: 1.0
-  background_volume: 0.12
+  background_volume: 0.18
 subtitle:
   enabled: true
   font_size: 72

@@ -34,18 +34,19 @@ This skill guides the end-to-end creation of vertical short-form videos for the 
 4. Verify all asset paths are relative to the ZIP root (e.g. `images/scene-01.png`) and avoid path traversal (`../`).
 
 ### Step 3: ZIP Package Assembly & Validation
-1. Create directory structure:
+1. Create directory structure (Canonical benchmark: `/dist/mamase-roman-space-telescope-wan-v2.zip`):
    ```text
    <package-name>/
    ├── script.json
+   ├── video-metadata.json
    ├── images/
-   │   ├── scene-01.png
+   │   ├── scene-01-hook.png
    │   ├── ...
-   │   └── scene-08-brand-outro.png
+   │   └── scene-08-mamase-outro.png
    └── audio/ (optional)
        └── bgm.mp3
    ```
-2. Archive into a `.zip` file.
+2. Archive into a `.zip` file with files at the root level (no extra wrapping parent folder).
 3. Validate and submit to AutoClip API or Docker test runner.
 
 ---

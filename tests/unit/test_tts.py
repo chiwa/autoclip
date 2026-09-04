@@ -3,7 +3,8 @@ import wave
 import pytest
 
 from app.domain.errors import AppError
-from app.infrastructure.tts import DummyTtsProvider, LocalThaiTtsProvider, create_tts_provider
+from app.config.settings import Settings
+from app.infrastructure.tts import DummyTtsProvider, LocalThaiTtsProvider, RunpodF5ThaiTtsProvider, create_tts_provider
 
 
 def test_dummy_tts_creates_valid_wav(tmp_path):
@@ -21,6 +22,15 @@ def test_provider_selection():
     assert caught.value.code == "TTS_GENERATION_FAILED"
 
 
+def test_runpod_f5_provider_requires_configured_connector(tmp_path):
+    settings = Settings()
+    provider = create_tts_provider("runpod-f5", settings)
+    assert isinstance(provider, RunpodF5ThaiTtsProvider)
+    with pytest.raises(AppError) as caught:
+        provider.synthesize("สวัสดีครับ", "th-TH", "thai-male-01", 1.0, tmp_path / "speech.wav")
+    assert caught.value.code == "RUNPOD_F5_NOT_CONFIGURED"
+
+
 def test_local_provider_validates_language_and_voice(tmp_path):
     provider = LocalThaiTtsProvider()
     with pytest.raises(AppError) as language_error:
@@ -29,3 +39,7 @@ def test_local_provider_validates_language_and_voice(tmp_path):
     with pytest.raises(AppError) as voice_error:
         provider.synthesize("ภาษาไทย", "th-TH", "missing", 1, tmp_path / "missing.wav")
     assert voice_error.value.details["voice"] == "missing"
+
+
+def test_local_provider_accepts_legacy_kokoro_voice_alias():
+    assert LocalThaiTtsProvider.VOICES["m_young_clear"] == "th_m_1"

@@ -60,6 +60,30 @@ class WanSettings(BaseModel):
     request_timeout_seconds: int = Field(120, gt=0, le=3600)
     generation_timeout_seconds: int = Field(900, gt=0, le=7200)
     poll_interval_seconds: float = Field(2.0, ge=0.5, le=30)
+    # 640x1152 preserves 9:16 while materially reducing Wan's pixel work.
+    # AutoClip upscales the completed scene during final 1080x1920 composition.
+    width: int = Field(640, gt=0)
+    height: int = Field(1152, gt=0)
+    # 22 is the production balance for the A40: materially faster than 25
+    # while retaining stable documentary details. Individual scenes may use
+    # wan.steps (for example 25 for the opening hook).
+    steps: int = Field(22, ge=10, le=50)
+    cfg: float = Field(5.0, ge=1.0, le=15.0)
+    sampler_name: str = "uni_pc"
+
+
+class RunpodF5Settings(BaseModel):
+    enabled: bool = False
+    ssh_host: str = ""
+    ssh_port: int = Field(22, gt=0, le=65535)
+    ssh_user: str = "root"
+    ssh_key_path: Path = Path("~/.ssh/id_ed25519_runpod")
+    python_path: Path = Path("/workspace/tools/F5-TTS-THAI/.venv/bin/python")
+    checkpoint_path: Path = Path("/workspace/models/f5-tts-th-v2/model_350000.pt")
+    vocab_path: Path = Path("/workspace/models/f5-tts-th-v2/vocab.txt")
+    workdir: Path = Path("/workspace/autoclip/f5")
+    runner_path: Path = Path("/workspace/autoclip/runpod_f5_infer.py")
+    timeout_seconds: int = Field(900, gt=0, le=7200)
 
 
 class SubtitleSettings(BaseModel):
@@ -87,6 +111,7 @@ class Settings(BaseModel):
     tts: TtsSettings = TtsSettings()
     audio: AudioSettings = AudioSettings()
     wan: WanSettings = WanSettings()
+    runpod_f5: RunpodF5Settings = RunpodF5Settings()
     subtitle: SubtitleSettings = SubtitleSettings()
     youtube: YouTubeSettings = YouTubeSettings()
     openai_api_key: str | None = None
@@ -137,6 +162,12 @@ def load_settings(path: str | Path | None = None) -> Settings:
         "AUTOCLIP_WAN_REQUEST_TIMEOUT_SECONDS": ("wan", "request_timeout_seconds"),
         "AUTOCLIP_WAN_GENERATION_TIMEOUT_SECONDS": ("wan", "generation_timeout_seconds"),
         "AUTOCLIP_WAN_POLL_INTERVAL_SECONDS": ("wan", "poll_interval_seconds"),
+        "AUTOCLIP_RUNPOD_F5_ENABLED": ("runpod_f5", "enabled"),
+        "RUNPOD_SSH_HOST": ("runpod_f5", "ssh_host"),
+        "RUNPOD_SSH_PORT": ("runpod_f5", "ssh_port"),
+        "RUNPOD_SSH_USER": ("runpod_f5", "ssh_user"),
+        "RUNPOD_SSH_KEY_PATH": ("runpod_f5", "ssh_key_path"),
+        "AUTOCLIP_RUNPOD_F5_TIMEOUT_SECONDS": ("runpod_f5", "timeout_seconds"),
     }
     openai_key = os.getenv("OPENAI_API_KEY")
     # Native development does not get Docker Compose's automatic .env

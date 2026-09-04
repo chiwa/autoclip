@@ -75,6 +75,7 @@ class Persistence:
             if "source_path" not in cols: db.execute("ALTER TABLE jobs ADD COLUMN source_path TEXT")
             if "interrupted" not in cols: db.execute("ALTER TABLE jobs ADD COLUMN interrupted INTEGER NOT NULL DEFAULT 0")
             if "render_engine" not in cols: db.execute("ALTER TABLE jobs ADD COLUMN render_engine TEXT NOT NULL DEFAULT 'ffmpeg_motion'")
+            if "output_format" not in cols: db.execute("ALTER TABLE jobs ADD COLUMN output_format TEXT NOT NULL DEFAULT 'use_json'")
 
     def upsert_project(self, project: Any) -> None:
         payload = project.model_dump(mode="json")
@@ -120,13 +121,13 @@ class Persistence:
 
     def upsert_job(self, record: Any, final_path: Path | None = None, metadata: dict | None = None) -> None:
         with self._lock, self._connect() as db:
-            db.execute("""INSERT INTO jobs(id,project_id,status,progress,final_path,error_json,created_at,completed_at,metadata_json,render_engine)
-              VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET
+            db.execute("""INSERT INTO jobs(id,project_id,status,progress,final_path,error_json,created_at,completed_at,metadata_json,render_engine,output_format)
+              VALUES(?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET
               project_id=COALESCE(excluded.project_id,jobs.project_id), status=excluded.status,
               progress=excluded.progress, final_path=COALESCE(excluded.final_path,jobs.final_path),
               error_json=excluded.error_json, completed_at=COALESCE(excluded.completed_at,jobs.completed_at),
-              metadata_json=COALESCE(excluded.metadata_json,jobs.metadata_json), render_engine=excluded.render_engine""",
-              (record.job_id,record.project_id,record.status,record.progress,str(final_path) if final_path else None,json.dumps(record.error) if record.error else None,record.created_at.isoformat(),datetime.now().astimezone().isoformat() if record.status=="COMPLETED" else None,json.dumps(metadata,ensure_ascii=False) if metadata else (json.dumps(record.metadata,ensure_ascii=False) if getattr(record,"metadata",None) else None),getattr(record,"render_engine","ffmpeg_motion")))
+              metadata_json=COALESCE(excluded.metadata_json,jobs.metadata_json), render_engine=excluded.render_engine, output_format=excluded.output_format""",
+              (record.job_id,record.project_id,record.status,record.progress,str(final_path) if final_path else None,json.dumps(record.error) if record.error else None,record.created_at.isoformat(),datetime.now().astimezone().isoformat() if record.status=="COMPLETED" else None,json.dumps(metadata,ensure_ascii=False) if metadata else (json.dumps(record.metadata,ensure_ascii=False) if getattr(record,"metadata",None) else None),getattr(record,"render_engine","ffmpeg_motion"),getattr(record,"output_format","use_json")))
 
     def get_job(self, job_id: str) -> dict | None:
         with self._connect() as db:

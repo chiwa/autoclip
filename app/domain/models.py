@@ -58,6 +58,8 @@ class WanSceneOptions(BaseModel):
     negative_prompt: str = Field(default="text, watermark, flicker, jitter", max_length=2_000)
     seed: int | None = Field(default=None, ge=0, le=2_147_483_647)
     frames: int | None = Field(default=None, ge=17, le=241)
+    # Optional per-scene quality override. Omit to use the configured default.
+    steps: int | None = Field(default=None, ge=10, le=50)
     lip_sync: bool = False
     character_id: str | None = None
 
@@ -182,9 +184,10 @@ class JobRecord(BaseModel):
     tts_provider: str | None = None
     subtitle_mode: str | None = None
     render_engine: str = "ffmpeg_motion"
+    output_format: str = "use_json"
 
     def api_dict(self) -> dict:
-        result = {"jobId": self.job_id, "status": self.status, "progress": self.progress, "currentStep": self.current_step, "error": self.error, "logs": self.logs, "subtitleMode": self.subtitle_mode, "renderEngine": self.render_engine}
+        result = {"jobId": self.job_id, "status": self.status, "progress": self.progress, "currentStep": self.current_step, "error": self.error, "logs": self.logs, "subtitleMode": self.subtitle_mode, "renderEngine": self.render_engine, "outputFormat": self.output_format}
         if self.metadata is not None:
             result["metadata"] = self.metadata
         return result

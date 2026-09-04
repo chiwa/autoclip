@@ -29,6 +29,10 @@ tts:
 audio:
   narration_volume: 1.0
   background_volume: 0.18
+runpod_f5:
+  # Host, port and dedicated SSH key remain in ignored .env; this only enables
+  # the provider selected explicitly from the Generate page.
+  enabled: true
 subtitle:
   enabled: true
   font_size: 72

@@ -24,6 +24,7 @@ workspaces/*
 !workspaces/.gitkeep
 dist/
 temp/
+native-server.log
 
 # Binary Media & Archives (Strict No-Binary Policy)
 *.zip

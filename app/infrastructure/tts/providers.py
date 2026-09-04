@@ -6,6 +6,9 @@ import threading
 import json
 import subprocess
 import wave
+import base64
+import hashlib
+import uuid
 from pathlib import Path
 from typing import Protocol
 
@@ -45,6 +48,20 @@ class LocalThaiTtsProvider:
         "th_m_1": "th_m_1",
         "th_f_2": "th_f_2",
         "th_m_2": "th_m_2",
+        # Legacy UI labels belong to Kokoro, but accept them defensively when
+        # an older package/page submits them with the Local Vachana provider.
+        "m_young_clear": "th_m_1",
+        "m_mid_warm": "th_m_1",
+        "m_elderly_deep": "th_m_1",
+        "m_teen_bright": "th_m_1",
+        "f_young_clear": "th_f_1",
+        "f_young_warm": "th_f_1",
+        "f_young_bright": "th_f_2",
+        "f_mid_clear": "th_f_1",
+        "f_mid_warm": "th_f_2",
+        "f_elderly_soft": "th_f_1",
+        "f_elderly_low": "th_f_2",
+        "f_teen_bright": "th_f_2",
     }
     _inference_lock = threading.Lock()
 
@@ -124,6 +141,80 @@ class ThonburianTtsProvider:
         if not output_path.is_file() or output_path.stat().st_size <= 44:
             raise AppError("TTS_GENERATION_FAILED", "Thonburian produced no audio")
         return output_path
+
+
+class RunpodF5ThaiTtsProvider:
+    """F5-TTS-THAI V2 executed on the configured RunPod GPU through SSH/SCP."""
+
+    def __init__(self, settings: Settings):
+        self.settings = settings
+        self._prepared_reference: str | None = None
+
+    def synthesize(self, text: str, language: str, voice: str, speed: float, output_path: Path) -> Path:
+        if language.lower() not in {"th", "th-th"}:
+            raise AppError("TTS_GENERATION_FAILED", "RunPod F5-TTS-THAI V2 currently supports Thai language only")
+        remote = self.settings.runpod_f5
+        reference = self.settings.tts.thonburian_ref_voice
+        reference_text = self.settings.tts.thonburian_ref_text.strip()
+        if not remote.enabled or not remote.ssh_host or not remote.ssh_key_path.expanduser().is_file():
+            raise AppError("RUNPOD_F5_NOT_CONFIGURED", "RunPod F5-TTS-THAI V2 ยังไม่ได้ตั้งค่า SSH connector")
+        if not reference.is_file() or not reference_text:
+            raise AppError("TTS_GENERATION_FAILED", "RunPod F5-TTS-THAI V2 ต้องตั้งค่า reference voice WAV และ ref text ก่อน")
+        try:
+            remote_reference = self._prepare(reference)
+            remote_output = f"{remote.workdir}/outputs/{uuid.uuid4().hex}.wav"
+            payload = base64.urlsafe_b64encode(json.dumps({
+                "text": text,
+                "reference": remote_reference,
+                "reference_text": reference_text,
+                "output": remote_output,
+                "checkpoint": str(remote.checkpoint_path),
+                "vocab": str(remote.vocab_path),
+                "speed": speed,
+            }, ensure_ascii=False).encode("utf-8")).decode("ascii")
+            self._ssh([str(remote.python_path), str(remote.runner_path), payload])
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            self._scp_from(remote_output, output_path)
+        except AppError:
+            raise
+        except (OSError, subprocess.SubprocessError) as exc:
+            raise AppError("RUNPOD_F5_FAILED", "RunPod F5-TTS-THAI V2 สร้างเสียงไม่สำเร็จ") from exc
+        if not output_path.is_file() or output_path.stat().st_size <= 44:
+            raise AppError("RUNPOD_F5_FAILED", "RunPod F5-TTS-THAI V2 ไม่ได้ส่งไฟล์ WAV กลับมา")
+        return output_path
+
+    def _prepare(self, reference: Path) -> str:
+        remote = self.settings.runpod_f5
+        digest = hashlib.sha256(reference.read_bytes()).hexdigest()[:16]
+        remote_reference = f"{remote.workdir}/references/{digest}.wav"
+        self._ssh(["mkdir", "-p", f"{remote.workdir}/references", f"{remote.workdir}/outputs"])
+        if self._prepared_reference != remote_reference:
+            runner = Path.cwd() / "scripts" / "runpod_f5_infer.py"
+            if not runner.is_file():
+                raise AppError("RUNPOD_F5_NOT_CONFIGURED", "ไม่พบ RunPod F5 inference runner ในโปรเจกต์")
+            self._scp_to(runner, str(remote.runner_path))
+            self._scp_to(reference, remote_reference)
+            self._prepared_reference = remote_reference
+        return remote_reference
+
+    def _ssh(self, remote_args: list[str]) -> None:
+        remote = self.settings.runpod_f5
+        command = ["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=10", "-i", str(remote.ssh_key_path.expanduser()), "-p", str(remote.ssh_port), f"{remote.ssh_user}@{remote.ssh_host}", *remote_args]
+        completed = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=remote.timeout_seconds, check=False)
+        if completed.returncode:
+            raise AppError("RUNPOD_F5_FAILED", "RunPod F5-TTS-THAI V2 remote command failed")
+
+    def _scp_to(self, source: Path, remote_path: str) -> None:
+        remote = self.settings.runpod_f5
+        command = ["scp", "-P", str(remote.ssh_port), "-i", str(remote.ssh_key_path.expanduser()), str(source), f"{remote.ssh_user}@{remote.ssh_host}:{remote_path}"]
+        if subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=remote.timeout_seconds, check=False).returncode:
+            raise AppError("RUNPOD_F5_FAILED", "ไม่สามารถส่งไฟล์ไปยัง RunPod F5 ได้")
+
+    def _scp_from(self, remote_path: str, output: Path) -> None:
+        remote = self.settings.runpod_f5
+        command = ["scp", "-P", str(remote.ssh_port), "-i", str(remote.ssh_key_path.expanduser()), f"{remote.ssh_user}@{remote.ssh_host}:{remote_path}", str(output)]
+        if subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=remote.timeout_seconds, check=False).returncode:
+            raise AppError("RUNPOD_F5_FAILED", "ไม่สามารถรับไฟล์เสียงจาก RunPod F5 ได้")
 
 
 class BirdF5ThaiTtsProvider:
@@ -304,6 +395,10 @@ def create_tts_provider(name: str, settings: Settings | None = None) -> TtsProvi
         return DummyTtsProvider()
     if name == "local":
         return LocalThaiTtsProvider()
+    if name in {"runpod-f5", "runpod-f5-thai"}:
+        if settings is None:
+            raise AppError("TTS_GENERATION_FAILED", "RunPod F5-TTS-THAI V2 provider requires application settings")
+        return RunpodF5ThaiTtsProvider(settings)
     if name == "thonburian":
         if settings is None:
             raise AppError("TTS_GENERATION_FAILED", "Thonburian provider requires application settings")

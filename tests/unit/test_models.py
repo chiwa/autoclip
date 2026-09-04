@@ -55,6 +55,7 @@ def test_scene_accepts_optional_wan_generation_plan():
         "negative_prompt": "text, watermark, flicker",
         "seed": 42,
         "frames": 81,
+        "steps": 25,
         "lip_sync": True,
         "character_id": "mamase-presenter-v1",
     }
@@ -62,6 +63,7 @@ def test_scene_accepts_optional_wan_generation_plan():
     wan = Script.model_validate(data).scenes[0].wan
 
     assert wan.seed == 42
+    assert wan.steps == 25
     assert wan.lip_sync is True
     assert wan.character_id == "mamase-presenter-v1"
 

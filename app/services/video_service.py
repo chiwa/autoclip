@@ -1,11 +1,32 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from pathlib import Path
 
 from app.config.settings import Settings
 from app.domain.errors import AppError
 from app.domain.models import Scene
 from app.infrastructure.ffmpeg import FfmpegRunner
+
+
+@dataclass(frozen=True)
+class RenderProfile:
+    """Per-job output settings resolved from the validated project script."""
+
+    width: int
+    height: int
+    fps: int
+    codec: str
+    pixel_format: str
+
+    @classmethod
+    def from_project(cls, settings: Settings, resolution: str, fps: int | None = None) -> "RenderProfile":
+        width, height = (int(part) for part in resolution.split("x", 1))
+        return cls(width, height, fps or settings.video.fps, settings.video.codec, settings.video.pixel_format)
+
+    @classmethod
+    def from_settings(cls, settings: Settings) -> "RenderProfile":
+        return cls(settings.video.width, settings.video.height, settings.video.fps, settings.video.codec, settings.video.pixel_format)
 
 
 def srt_timestamp(seconds: float) -> str:
@@ -33,12 +54,13 @@ class SceneRenderer:
     }
     AUTO_MOTIONS = ("cinematic_push_in", "pan_left_to_right", "slow_zoom_out", "pan_right_to_left_zoom_in", "documentary_pan")
     SPEED_FACTOR = {"slow": 0.9, "normal": 1.2, "fast": 1.5}
-    def __init__(self, ffmpeg: FfmpegRunner, settings: Settings):
+    def __init__(self, ffmpeg: FfmpegRunner, settings: Settings, profile: RenderProfile | None = None):
         self.ffmpeg = ffmpeg
         self.settings = settings
+        self.profile = profile or RenderProfile.from_settings(settings)
 
     def build_filter(self, scene: Scene, duration: float, subtitle: Path | None = None) -> str:
-        video = self.settings.video
+        video = self.profile
         frames = max(1, round(duration * video.fps))
         w, h, fps = video.width, video.height, video.fps
         base = f"scale={w}:{h}:force_original_aspect_ratio=increase,crop={w}:{h},setsar=1"
@@ -98,9 +120,10 @@ class SceneRenderer:
             # Plain SRT has no PlayRes metadata; libass uses a 288-unit vertical
             # script space. Convert pixel-facing configuration to those units.
             ass_scale = 288 / h
-            ass_font_size = max(1, self.settings.subtitle.font_size * ass_scale)
+            scale_from_default = h / self.settings.video.height
+            ass_font_size = max(1, self.settings.subtitle.font_size * scale_from_default * ass_scale)
             ass_outline = max(0, self.settings.subtitle.outline * ass_scale)
-            ass_margin_v = round(self.settings.subtitle.margin_bottom * ass_scale)
+            ass_margin_v = round(self.settings.subtitle.margin_bottom * scale_from_default * ass_scale)
             ass_safe_margin = round(70 * ass_scale)
             style = (f"FontName=Noto Sans Thai,FontSize={ass_font_size:.2f},"
                      f"PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,BorderStyle=1,"
@@ -116,7 +139,7 @@ class SceneRenderer:
         return animated + f",fps={fps},format={video.pixel_format}"
 
     def render(self, scene: Scene, image: Path, narration: Path, subtitle: Path | None, duration: float, output: Path) -> Path:
-        video = self.settings.video
+        video = self.profile
         image_input = ["-loop", "1"] if scene.motion == "none" else []
         args = [
             *image_input, "-i", str(image), "-i", str(narration), "-t", f"{duration:.3f}",
@@ -135,27 +158,28 @@ class SceneRenderer:
         timing here means the existing composer can treat FFmpeg and Wan
         scenes identically, including transitions and BGM ducking.
         """
-        video = self.settings.video
+        video = self.profile
         subtitle_filter = ""
         if self.settings.subtitle.enabled and subtitle and subtitle.is_file() and getattr(scene, "show_subtitle", True) and self.ffmpeg.has_filter("subtitles"):
             escaped = str(subtitle).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
             ass_scale = 288 / video.height
+            scale_from_default = video.height / self.settings.video.height
             style = (
-                f"FontName=Noto Sans Thai,FontSize={max(1, self.settings.subtitle.font_size * ass_scale):.2f},"
+                f"FontName=Noto Sans Thai,FontSize={max(1, self.settings.subtitle.font_size * scale_from_default * ass_scale):.2f},"
                 f"PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,BorderStyle=1,"
                 f"Outline={max(0, self.settings.subtitle.outline * ass_scale):.2f},Shadow=0.5,Alignment=2,"
-                f"MarginV={round(self.settings.subtitle.margin_bottom * ass_scale)},"
+                f"MarginV={round(self.settings.subtitle.margin_bottom * scale_from_default * ass_scale)},"
                 f"MarginL={round(70 * ass_scale)},MarginR={round(70 * ass_scale)}"
             ).replace(",", r"\,")
             subtitle_filter = f",subtitles={escaped}:original_size={video.width}x{video.height}:charenc=UTF-8:force_style={style}"
         vf = (
-            f"scale={video.width}:{video.height}:force_original_aspect_ratio=increase,"
-            f"crop={video.width}:{video.height},setsar=1{subtitle_filter},fps={video.fps},format={video.pixel_format}"
+            f"scale={video.width}:{video.height}:force_original_aspect_ratio=increase:flags=lanczos,"
+            f"crop={video.width}:{video.height},setsar=1{subtitle_filter},framerate=fps={video.fps},format={video.pixel_format}"
         )
         self.ffmpeg.run(
             ["-stream_loop", "-1", "-i", str(source_video), "-i", str(narration), "-t", f"{duration:.3f}",
-             "-vf", vf, "-c:v", video.codec, "-preset", "veryfast", "-crf", "23", "-pix_fmt", video.pixel_format,
-             "-r", str(video.fps), "-c:a", "aac", "-ar", "48000", "-ac", "2", "-b:a", "160k",
+             "-vf", vf, "-c:v", video.codec, "-preset", "veryfast", "-crf", "18", "-pix_fmt", video.pixel_format,
+             "-r", str(video.fps), "-c:a", "aac", "-ar", "48000", "-ac", "2", "-b:a", "192k",
              "-movflags", "+faststart", "-shortest", str(output)],
             "WAN_SCENE_NORMALIZATION_FAILED",
         )
@@ -213,9 +237,10 @@ class VideoComposer:
         "vertical_slice_down": "vdslice",
     }
 
-    def __init__(self, ffmpeg: FfmpegRunner, settings: Settings):
+    def __init__(self, ffmpeg: FfmpegRunner, settings: Settings, profile: RenderProfile | None = None):
         self.ffmpeg = ffmpeg
         self.settings = settings
+        self.profile = profile or RenderProfile.from_settings(settings)
 
     def build_transition_filter(self, durations: list[float], transitions: list[str], transition_seconds: float) -> tuple[str, str, str]:
         video_parts = [f"[{index}:v]settb=AVTB,setpts=PTS-STARTPTS[v{index}]" for index in range(len(durations))]
@@ -251,7 +276,7 @@ class VideoComposer:
             selected = transitions or [self.settings.video.transition] * (len(scenes) - 1)
             filter_complex, video_label, audio_label = self.build_transition_filter(durations, selected, transition)
             inputs = [item for scene in scenes for item in ("-i", str(scene))]
-            video = self.settings.video
+            video = self.profile
             self.ffmpeg.run(
                 [*inputs, "-filter_complex", filter_complex, "-map", f"[{video_label}]", "-map", f"[{audio_label}]",
                  "-c:v", video.codec, "-preset", "veryfast", "-crf", "23", "-pix_fmt", video.pixel_format,

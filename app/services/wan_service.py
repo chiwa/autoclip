@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+import re
+import subprocess
+import threading
 import time
 import uuid
 from pathlib import Path
@@ -10,6 +13,60 @@ import requests
 from app.config.settings import Settings
 from app.domain.errors import AppError
 from app.domain.models import Scene
+
+
+_ANSI_ESCAPE = re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]")
+_SENSITIVE_LOG_VALUE = re.compile(r"(?i)\b(api[_-]?key|token|secret|authorization)\s*[=:]\s*\S+")
+
+
+class RunpodComfyLogTailer:
+    """Forward a bounded, redacted subset of ComfyUI logs to an AutoClip job."""
+
+    def __init__(self, settings: Settings, emit):
+        self.settings = settings
+        self.emit = emit
+        self._process: subprocess.Popen[str] | None = None
+        self._thread: threading.Thread | None = None
+
+    def start(self) -> None:
+        remote = self.settings.runpod_f5
+        key_path = remote.ssh_key_path.expanduser()
+        if not remote.ssh_host or not key_path.is_file():
+            return
+        command = [
+            "ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=10",
+            "-o", "ServerAliveInterval=15", "-i", str(key_path),
+            "-p", str(remote.ssh_port), f"{remote.ssh_user}@{remote.ssh_host}",
+            "tail -n 0 -F -- /workspace/comfyui.log",
+        ]
+        try:
+            self._process = subprocess.Popen(command, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
+        except OSError as exc:
+            self.emit(f"RunPod log stream unavailable: {exc}")
+            return
+        self._thread = threading.Thread(target=self._read, name="autoclip-runpod-log", daemon=True)
+        self._thread.start()
+
+    def stop(self) -> None:
+        if self._process and self._process.poll() is None:
+            self._process.terminate()
+            try:
+                self._process.wait(timeout=3)
+            except subprocess.TimeoutExpired:
+                self._process.kill()
+
+    def _read(self) -> None:
+        assert self._process and self._process.stdout
+        for raw in self._process.stdout:
+            if message := self._sanitize(raw):
+                self.emit(message)
+
+    @staticmethod
+    def _sanitize(raw: str) -> str:
+        value = _ANSI_ESCAPE.sub("", raw.rsplit("\r", 1)[-1])
+        value = _SENSITIVE_LOG_VALUE.sub(r"\1=[redacted]", value)
+        value = " ".join(value.split())
+        return value if value and len(value) <= 1000 else ""
 
 
 class ComfyWanClient:
@@ -29,11 +86,14 @@ class ComfyWanClient:
         except requests.RequestException as exc:
             raise AppError("WAN_CONNECTION_FAILED", "AutoClip เชื่อมต่อ ComfyUI บน RunPod ไม่สำเร็จ") from exc
 
-    def render_scene(self, job_id: str, scene: Scene, image: Path, output: Path) -> Path:
+    def render_scene(self, job_id: str, scene: Scene, image: Path, output: Path, width: int | None = None, height: int | None = None, frames: int | None = None) -> Path:
         if scene.wan is None:
             raise AppError("WAN_SCENE_CONFIG_MISSING", f"Scene {scene.id} ยังไม่มี Wan prompt")
+        target_w = width or getattr(self.settings.wan, "width", 704)
+        target_h = height or getattr(self.settings.wan, "height", 1280)
+        target_frames = frames or scene.wan.frames or 81
         uploaded_name = self._upload_image(job_id, scene.id, image)
-        prompt_id = self._queue(self._workflow(job_id, scene, uploaded_name))
+        prompt_id = self._queue(self._workflow(job_id, scene, uploaded_name, target_w, target_h, target_frames))
         result = self._wait_for_output(prompt_id)
         return self._download_output(result, output)
 
@@ -76,7 +136,11 @@ class ComfyWanClient:
             if history:
                 status = history.get("status", {})
                 if status.get("status_str") == "success":
-                    outputs = history.get("outputs", {}).get("11", {}).get("images", [])
+                    outputs = None
+                    for node_out in history.get("outputs", {}).values():
+                        if "images" in node_out and node_out["images"]:
+                            outputs = node_out["images"]
+                            break
                     if outputs:
                         return outputs[0]
                     raise AppError("WAN_OUTPUT_MISSING", "Wan render เสร็จแล้ว แต่ไม่พบไฟล์วิดีโอ")
@@ -101,24 +165,27 @@ class ComfyWanClient:
             raise AppError("WAN_DOWNLOAD_FAILED", "วิดีโอ Wan ที่ได้รับมีขนาดเป็นศูนย์")
         return output
 
-    @staticmethod
-    def _workflow(job_id: str, scene: Scene, uploaded_name: str) -> dict:
+    def _workflow(self, job_id: str, scene: Scene, uploaded_name: str, width: int = 704, height: int = 1280, frames: int = 81) -> dict:
         wan = scene.wan
         assert wan is not None
-        # Native Wan 2.2 workflow confirmed against this Pod's /object_info.
-        # WanImageToVideo outputs conditioned positive/negative and latent at
-        # indices 0/1/2 respectively; using the raw text encodes loses image
-        # conditioning and using index 0 as latent is invalid.
+        # Native Wan 2.2 TI2V workflow confirmed against ComfyUI templates.
+        # Wan 2.2 uses 48-channel latents generated by Wan22ImageToVideoLatent,
+        # ModelSamplingSD3 with shift 8.0, and positive/negative text conditioning
+        # routed directly from CLIPTextEncode to KSampler.
+        steps = wan.steps if wan.steps is not None else self.settings.wan.steps
+        cfg = getattr(self.settings.wan, "cfg", 5.0)
+        sampler_name = getattr(self.settings.wan, "sampler_name", "uni_pc")
         return {
             "1": {"class_type": "UNETLoader", "inputs": {"unet_name": "wan2.2_ti2v_5B_fp16.safetensors", "weight_dtype": "default"}},
             "2": {"class_type": "CLIPLoader", "inputs": {"clip_name": "umt5_xxl_fp8_e4m3fn_scaled.safetensors", "type": "wan", "device": "default"}},
             "3": {"class_type": "VAELoader", "inputs": {"vae_name": "wan2.2_vae.safetensors"}},
-            "4": {"class_type": "LoadImage", "inputs": {"image": uploaded_name}},
-            "5": {"class_type": "CLIPTextEncode", "inputs": {"text": wan.prompt, "clip": ["2", 0]}},
-            "6": {"class_type": "CLIPTextEncode", "inputs": {"text": wan.negative_prompt, "clip": ["2", 0]}},
-            "7": {"class_type": "WanImageToVideo", "inputs": {"positive": ["5", 0], "negative": ["6", 0], "vae": ["3", 0], "width": 352, "height": 640, "length": wan.frames or 81, "batch_size": 1, "start_image": ["4", 0]}},
-            "8": {"class_type": "KSampler", "inputs": {"model": ["1", 0], "seed": wan.seed if wan.seed is not None else 0, "steps": 12, "cfg": 5.0, "sampler_name": "euler", "scheduler": "simple", "positive": ["7", 0], "negative": ["7", 1], "latent_image": ["7", 2], "denoise": 1.0}},
-            "9": {"class_type": "VAEDecode", "inputs": {"samples": ["8", 0], "vae": ["3", 0]}},
-            "10": {"class_type": "CreateVideo", "inputs": {"images": ["9", 0], "fps": 16.0}},
-            "11": {"class_type": "SaveVideo", "inputs": {"video": ["10", 0], "filename_prefix": f"autoclip/{job_id}/{scene.id}", "format": "mp4", "codec": "h264"}},
+            "4": {"class_type": "ModelSamplingSD3", "inputs": {"model": ["1", 0], "shift": 8.0}},
+            "5": {"class_type": "LoadImage", "inputs": {"image": uploaded_name}},
+            "6": {"class_type": "CLIPTextEncode", "inputs": {"text": wan.prompt, "clip": ["2", 0]}},
+            "7": {"class_type": "CLIPTextEncode", "inputs": {"text": wan.negative_prompt, "clip": ["2", 0]}},
+            "8": {"class_type": "Wan22ImageToVideoLatent", "inputs": {"vae": ["3", 0], "start_image": ["5", 0], "width": width, "height": height, "length": frames, "batch_size": 1}},
+            "9": {"class_type": "KSampler", "inputs": {"model": ["4", 0], "seed": wan.seed if wan.seed is not None else 0, "steps": steps, "cfg": cfg, "sampler_name": sampler_name, "scheduler": "simple", "positive": ["6", 0], "negative": ["7", 0], "latent_image": ["8", 0], "denoise": 1.0}},
+            "10": {"class_type": "VAEDecode", "inputs": {"samples": ["9", 0], "vae": ["3", 0]}},
+            "11": {"class_type": "CreateVideo", "inputs": {"images": ["10", 0], "fps": 16.0}},
+            "12": {"class_type": "SaveVideo", "inputs": {"video": ["11", 0], "filename_prefix": f"autoclip/{job_id}/{scene.id}", "format": "mp4", "codec": "h264"}},
         }

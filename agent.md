@@ -185,7 +185,16 @@ ComfyUI จะ listen ที่:
 0.0.0.0:8188
 ```
 
-อย่าใส่ `--normalvram` เพราะ ComfyUI version ที่ทดสอบไม่รองรับ argument นี้ ค่า default จะเลือก `NORMAL_VRAM` ให้อัตโนมัติบน A40
+ComfyUI บน A40 นี้ใช้ dynamic VRAM เป็น runtime ที่ยืนยันแล้ว. `--highvram`
+รองรับใน CLI แต่การทดลองกับ Wan shot ยาวทำให้ service ไม่กลับมาที่ 8188 จึง
+ห้ามตั้งเป็น default หรือใส่ใน installer. อาจทดลองเฉพาะช็อต 81 frames เมื่อ
+queue ว่างและต้องมี rollback/health check ทันที. อย่าใส่ `--normalvram`
+เพราะ ComfyUI version ที่ทดสอบไม่รองรับ argument นี้.
+
+`/workspace/start-comfyui.sh` ส่ง argument ผ่านไปยัง ComfyUI จึงใช้
+`/workspace/start-comfyui.sh --highvram` ได้สำหรับ controlled experiment
+เท่านั้น. ตรวจ `/queue` ให้ไม่มีงานก่อนเปลี่ยน mode, restart เพียงครั้งเดียว,
+แล้วตรวจ `system_stats`, `nvidia-smi` และ render smoke test ก่อนรับงานจริง.
 
 ตรวจสถานะจากภายใน Pod:
 
@@ -283,6 +292,7 @@ RunPod generation. Preserve the product workflow:
 
 ```text
 script.json                 # required at ZIP root
+video-metadata.json         # required for Title, Description, and Social Hashtags
 images/<scene>.png|jpg|webp # required assets; relative POSIX paths only
 audio/bgm.mp3|wav|m4a|aac   # optional BGM
 ```
@@ -396,6 +406,66 @@ download MP4 → add narration/subtitles → compose final video. `lip_sync: tru
 is still an explicit future F5 + LatentSync stage, not a claim that lip sync
 has already occurred.
 
+For `wan2.2` jobs, the collapsed **Live technical log** may additionally show
+a bounded, redacted server-side tail of `/workspace/comfyui.log` from RunPod.
+The browser must never SSH to RunPod or receive any Pod credential. Stream it
+only through AutoClip's existing SSE log event, remove terminal escape codes,
+redact token-like values, and stop the SSH tailer when the scene render ends.
+
+Wan outputs run at 16 fps and require a `4k + 1` frame count. Derive the frame
+count from narration duration for every Wan scene, treating `wan.frames` only
+as a lower bound. Never let a conventional `81` frame package default shorten
+a longer narration and force `render_wan_video` to loop the source clip.
+
+### Wan speed profile
+
+Generate vertical Wan at **640x1152** and upscale only in the final AutoClip
+composition. Write Wan narration so each shot is about **4.5–5.0 seconds**;
+normal scenes use exactly `frames: 81` (about 5.06 seconds at 16 fps). Add a
+new scene rather than silently stretching a Wan shot beyond that budget. The
+renderer still increases frames when narration is longer, because it must not
+loop a shorter AI video beneath speech.
+
+### Thai TTS selection on Generate page
+
+The Generate page presents exactly two narration choices: **Local — Vachana
+Thai** and **RunPod — F5-TTS-THAI V2**. The selected value must travel with the
+job; it must never silently fall back to another provider. RunPod F5 uses the
+configured dedicated SSH connector, the protected reference WAV and reference
+transcript, then copies only the generated WAV back to the job workspace.
+Never expose SSH details, keys, reference audio, or remote paths to the
+browser. Keep the provider disabled only through configuration when the Pod is
+unavailable, and return a clear safe configuration error.
+
+The video-page voice selector must always match its selected provider. Local
+Vachana uses only `thai-male-01`, `thai-female-01`, `thai-male-02`, or
+`thai-female-02`; RunPod F5 uses the protected reference voice and must not
+show a misleading model-specific roster. Never allow Kokoro labels such as
+`m_young_clear` to overwrite a Local Vachana ZIP voice during submit. Accept
+those old labels as defensive Local aliases for already-created packages, but
+generate all new Local packages with the canonical Vachana names.
+
+### Wan sampling steps policy
+
+The default Wan 2.2 sampling budget is **22 steps**. It is the production
+speed/quality balance for the A40 RunPod. ZIPs may set `wan.steps` per scene
+between 10 and 50; omitted means the configured default. The first hook scene
+of every Mamase package must explicitly set `"steps": 25` for the best first
+impression. Other scenes normally omit it and use 22. `steps` controls the
+sampling budget; it is not the frame rate or video duration.
+
+### Priority backlog: Wan scene retry and resume
+
+Implement resumable Wan jobs before treating full multi-scene GPU rendering as
+production-ready. Persist each scene's state (`queued`, `rendering`,
+`completed`, `failed`) and its Wan video, narration WAV, subtitle, prompt ID,
+seed, and safe error metadata. History must provide **Retry failed scene** and
+**Retry from scene N** actions that retain successful prior scenes, regenerate
+only the selected/dependent scene, then compose the final MP4 again. Never
+silently discard a successfully rendered scene merely because a later one
+failed. Cleanup must preserve artifacts for running jobs and projects marked
+Keep.
+
 ## Mamase editorial playbook and clip-generation procedure
 
 ### Channel identity
@@ -406,11 +476,76 @@ around the world, accessible science, surprising space facts, and timely
 trends/news. Tone: curious, warm, credible, cinematic, and never sensational
 at the expense of accuracy.
 
+### Visual Standard: Real Science + Cinematic Documentary (ไม่ใช่ "AI Infographic Channel")
+
+แนวทางภาพหลักของ **“จักรวาลของใจ”** กำหนดเป็น **"Real Science + Cinematic Documentary"** (ระดับสารคดีดาราศาสตร์สากล) โดยมีแนวภาพตัวอย่างอ้างอิงอยู่ใน `dist/examples/` (ศึกษาจากช่องชั้นนำอย่าง @DeepSpaceTH และ Cosmic Documentaries):
+
+1. **แหล่งภาพอันดับหนึ่ง (Preferred Image Sources)**:
+   - ใช้ภาพถ่ายทางดาราศาสตร์และวิทยาศาสตร์ของจริงความละเอียดสูงจาก **NASA, James Webb Space Telescope (JWST), ESO (European Southern Observatory), Hubble Space Telescope, และ Caltech/IPAC** เป็นลำดับแรก
+   - หลีกเลี่ยงภาพ 2D กราฟิกจำลองแบนๆ (Flat programmatic vector) หรือภาพสไตล์ AI ทั่วไปที่ดูประดิษฐ์และไร้มิติ
+
+2. **โทนภาพและความอลังการ (Aesthetic & Mood)**:
+   - **Deep Cosmic Space**: อวกาศมืดลึก จุดดาวคมกริบ กาแล็กซี ทางช้างเผือก หลุมดำ จานสะสมมวล (Accretion Disks) และเนบิวลาที่มีแสงเรืองรอง volumetric มีพลัง ดึงดูดสายตา และสมจริงตามหลักฟิสิกส์
+   - **Authentic Astronomical Hardware**: โมเดลกล้องโทรทรรศน์อวกาศ แผงรับแสง หอดูดาวภาคพื้นดินที่กำลังยิง Laser Guide Star สู่ท้องฟ้า
+   - **Human & Philosophical Connection**: มีภาพมนุษย์ยืนมองท้องฟ้าดวงดาวท่ามกลางธรรมชาติอันกว้างใหญ่ หรือกองไฟใต้ทางช้างเผือก เพื่อเชื่อมโยงความลึกลับของอวกาศเข้ากับจิตใจมนุษย์ (สอดคล้องกับชื่อช่อง "จักรวาลของใจ")
+
+3. **กฎ On-Screen Graphics (Minimal Sci-Fi HUD vs No Clunky Cards)**:
+   - **ห้ามใส่การ์ดข้อความสี่เหลี่ยมทึบ บุลเล็ตพอยต์ หรือ Infographic Box รกตา**
+   - หากจำเป็นต้องแสดงตัวเลข/ข้อมูล ให้ใช้สไตล์ **Futuristic Sci-Fi HUD Box โปร่งแสงขนาดเล็ก** (เช่น กรอบเส้นบางสีฟ้า Cyan พร้อมข้อความเทเลเมทรีสั้นๆ `LIGHT TRAVEL TIME: 12.8 BILLION YEARS` หรือเส้นบอกระยะทาง)
+   - ปล่อยให้เนื้อหาหลักเป็นหน้าที่ของเสียงบรรยาย (Voiceover) และระบบ AutoClip Subtitles โดยไม่บดบังความงามของภาพอวกาศ
+
+### Delivery formats and framing
+
+Create each package for one delivery format; never crop vertical scene art into
+horizontal output or the reverse.
+
+- **Shorts / Reels / TikTok:** `1080x1920` (9:16). Keep the lower-center safe
+  area clear for Thai subtitles.
+- **Standard YouTube:** `1920x1080` (16:9). Use genuine horizontal assets,
+  retain a clean lower-center subtitle area, and favour wide establishing shots,
+  medium documentary details, and cinematic landscapes.
+
+Set the intended format in `project.resolution` and make every image in the ZIP
+match it. AutoClip resolves a per-job render profile from the final project
+resolution, so FFmpeg scene rendering, Wan normalization, subtitles, and final
+composition use the same dimensions.
+
+The Create Video UI must always offer these output choices:
+
+- `use_json` — use `project.resolution` from the ZIP.
+- `vertical` — override the project to `1080x1920`.
+- `youtube` — override the project to `1920x1080`.
+
+An explicit UI choice overrides the ZIP only for that job; write the selected
+format to the job record and log the resolved dimensions. Never mutate the
+original uploaded ZIP outside that job workspace.
+
 The recurring presenter is an original, friendly Thai anime adult male:
 slightly tousled black hair, thin rectangular glasses, navy blazer over black
 shirt, welcoming smile, and an explanatory pointing gesture. Keep this visual
 identity consistent through `character_id: "mamase-presenter-v1"`; do not add
 in-image text to presenter or scene art unless the user explicitly asks.
+
+### Mandatory Mamase branding outro
+
+Every Mamase clip must end with the established brand outro from
+`dist/planet-nine-extended.zip`; it is not optional unless the user explicitly
+asks to omit or replace it. Reuse its visual asset and scene treatment as the
+canonical closing scene:
+
+- narration: `ค้นพบโลก ค้นพบใจ กับ Mamase จักรวาลของใจ`
+- `tts_text`: `ค้นพบโลก ค้นพบใจ กับ มามาเซ่ จักรวาลของใจ`
+- subtitle: `ค้นพบโลก ค้นพบใจ\\nMamase จักรวาลของใจ`
+- `motion: "slow_zoom_in"`, speed `slow`, intensity `0.1`, focus `center`,
+  transition `none`
+- Wan plan: `Mamase brand outro, glowing cyan orbiting planet in dark navy
+  space, peaceful and contemplative.` with `seed: 98`, `frames: 81`, and
+  `lip_sync: false`.
+
+Place this scene last in `script.json`, retain the prescribed scene order, and
+copy the canonical image into the package under that last scene's relative
+`images/` path.
+
 
 ### Required creative approval order
 
@@ -430,15 +565,49 @@ Never present generated fiction or an unverified claim as a factual script.
 For science, space, current events, or other time-sensitive claims, verify
 against authoritative current sources before writing the final script.
 
+### First-scene hook rule
+
+The first 2-3 seconds must earn attention with the strongest truthful visual
+and a concise spoken question or reveal. Make the opening image the most
+visually arresting asset in the package, with a clear subject and motion that
+is legible on a phone screen.
+
+Every first scene must also carry a short, beautiful in-image text hook. Keep
+it to roughly 2-5 Thai words or an equivalently short phrase, use large clean
+Thai-capable type with high contrast, and place it away from the subtitle safe
+area and the main subject. The text must sharpen curiosity without asserting
+an unverified claim. Treat it as intentional title design, not a cluttered
+infographic card.
+
+For science hooks, compose the first image like a premium science-book cover
+or documentary-film poster: one dominant focal subject, deliberate negative
+space, and one elegant title. Never turn it into a crowded information card.
+
+The recurring Mamase anime presenter must appear in every first scene, using
+the established friendly glasses, tousled-black-hair, navy-blazer identity and
+a face-forward composition suitable for Wan/LatentSync talking shots. Keep the
+same character on the right or otherwise leave the hook text readable.
+The canonical visual reference is
+`assets/characters/mamase-presenter-v1.png`; never replace it or substitute a
+new character without the user's approval. Set `character_id` to
+`mamase-presenter-v1` in the scene's Wan plan.
+
+For unsettled science stories, use a strong question without depicting an
+unverified conclusion as fact. For example, K2-18 b may open with a cinematic
+exoplanet, its host star, a small JWST silhouette, and the in-image hook
+`เจอสัญญาณเอเลียน?` alongside the narration `K2-18 b… เราเจอสัญญาณของเอเลียน
+แล้วหรือยัง?` Do not show aliens or text that implies life has been confirmed;
+immediately follow with the evidence and its limits.
+
 ### Default clip structure
 
 Aim for 45-70 seconds unless the user requests a short technical test. A usual
-format is 5-8 content scenes plus an optional 3-4 second presenter intro and a
-brief Mamase branding outro:
+format is 5-8 content scenes plus an optional 3-4 second presenter intro and
+the mandatory Mamase branding outro:
 
 ```text
 Hook → reveal/context → why/how → unexpected twist → meaning/safety context
-→ warm ending/CTA → optional Mamase brand scene
+→ warm ending/CTA → Mamase brand scene
 ```
 
 - Hook must create curiosity in the first 2-3 seconds without misleading.
@@ -448,6 +617,12 @@ Hook → reveal/context → why/how → unexpected twist → meaning/safety cont
   scientific implications. State nuance where a popular myth is misleading.
 - Use varied visuals: aerial/wide, environmental detail, close documentary
   subject, people/presenter only when useful, then a closing wide shot.
+- Each scene image must illustrate its own narration directly, not merely the
+  overall topic. Derive the visual subject, setting, action, and factual detail
+  from that scene's spoken sentence; use an image that makes the point legible
+  before the subtitle is read. Do not reuse generic decorative b-roll when a
+  scene calls for a specific animal, process, place, object, or scientific
+  evidence.
 - Keep lower-center composition reasonably clean for Thai subtitles.
 - Match image style inside one clip: cinematic documentary for facts/nature,
   clean semi-realistic anime only for the presenter.
@@ -494,6 +669,7 @@ Hook → reveal/context → why/how → unexpected twist → meaning/safety cont
 
 ```text
 script.json at ZIP root
+video-metadata.json at ZIP root (Title, Description, Hashtags)
 images/ exists and every scene image path resolves
 scene order matches approved script
 Thai narration and tts_text are reviewed
@@ -541,3 +717,35 @@ ffmpeg -v error -i /workspace/ComfyUI/output/video/OUTPUT.mp4 -f null -
 - เก็บไฟล์ใหญ่ทั้งหมดใต้ `/workspace`
 - ใช้ native ComfyUI workflow; อย่าติดตั้ง custom nodes ถ้าไม่มี requirement ใหม่
 - หลัง generation ต้องตรวจ output ด้วย FFprobe และ full FFmpeg decode ก่อนรายงานว่าสำเร็จ
+
+### ปัญหาที่เคยพบในการสร้างแพ็กเกจคอนเทนต์และแนวทางหลีกเลี่ยง (Content Pitfalls to Avoid)
+
+1. **ห้ามแก้ไขโค้ดระบบเดิม (No Unnecessary Code Modifications)**:
+   - ระบบ AutoClip มีโค้ดรองรับการทำงานพื้นฐาน เช่น `video-metadata.json`, TTS, ฟอนต์, และ ZIP contract ไว้อยู่แล้ว
+   - เมื่อสร้างคอนเทนต์หรือ ZIP ใหม่ **ห้ามแก้ไขโค้ดใน `app/` เด็ดขาด** ยกเว้นได้รับคำสั่งปรับปรุงฟีเจอร์จากผู้ใช้โดยตรง
+
+2. **ต้องมี `video-metadata.json` ควบคู่เสมอ**:
+   - ทุกครั้งที่สร้างไฟล์ ZIP ต้องแนบ `video-metadata.json` ไว้ที่ root ของ ZIP เสมอ
+   - โครงสร้างต้องมี `"title"` (ชื่อคลิปชวนคลิก) และ `"description"` (เรื่องย่อ, คำโปรย, แท็กไลน์ช่อง และแฮชแท็ก) เพื่อให้ระบบนำไปแสดงผลบนหน้า Preview และบันทึกลงฐานข้อมูล
+
+3. **ปัญหาตัวหนังสือเป็นสี่เหลี่ยม (Font Tofu / Missing Glyphs)**:
+   - ห้ามใช้ฟอนต์อังกฤษล้วน (เช่น Helvetica) กับข้อความภาษาไทย เพราะอักขระไทยจะกลายเป็นกล่องสี่เหลี่ยม `□`
+   - ต้องใช้ฟอนต์ที่รองรับทั้งภาษาไทยและอังกฤษอย่างสมบูรณ์ เช่น `SukhumvitSet.ttc` หรือ `Thonburi.ttc` บน macOS (หรือ `Noto Sans Thai` บน Linux/Docker)
+   - ห้ามใช้สัญลักษณ์ Unicode แปลกปลอมที่ไม่การันตีว่ามีในฟอนต์ (เช่น `✓`, `★`, `▲`, `▼`, `➔`, `⚡`) ให้วาดสัญลักษณ์เหล่านี้เป็นเวกเตอร์ตรงด้วยโค้ด (`draw.line`, `draw.polygon`) หรือใช้ตัวเลข/ป้ายกำกับแทน
+
+4. **ปัญหาตัวหนังสือล้นขอบภาพ (Text Overflow & Layout Safe Area)**:
+   - เมื่อสร้างภาพที่มีไดอะแกรมหรือข้อความอธิบาย ต้องวัดขนาดข้อความและตัดขึ้นบรรทัดใหม่เสมอ (Auto Line/Word Wrapping) โดยกำหนดความกว้างไม่ให้เกิน Card Padding
+   - ต้องเว้นพื้นที่ปลอดภัยด้านล่าง (Bottom Safe Area ตั้งแต่ $Y \ge 1350$ ในขนาด 1080x1920) ให้โปร่ง เพื่อไม่ให้ภาพหรือการ์ดไปทับซ้อนกับ Subtitle ภาษาไทยที่ระบบจะเบิร์นลงไป
+
+5. **ความยาวและจำนวนซีนของคลิป (Pacing & Scene Count - พอดีพอพี)**:
+   - **ความยาว 5–10 ซีนแล้วแต่เนื้อหา ไม่ต้อง fixed**: ให้ยึดความพอดีของเนื้อเรื่องเป็นหลัก ("พอดีพอพี") ไม่เยิ่นเย้อจนน่าเบื่อ และไม่สั้นเกินไปจนเนื้อหาขาดมิติ
+   - หากเป็นประเด็นสั้นกระชับเข้าใจง่าย ใช้ 5–6 ซีน (~30–45 วินาที)
+   - หากเป็นเรื่องราวที่มีมิติเชิงลึก/สารคดีน่าติดตาม (เช่น การค้นพบทางดาราศาสตร์ ทฤษฎีฟิสิกส์ หรือปริศนาจักรวาล) ขยายได้เป็น 7–10 ซีน (~50–70 วินาที) เพื่อให้เนื้อหาครบถ้วน ดื่มด่ำ ชวนคิด และอิ่มเอม
+
+6. **ความต่างระหว่างคลิป 'วิทยาศาสตร์ความงาม' vs 'อวกาศ/จักรวาล' (Visual Direction Rule)**:
+   - **หมวดวิทยาศาสตร์/ความงาม (Science & Skincare)**: ใช้ Infographic ที่มีข้อความสั้นกระชับ, ไดอะแกรม, หรือการ์ดตารางเปรียบเทียบคลีนๆ สไตล์ Modern Medical ได้
+   - **หมวดอวกาศ/จักรวาล (Space & Universe)**: **ยึดมาตรฐาน "Real Science + Cinematic Documentary" (ไม่ใช่ "AI Infographic Channel")**
+     - **แนวภาพอ้างอิง**: ศึกษาแนวภาพที่ผู้ใช้ชอบใน `dist/examples/` (ช่องอย่าง @DeepSpaceTH / สารคดีดาราศาสตร์ระดับสากล)
+     - **แหล่งภาพจริง**: คัดเลือกและใช้ภาพถ่ายจริงความละเอียดสูงจาก **NASA, James Webb Space Telescope (JWST), ESO (European Southern Observatory), Hubble, และ Caltech/IPAC** เป็นลำดับแรก
+     - **ความอลังการระดับ BBC / National Geographic ไร้ตัวหนังสือบังภาพ**: เน้นภาพอวกาศ ดวงดาว กาแล็กซี เนบิวลา หลุมดำ และเทคโนโลยีกล้องโทรทรรศน์ที่สวยงาม ยิ่งใหญ่อลังการ ดื่มด่ำ (Immersive) แบบเต็มจอ
+     - **การใส่ Title บนภาพ**: **มี Title ในภาพได้บ้างเพื่อ hook คนดูให้หยุดดูคลิป** (เช่น ชื่อหัวข้อสไตล์สารคดีตัวหนาคมกริบ หรือ Telemetry HUD ขนาดเล็ก) **แต่ไม่จำเป็นต้องมีทุกซีน** และต้องไม่บดบังองค์ประกอบภาพหลักเด็ดขาด ปล่อยให้เนื้อหาหลักขับเคลื่อนด้วยเสียงบรรยายและ Subtitle

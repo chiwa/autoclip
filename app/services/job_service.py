@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 import zipfile
 import logging
 import threading
@@ -20,12 +21,29 @@ from app.infrastructure.tts import create_tts_provider
 from app.services.package_service import PackageService
 from app.services.pronunciation_service import PronunciationService
 from app.services.bgm_service import ensure_default_bgm
-from app.services.video_service import SceneRenderer, SubtitleRenderer, VideoComposer
+from app.services.video_service import RenderProfile, SceneRenderer, SubtitleRenderer, VideoComposer
 from app.services.persistence import Persistence
-from app.services.wan_service import ComfyWanClient
+from app.services.wan_service import ComfyWanClient, RunpodComfyLogTailer
 
 logger = logging.getLogger("autoclip.jobs")
 SUPPORTED_RENDER_ENGINES = {"ffmpeg_motion", "wan2.2"}
+SUPPORTED_OUTPUT_FORMATS = {"use_json", "vertical", "youtube"}
+OUTPUT_RESOLUTIONS = {"vertical": "1080x1920", "youtube": "1920x1080"}
+WAN_FPS = 16.0
+WAN_FRAME_STEP = 4
+WAN_MAX_FRAMES = 161
+
+
+def wan_frames_for_duration(duration_seconds: float, requested_frames: int | None = None) -> int:
+    """Return a Wan-compatible 4k+1 frame count that covers narration.
+
+    A package may request a longer shot, but it must never reduce the length
+    needed by narration: doing so forces FFmpeg to loop the Wan output later.
+    """
+    required = max(1, int(math.ceil((duration_seconds * WAN_FPS - 1) / WAN_FRAME_STEP)))
+    requested = max(0, int(requested_frames or 0))
+    frames = WAN_FRAME_STEP * max(required, int(math.ceil(max(0, requested - 1) / WAN_FRAME_STEP))) + 1
+    return min(frames, WAN_MAX_FRAMES)
 
 
 class JobRegistry:
@@ -80,7 +98,7 @@ class JobService:
         self.persistence = persistence
         self.pronunciation = PronunciationService()
 
-    def submit(self, uploaded_file, tts_provider: str | None = None, subtitle_mode: str | None = None, script_json: str | None = None, render_engine: str | None = None) -> JobRecord:
+    def submit(self, uploaded_file, tts_provider: str | None = None, subtitle_mode: str | None = None, script_json: str | None = None, render_engine: str | None = None, output_format: str | None = None) -> JobRecord:
         selected_provider = (tts_provider or self.settings.tts.provider or "local").strip().lower()
         # Keep UI/config aliases backwards compatible while exposing one
         # canonical provider name to the rendering pipeline.
@@ -90,11 +108,14 @@ class JobService:
             "f5": "thonburian",
             "bird/f5-tts-thai": "bird-f5",
         }.get(selected_provider, selected_provider)
-        if selected_provider not in {"dummy", "local", "kokoro", "kokoro-thai", "wayu-kokoro-thai", "thonburian", "bird", "bird-f5", "f5-thai", "f5-tts-thai", "khanomtan", "khanom-tan", "khanomtan-tts"}:
+        if selected_provider not in {"dummy", "local", "runpod-f5", "runpod-f5-thai", "kokoro", "kokoro-thai", "wayu-kokoro-thai", "thonburian", "bird", "bird-f5", "f5-thai", "f5-tts-thai", "khanomtan", "khanom-tan", "khanomtan-tts"}:
             raise AppError("TTS_GENERATION_FAILED", "Selected TTS model is unavailable")
         selected_engine = (render_engine or "ffmpeg_motion").strip().lower()
         if selected_engine not in SUPPORTED_RENDER_ENGINES:
             raise AppError("RENDER_ENGINE_INVALID", "Selected render engine is unavailable")
+        selected_output_format = (output_format or "use_json").strip().lower()
+        if selected_output_format not in SUPPORTED_OUTPUT_FORMATS:
+            raise AppError("OUTPUT_FORMAT_INVALID", "Selected output format is unavailable")
         job_id = str(uuid.uuid4())
         workspace = self.workspaces.create(job_id)
         input_path = workspace.source / "input.zip"
@@ -107,10 +128,14 @@ class JobService:
                     output.close()
                     raise AppError("UPLOAD_TOO_LARGE", "Upload exceeds the configured size limit")
                 output.write(chunk)
-        if script_json:
+        if script_json or selected_output_format != "use_json":
             try:
                 from app.domain.models import Script
-                script = Script.model_validate(json.loads(script_json))
+                with zipfile.ZipFile(input_path) as source:
+                    raw_script = json.loads(script_json) if script_json else json.loads(source.read("script.json"))
+                    script = Script.model_validate(raw_script)
+                    if resolution := OUTPUT_RESOLUTIONS.get(selected_output_format):
+                        script = script.model_copy(update={"project": script.project.model_copy(update={"resolution": resolution})})
                 replacement = input_path.with_suffix(".patched.zip")
                 with zipfile.ZipFile(input_path) as source, zipfile.ZipFile(replacement, "w", zipfile.ZIP_DEFLATED) as target:
                     for item in source.infolist():
@@ -122,16 +147,17 @@ class JobService:
             except Exception as exc:
                 logger.exception("script preview patch failed")
                 raise AppError("SCRIPT_JSON_INVALID", "ค่าที่แก้ไขใน Scene Preview ไม่ถูกต้อง") from exc
-        record = self.registry.set(JobRecord(job_id=job_id, status=JobStatus.RECEIVED, progress=0, current_step="Upload received", tts_provider=selected_provider, subtitle_mode=subtitle_mode, render_engine=selected_engine))
+        record = self.registry.set(JobRecord(job_id=job_id, status=JobStatus.RECEIVED, progress=0, current_step="Upload received", tts_provider=selected_provider, subtitle_mode=subtitle_mode, render_engine=selected_engine, output_format=selected_output_format))
         if self.persistence: self.persistence.upsert_job(record)
-        self._investigation_log(job_id, "job_received", render_engine=selected_engine, tts_provider=selected_provider, upload_bytes=size)
+        self._investigation_log(job_id, "job_received", render_engine=selected_engine, output_format=selected_output_format, tts_provider=selected_provider, upload_bytes=size)
         self._log(job_id, "INFO", "Package uploaded")
         self._log(job_id, "INFO", f"Render engine selected: {selected_engine}")
+        self._log(job_id, "INFO", f"Output format selected: {selected_output_format}")
         self._progress(job_id, JobStatus.RECEIVED, 2, "Package uploaded")
         self.executor.submit(self._process, job_id, workspace)
         return record
 
-    def submit_path(self, package_path: Path, tts_provider: str | None = None, subtitle_mode: str | None = None, script_json: str | None = None, render_engine: str | None = None) -> JobRecord:
+    def submit_path(self, package_path: Path, tts_provider: str | None = None, subtitle_mode: str | None = None, script_json: str | None = None, render_engine: str | None = None, output_format: str | None = None) -> JobRecord:
         """Submit a server-created package through the same render pipeline."""
         if not package_path.is_file():
             raise AppError("PACKAGE_INVALID", "Generated package is unavailable")
@@ -139,7 +165,7 @@ class JobService:
             def __init__(self, path: Path): self.file = path.open("rb")
         source = _File(package_path)
         try:
-            return self.submit(source, tts_provider, subtitle_mode, script_json, render_engine)
+            return self.submit(source, tts_provider, subtitle_mode, script_json, render_engine, output_format)
         finally:
             source.file.close()
 
@@ -150,14 +176,20 @@ class JobService:
             if current: self.persistence.upsert_job(current)
         self.events.publish(JobEvent(type=JobEventType.PROGRESS, job_id=job_id, payload={"progress": progress, "status": status, "currentStep": step}))
 
-    def _log(self, job_id: str, level: str, message: str) -> None:
+    def _log(self, job_id: str, level: str, message: str, technical: bool = False) -> None:
         entry = self.registry.add_log(job_id, level, message)
+        if technical:
+            entry["technical"] = True
         self.events.publish(JobEvent(type=JobEventType.LOG, job_id=job_id, payload=entry))
 
     def _investigation_log(self, job_id: str, event: str, **fields: object) -> None:
         """Emit compact, grep-friendly diagnostics without leaking secrets."""
         safe = " ".join(f"{key}={value}" for key, value in fields.items() if value is not None)
         logger.info("event=%s job_id=%s %s", event, job_id, safe)
+
+    def _technical_log(self, job_id: str, message: str) -> None:
+        """Send remote diagnostics to the collapsed technical-log UI only."""
+        self._log(job_id, "TECHNICAL", message, technical=True)
 
     def _process(self, job_id: str, workspace: Workspace) -> None:
         started = time.monotonic()
@@ -170,6 +202,9 @@ class JobService:
             package = PackageService(self.settings.app.max_extracted_mb * 1024 * 1024)
             script, bgm = package.extract_and_validate(workspace.source / "input.zip", workspace.extracted)
             self._investigation_log(job_id, "package_validated", render_engine=render_engine, project_id=script.project.id, scene_count=len(script.scenes), has_bgm=bool(bgm))
+            render_profile = RenderProfile.from_project(self.settings, script.project.resolution, script.project.fps)
+            self._investigation_log(job_id, "render_profile_resolved", width=render_profile.width, height=render_profile.height, fps=render_profile.fps)
+            self._log(job_id, "INFO", f"Output resolution: {render_profile.width}x{render_profile.height}")
             if bgm is None:
                 bgm = ensure_default_bgm(self.settings.app.workspace)
                 self._log(job_id, "INFO", "No BGM in package; using system ambient background music")
@@ -220,7 +255,7 @@ class JobService:
                 self._log(job_id, "SUCCESS", f"Narration generated {index + 1} of {count}")
                 self._progress(job_id, JobStatus.GENERATING_AUDIO, 15 + round(25 * (index + 1) / count), f"Generated narration {index + 1} of {count}")
             subtitle_renderer = SubtitleRenderer()
-            scene_renderer = SceneRenderer(self.ffmpeg, self.settings)
+            scene_renderer = SceneRenderer(self.ffmpeg, self.settings, render_profile)
             rendered: list[Path] = []
             job_record = self.registry.get(job_id)
             sub_mode = (job_record.subtitle_mode if job_record else None) or "auto"
@@ -260,7 +295,20 @@ class JobService:
                     self._progress(job_id, JobStatus.RENDERING_SCENES, render_progress, f"Rendering Wan scene {index + 1} of {count} (in progress)")
                     self._log(job_id, "INFO", f"Submitting scene {index + 1} to Wan 2.2")
                     wan_output = workspace.rendered_scenes / f"{scene.id}.wan.mp4"
-                    wan_client.render_scene(job_id, scene, workspace.extracted / scene.image, wan_output)
+                    # Keep Wan generation smaller than the final delivery and
+                    # orient the configured profile to the requested format.
+                    # Vertical defaults to 640x1152; landscape swaps it.
+                    is_landscape = render_profile.width > render_profile.height
+                    wan_width = self.settings.wan.height if is_landscape else self.settings.wan.width
+                    wan_height = self.settings.wan.width if is_landscape else self.settings.wan.height
+                    dynamic_frames = wan_frames_for_duration(duration, scene.wan.frames)
+                    self._technical_log(job_id, "RunPod ComfyUI log stream started")
+                    tailer = RunpodComfyLogTailer(self.settings, lambda message: self._technical_log(job_id, f"RunPod | {message}"))
+                    tailer.start()
+                    try:
+                        wan_client.render_scene(job_id, scene, workspace.extracted / scene.image, wan_output, width=wan_width, height=wan_height, frames=dynamic_frames)
+                    finally:
+                        tailer.stop()
                     self._log(job_id, "INFO", f"Wan scene {index + 1} received; adding narration and subtitles")
                     rendered.append(scene_renderer.render_wan_video(scene, wan_output, workspace.generated_audio / f"{scene.id}.wav", subtitle, duration, workspace.rendered_scenes / f"{scene.id}.mp4"))
                 else:
@@ -275,7 +323,7 @@ class JobService:
             self._log(job_id, "INFO", "Normalizing audio")
             self._progress(job_id, JobStatus.COMPOSING, 92, "Creating final video")
             self._log(job_id, "INFO", "Creating final video")
-            final = VideoComposer(self.ffmpeg, self.settings).compose(rendered, workspace.output, bgm, durations, transitions)
+            final = VideoComposer(self.ffmpeg, self.settings, render_profile).compose(rendered, workspace.output, bgm, durations, transitions)
             self._investigation_log(job_id, "compose_completed", render_engine=render_engine, final_path=final.name, elapsed_ms=round((time.monotonic() - started) * 1000))
             probe = self.ffprobe.probe(final)
             video_stream = next(stream for stream in probe["streams"] if stream.get("codec_type") == "video")
@@ -283,6 +331,7 @@ class JobService:
                 "projectTitle": script.project.title,
                 "durationSeconds": round(float(probe["format"]["duration"]), 3),
                 "resolution": f"{video_stream['width']}x{video_stream['height']}",
+                "outputFormat": job.output_format if job else "use_json",
                 "sceneCount": count,
                 "fileSizeBytes": final.stat().st_size,
                 "createdAt": local_now().isoformat(),
@@ -346,6 +395,6 @@ class JobService:
         if status in {JobStatus.RECEIVED, JobStatus.VALIDATING, JobStatus.GENERATING_AUDIO, JobStatus.RENDERING_SCENES, JobStatus.COMPOSING}:
             status = JobStatus.FAILED
             row["error"] = {"code":"JOB_INTERRUPTED","message":"งานหยุดลงเมื่อ server restart กรุณาสั่งสร้างใหม่"}
-        record = JobRecord(job_id=job_id,status=status,progress=row["progress"],current_step="Job interrupted" if status==JobStatus.FAILED and row.get("interrupted") else ("Video is ready" if status==JobStatus.COMPLETED else "Job restored"),error=row.get("error"),metadata=row.get("metadata"),project_id=row.get("project_id"),render_engine=row.get("render_engine") or "ffmpeg_motion")
+        record = JobRecord(job_id=job_id,status=status,progress=row["progress"],current_step="Job interrupted" if status==JobStatus.FAILED and row.get("interrupted") else ("Video is ready" if status==JobStatus.COMPLETED else "Job restored"),error=row.get("error"),metadata=row.get("metadata"),project_id=row.get("project_id"),render_engine=row.get("render_engine") or "ffmpeg_motion",output_format=row.get("output_format") or "use_json")
         self.registry.set(record)
         return record

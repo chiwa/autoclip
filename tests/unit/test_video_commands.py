@@ -3,7 +3,7 @@ from pathlib import Path
 from app.config.settings import Settings
 from app.domain.models import Scene
 from app.infrastructure.ffmpeg import FfmpegRunner
-from app.services.video_service import SceneRenderer, SubtitleRenderer, VideoComposer, srt_timestamp
+from app.services.video_service import RenderProfile, SceneRenderer, SubtitleRenderer, VideoComposer, srt_timestamp
 
 
 def test_scene_filter_has_uniform_output_and_thai_subtitles():
@@ -31,6 +31,16 @@ def test_scene_filter_skips_subtitles_when_disabled():
         scene_none_sub = Scene(id="s2", image="images/a.png", narration="ภาษาไทย", motion="slow_zoom_in")
         value_no_path = SceneRenderer(FfmpegRunner(), Settings()).build_filter(scene_none_sub, 2, None)
         assert "subtitles=" not in value_no_path
+
+
+def test_scene_filter_uses_job_level_youtube_profile():
+    scene = Scene(id="landscape", image="images/a.png", narration="สารคดี", motion="cinematic_push_in")
+    profile = RenderProfile.from_project(Settings(), "1920x1080", 30)
+
+    value = SceneRenderer(FfmpegRunner(), Settings(), profile).build_filter(scene, 2)
+
+    assert "1920:1080" in value
+    assert "s=1920x1080" in value
 
 
 def test_srt_timestamp():

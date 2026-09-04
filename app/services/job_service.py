@@ -27,8 +27,21 @@ from app.services.wan_service import ComfyWanClient, RunpodComfyLogTailer
 
 logger = logging.getLogger("autoclip.jobs")
 SUPPORTED_RENDER_ENGINES = {"ffmpeg_motion", "wan2.2"}
-SUPPORTED_OUTPUT_FORMATS = {"use_json", "vertical", "youtube"}
-OUTPUT_RESOLUTIONS = {"vertical": "1080x1920", "youtube": "1920x1080"}
+SUPPORTED_OUTPUT_FORMATS = {
+    "use_json",
+    "vertical", "vertical_1080p", "vertical_2k", "vertical_4k",
+    "youtube", "youtube_1080p", "youtube_2k", "youtube_4k",
+}
+OUTPUT_RESOLUTIONS = {
+    "vertical": "1080x1920",
+    "vertical_1080p": "1080x1920",
+    "vertical_2k": "1440x2560",
+    "vertical_4k": "2160x3840",
+    "youtube": "1920x1080",
+    "youtube_1080p": "1920x1080",
+    "youtube_2k": "2560x1440",
+    "youtube_4k": "3840x2160",
+}
 WAN_FPS = 16.0
 WAN_FRAME_STEP = 4
 WAN_MAX_FRAMES = 161
@@ -98,7 +111,7 @@ class JobService:
         self.persistence = persistence
         self.pronunciation = PronunciationService()
 
-    def submit(self, uploaded_file, tts_provider: str | None = None, subtitle_mode: str | None = None, script_json: str | None = None, render_engine: str | None = None, output_format: str | None = None) -> JobRecord:
+    def submit(self, uploaded_file, tts_provider: str | None = None, subtitle_mode: str | None = None, script_json: str | None = None, render_engine: str | None = None, output_format: str | None = None, motion_resolution: str | None = None) -> JobRecord:
         selected_provider = (tts_provider or self.settings.tts.provider or "local").strip().lower()
         # Keep UI/config aliases backwards compatible while exposing one
         # canonical provider name to the rendering pipeline.
@@ -128,7 +141,7 @@ class JobService:
                     output.close()
                     raise AppError("UPLOAD_TOO_LARGE", "Upload exceeds the configured size limit")
                 output.write(chunk)
-        if script_json or selected_output_format != "use_json":
+        if script_json or selected_output_format != "use_json" or motion_resolution:
             try:
                 from app.domain.models import Script
                 with zipfile.ZipFile(input_path) as source:
@@ -136,6 +149,15 @@ class JobService:
                     script = Script.model_validate(raw_script)
                     if resolution := OUTPUT_RESOLUTIONS.get(selected_output_format):
                         script = script.model_copy(update={"project": script.project.model_copy(update={"resolution": resolution})})
+                    if selected_engine == "ffmpeg_motion" and motion_resolution:
+                        tier = motion_resolution.strip().lower()
+                        if tier in {"2k", "4k"}:
+                            orig_w, orig_h = (int(p) for p in script.project.resolution.split("x", 1))
+                            if orig_w > orig_h:
+                                target_res = "2560x1440" if tier == "2k" else "3840x2160"
+                            else:
+                                target_res = "1440x2560" if tier == "2k" else "2160x3840"
+                            script = script.model_copy(update={"project": script.project.model_copy(update={"resolution": target_res})})
                 replacement = input_path.with_suffix(".patched.zip")
                 with zipfile.ZipFile(input_path) as source, zipfile.ZipFile(replacement, "w", zipfile.ZIP_DEFLATED) as target:
                     for item in source.infolist():
@@ -152,12 +174,14 @@ class JobService:
         self._investigation_log(job_id, "job_received", render_engine=selected_engine, output_format=selected_output_format, tts_provider=selected_provider, upload_bytes=size)
         self._log(job_id, "INFO", "Package uploaded")
         self._log(job_id, "INFO", f"Render engine selected: {selected_engine}")
+        if selected_engine == "ffmpeg_motion" and motion_resolution and motion_resolution.strip().lower() in {"2k", "4k"}:
+            self._log(job_id, "INFO", f"Resolution: {motion_resolution.strip().upper()} ({script.project.resolution})")
         self._log(job_id, "INFO", f"Output format selected: {selected_output_format}")
         self._progress(job_id, JobStatus.RECEIVED, 2, "Package uploaded")
         self.executor.submit(self._process, job_id, workspace)
         return record
 
-    def submit_path(self, package_path: Path, tts_provider: str | None = None, subtitle_mode: str | None = None, script_json: str | None = None, render_engine: str | None = None, output_format: str | None = None) -> JobRecord:
+    def submit_path(self, package_path: Path, tts_provider: str | None = None, subtitle_mode: str | None = None, script_json: str | None = None, render_engine: str | None = None, output_format: str | None = None, motion_resolution: str | None = None) -> JobRecord:
         """Submit a server-created package through the same render pipeline."""
         if not package_path.is_file():
             raise AppError("PACKAGE_INVALID", "Generated package is unavailable")

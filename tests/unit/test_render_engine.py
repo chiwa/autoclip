@@ -148,3 +148,27 @@ def test_wan_selection_fails_explicitly_until_connector_is_enabled(tmp_path, mon
     assert record.status == JobStatus.FAILED
     assert record.error["code"] == "WAN_NOT_CONFIGURED"
     assert not any("Generating narration" in item["message"] for item in record.logs)
+
+
+def test_submit_applies_motion_resolution_2k_and_4k(tmp_path):
+    service = build_service(tmp_path)
+    buffer = BytesIO()
+    with zipfile.ZipFile(buffer, "w") as zf:
+        zf.writestr("script.json", json.dumps({
+            "project": {"id": "test", "title": "Test", "language": "th-TH", "resolution": "1080x1920"},
+            "voice": {"provider": "dummy", "voice": "test", "speed": 1},
+            "scenes": [{"id": "scene-01", "image": "images/scene-01.png", "narration": "ทดสอบ", "motion": "none"}],
+        }))
+    buffer.seek(0)
+
+    record_2k = service.submit(Upload(buffer.getvalue()), tts_provider="dummy", render_engine="ffmpeg_motion", motion_resolution="2k")
+    zip_2k = service.workspaces.root / record_2k.job_id / "source" / "input.zip"
+    with zipfile.ZipFile(zip_2k) as zf:
+        patched = json.loads(zf.read("script.json"))
+        assert patched["project"]["resolution"] == "1440x2560"
+
+    record_4k = service.submit(Upload(buffer.getvalue()), tts_provider="dummy", render_engine="ffmpeg_motion", motion_resolution="4k")
+    zip_4k = service.workspaces.root / record_4k.job_id / "source" / "input.zip"
+    with zipfile.ZipFile(zip_4k) as zf:
+        patched = json.loads(zf.read("script.json"))
+        assert patched["project"]["resolution"] == "2160x3840"

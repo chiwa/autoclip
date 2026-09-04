@@ -505,6 +505,16 @@ horizontal output or the reverse.
   retain a clean lower-center subtitle area, and favour wide establishing shots,
   medium documentary details, and cinematic landscapes.
 
+### Long-form YouTube pacing
+
+For a roughly 10-minute standard YouTube video, plan about 18-22 narrative
+chapters but 70-100 visual scenes/shots. Change the visual every 4-8 seconds;
+hold only a deliberately important tableau for up to 8-10 seconds. A scene is
+a visual shot for this purpose, not a whole chapter. Use roughly 10-15 Wan 2.2
+hero shots for the highest-stakes moments and FFmpeg Motion for the remaining
+explanatory shots. Every extra shot must advance the story, comparison, or
+emotion; do not change images merely to create motion.
+
 Set the intended format in `project.resolution` and make every image in the ZIP
 match it. AutoClip resolves a per-job render profile from the final project
 resolution, so FFmpeg scene rendering, Wan normalization, subtitles, and final
@@ -583,6 +593,13 @@ For science hooks, compose the first image like a premium science-book cover
 or documentary-film poster: one dominant focal subject, deliberate negative
 space, and one elegant title. Never turn it into a crowded information card.
 
+Treat that first image as **Narrative Key Art** (also called a cinematic
+storytelling thumbnail): a single image that communicates the whole video's
+story, stakes, and emotional promise at a glance—not merely its topic. Use a
+clear cause-and-effect or before-and-after composition when it helps. The
+thumbnail and Scene 1 must share this same core story image so the viewer gets
+an immediate payoff after clicking.
+
 The recurring Mamase anime presenter must appear in every first scene, using
 the established friendly glasses, tousled-black-hair, navy-blazer identity and
 a face-forward composition suitable for Wan/LatentSync talking shots. Keep the
@@ -601,9 +618,11 @@ immediately follow with the evidence and its limits.
 
 ### Default clip structure
 
-Aim for 45-70 seconds unless the user requests a short technical test. A usual
-format is 5-8 content scenes plus an optional 3-4 second presenter intro and
-the mandatory Mamase branding outro:
+Aim for 45-70 seconds unless the user requests a short technical test. A
+normal public clip has **at least 8 scenes**, including the mandatory Mamase
+branding outro. Add more scenes only when they introduce a distinct factual
+beat, visual reveal, explanation, or emotional turn; never pad the runtime by
+repeating an idea or decorative b-roll. A usual story flow is:
 
 ```text
 Hook → reveal/context → why/how → unexpected twist → meaning/safety context

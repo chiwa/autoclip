@@ -78,12 +78,13 @@ def create_job(
     subtitle_mode: str | None = Form(None),
     render_engine: str | None = Form(None),
     output_format: str | None = Form(None),
+    motion_resolution: str | None = Form(None),
     script_json: str | None = Form(None),
 ) -> dict:
     if not file.filename or not file.filename.lower().endswith(".zip"):
         raise HTTPException(400, public_error(AppError("PACKAGE_INVALID", "Exactly one ZIP file is required")))
     try:
-        record = request.app.state.job_service.submit(file, tts_provider, subtitle_mode, script_json, render_engine, output_format)
+        record = request.app.state.job_service.submit(file, tts_provider, subtitle_mode, script_json, render_engine, output_format, motion_resolution)
     except AppError as exc:
         raise HTTPException(413 if exc.code == "UPLOAD_TOO_LARGE" else 400, public_error(exc)) from exc
     return {"jobId": record.job_id, "status": record.status}

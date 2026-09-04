@@ -14,6 +14,12 @@ For a new public clip, present the complete Thai script and scene outline for
 approval before generating final assets, unless the user explicitly asks for a
 technical test package. Keep scenes in the approved `script.json` order.
 
+Public clips require **at least 8 scenes**, counting the mandatory Mamase
+outro. Use more scenes when each additional scene earns its place with a new
+fact, visual reveal, explanation, or emotional turn. Do not pad the runtime by
+repeating narration, restating a point, or adding decorative b-roll that does
+not advance the story.
+
 By default, scene 1 is the recurring original anime presenter with
 `character_id: "mamase-presenter-v1"`. Its opening narration uses this form,
 adapted only for the topic:
@@ -63,6 +69,13 @@ talking shot. The canonical reference is
 different presenter without the user's approval. For K2-18 b, the in-image
 hook is `เจอสัญญาณเอเลียน?`.
 
+Design the same image as **Narrative Key Art** / a cinematic storytelling
+thumbnail: it should show the full story, stakes, and emotional promise of the
+video at a glance, not just a generic subject image. Favor a readable
+cause-and-effect or before-and-after composition where appropriate. Scene 1
+must deliver the same core story image as the thumbnail, so the click is paid
+off immediately.
+
 ## Delivery format
 
 Every Wan plan defaults to AutoClip's 22 sampling steps. The first hook scene
@@ -90,6 +103,16 @@ ratio: `1080x1920` for Shorts/Reels/TikTok or `1920x1080` for standard YouTube.
 Set `project.resolution` accordingly. For 16:9, use real wide documentary
 composition rather than cropping a vertical image, and reserve a clean
 lower-center area for subtitles.
+
+### Long-form YouTube pacing
+
+For a roughly 10-minute 16:9 video, outline 18-22 narrative chapters and use
+70-100 visual scenes/shots. Refresh the visual every 4-8 seconds; only hold a
+deliberately important tableau for 8-10 seconds. Treat a scene as a visual shot
+rather than a whole chapter. Reserve approximately 10-15 Wan 2.2 hero shots
+for high-stakes moments and use FFmpeg Motion for the remaining explanatory
+shots. Each added shot must advance the story, comparison, or emotion—not just
+create motion.
 
 At render time, AutoClip's Create Video UI offers `use_json`, `vertical`, and
 `youtube`. The first preserves the ZIP resolution; the latter two override it

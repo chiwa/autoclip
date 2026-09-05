@@ -16,6 +16,9 @@ services:
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       AUTOCLIP_OPENAI_MODEL: ${AUTOCLIP_OPENAI_MODEL:-gpt-5-mini}
       AUTOCLIP_IMAGE_MODEL: ${AUTOCLIP_IMAGE_MODEL:-gpt-image-1}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      AUTOCLIP_GEMINI_TEXT_MODEL: ${AUTOCLIP_GEMINI_TEXT_MODEL:-gemini-3.6-flash}
+      AUTOCLIP_GEMINI_IMAGE_MODEL: ${AUTOCLIP_GEMINI_IMAGE_MODEL:-gemini-2.5-flash-image}
     healthcheck:
       test: ["CMD", "curl", "-fsS", "http://localhost:8000/health"]
       interval: 10s

@@ -31,3 +31,25 @@ def test_home_contains_thai_tts_preview_and_download():
     assert 'id="ttsDownload"' in page
     assert "fetch('/api/tts'" in script
     assert "URL.createObjectURL" in script
+
+
+def test_ai_page_uses_no_chat_automatic_zip_flow_with_live_progress():
+    page = (STATIC / "ai.html").read_text(encoding="utf-8")
+    assert "สร้างบทอัตโนมัติ" in page
+    assert "/api/ai/projects/automatic" in page
+    assert "/generate-images" in page
+    assert "/approve-and-package" in page
+    assert "LIVE CREATION PROGRESS" in page
+    assert "setInterval(refresh,1500)" in page
+    assert "อัปเดตล่าสุด" in page
+    assert "คุยกับ AutoClip" not in page
+    assert 'id="download" class="button" download' in page
+
+
+def test_antigravity_prompt_page_is_copyable_and_uses_durable_visual_brief():
+    page = (STATIC / "antigravity.html").read_text(encoding="utf-8")
+    app = Path("app/main.py").read_text(encoding="utf-8")
+    assert 'id="copy"' in page
+    assert "navigator.clipboard.writeText" in page
+    assert "assets/parker_solar_probe_reel/visual-reference.md" in page
+    assert "@application.get(\"/antigravity\"" in app

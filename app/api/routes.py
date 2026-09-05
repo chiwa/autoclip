@@ -23,14 +23,21 @@ class AiMessageRequest(BaseModel):
     content: str = Field(min_length=1, max_length=8000)
 
 
+class AiAutomaticRequest(BaseModel):
+    topic: str = Field(min_length=1, max_length=500)
+    concept: str = Field(default="", max_length=4000)
+
+
 class AiSceneUpdate(BaseModel):
     narration: str | None = None
+    tts_text: str | None = None
     subtitle: str | None = None
     show_subtitle: bool | None = None
     image_prompt: str | None = None
     motion: str | None = None
     transition: str | None = None
     estimated_duration: float | None = None
+    wan: dict | None = None
 
 class YouTubeUploadRequest(BaseModel):
     connectionId: str
@@ -321,6 +328,18 @@ def create_ai_project(request: Request, topic: str = "") -> dict:
         raise HTTPException(400, public_error(exc)) from exc
 
 
+@router.post("/ai/projects/automatic")
+def create_automatic_ai_project(request: Request, body: AiAutomaticRequest) -> dict:
+    """Start the no-chat topic-to-ZIP workflow and return immediately.
+
+    The browser polls the project resource for the live, persisted progress log.
+    """
+    try:
+        return request.app.state.ai_project_service.create_automatic(body.topic, body.concept).model_dump(mode="json")
+    except AppError as exc:
+        raise HTTPException(400, public_error(exc)) from exc
+
+
 @router.get("/ai/projects")
 def list_ai_projects(request: Request) -> dict:
     return {"projects": request.app.state.persistence.list_projects()}
@@ -366,10 +385,27 @@ def ai_regenerate_image(request: Request, project_id: str, scene_id: str) -> dic
         raise HTTPException(400, public_error(exc)) from exc
 
 
+@router.post("/ai/projects/{project_id}/generate-images")
+def ai_generate_images(request: Request, project_id: str) -> dict:
+    try:
+        return request.app.state.ai_project_service.start_image_generation(project_id).model_dump(mode="json")
+    except AppError as exc:
+        raise HTTPException(400, public_error(exc)) from exc
+
+
 @router.post("/ai/projects/{project_id}/confirm")
 def ai_confirm(request: Request, project_id: str) -> dict:
     try:
         return request.app.state.ai_project_service.confirm(project_id).model_dump(mode="json")
+    except AppError as exc:
+        raise HTTPException(400, public_error(exc)) from exc
+
+
+@router.post("/ai/projects/{project_id}/approve-and-package")
+def ai_approve_and_package(request: Request, project_id: str) -> dict:
+    try:
+        path = request.app.state.ai_project_service.approve_and_build_package(project_id)
+        return {"projectId": project_id, "packageUrl": f"/api/ai/projects/{project_id}/package", "filename": path.name}
     except AppError as exc:
         raise HTTPException(400, public_error(exc)) from exc
 

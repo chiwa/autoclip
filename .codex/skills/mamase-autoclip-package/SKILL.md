@@ -10,9 +10,13 @@ use it to change AutoClip application code or RunPod setup.
 
 ## Creative flow
 
-For a new public clip, present the complete Thai script and scene outline for
-approval before generating final assets, unless the user explicitly asks for a
-technical test package. Keep scenes in the approved `script.json` order.
+For a new public clip created manually, present the complete Thai script and
+scene outline for approval before generating final assets, unless the user
+explicitly asks for a technical test package. AutoClip's `/ai` automatic mode
+uses the same two approvals without chat: generate and approve the script,
+generate and approve the scene images, then create the finished package. It
+reports each planning, image, validation, and packaging step live. Keep scenes
+in the resulting `script.json` order.
 
 Public clips require **at least 8 scenes**, counting the mandatory Mamase
 outro. Use more scenes when each additional scene earns its place with a new
@@ -76,6 +80,10 @@ six scenes per job, configurable through `AUTOCLIP_GOOGLE_TTS_PARALLELISM`)
 because each scene is independent. Keep the completed
 audio mapped back to the original scene order; use bounded concurrency rather
 than unbounded requests.
+For FFmpeg Motion, AutoClip may render two independent scenes concurrently;
+their subtitle and MP4 outputs remain scene-local and are sorted back into
+script order before final composition. Keep Wan 2.2 generation and final
+composition sequential.
 
 Use the supplied presenter image unchanged for a static/FFmpeg-motion scene.
 If a Wan prompt is included, state that it must preserve the supplied 2D anime
@@ -95,6 +103,48 @@ The visual must show the central subject, setting, action, or evidence stated
 in the line so a viewer can understand it before reading subtitles. Avoid
 generic decorative b-roll whenever the narration calls for a specific animal,
 place, process, object, or scientific detail.
+
+## Visual quality gate — cinematic, not placeholder art
+
+Before packaging, inspect every master image at phone size. Mamase space and
+science clips must feel like a premium cinematic documentary, not a sparse
+slide deck, a generic AI render, or an infographic channel.
+
+Read `assets/parker_solar_probe_reel/visual-reference.md` before creating a
+space or science Reel. It is the concise, durable quality benchmark; inspect
+the master images in that folder only when a composition needs closer study.
+Meet or exceed its standard without copying its Sun/Parker subject matter into
+unrelated stories. Never rely on `dist/` as the sole visual reference because
+ZIP outputs may be cleaned up.
+
+- Make the subject visually dominant: use a clear foreground subject plus
+  atmosphere, scale, light, depth, or a secondary element that tells the
+  scene's story. Do not deliver a small spacecraft, diagram, or moon floating
+  in a mostly empty black 9:16 canvas.
+- Keep visual energy in the middle 70–80% of the frame. The subtitle safe area
+  is a calm lower-center band, not an excuse to leave half the image empty.
+  Compose vertically with deliberate foreground, midground, and background.
+- Prefer dramatic, physically credible documentary lighting: directional sun
+  light, reflected ice, volumetric dust/ice particles, rich but controlled
+  contrast, and scale cues. Avoid flat cut-out objects on a plain star field.
+- Except for scene 1's approved Thai title and hook, scene masters contain no
+  labels, English copy, numbered callouts, charts, HUD, NASA/ESA logos,
+  watermarks, or embedded subtitles. Explain mechanisms in narration and
+  AutoClip subtitles instead.
+- Scene 1 must be integrated **Narrative Key Art**: the presenter, subject,
+  title, and hook share one cinematic light direction and depth. Never paste a
+  stock presenter over an unrelated background or leave a huge blank area.
+- A mechanism that genuinely needs explanation may use a clean cinematic
+  cutaway, but it must be image-led and label-free—not a textbook cross-section
+  or presentation slide.
+
+Reject and regenerate an image that has any of these failure signals: more
+than roughly one third dead empty space without a compositional purpose,
+generic black-starfield filler, weak/small focal subject, inconsistent visual
+style, unreadable or unintended text, any logo/watermark, visibly pasted
+presenter, or a picture that does not make that narration's fact legible.
+For a multi-scene package, do this visual pass before writing the final ZIP;
+regenerate only the failed scenes and retain strong ones.
 
 ## First-scene hook
 

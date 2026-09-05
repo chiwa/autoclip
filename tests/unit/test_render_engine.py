@@ -122,6 +122,13 @@ def test_native_wan_settings_are_read_from_dotenv(tmp_path, monkeypatch):
     assert settings.wan.request_timeout_seconds == 240
 
 
+def test_ffmpeg_scene_parallelism_defaults_to_two_and_reads_dotenv(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    assert load_settings(tmp_path / "config.yaml").video.ffmpeg_scene_parallelism == 2
+    (tmp_path / ".env").write_text("AUTOCLIP_FFMPEG_SCENE_PARALLELISM=3\n", encoding="utf-8")
+    assert load_settings(tmp_path / "config.yaml").video.ffmpeg_scene_parallelism == 3
+
+
 def test_wan_selection_fails_explicitly_until_connector_is_enabled(tmp_path, monkeypatch):
     service = build_service(tmp_path)
     job_id = "wan-not-configured"

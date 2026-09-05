@@ -46,7 +46,13 @@ def create_app() -> FastAPI:
 
     @application.get("/ai", include_in_schema=False)
     def ai_page() -> FileResponse:
-        return FileResponse(static_dir / "ai.html")
+        # The automatic package UI changes independently of media assets;
+        # never leave a browser using an old download handler from cache.
+        return FileResponse(static_dir / "ai.html", headers={"Cache-Control": "no-store"})
+
+    @application.get("/antigravity", include_in_schema=False)
+    def antigravity_page() -> FileResponse:
+        return FileResponse(static_dir / "antigravity.html", headers={"Cache-Control": "no-store"})
 
     @application.get("/history", include_in_schema=False)
     def history_page() -> FileResponse:

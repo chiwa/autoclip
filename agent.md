@@ -280,8 +280,15 @@ RunPod generation. Preserve the product workflow:
 ### Product boundaries
 
 - **สร้างวิดีโอ** (`/`) imports ZIP and selects `ffmpeg_motion` or `wan2.2`.
-- **สร้างด้วย AI** (`/ai`) generates script, images, and ZIP only after the
-  user reviews the scene preview.
+- **สร้างด้วย AI** (`/ai`) is a two-stage automatic package path: the user
+  supplies only a topic and optional concept; AutoClip first plans a script and
+  shot list for approval, then creates images only after the script is
+  approved. The user may edit a specific scene and regenerate only its image,
+  then approves the visual preview before AutoClip validates and returns the
+  final ZIP. The page must show a persistent live progress section (step,
+  percentage, and investigation logs) in both generation stages. It has no
+  chat. Use the server-only `GEMINI_API_KEY`; never expose it to the browser or
+  write it into a package.
 - Wan is a renderer inside Create Video, never a separate product flow.
 - Even with Wan, FFmpeg does final scene ordering, narration, subtitles,
   transitions, BGM ducking/mix, loudness normalization, and MP4 export.
@@ -499,8 +506,53 @@ at the expense of accuracy.
 
 3. **กฎ On-Screen Graphics (Minimal Sci-Fi HUD vs No Clunky Cards)**:
    - **ห้ามใส่การ์ดข้อความสี่เหลี่ยมทึบ บุลเล็ตพอยต์ หรือ Infographic Box รกตา**
-   - หากจำเป็นต้องแสดงตัวเลข/ข้อมูล ให้ใช้สไตล์ **Futuristic Sci-Fi HUD Box โปร่งแสงขนาดเล็ก** (เช่น กรอบเส้นบางสีฟ้า Cyan พร้อมข้อความเทเลเมทรีสั้นๆ `LIGHT TRAVEL TIME: 12.8 BILLION YEARS` หรือเส้นบอกระยะทาง)
+   - สำหรับคลิป Mamase ปกติ **ไม่ใช้ HUD, label, callout หรือ telemetry ในภาพ**; อนุญาตได้เฉพาะเมื่อผู้ใช้ขอภาพข้อมูลโดยตรง และต้องเล็ก โปร่งแสง และไม่ทำให้ภาพกลายเป็น infographic
    - ปล่อยให้เนื้อหาหลักเป็นหน้าที่ของเสียงบรรยาย (Voiceover) และระบบ AutoClip Subtitles โดยไม่บดบังความงามของภาพอวกาศ
+
+### Visual quality gate: ห้ามส่งงานภาพที่ดูโล่ง/ฉุ่ย
+
+ก่อนประกอบ ZIP ให้ตรวจภาพ master ทุก scene ในขนาดที่เห็นบนมือถือจริง
+โดยเฉพาะหมวดอวกาศ/วิทยาศาสตร์ ภาพต้องมีมาตรฐาน **premium cinematic
+documentary** ไม่ใช่สไลด์ดำโล่ง, infographic, หรือวัตถุเล็ก ๆ แปะอยู่บน
+starfield:
+
+ก่อนสร้าง Reel อวกาศ/วิทยาศาสตร์ ให้ **อ่าน
+`assets/parker_solar_probe_reel/visual-reference.md` ก่อน**. ไฟล์นี้สรุป
+visual benchmark ของ Parker แบบสั้น จึงไม่ต้องเปิด master images ทุกไฟล์;
+เปิดเฉพาะภาพที่ต้องศึกษา composition เพิ่ม. ต้องทำให้ถึงหรือดีกว่ามาตรฐานนี้
+แต่ห้ามคัดลอกเนื้อหา Sun/Parker ไปใส่เรื่องอื่น. ห้ามใช้ `dist/` เป็น reference
+หลัก เพราะเป็น output ZIP ที่อาจถูก cleanup ได้.
+
+- Subject หลักต้องเด่นและใหญ่พอ โดยใช้ foreground + midground + background
+  หรือแสง/อนุภาค/scale cue ที่ทำให้เรื่องมีมิติ; ห้ามปล่อยยานหรือดวงจันทร์
+  เล็ก ๆ ลอยอยู่ในผืนดำส่วนใหญ่ของเฟรม
+- ให้ active visual composition กินพื้นที่กลางภาพราว 70–80%; subtitle safe
+  area ด้านล่างเป็นพื้นที่สงบพอดี ไม่ใช่พื้นที่ดำว่างครึ่งภาพ
+- ใช้แสงและบรรยากาศระดับสารคดี: direction ของแสงสมเหตุผล, reflected ice,
+  volumetric particle/dust, contrast ที่ลุ่มลึก และ scale ที่สัมผัสได้; หลีกเลี่ยง
+  cut-out asset บนพื้นหลังดาวธรรมดา
+- Scene 2 เป็นต้นไปห้ามมีตัวหนังสือ, callout, แผนภาพ, numbered list, HUD,
+  NASA/ESA logo, watermark, หรือ subtitle ฝังในภาพ. ให้เล่ากลไกด้วย narration
+  และ AutoClip subtitle แทน
+- Scene 1 เป็น **Narrative Key Art** ชิ้นเดียว: Mamase, subject, title, hook
+  ต้องอยู่ในโลกเดียวกันด้วยแสง เงา ระยะชัด และองค์ประกอบที่สัมพันธ์กัน; ห้าม
+  cut/paste ตัวละครทับ background และห้ามปล่อย blank area ขนาดใหญ่
+- หากต้องอธิบายกลไก ใช้ cinematic cutaway ที่ไม่มี label และยังสวยแบบภาพยนตร์
+  ไม่ใช้ภาพตัดขวางแบบตำรา/slide
+
+**Reject / regenerate** ทันที หากภาพมี dead space เกินราวหนึ่งในสามโดยไม่มี
+เหตุผลทางองค์ประกอบ, starfield filler, subject เล็กหรือไม่มีจุดโฟกัส,
+สไตล์ไม่ต่อเนื่อง, ตัวหนังสือหลุด/อ่านไม่ได้, โลโก้/ลายน้ำ, presenter ดูเหมือน
+วางทับ, หรือภาพไม่สื่อ fact ของ narration ได้ก่อนอ่าน subtitle. ให้แก้เฉพาะ
+scene ที่ไม่ผ่านก่อนสร้าง ZIP และเก็บ scene ที่ดีไว้เหมือนเดิม.
+
+### Autonomous master-image workflow (มาตรฐาน Tianwen-2)
+
+เมื่อผู้ใช้ขอคลิปทั้งชุด ให้ agent สร้าง master images จาก scene plan ที่ผ่าน review เองทั้งหมด **ห้ามโยนงานให้ผู้ใช้เขียน image prompt ทีละซีน**. แปลง narration เป็น visual brief: fact หลัก, subject, action, setting, scale cue และอารมณ์.
+
+ทุก scene เป็น heroic factual frame: foreground subject เด่น + midground action + background ที่ให้ scale/atmosphere; ใช้ detail วิทยาศาสตร์/วิศวกรรมที่น่าเชื่อ, แสงมีทิศทาง, cinematic navy/cyan ตัด gold/orange, subtitle-safe band ด้านล่างพอดี. สร้าง native aspect ratio, ตรวจบนมือถือ, regenerate เฉพาะ scene อ่อน และห้ามใช้ black-starfield filler เพื่อให้จบงาน.
+
+Scene 1 เท่านั้นที่มี Thai topic title + short hook; Scene 2 เป็นต้นไปไม่มี text, label, HUD, watermark หรือ logo. ชุด `assets/tianwen-2-quasi-satellite-reel/images/` เป็นตัวอย่าง workflow ที่ผ่าน: key art แบบ integrated แล้วตามด้วยภาพตรง narration สำหรับ quasi-satellite, journey, close approach, surface study, sampling, return และ next mission leg. ใช้วิธีคิดนี้กับเรื่องใหม่โดยห้ามคัดลอก subject matter.
 
 ### Delivery formats and framing
 
@@ -713,6 +765,11 @@ Imaginable hook → everyday scale comparison → surprising reveal
   up to six scenes per job by default (configurable through
   `AUTOCLIP_GOOGLE_TTS_PARALLELISM`), but completed audio must be mapped back to the
   original scene order before rendering.
+
+- For the FFmpeg Motion engine only, render up to two independent scenes per
+  job concurrently (`AUTOCLIP_FFMPEG_SCENE_PARALLELISM`, range 1–4). Each
+  worker owns its SRT and MP4; sort outputs back into original scene order
+  before final composition. Wan 2.2 and final composition stay sequential.
 
 - Hook must create curiosity in the first 2-3 seconds without misleading.
 - Scene 1 in-image typography always has two clear layers: a concise topic

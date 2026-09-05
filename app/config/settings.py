@@ -30,6 +30,7 @@ class VideoSettings(BaseModel):
     scene_padding_seconds: float = Field(0.25, ge=0, le=10)
     transition: str = "fade"
     transition_seconds: float = Field(0.45, ge=0, le=2)
+    ffmpeg_scene_parallelism: int = Field(2, ge=1, le=4)
 
 
 class TtsSettings(BaseModel):
@@ -129,6 +130,10 @@ class Settings(BaseModel):
     openai_api_key: str | None = None
     openai_model: str = "gpt-5-mini"
     image_model: str = "gpt-image-1"
+    # Read only by the server. Never return it from an API or put it in a ZIP.
+    gemini_api_key: str | None = None
+    gemini_text_model: str = "gemini-3.6-flash"
+    gemini_image_model: str = "gemini-2.5-flash-image"
     ai_instructions: str = "You are the AutoClip Mamase assistant. Create concise factual Thai short-form scripts. Return JSON with message and scenes when asked for a preview. Every scene needs id,narration,subtitle,image_prompt,motion,transition,estimated_duration. Always put the Mamase brand outro last."
 
 
@@ -151,9 +156,9 @@ def _dotenv_value(name: str, config_path: Path) -> str | None:
             continue
         for line in candidate.read_text(encoding="utf-8").splitlines():
             stripped = line.strip()
-            if not stripped or stripped.startswith("#") or "=" not in stripped:
+            if not stripped or stripped.startswith("#") or ("=" not in stripped and ":" not in stripped):
                 continue
-            key, value = stripped.split("=", 1)
+            key, value = stripped.split("=", 1) if "=" in stripped else stripped.split(":", 1)
             if key.strip() == name:
                 return value.strip().strip('"\'')
     return None
@@ -171,6 +176,7 @@ def load_settings(path: str | Path | None = None) -> Settings:
         "AUTOCLIP_GOOGLE_TTS_MODEL": ("tts", "google_model"),
         "AUTOCLIP_GOOGLE_TTS_VOICE": ("tts", "google_voice"),
         "AUTOCLIP_GOOGLE_TTS_PARALLELISM": ("tts", "google_parallelism"),
+        "AUTOCLIP_FFMPEG_SCENE_PARALLELISM": ("video", "ffmpeg_scene_parallelism"),
         "AUTOCLIP_MAX_UPLOAD_MB": ("app", "max_upload_mb"),
         "AUTOCLIP_MAX_EXTRACTED_MB": ("app", "max_extracted_mb"),
         "AUTOCLIP_WAN_ENABLED": ("wan", "enabled"),
@@ -229,10 +235,17 @@ def load_settings(path: str | Path | None = None) -> Settings:
                 if match: oauth[field] = match.group(1).strip("'\"")
     if openai_key:
         data["openai_api_key"] = openai_key
+    gemini_key = _dotenv_value("GEMINI_API_KEY", config_path)
+    if gemini_key:
+        data["gemini_api_key"] = gemini_key
     if os.getenv("AUTOCLIP_OPENAI_MODEL"):
         data["openai_model"] = os.environ["AUTOCLIP_OPENAI_MODEL"]
     if os.getenv("AUTOCLIP_IMAGE_MODEL"):
         data["image_model"] = os.environ["AUTOCLIP_IMAGE_MODEL"]
+    if value := _dotenv_value("AUTOCLIP_GEMINI_TEXT_MODEL", config_path):
+        data["gemini_text_model"] = value
+    if value := _dotenv_value("AUTOCLIP_GEMINI_IMAGE_MODEL", config_path):
+        data["gemini_image_model"] = value
     if os.getenv("AUTOCLIP_THONBURIAN_REF_VOICE"):
         data.setdefault("tts", {})["thonburian_ref_voice"] = os.environ["AUTOCLIP_THONBURIAN_REF_VOICE"]
     if os.getenv("AUTOCLIP_THONBURIAN_REF_TEXT"):

@@ -304,7 +304,9 @@ class JobService:
             transition_seconds = 0.0
             if count > 1 and self.settings.video.transition_seconds > 0:
                 transition_seconds = min(self.settings.video.transition_seconds, min(durations) / 2)
-            for index, (scene, duration) in enumerate(zip(script.scenes, durations)):
+            if not wan_client:
+                rendered = self._render_ffmpeg_scenes(job_id, script, durations, workspace, render_profile, sub_mode, transitions, transition_seconds)
+            for index, (scene, duration) in enumerate(zip(script.scenes, durations) if wan_client else ()):
                 render_progress = 40 + round(35 * index / count)
                 self._progress(job_id, JobStatus.RENDERING_SCENES, render_progress, f"Rendering scene {index + 1} of {count} (in progress)")
                 scene_started = time.monotonic()
@@ -413,6 +415,65 @@ class JobService:
             self.events.publish(JobEvent(type=JobEventType.FAILED, job_id=job_id, payload={"progress": progress, "status": JobStatus.FAILED, "code": error.code, "message": error.message, "currentStep": step}))
             self._investigation_log(job_id, "job_failed", error_code="INTERNAL_ERROR", elapsed_ms=round((time.monotonic() - started) * 1000))
             logger.exception("job_id=%s stage=FAILED error_code=INTERNAL_ERROR", job_id)
+
+    def _render_ffmpeg_scenes(self, job_id: str, script, durations: list[float], workspace: Workspace, render_profile: RenderProfile, sub_mode: str, transitions: list[str], transition_seconds: float) -> list[Path]:
+        """Render independent FFmpeg scenes with bounded parallelism.
+
+        The final compose remains ordered and single-threaded.  Each worker owns
+        its SRT and MP4 paths, so no scene writes the same file as another.
+        """
+        count = len(script.scenes)
+        workers = min(count, self.settings.video.ffmpeg_scene_parallelism)
+        self._log(job_id, "INFO", f"Rendering FFmpeg scenes in parallel ({workers} workers)")
+        self._investigation_log(job_id, "ffmpeg_scene_parallelism", workers=workers, scene_count=count)
+
+        def render_one(index: int) -> tuple[int, Path, int]:
+            scene = script.scenes[index]
+            duration = durations[index]
+            started = time.monotonic()
+            self._investigation_log(job_id, "scene_render_started", render_engine="ffmpeg_motion", scene_id=scene.id, scene_index=index + 1, motion=scene.motion, transition=scene.transition or self.settings.video.transition, duration_seconds=round(duration, 3))
+            try:
+                if sub_mode == "disable":
+                    show_sub = False
+                elif sub_mode == "enable":
+                    show_sub = True
+                else:
+                    show_sub = scene.show_subtitle and bool(scene.subtitle)
+                subtitle = None
+                if show_sub and (scene.subtitle or scene.narration):
+                    entering = transition_seconds if index > 0 and transitions[index - 1] != "none" else 0.0
+                    leaving = transition_seconds if index < count - 1 and transitions[index] != "none" else 0.0
+                    end = duration - leaving
+                    if end > entering + 0.05:
+                        subtitle = SubtitleRenderer().write(scene.subtitle or scene.narration, duration, workspace.subtitles / f"{scene.id}.srt", entering, end)
+                        self._investigation_log(job_id, "subtitle_window", scene_id=scene.id, start_seconds=round(entering, 3), end_seconds=round(end, 3), transition_seconds=round(transition_seconds, 3))
+                output = SceneRenderer(self.ffmpeg, self.settings, render_profile).render(scene, workspace.extracted / scene.image, workspace.generated_audio / f"{scene.id}.wav", subtitle, duration, workspace.rendered_scenes / f"{scene.id}.mp4")
+                return index, output, round((time.monotonic() - started) * 1000)
+            except AppError as exc:
+                details = {**exc.details, "sceneId": scene.id}
+                raise AppError(exc.code, exc.message, details) from exc
+            except Exception as exc:
+                raise AppError("SCENE_RENDER_FAILED", "Scene rendering failed", {"sceneId": scene.id}) from exc
+
+        completed_paths: dict[int, Path] = {}
+        with ThreadPoolExecutor(max_workers=workers, thread_name_prefix="autoclip-ffmpeg") as executor:
+            futures = {}
+            for index, scene in enumerate(script.scenes):
+                self._log(job_id, "INFO", f"Rendering scene {index + 1} of {count} (queued)")
+                futures[executor.submit(render_one, index)] = (index, scene)
+            for completed, future in enumerate(as_completed(futures), start=1):
+                index, scene = futures[future]
+                try:
+                    _, output, elapsed_ms = future.result()
+                except Exception:
+                    for pending in futures:
+                        pending.cancel()
+                    raise
+                completed_paths[index] = output
+                self._investigation_log(job_id, "scene_render_completed", render_engine="ffmpeg_motion", scene_id=scene.id, scene_index=index + 1, output=output.name, elapsed_ms=elapsed_ms)
+                self._log(job_id, "SUCCESS", f"Scene rendered {index + 1} of {count}")
+                self._progress(job_id, JobStatus.RENDERING_SCENES, 40 + round(35 * completed / count), f"Rendered scene {completed} of {count}")
+        return [completed_paths[index] for index in range(count)]
 
     def final_video(self, job_id: str) -> Path:
         record = self.registry.get(job_id)

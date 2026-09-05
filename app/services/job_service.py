@@ -7,7 +7,7 @@ import logging
 import threading
 import time
 import uuid
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from app.config.settings import Settings
@@ -112,7 +112,7 @@ class JobService:
         self.pronunciation = PronunciationService()
 
     def submit(self, uploaded_file, tts_provider: str | None = None, subtitle_mode: str | None = None, script_json: str | None = None, render_engine: str | None = None, output_format: str | None = None, motion_resolution: str | None = None) -> JobRecord:
-        selected_provider = (tts_provider or self.settings.tts.provider or "local").strip().lower()
+        selected_provider = (tts_provider or self.settings.tts.provider or "google-gemini").strip().lower()
         # Keep UI/config aliases backwards compatible while exposing one
         # canonical provider name to the rendering pipeline.
         selected_provider = {
@@ -120,8 +120,10 @@ class JobService:
             "vachana-tts": "local",
             "f5": "thonburian",
             "bird/f5-tts-thai": "bird-f5",
+            "google": "google-gemini",
+            "gemini": "google-gemini",
         }.get(selected_provider, selected_provider)
-        if selected_provider not in {"dummy", "local", "runpod-f5", "runpod-f5-thai", "kokoro", "kokoro-thai", "wayu-kokoro-thai", "thonburian", "bird", "bird-f5", "f5-thai", "f5-tts-thai", "khanomtan", "khanom-tan", "khanomtan-tts"}:
+        if selected_provider not in {"dummy", "local", "google-gemini", "runpod-f5", "runpod-f5-thai", "kokoro", "kokoro-thai", "wayu-kokoro-thai", "thonburian", "bird", "bird-f5", "f5-thai", "f5-tts-thai", "khanomtan", "khanom-tan", "khanomtan-tts"}:
             raise AppError("TTS_GENERATION_FAILED", "Selected TTS model is unavailable")
         selected_engine = (render_engine or "ffmpeg_motion").strip().lower()
         if selected_engine not in SUPPORTED_RENDER_ENGINES:
@@ -259,25 +261,40 @@ class JobService:
                 self._log(job_id, "SUCCESS", "Connected to ComfyUI Wan 2.2")
             selected_provider = self.registry.get(job_id).tts_provider or self.settings.tts.provider
             provider = create_tts_provider(selected_provider, self.settings)
+            if getattr(script.voice, "style_prompt", None) and hasattr(provider, "style_prompt"):
+                provider.style_prompt = script.voice.style_prompt
             count = len(script.scenes)
-            durations: list[float] = []
-            self._progress(job_id, JobStatus.GENERATING_AUDIO, 15, f"Generating narration 1 of {count}")
-            for index, scene in enumerate(script.scenes):
-                start_progress = 15 + round(25 * index / count)
-                self._progress(job_id, JobStatus.GENERATING_AUDIO, start_progress, f"Generating narration {index + 1} of {count} (in progress)")
-                self._log(job_id, "INFO", f"Generating narration {index + 1} of {count} (in progress)")
-                self._investigation_log(job_id, "tts_started", render_engine=render_engine, scene_id=scene.id, scene_index=index + 1, scene_count=count, provider=selected_provider)
+            parallelism = min(count, self.settings.tts.google_parallelism) if selected_provider == "google-gemini" else 1
+            self._progress(job_id, JobStatus.GENERATING_AUDIO, 15, f"Generating narration 0 of {count}")
+            if parallelism > 1:
+                self._log(job_id, "INFO", f"Generating Google Gemini narration in parallel ({parallelism} workers)")
+                self._investigation_log(job_id, "tts_parallelism", provider=selected_provider, workers=parallelism, scene_count=count)
+
+            def synthesize_scene(index: int, scene) -> tuple[int, float]:
                 output = workspace.generated_audio / f"{scene.id}.wav"
                 try:
                     provider.synthesize(self.pronunciation.resolve_scene(scene), script.project.language, script.voice.voice, script.voice.speed, output)
+                    return index, self.ffprobe.duration(output) + self.settings.video.scene_padding_seconds
                 except AppError:
                     raise
                 except Exception as exc:
                     raise AppError("TTS_GENERATION_FAILED", "Narration audio generation failed", {"sceneId": scene.id}) from exc
-                durations.append(self.ffprobe.duration(output) + self.settings.video.scene_padding_seconds)
-                self._investigation_log(job_id, "tts_completed", render_engine=render_engine, scene_id=scene.id, audio_seconds=round(durations[-1], 3))
-                self._log(job_id, "SUCCESS", f"Narration generated {index + 1} of {count}")
-                self._progress(job_id, JobStatus.GENERATING_AUDIO, 15 + round(25 * (index + 1) / count), f"Generated narration {index + 1} of {count}")
+
+            durations_by_index: dict[int, float] = {}
+            with ThreadPoolExecutor(max_workers=parallelism, thread_name_prefix="autoclip-tts") as audio_executor:
+                futures = {}
+                for index, scene in enumerate(script.scenes):
+                    self._log(job_id, "INFO", f"Generating narration {index + 1} of {count} (queued)")
+                    self._investigation_log(job_id, "tts_started", render_engine=render_engine, scene_id=scene.id, scene_index=index + 1, scene_count=count, provider=selected_provider)
+                    futures[audio_executor.submit(synthesize_scene, index, scene)] = (index, scene)
+                for completed, future in enumerate(as_completed(futures), start=1):
+                    index, scene = futures[future]
+                    _, duration = future.result()
+                    durations_by_index[index] = duration
+                    self._investigation_log(job_id, "tts_completed", render_engine=render_engine, scene_id=scene.id, audio_seconds=round(duration, 3))
+                    self._log(job_id, "SUCCESS", f"Narration generated {index + 1} of {count}")
+                    self._progress(job_id, JobStatus.GENERATING_AUDIO, 15 + round(25 * completed / count), f"Generated narration {completed} of {count}")
+            durations = [durations_by_index[index] for index in range(count)]
             subtitle_renderer = SubtitleRenderer()
             scene_renderer = SceneRenderer(self.ffmpeg, self.settings, render_profile)
             rendered: list[Path] = []
@@ -411,10 +428,27 @@ class JobService:
 
     def restore(self, job_id: str) -> JobRecord | None:
         current = self.registry.get(job_id)
-        if current: return current
-        if not self.persistence: return None
-        row = self.persistence.get_job(job_id)
-        if not row: return None
+        if current and not self.persistence:
+            return current
+        row = self.persistence.get_job(job_id) if self.persistence else None
+        if current and not row:
+            return current
+        if not row:
+            return None
+        # A completed repair may be written to SQLite after a renderer has
+        # already recorded this job as failed in the in-memory registry.  The
+        # finished file and durable COMPLETED state are authoritative here;
+        # otherwise the download endpoint remains stuck at VIDEO_NOT_READY
+        # until a server restart.  Never replace an active in-memory job.
+        if current and current.status != JobStatus.COMPLETED:
+            repaired_path = Path(row["final_path"]).resolve() if row.get("final_path") else None
+            workspace_root = self.settings.app.workspace.resolve()
+            if row["status"] == JobStatus.COMPLETED and repaired_path and workspace_root in repaired_path.parents and repaired_path.is_file():
+                current = None
+            else:
+                return current
+        if current:
+            return current
         status = row["status"]
         if status in {JobStatus.RECEIVED, JobStatus.VALIDATING, JobStatus.GENERATING_AUDIO, JobStatus.RENDERING_SCENES, JobStatus.COMPOSING}:
             status = JobStatus.FAILED

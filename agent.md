@@ -304,6 +304,14 @@ audio/bgm.mp3|wav|m4a|aac   # optional BGM
 - Use `PackageService` to validate every created ZIP, and run `unzip -t`.
 - `tts_text` is an optional pronunciation override; use `narration` when it
   is absent.
+- Treat `narration` as viewer-facing wording, but add `tts_text` whenever a
+  scene contains English, an acronym, a foreign proper name, a scientific
+  designation, a unit, or a number that Thai TTS might misread. Keep the
+  correct spelling in narration/subtitles and write the whole spoken line in
+  natural Thai phonetics for `tts_text`: `Parker Solar Probe` → `พาร์กเกอร์
+  โซลาร์ โพรบ`, `Hubble` → `ฮับเบิล`, `N44` → `เอ็น สี่สิบสี่`, and
+  `Superbubble` → `ซูเปอร์บับเบิล`. Never rely on a Thai model guessing
+  English pronunciation; listen to the per-scene TTS preview before publishing.
 
 Minimal scene:
 
@@ -505,6 +513,21 @@ horizontal output or the reverse.
   retain a clean lower-center subtitle area, and favour wide establishing shots,
   medium documentary details, and cinematic landscapes.
 
+### Reel / Shorts production default
+
+For an ordinary **45–60 second** Mamase Reel, Shorts, or TikTok, use **9–12
+scenes** as the normal pacing range: one new, meaningful visual every roughly
+4–6 seconds, with readable Thai subtitles. Use **12–15 scenes** only for a
+fast story with several genuine reveals or short cutaways. Do not use 20 scenes
+for a 45–60 second clip; reserve 20 scenes for a roughly 75–90 second edit or
+an intentionally rapid format where every shot remains readable.
+
+Prefer **FFmpeg Motion** for the main body of short-form clips because it is
+fast, stable, and inexpensive. A Reel normally needs **0–2 Wan shots** only:
+the opening Mamase presenter/hook and, if justified, one high-impact reveal.
+Use FFmpeg Motion for all remaining b-roll, with varied source images and
+intentional motion/focus rather than repeatedly zooming the same frame.
+
 ### Long-form YouTube pacing
 
 For a roughly 10-minute standard YouTube video, plan about 18-22 narrative
@@ -629,9 +652,84 @@ Hook → reveal/context → why/how → unexpected twist → meaning/safety cont
 → warm ending/CTA → Mamase brand scene
 ```
 
+### Mamase science-storyteller voice
+
+Write voiceover as a charismatic Thai science storyteller: curious, friendly,
+slightly cheeky, conversational, and genuinely excited by surprising facts.
+The delivery is an intelligent friend sharing a discovery—not a news anchor or
+a textbook. Give each clip a clear rhythm:
+
+```text
+Imaginable hook → everyday scale comparison → surprising reveal
+→ playful aside / “แต่เดี๋ยวก่อน...” → accurate explanation → warm wonder
+```
+
+- Turn large scientific quantities into a concrete everyday image where useful
+  (for example, compare light-speed travel to laps around Earth), but retain
+  the correct qualification and measurement.
+- Use pauses sparingly for curiosity, comic timing, and emphasis; do not pad
+  the script with ellipses or repeat the same fact.
+- Use natural spoken asides when they make the science feel tangible and the
+  narrator feel present: `แต่เดี๋ยวก่อน...`, `ย้ำนะครับ สมมุติ!`, or
+  `เอ๊ะ วันนี้แดดก็ดีนี่นา`. They are reactions woven into the explanation,
+  not catchphrases to repeat mechanically.
+- Light humor must serve comprehension. Do not turn a hypothetical into a
+  prediction, make unsupported claims, or sacrifice scientific precision for a
+  stronger punchline.
+- Prefer endings that invite wonder: knowing more should reveal how much there
+  still is to discover.
+- Gemini TTS default delivery prompt:
+
+  `Read aloud like a charismatic science storyteller with a playful personality. Sound curious, friendly, slightly cheeky, and genuinely excited by surprising facts. Keep the delivery natural and conversational, with small pauses for comedic timing and emphasis. Never sound like a news anchor.`
+
+- Approved Mamase Google Gemini TTS profile, unless the user overrides it:
+
+  ```json
+  {
+    "voice": "Fenrir",
+    "pitch": 0,
+    "speakingRate": 1.3
+  }
+  ```
+
+  The intended feeling is **energetic, clear, playful, friendly, warm, and
+  reassuring**—a voice that helps the listener relax and stay curious. Extend
+  the delivery prompt with: `Keep the delivery energetic, clear, playful,
+  warm, and reassuring. Make the listener feel relaxed and curious, never
+  rushed, tense, or overly dramatic.`
+
+- Google Gemini TTS is the default provider for Native AutoClip. The UI must
+  expose an editable narration-style prompt and speaking rate, with a visible
+  **คืนค่า Mamase default** action that always restores the approved prompt,
+  Fenrir, and `speakingRate: 1.3`. Google voices must be grouped as **ชาย** and
+  **หญิง**, with Fenrir first in the male group. It uses
+  Application Default Credentials from `gcloud auth application-default login`
+  and the quota project set with `gcloud auth application-default
+  set-quota-project`. Do not create a service-account JSON key, set
+  `GOOGLE_APPLICATION_CREDENTIALS`, expose tokens, or place credentials in ZIPs.
+  `AUTOCLIP_GOOGLE_CLOUD_PROJECT` is optional because Native ADC already carries
+  the quota project; use it only as an explicit override. Google Gemini
+  narration may be generated concurrently for
+  up to six scenes per job by default (configurable through
+  `AUTOCLIP_GOOGLE_TTS_PARALLELISM`), but completed audio must be mapped back to the
+  original scene order before rendering.
+
 - Hook must create curiosity in the first 2-3 seconds without misleading.
-- Narration must be natural Thai, short enough to be spoken clearly, and use
-  Thai phonetic spelling or `tts_text` for difficult foreign names.
+- Scene 1 in-image typography always has two clear layers: a concise topic
+  title (for example `ดาวศุกร์`) plus a separate short hook. The title tells
+  viewers what the story is about; the hook earns the next few seconds. Keep
+  the hierarchy elegant, mobile-readable, and outside the subtitle safe area.
+- For future clips, preserve Mamase's recognizable face, tousled black hair,
+  and rectangular glasses, but do not fix one outfit forever. Match the
+  wardrobe to the scene background with a professional, youthful, lightly
+  playful look. Do not alter an already-approved presenter asset in a current
+  package unless the user explicitly asks. Match facial expression and natural
+  body language to the story beat: wonder, surprise, joy, concern, curiosity,
+  or quiet reflection are all valid when appropriate.
+- Narration must be natural Thai, short enough to be spoken clearly. Any
+  English word, acronym, foreign name, scientific label, date, unit, or number
+  that could be mispronounced requires a full Thai-phonetic `tts_text` for
+  that scene; test it in the per-scene TTS preview before final publishing.
 - Avoid gore, graphic remains, frightening imagery, and unsupported medical or
   scientific implications. State nuance where a popular myth is misleading.
 - Use varied visuals: aerial/wide, environmental detail, close documentary

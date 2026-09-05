@@ -64,6 +64,30 @@ def test_completed_snapshot_exposes_metadata():
     assert response.json()["metadata"]["resolution"] == "1080x1920"
 
 
+def test_restore_replaces_stale_failed_memory_job_with_repaired_completed_record(tmp_path):
+    from app.services.job_service import JobService
+    from app.services.persistence import Persistence
+    from app.domain.models import JobRecord
+
+    settings = app.state.settings.model_copy(deep=True)
+    settings.app.workspace = tmp_path
+    persistence = Persistence(tmp_path)
+    video = tmp_path / "repair" / "output" / "final.mp4"
+    video.parent.mkdir(parents=True)
+    video.write_bytes(b"video")
+    service = JobService(settings, persistence=persistence)
+    record = service.registry.create("repaired")
+    service.registry.update(record.job_id, "FAILED", 92, "Creating final video", {"code": "VIDEO_COMPOSITION_FAILED"})
+    repaired = service.registry.get(record.job_id).model_copy(update={"status": "COMPLETED", "progress": 100, "error": None})
+    persistence.upsert_job(repaired, final_path=video)
+
+    restored = service.restore(record.job_id)
+
+    assert restored is not None
+    assert restored.status == "COMPLETED"
+    assert service.final_video(record.job_id) == video
+
+
 def test_thai_tts_returns_downloadable_wav(monkeypatch):
     monkeypatch.setattr(app.state.tts_preview_service, "provider", DummyTtsProvider())
     response = client.post(

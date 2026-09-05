@@ -4,7 +4,7 @@ import pytest
 
 from app.domain.errors import AppError
 from app.config.settings import Settings
-from app.infrastructure.tts import DummyTtsProvider, LocalThaiTtsProvider, RunpodF5ThaiTtsProvider, create_tts_provider
+from app.infrastructure.tts import DummyTtsProvider, GoogleGeminiTtsProvider, LocalThaiTtsProvider, RunpodF5ThaiTtsProvider, create_tts_provider
 
 
 def test_dummy_tts_creates_valid_wav(tmp_path):
@@ -17,6 +17,7 @@ def test_dummy_tts_creates_valid_wav(tmp_path):
 def test_provider_selection():
     assert isinstance(create_tts_provider("dummy"), DummyTtsProvider)
     assert isinstance(create_tts_provider("local"), LocalThaiTtsProvider)
+    assert isinstance(create_tts_provider("google-gemini", Settings()), GoogleGeminiTtsProvider)
     with pytest.raises(AppError) as caught:
         create_tts_provider("unknown")
     assert caught.value.code == "TTS_GENERATION_FAILED"

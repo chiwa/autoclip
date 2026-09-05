@@ -33,7 +33,7 @@ class VideoSettings(BaseModel):
 
 
 class TtsSettings(BaseModel):
-    provider: str = "local"
+    provider: str = "google-gemini"
     language: str = "th-TH"
     thonburian_ref_voice: Path = Path("/app/voices/thonburian-reference.wav")
     thonburian_ref_text: str = ""
@@ -41,6 +41,18 @@ class TtsSettings(BaseModel):
     kokoro_model_dir: Path = Path("voices/wayu-kokoro-thai")
     kokoro_worker_python: Path = Path(".kokoro-venv/bin/python")
     kokoro_speed: float = Field(0.85, ge=0.7, le=1.1)
+    google_project_id: str = ""
+    google_model: str = "gemini-2.5-flash-tts"
+    google_voice: str = "Fenrir"
+    google_pitch: float = Field(0.0, ge=-20, le=20)
+    google_speaking_rate: float = Field(1.3, ge=0.5, le=2.0)
+    google_parallelism: int = Field(6, ge=1, le=12)
+    google_style_prompt: str = (
+        "Read aloud like a charismatic science storyteller with a playful personality. "
+        "Sound curious, friendly, slightly cheeky, and genuinely excited by surprising facts. "
+        "Keep the delivery natural and conversational, with small pauses for comedic timing and emphasis. "
+        "Never sound like a news anchor."
+    )
 
 
 class AudioSettings(BaseModel):
@@ -155,6 +167,10 @@ def load_settings(path: str | Path | None = None) -> Settings:
     overrides = {
         "AUTOCLIP_WORKSPACE": ("app", "workspace"),
         "AUTOCLIP_TTS_PROVIDER": ("tts", "provider"),
+        "AUTOCLIP_GOOGLE_CLOUD_PROJECT": ("tts", "google_project_id"),
+        "AUTOCLIP_GOOGLE_TTS_MODEL": ("tts", "google_model"),
+        "AUTOCLIP_GOOGLE_TTS_VOICE": ("tts", "google_voice"),
+        "AUTOCLIP_GOOGLE_TTS_PARALLELISM": ("tts", "google_parallelism"),
         "AUTOCLIP_MAX_UPLOAD_MB": ("app", "max_upload_mb"),
         "AUTOCLIP_MAX_EXTRACTED_MB": ("app", "max_extracted_mb"),
         "AUTOCLIP_WAN_ENABLED": ("wan", "enabled"),
@@ -239,6 +255,6 @@ def load_settings(path: str | Path | None = None) -> Settings:
         if native_candidate.is_file():
             settings.tts.thonburian_ref_voice = native_candidate
     ws = settings.app.workspace
-    if str(ws).startswith("/app/") and not ws.is_dir():
+    if str(ws).startswith("/app/"):
         settings.app.workspace = (config_path.parent / str(ws).removeprefix("/app/")).resolve()
     return settings

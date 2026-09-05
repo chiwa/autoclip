@@ -45,6 +45,7 @@ class Voice(BaseModel):
     provider: str = Field(min_length=1)
     voice: str = Field(min_length=1)
     speed: float = Field(ge=0.5, le=2.0)
+    style_prompt: str | None = Field(default=None, max_length=4_000)
 
 
 class WanSceneOptions(BaseModel):

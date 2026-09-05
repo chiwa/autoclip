@@ -86,6 +86,62 @@ class LocalThaiTtsProvider:
         return output_path
 
 
+class GoogleGeminiTtsProvider:
+    """Google Gemini TTS using local Application Default Credentials (ADC)."""
+
+    def __init__(self, settings: Settings):
+        self.settings = settings
+        self.style_prompt: str | None = None
+
+    def synthesize(self, text: str, language: str, voice: str, speed: float, output_path: Path) -> Path:
+        try:
+            import google.auth
+            from google.auth.transport.requests import AuthorizedSession
+            credentials, _ = google.auth.default(scopes=["https://www.googleapis.com/auth/cloud-platform"])
+            # Native ADC stores the quota project selected through
+            # `gcloud auth application-default set-quota-project`; honor it so
+            # no credential path or duplicate secret configuration is needed.
+            project_id = self.settings.tts.google_project_id.strip() or getattr(credentials, "quota_project_id", "") or ""
+            if not project_id:
+                raise AppError("GOOGLE_TTS_NOT_CONFIGURED", "Google Gemini TTS ต้องตั้ง Google quota project ก่อน")
+            payload = {
+                "input": {
+                    "prompt": self.style_prompt or self.settings.tts.google_style_prompt,
+                    "text": text,
+                },
+                "voice": {
+                    "languageCode": language,
+                    "name": voice or self.settings.tts.google_voice,
+                    "modelName": self.settings.tts.google_model,
+                },
+                "audioConfig": {"audioEncoding": "LINEAR16", "pitch": self.settings.tts.google_pitch, "speakingRate": speed},
+            }
+            response = AuthorizedSession(credentials).post(
+                "https://texttospeech.googleapis.com/v1beta1/text:synthesize",
+                headers={"x-goog-user-project": project_id}, json=payload, timeout=90,
+            )
+            if not response.ok:
+                try:
+                    error = response.json().get("error", {})
+                    reason = str(error.get("message") or "")[:300]
+                except Exception:
+                    reason = ""
+                details = {"status": response.status_code}
+                if reason:
+                    details["reason"] = reason
+                raise AppError("TTS_GENERATION_FAILED", "Google Gemini TTS สร้างเสียงไม่สำเร็จ", details)
+            audio = base64.b64decode(response.json().get("audioContent", ""))
+        except AppError:
+            raise
+        except Exception as exc:
+            raise AppError("GOOGLE_TTS_NOT_CONFIGURED", "ไม่พบ Google Application Default Credentials หรือ Google TTS ใช้งานไม่ได้") from exc
+        if len(audio) <= 44:
+            raise AppError("TTS_GENERATION_FAILED", "Google Gemini TTS ไม่ได้ส่งไฟล์เสียงกลับมา")
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_bytes(audio)
+        return output_path
+
+
 class ThonburianTtsProvider:
     """F5/Flow-Matching Thai provider; requires a licensed reference WAV and transcript."""
 
@@ -395,6 +451,10 @@ def create_tts_provider(name: str, settings: Settings | None = None) -> TtsProvi
         return DummyTtsProvider()
     if name == "local":
         return LocalThaiTtsProvider()
+    if name in {"google", "google-gemini", "gemini", "gemini-tts"}:
+        if settings is None:
+            raise AppError("TTS_GENERATION_FAILED", "Google Gemini TTS provider requires application settings")
+        return GoogleGeminiTtsProvider(settings)
     if name in {"runpod-f5", "runpod-f5-thai"}:
         if settings is None:
             raise AppError("TTS_GENERATION_FAILED", "RunPod F5-TTS-THAI V2 provider requires application settings")

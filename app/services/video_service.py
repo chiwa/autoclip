@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from math import ceil
 from pathlib import Path
 
 from app.config.settings import Settings
@@ -187,6 +188,13 @@ class SceneRenderer:
 
 
 class VideoComposer:
+    # Very long transition chains make FFmpeg keep every source stream and
+    # every intermediate xfade surface alive in one filter graph.  Apart from
+    # consuming a lot of memory, that becomes disproportionately slow past a
+    # few dozen scenes.  Compose modest groups first, then transition the
+    # group outputs.  This preserves every boundary transition while keeping
+    # each FFmpeg graph bounded.
+    MAX_TRANSITION_INPUTS = 10
     TRANSITIONS = {
         "fade": "fade",
         "dissolve": "dissolve",
@@ -268,22 +276,100 @@ class VideoComposer:
             video_left, audio_left = video_out, audio_out
         return ";".join(video_parts + audio_parts), video_left, audio_left
 
+    def _transition_duration(self, durations: list[float], transitions: list[str], transition_seconds: float) -> float:
+        """Return the duration after only non-hard-cut transitions overlap."""
+        return sum(durations) - sum(transition_seconds for item in transitions if item != "none")
+
+    @staticmethod
+    def _composition_timeout(durations: list[float]) -> int:
+        """Allow a long final encode enough time without relaxing scene jobs.
+
+        Composition has to decode and re-encode the complete timeline.  Two
+        times the intended running time plus a short startup margin protects
+        long-form projects on modest CPUs, while the existing 15-minute
+        default remains the floor for ordinary clips.
+        """
+        return max(900, ceil(sum(durations) * 2) + 120)
+
+    def _compose_transition_group(
+        self,
+        scenes: list[Path],
+        durations: list[float],
+        transitions: list[str],
+        transition_seconds: float,
+        output: Path,
+    ) -> None:
+        filter_complex, video_label, audio_label = self.build_transition_filter(durations, transitions, transition_seconds)
+        inputs = [item for scene in scenes for item in ("-i", str(scene))]
+        video = self.profile
+        self.ffmpeg.run(
+            [*inputs, "-filter_complex", filter_complex, "-map", f"[{video_label}]", "-map", f"[{audio_label}]",
+             "-c:v", video.codec, "-preset", "veryfast", "-crf", "23", "-pix_fmt", video.pixel_format,
+             "-r", str(video.fps), "-c:a", "aac", "-ar", "48000", "-ac", "2", "-b:a", "160k",
+             "-movflags", "+faststart", str(output)],
+            "VIDEO_COMPOSITION_FAILED",
+            timeout_seconds=self._composition_timeout(durations),
+        )
+
+    def _compose_transition_segments(
+        self,
+        scenes: list[Path],
+        durations: list[float],
+        transitions: list[str],
+        transition_seconds: float,
+        output_dir: Path,
+        joined: Path,
+    ) -> None:
+        """Compose a long timeline in bounded transition graphs.
+
+        The original scene-to-scene transition at a group boundary is applied
+        in the final pass; all other transitions are rendered in that group's
+        pass.  Therefore there is no visual or audio hard-cut introduced by
+        batching.
+        """
+        segment_dir = output_dir / "transition-segments"
+        segment_dir.mkdir(parents=True, exist_ok=True)
+        segment_paths: list[Path] = []
+        segment_durations: list[float] = []
+        boundary_transitions: list[str] = []
+
+        for start in range(0, len(scenes), self.MAX_TRANSITION_INPUTS):
+            end = min(len(scenes), start + self.MAX_TRANSITION_INPUTS)
+            group_scenes = scenes[start:end]
+            group_durations = durations[start:end]
+            group_transitions = transitions[start:end - 1]
+            segment_path = segment_dir / f"segment-{start // self.MAX_TRANSITION_INPUTS + 1:02}.mp4"
+
+            if len(group_scenes) == 1:
+                # This only happens for a one-scene package or a one-scene
+                # final group. Passing the already-normalized scene through
+                # avoids a needless re-encode.
+                segment_path = group_scenes[0]
+                segment_duration = group_durations[0]
+            else:
+                self._compose_transition_group(group_scenes, group_durations, group_transitions, transition_seconds, segment_path)
+                segment_duration = self._transition_duration(group_durations, group_transitions, transition_seconds)
+
+            segment_paths.append(segment_path)
+            segment_durations.append(segment_duration)
+            if end < len(scenes):
+                boundary_transitions.append(transitions[end - 1])
+
+        if len(segment_paths) == 1:
+            self.ffmpeg.run(["-i", str(segment_paths[0]), "-c", "copy", str(joined)], "VIDEO_COMPOSITION_FAILED", timeout_seconds=self._composition_timeout(segment_durations))
+            return
+        self._compose_transition_group(segment_paths, segment_durations, boundary_transitions, transition_seconds, joined)
+
     def compose(self, scenes: list[Path], output_dir: Path, bgm: Path | None, durations: list[float] | None = None, transitions: list[str] | None = None) -> Path:
         joined = output_dir / "joined.mp4"
         transition = self.settings.video.transition_seconds
         if len(scenes) > 1 and durations and transition > 0:
             transition = min(transition, min(durations) / 2)
             selected = transitions or [self.settings.video.transition] * (len(scenes) - 1)
-            filter_complex, video_label, audio_label = self.build_transition_filter(durations, selected, transition)
-            inputs = [item for scene in scenes for item in ("-i", str(scene))]
-            video = self.profile
-            self.ffmpeg.run(
-                [*inputs, "-filter_complex", filter_complex, "-map", f"[{video_label}]", "-map", f"[{audio_label}]",
-                 "-c:v", video.codec, "-preset", "veryfast", "-crf", "23", "-pix_fmt", video.pixel_format,
-                 "-r", str(video.fps), "-c:a", "aac", "-ar", "48000", "-ac", "2", "-b:a", "160k",
-                 "-movflags", "+faststart", str(joined)],
-                "VIDEO_COMPOSITION_FAILED",
-            )
+            if len(scenes) > self.MAX_TRANSITION_INPUTS:
+                self._compose_transition_segments(scenes, durations, selected, transition, output_dir, joined)
+            else:
+                self._compose_transition_group(scenes, durations, selected, transition, joined)
         else:
             concat_file = output_dir / "scenes.txt"
             concat_file.write_text("".join(f"file '{path.as_posix()}'\n" for path in scenes), encoding="utf-8")
@@ -297,7 +383,7 @@ class VideoComposer:
                 "afade=t=in:st=0:d=0.5[bg];[bg][n]sidechaincompress=threshold=0.02:ratio=8:attack=20:release=300[duck];"
                 "[n][duck]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-16:LRA=11:TP=-1.5[a]"
             )
-            self.ffmpeg.run(["-i", str(joined), "-stream_loop", "-1", "-i", str(bgm), "-filter_complex", audio_filter, "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-ar", "48000", "-ac", "2", "-shortest", "-movflags", "+faststart", str(final)], "VIDEO_COMPOSITION_FAILED")
+            self.ffmpeg.run(["-i", str(joined), "-stream_loop", "-1", "-i", str(bgm), "-filter_complex", audio_filter, "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-ar", "48000", "-ac", "2", "-shortest", "-movflags", "+faststart", str(final)], "VIDEO_COMPOSITION_FAILED", timeout_seconds=self._composition_timeout(durations or []))
         else:
-            self.ffmpeg.run(["-i", str(joined), "-map", "0:v", "-map", "0:a", "-c:v", "copy", "-af", f"volume={self.settings.audio.narration_volume},loudnorm=I=-16:LRA=11:TP=-1.5", "-c:a", "aac", "-ar", "48000", "-ac", "2", "-movflags", "+faststart", str(final)], "VIDEO_COMPOSITION_FAILED")
+            self.ffmpeg.run(["-i", str(joined), "-map", "0:v", "-map", "0:a", "-c:v", "copy", "-af", f"volume={self.settings.audio.narration_volume},loudnorm=I=-16:LRA=11:TP=-1.5", "-c:a", "aac", "-ar", "48000", "-ac", "2", "-movflags", "+faststart", str(final)], "VIDEO_COMPOSITION_FAILED", timeout_seconds=self._composition_timeout(durations or []))
         return final

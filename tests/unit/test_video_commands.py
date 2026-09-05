@@ -73,3 +73,31 @@ def test_transition_names_from_script_map_to_ffmpeg():
     composer = VideoComposer(FfmpegRunner(), Settings())
     filters, _, _ = composer.build_transition_filter([2.0, 2.0], ["fade_black"], 0.2)
     assert "xfade=transition=fadeblack" in filters
+
+
+def test_long_transition_timeline_is_composed_in_bounded_groups(tmp_path):
+    class RecordingRunner:
+        def __init__(self):
+            self.commands: list[list[str]] = []
+
+        def run(self, args, error_code, timeout_seconds=None):
+            self.commands.append(args)
+
+    runner = RecordingRunner()
+    composer = VideoComposer(runner, Settings())
+    scenes = [tmp_path / f"scene-{index:02}.mp4" for index in range(25)]
+    durations = [3.0] * len(scenes)
+
+    final = composer.compose(scenes, tmp_path, None, durations, ["fade"] * (len(scenes) - 1))
+
+    # Three bounded first-pass groups (10, 10, 5), one three-input final
+    # transition pass, and the final audio normalization pass.
+    assert len(runner.commands) == 5
+    transition_commands = [command for command in runner.commands if "-filter_complex" in command]
+    assert len(transition_commands) == 4
+    assert max(command.count("-i") for command in transition_commands) == 10
+    assert final == tmp_path / "final.mp4"
+
+
+def test_long_composition_timeout_scales_with_timeline_duration():
+    assert VideoComposer._composition_timeout([10.0] * 79) == 1700

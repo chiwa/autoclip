@@ -51,9 +51,10 @@ def create_thai_speech(
     voice: str = Form("thai-male-01"),
     speed: float = Form(1.0),
     provider: str = Form("local"),
+    style_prompt: str | None = Form(None),
 ) -> FileResponse:
     try:
-        path = request.app.state.tts_preview_service.synthesize(text, voice, speed, provider)
+        path = request.app.state.tts_preview_service.synthesize(text, voice, speed, provider, style_prompt)
     except AppError as exc:
         raise HTTPException(400, public_error(exc)) from exc
     except Exception:

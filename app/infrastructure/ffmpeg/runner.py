@@ -26,13 +26,13 @@ class FfmpegRunner:
                 self._filters = set()
         return name in self._filters
 
-    def run(self, args: list[str], error_code: str) -> None:
+    def run(self, args: list[str], error_code: str, timeout_seconds: int | None = None) -> None:
         try:
             result = subprocess.run(
                 [self.executable, "-hide_banner", "-nostdin", "-y", *args],
                 capture_output=True,
                 text=True,
-                timeout=self.timeout_seconds,
+                timeout=timeout_seconds or self.timeout_seconds,
                 check=False,
             )
         except (OSError, subprocess.TimeoutExpired) as exc:
@@ -67,4 +67,3 @@ class FfprobeRunner:
             return float(self.probe(path)["format"]["duration"])
         except (KeyError, TypeError, ValueError) as exc:
             raise AppError("FFPROBE_FAILED", "Media duration is unavailable") from exc
-

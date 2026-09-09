@@ -295,6 +295,9 @@ class JobService:
                     "speed": selected_speed,
                     "thaiStylePrompt": selected_style,
                     "englishStylePrompt": selected_english_style,
+                    "bgmTrack": bgm_track,
+                    "bgmVolume": selected_bgm_vol,
+                    "customBgmFile": saved_bgm.name if saved_bgm else None,
                 },
                 ensure_ascii=False,
                 indent=2,
@@ -917,10 +920,12 @@ class JobService:
                 try:
                     raw_english_audio, _, raw_english_duration = english_future.result()
                     english_audio_path = workspace.output / "podcast-en.wav"
-                    _, english_duration = audio_service.conform_to_video_duration(
+                    _, english_duration = audio_service.create_alternate_track(
                         raw_english_audio,
                         english_audio_path,
                         video_duration,
+                        bgm_path=resolved_bgm,
+                        bgm_volume=bgm_volume,
                     )
                     english_audio_metadata = {
                         "requested": True,
@@ -930,6 +935,9 @@ class JobService:
                         "durationSeconds": round(english_duration, 3),
                         "sourceDurationSeconds": round(raw_english_duration, 3),
                         "fileSizeBytes": english_audio_path.stat().st_size,
+                        "bgmIncluded": bool(resolved_bgm and resolved_bgm.is_file()),
+                        "bgmTrack": bgm_track,
+                        "bgmVolume": bgm_volume,
                     }
                     self._log(job_id, "SUCCESS", "English WAV พร้อมดาวน์โหลดแล้ว")
                 except AppError as exc:
@@ -1136,6 +1144,8 @@ class JobService:
             voice = str(config.get("voice") or self.settings.podcast.default_voice)
             speed = float(config.get("speed") or self.settings.podcast.default_speed)
             style = str(config.get("englishStylePrompt") or self.settings.podcast.default_english_style_prompt)
+            bgm_track = str(config.get("bgmTrack") or "space.mp3")
+            bgm_volume = float(config.get("bgmVolume", self.settings.podcast.default_bgm_volume))
             script_text = (workspace_root / "source/script-en.txt").read_text(encoding="utf-8")
             chunks = PodcastChunker.chunk(script_text, max_bytes=self.settings.podcast.chunk_max_bytes)
             provider = create_tts_provider("google-gemini", self.settings)
@@ -1162,10 +1172,18 @@ class JobService:
                 log_callback=retry_log,
             )
             target_duration = self.ffprobe.duration(self.final_video(job_id))
-            output, final_duration = service.conform_to_video_duration(
+            custom_bgm_name = config.get("customBgmFile")
+            custom_bgm = workspace_root / "source" / str(custom_bgm_name) if custom_bgm_name else None
+            bgm_path = custom_bgm if custom_bgm and custom_bgm.is_file() else resolve_podcast_bgm(
+                self.settings.app.workspace,
+                bgm_track,
+            )
+            output, final_duration = service.create_alternate_track(
                 raw_audio,
                 self.english_audio(job_id),
                 target_duration,
+                bgm_path=bgm_path,
+                bgm_volume=bgm_volume,
             )
             record = self.restore(job_id)
             metadata = dict((record.metadata if record else None) or {})
@@ -1177,6 +1195,9 @@ class JobService:
                 "durationSeconds": round(final_duration, 3),
                 "sourceDurationSeconds": round(raw_duration, 3),
                 "fileSizeBytes": output.stat().st_size,
+                "bgmIncluded": bool(bgm_path and bgm_path.is_file()),
+                "bgmTrack": bgm_track,
+                "bgmVolume": bgm_volume,
             }
             self.registry.set_metadata(job_id, metadata)
             if self.persistence:

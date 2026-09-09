@@ -227,3 +227,47 @@ def test_conform_english_audio_rejects_excessive_speedup(tmp_path):
         service.conform_to_video_duration(source, tmp_path / "unused.wav", 1.0)
 
     assert exc_info.value.code == "ENGLISH_AUDIO_TOO_LONG"
+
+
+def test_create_alternate_track_mixes_bgm_and_matches_video_duration(tmp_path):
+    service = PodcastAudioService(FfmpegRunner(), FfprobeRunner(), Settings())
+    narration = tmp_path / "narration.wav"
+    bgm = tmp_path / "bgm.wav"
+    output = tmp_path / "podcast-en.wav"
+    _make_tone(service.ffmpeg, narration, 0.65)
+    service.ffmpeg.run(
+        [
+            "-y", "-f", "lavfi", "-i", "sine=frequency=180:duration=0.4",
+            "-c:a", "pcm_s16le", str(bgm),
+        ],
+        "TEST_AUDIO_FAILED",
+    )
+
+    _, duration = service.create_alternate_track(
+        narration,
+        output,
+        1.0,
+        bgm_path=bgm,
+        bgm_volume=0.08,
+    )
+
+    assert output.is_file()
+    assert abs(duration - 1.0) <= 0.1
+    probe = service.ffprobe.probe(output)
+    audio_stream = next(stream for stream in probe["streams"] if stream.get("codec_type") == "audio")
+    assert audio_stream["codec_name"] == "pcm_s16le"
+    assert int(audio_stream["sample_rate"]) == 48000
+    assert audio_stream["channels"] == 2
+    assert not list(tmp_path.glob(".*.tmp.wav"))
+
+
+def test_create_alternate_track_without_bgm_keeps_aligned_narration(tmp_path):
+    service = PodcastAudioService(FfmpegRunner(), FfprobeRunner(), Settings())
+    narration = tmp_path / "narration.wav"
+    output = tmp_path / "podcast-en.wav"
+    _make_tone(service.ffmpeg, narration, 0.6)
+
+    _, duration = service.create_alternate_track(narration, output, 1.0)
+
+    assert output.is_file()
+    assert abs(duration - 1.0) <= 0.1

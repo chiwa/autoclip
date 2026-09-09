@@ -285,6 +285,7 @@ AutoClip รองรับการสร้าง YouTube Visual Podcast แ�
 - **เสียงและสไตล์เริ่มต้น**: Google Gemini TTS เสียง `Enceladus` ความเร็ว `1.10` พร้อม Bedtime Storytelling Style Prompt (เสียงนุ่มนวล อบอุ่น ฟังสบาย เหมาะสำหรับการพักผ่อน)
 - **การประมวลผลเสียงขนาน**: สังเคราะห์แต่ละภาษาแบบขนาน (`AUTOCLIP_PODCAST_CONCURRENCY=6`) มี retry สูงสุด 5 รอบโดยเว้นอย่างน้อย 5 วินาที, รองรับ `Retry-After` จากผู้ให้บริการ และ manifest-based cache (`podcast_chunks/`) ต่องานด้วย FFmpeg concat demuxer สำหรับงานสองภาษาอาจมีคำขอไทยและอังกฤษทำงานพร้อมกัน จึงต้องลดค่านี้หากโครงการ Google เริ่มตอบ `429`
 - **การเคลื่อนไหวและดนตรีประกอบ**: เคลื่อนไหวภาพปกด้วย 6-stage gentle breathing motion cycle ต่อเนื่อง พร้อมระบบ Sidechain Audio Ducking ลดเสียง BGM อัตโนมัติขณะมีเสียงบรรยาย
+- **English alternate WAV**: เมื่อมีบทอังกฤษ ไฟล์ `podcast-en.wav` ต้องผสม BGM เพลงเดียวกัน ระดับเสียงเดียวกัน และ Sidechain Ducking ชุดเดียวกับวิดีโอไทย เพื่ออัปโหลดเป็นภาษาเพิ่มเติมบน YouTube ได้ทันที โดยเก็บ narration ดิบไว้สำหรับ retry
 - **การแสดงผล**: เชื่อมต่อเข้ากับระบบ Persistence, History (`/history`) และ Preview (`/jobs/{id}/preview`) โดยตรง
 - **ความเข้ากันได้**: แยกการทำงานเป็นอิสระ ไม่กระทบค่าเริ่มต้นหรือพฤติกรรมของหน้าสร้างวิดีโอเดิม (Reel / Shorts) และ ZIP contract
 

@@ -13,6 +13,7 @@ from app.config.settings import Settings
 from app.domain.errors import AppError
 from app.infrastructure.ffmpeg import FfmpegRunner, FfprobeRunner
 from app.infrastructure.tts.providers import TtsProvider
+from app.services.podcast_audio_mix import build_podcast_audio_mix_filter
 
 logger = logging.getLogger("autoclip.podcast.audio")
 
@@ -82,6 +83,59 @@ class PodcastAudioService:
                 "ปรับความยาวเสียงภาษาอังกฤษให้ตรงกับวิดีโอไม่สำเร็จ",
             )
         return output_audio, final_duration
+
+    def create_alternate_track(
+        self,
+        input_audio: Path,
+        output_audio: Path,
+        target_duration: float,
+        bgm_path: Path | None = None,
+        bgm_volume: float = 0.08,
+    ) -> tuple[Path, float]:
+        """Align narration and create the final WAV alternate track.
+
+        When BGM is available, this uses the exact same volume, fade, ducking,
+        and loudness filter graph as the Thai podcast video. The destination is
+        replaced only after every FFmpeg step and duration check succeeds.
+        """
+        output_audio.parent.mkdir(parents=True, exist_ok=True)
+        aligned_audio = output_audio.with_name(f".{output_audio.stem}.aligned.tmp.wav")
+        mixed_audio = output_audio.with_name(f".{output_audio.stem}.mixed.tmp.wav")
+        aligned_audio.unlink(missing_ok=True)
+        mixed_audio.unlink(missing_ok=True)
+        try:
+            self.conform_to_video_duration(input_audio, aligned_audio, target_duration)
+            if bgm_path and bgm_path.is_file():
+                audio_filter = build_podcast_audio_mix_filter(0, 1, target_duration, bgm_volume)
+                self.ffmpeg.run(
+                    [
+                        "-y",
+                        "-i", str(aligned_audio),
+                        "-stream_loop", "-1", "-i", str(bgm_path),
+                        "-t", f"{target_duration:.6f}",
+                        "-filter_complex", audio_filter,
+                        "-map", "[a]",
+                        "-c:a", "pcm_s16le",
+                        "-ar", "48000",
+                        "-ac", "2",
+                        str(mixed_audio),
+                    ],
+                    "ENGLISH_AUDIO_MIX_FAILED",
+                )
+            else:
+                aligned_audio.replace(mixed_audio)
+
+            final_duration = self.ffprobe.duration(mixed_audio)
+            if abs(final_duration - target_duration) > 0.1:
+                raise AppError(
+                    "ENGLISH_AUDIO_MIX_FAILED",
+                    "ผสมเสียงภาษาอังกฤษกับเพลงประกอบไม่สำเร็จ",
+                )
+            mixed_audio.replace(output_audio)
+            return output_audio, final_duration
+        finally:
+            aligned_audio.unlink(missing_ok=True)
+            mixed_audio.unlink(missing_ok=True)
 
     @staticmethod
     def _text_hash(text: str, style_prompt: str | None = None) -> str:

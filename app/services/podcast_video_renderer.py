@@ -12,6 +12,7 @@ from PIL import Image
 from app.config.settings import Settings
 from app.domain.errors import AppError
 from app.infrastructure.ffmpeg import FfmpegRunner, FfprobeRunner, build_ffmpeg_metadata_args
+from app.services.podcast_audio_mix import build_podcast_audio_mix_filter
 
 logger = logging.getLogger("autoclip.podcast.video")
 
@@ -239,14 +240,7 @@ class PodcastVideoRenderer:
             if log_callback:
                 log_callback("INFO", f"กำลังผสม Background Music (ระดับเสียง {bgm_volume:.2f}) พร้อม Sidechain Ducking", False)
             inputs.extend(["-stream_loop", "-1", "-i", str(bgm_path)])
-            fade_out_start = max(0.0, total_duration - 2.0)
-            audio_filter = (
-                f"[1:a]volume=1.0,asplit=2[n1][n2];"
-                f"[2:a]volume={bgm_volume},"
-                f"afade=t=in:st=0:d=1.0,afade=t=out:st={fade_out_start:.2f}:d=2.0[bg];"
-                f"[bg][n1]sidechaincompress=threshold=0.02:ratio=8:attack=20:release=300[duck];"
-                f"[n2][duck]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-16:LRA=11:TP=-1.5[a]"
-            )
+            audio_filter = build_podcast_audio_mix_filter(1, 2, total_duration, bgm_volume)
             cmd = [
                 *inputs,
                 "-t", f"{total_duration:.3f}",

@@ -825,6 +825,9 @@ Imaginable hook → everyday scale comparison → surprising reveal
   - Video motion & audio ducking: `PodcastVideoRenderer` constructs a 6-stage
     breathing motion cycle looped with `-stream_loop -1` and mixes background
     music with `asplit=2` sidechain compression beneath spoken narration.
+  - English alternate audio: `podcast-en.wav` uses the same selected BGM,
+    volume, fade, sidechain ducking, and loudness normalization as the Thai
+    video audio. Keep `english_narration_raw.wav` for targeted retry/repair.
   - Existing Reel defaults (`Fenrir`, 1.0, 9:16, ZIP packages) remain 100% isolated
     and intact.
 

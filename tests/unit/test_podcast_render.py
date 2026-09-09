@@ -9,6 +9,7 @@ from app.config.settings import Settings
 from app.domain.errors import AppError
 from app.infrastructure.ffmpeg import FfmpegRunner, FfprobeRunner
 from app.infrastructure.tts.providers import DummyTtsProvider
+from app.services.podcast_audio_mix import build_podcast_audio_mix_filter
 from app.services.podcast_subtitle_service import PodcastSubtitleService
 from app.services.podcast_video_renderer import PodcastVideoRenderer
 
@@ -98,3 +99,20 @@ def test_podcast_video_render_smoke(tmp_path):
     assert v_stream["width"] == 1920
     assert v_stream["height"] == 1080
     assert a_stream["codec_name"] == "aac"
+
+
+def test_podcast_audio_mix_filter_is_shared_for_video_and_alternate_track():
+    video_filter = build_podcast_audio_mix_filter(1, 2, 60.0, 0.08)
+    alternate_filter = build_podcast_audio_mix_filter(0, 1, 60.0, 0.08)
+
+    assert "[1:a]volume=1.0,asplit=2[n1][n2]" in video_filter
+    assert "[0:a]volume=1.0,asplit=2[n1][n2]" in alternate_filter
+    for expected in (
+        "volume=0.08",
+        "afade=t=in:st=0:d=1.0",
+        "afade=t=out:st=58.00:d=2.0",
+        "sidechaincompress=threshold=0.02:ratio=8:attack=20:release=300",
+        "loudnorm=I=-16:LRA=11:TP=-1.5",
+    ):
+        assert expected in video_filter
+        assert expected in alternate_filter

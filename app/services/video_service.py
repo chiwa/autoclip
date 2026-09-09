@@ -7,7 +7,7 @@ from pathlib import Path
 from app.config.settings import Settings
 from app.domain.errors import AppError
 from app.domain.models import Scene
-from app.infrastructure.ffmpeg import FfmpegRunner
+from app.infrastructure.ffmpeg import FfmpegRunner, build_ffmpeg_metadata_args
 
 
 @dataclass(frozen=True)
@@ -179,9 +179,10 @@ class SceneRenderer:
         )
         self.ffmpeg.run(
             ["-stream_loop", "-1", "-i", str(source_video), "-i", str(narration), "-t", f"{duration:.3f}",
+             "-map", "0:v:0", "-map", "1:a:0",
              "-vf", vf, "-c:v", video.codec, "-preset", "veryfast", "-crf", "18", "-pix_fmt", video.pixel_format,
              "-r", str(video.fps), "-c:a", "aac", "-ar", "48000", "-ac", "2", "-b:a", "192k",
-             "-movflags", "+faststart", "-shortest", str(output)],
+             "-af", "apad", "-movflags", "+faststart", str(output)],
             "WAN_SCENE_NORMALIZATION_FAILED",
         )
         return output
@@ -270,7 +271,7 @@ class VideoComposer:
                     f"duration={transition_seconds:.3f}:offset={offset:.3f}[{video_out}]"
                 )
                 audio_parts.append(
-                    f"[{audio_left}][a{index}]acrossfade=d={transition_seconds:.3f}:c1=tri:c2=tri[{audio_out}]"
+                    f"[{audio_left}][a{index}]acrossfade=d={transition_seconds:.3f}:c1=nofade:c2=nofade[{audio_out}]"
                 )
                 elapsed += durations[index] - transition_seconds
             video_left, audio_left = video_out, audio_out
@@ -360,7 +361,17 @@ class VideoComposer:
             return
         self._compose_transition_group(segment_paths, segment_durations, boundary_transitions, transition_seconds, joined)
 
-    def compose(self, scenes: list[Path], output_dir: Path, bgm: Path | None, durations: list[float] | None = None, transitions: list[str] | None = None) -> Path:
+    def compose(
+        self,
+        scenes: list[Path],
+        output_dir: Path,
+        bgm: Path | None,
+        durations: list[float] | None = None,
+        transitions: list[str] | None = None,
+        title: str | None = None,
+        description: str | None = None,
+        artist: str | None = "Mamase",
+    ) -> Path:
         joined = output_dir / "joined.mp4"
         transition = self.settings.video.transition_seconds
         if len(scenes) > 1 and durations and transition > 0:
@@ -375,6 +386,7 @@ class VideoComposer:
             concat_file.write_text("".join(f"file '{path.as_posix()}'\n" for path in scenes), encoding="utf-8")
             self.ffmpeg.run(["-f", "concat", "-safe", "0", "-i", str(concat_file), "-c", "copy", str(joined)], "VIDEO_COMPOSITION_FAILED")
         final = output_dir / "final.mp4"
+        meta_args = build_ffmpeg_metadata_args(title=title, description=description, artist=artist or "Mamase")
         if bgm:
             bg_volume = self.settings.audio.background_volume
             narration_volume = self.settings.audio.narration_volume
@@ -383,7 +395,7 @@ class VideoComposer:
                 "afade=t=in:st=0:d=0.5[bg];[bg][n]sidechaincompress=threshold=0.02:ratio=8:attack=20:release=300[duck];"
                 "[n][duck]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-16:LRA=11:TP=-1.5[a]"
             )
-            self.ffmpeg.run(["-i", str(joined), "-stream_loop", "-1", "-i", str(bgm), "-filter_complex", audio_filter, "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-ar", "48000", "-ac", "2", "-shortest", "-movflags", "+faststart", str(final)], "VIDEO_COMPOSITION_FAILED", timeout_seconds=self._composition_timeout(durations or []))
+            self.ffmpeg.run(["-i", str(joined), "-stream_loop", "-1", "-i", str(bgm), "-filter_complex", audio_filter, "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-ar", "48000", "-ac", "2", "-shortest", "-movflags", "+faststart", *meta_args, str(final)], "VIDEO_COMPOSITION_FAILED", timeout_seconds=self._composition_timeout(durations or []))
         else:
-            self.ffmpeg.run(["-i", str(joined), "-map", "0:v", "-map", "0:a", "-c:v", "copy", "-af", f"volume={self.settings.audio.narration_volume},loudnorm=I=-16:LRA=11:TP=-1.5", "-c:a", "aac", "-ar", "48000", "-ac", "2", "-movflags", "+faststart", str(final)], "VIDEO_COMPOSITION_FAILED", timeout_seconds=self._composition_timeout(durations or []))
+            self.ffmpeg.run(["-i", str(joined), "-map", "0:v", "-map", "0:a", "-c:v", "copy", "-af", f"volume={self.settings.audio.narration_volume},loudnorm=I=-16:LRA=11:TP=-1.5", "-c:a", "aac", "-ar", "48000", "-ac", "2", "-movflags", "+faststart", *meta_args, str(final)], "VIDEO_COMPOSITION_FAILED", timeout_seconds=self._composition_timeout(durations or []))
         return final

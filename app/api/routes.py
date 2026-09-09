@@ -14,7 +14,7 @@ from app.domain.enums import JobStatus
 from app.domain.errors import AppError, public_error
 from app.domain.events import JobEvent, JobEventType
 from app.domain.ai_models import AiProject
-from app.services.bgm_service import ensure_default_bgm
+from app.services.bgm_service import ensure_default_bgm, get_podcast_bgm_catalog, resolve_podcast_bgm
 
 router = APIRouter(prefix="/api")
 
@@ -49,6 +49,7 @@ class YouTubeUploadRequest(BaseModel):
 class VideoMetadataRequest(BaseModel):
     title: str = Field(default="-", max_length=100)
     description: str = Field(default="-", max_length=10000)
+    hashtags: str = Field(default="", max_length=3000)
 
 
 @router.post("/tts")
@@ -76,6 +77,112 @@ def preview_background_music(request: Request) -> FileResponse:
     """Play the same system fallback BGM used when a ZIP has no bgm asset."""
     path = ensure_default_bgm(request.app.state.settings.app.workspace)
     return FileResponse(path, media_type="audio/wav", filename="autoclip-default-bgm.wav")
+
+
+@router.post("/podcast/preview-audio")
+def podcast_preview_audio(
+    request: Request,
+    text: str | None = Form(None),
+    voice: str = Form("Enceladus"),
+    speed: float = Form(1.10),
+    style_prompt: str | None = Form(None),
+) -> FileResponse:
+    sample_text = (text or "").strip()
+    if not sample_text:
+        sample_text = (
+            "สวัสดีครับ ยินดีต้อนรับสู่ช่วงเวลาแห่งความผ่อนคลาย "
+            "ค่ำคืนนี้ขอให้ปล่อยวางความเหนื่อยล้า แล้วเดินทางสู่ความสงบไปด้วยกันครับ"
+        )
+    else:
+        import re
+        sentences = [s.strip() for s in re.split(r"[.!?\n]+", sample_text) if s.strip()]
+        if len(sentences) >= 2:
+            sample_text = " ".join(sentences[:3])
+        if len(sample_text) > 300:
+            sample_text = sample_text[:300].rsplit(" ", 1)[0] + "..."
+
+    try:
+        path = request.app.state.tts_preview_service.synthesize(
+            text=sample_text,
+            voice=voice,
+            speed=speed,
+            provider_name="google-gemini",
+            style_prompt=request.app.state.settings.podcast.resolve_style_prompt(voice, style_prompt),
+        )
+    except AppError as exc:
+        raise HTTPException(400, public_error(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(500, public_error(AppError("TTS_GENERATION_FAILED", "สร้างเสียงตัวอย่างไม่สำเร็จ"))) from exc
+    return FileResponse(path, media_type="audio/wav", filename="podcast-sample.wav")
+
+
+@router.get("/podcast/bgm-tracks")
+def list_podcast_bgm_tracks() -> dict:
+    return {"tracks": get_podcast_bgm_catalog()}
+
+
+@router.get("/podcast/bgm-preview/{track_id}")
+def preview_podcast_bgm(request: Request, track_id: str) -> FileResponse:
+    try:
+        path = resolve_podcast_bgm(request.app.state.settings.app.workspace, track_id)
+        if not path.is_file():
+            raise HTTPException(404, public_error(AppError("BGM_NOT_FOUND", "ไม่พบเพลง BGM ที่เลือก")))
+        mimes = {
+            ".mp3": "audio/mpeg",
+            ".wav": "audio/wav",
+            ".m4a": "audio/mp4",
+            ".aac": "audio/aac",
+            ".ogg": "audio/ogg",
+            ".flac": "audio/flac",
+        }
+        media_type = mimes.get(path.suffix.lower(), "audio/mpeg")
+        return FileResponse(path, media_type=media_type, filename=path.name)
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(404, public_error(AppError("BGM_NOT_FOUND", "ไม่พบเพลง BGM ที่เลือก"))) from exc
+
+
+@router.post("/podcast/jobs", status_code=202)
+def create_podcast_job(
+    request: Request,
+    cover_image: UploadFile = File(...),
+    title: str = Form("YouTube Podcast"),
+    script: str | None = Form(None),
+    script_text: str | None = Form(None),
+    voice: str = Form("Enceladus"),
+    description: str = Form(""),
+    hashtags: str = Form(""),
+    speed: float = Form(1.10),
+    style_prompt: str | None = Form(None),
+    enable_subtitles: bool = Form(True),
+    bgm_file: UploadFile | None = File(None),
+    bgm_track: str = Form("space.mp3"),
+    bgm_volume: float = Form(0.08),
+    focus: str = Form("center"),
+) -> dict:
+    effective_script = (script_text if script_text is not None else script) or ""
+    if not effective_script.strip():
+        raise HTTPException(400, public_error(AppError("PODCAST_SCRIPT_EMPTY", "กรุณาใส่บทพูดสำหรับ Podcast")))
+    try:
+        record = request.app.state.job_service.submit_podcast(
+            image_file=cover_image,
+            title=title,
+            script_text=effective_script,
+            voice=voice,
+            speed=speed,
+            style_prompt=style_prompt,
+            enable_subtitles=enable_subtitles,
+            description=description,
+            hashtags=hashtags,
+            bgm_file=bgm_file,
+            bgm_track=bgm_track,
+            bgm_volume=bgm_volume,
+            focus=focus,
+        )
+    except AppError as exc:
+        raise HTTPException(400, public_error(exc)) from exc
+    return {"jobId": record.job_id, "status": record.status}
 
 
 @router.post("/jobs", status_code=202)
@@ -136,6 +243,15 @@ def get_job(request: Request, job_id: str) -> dict:
     return record.api_dict()
 
 
+@router.post("/jobs/{job_id}/retry")
+def retry_job(request: Request, job_id: str) -> dict:
+    try:
+        record = request.app.state.job_service.retry(job_id)
+    except AppError as exc:
+        raise HTTPException(404 if exc.code == "JOB_NOT_FOUND" else 400, public_error(exc)) from exc
+    return {"jobId": record.job_id, "status": record.status}
+
+
 @router.get("/jobs/{job_id}/events")
 def job_events(request: Request, job_id: str) -> StreamingResponse:
     service = request.app.state.job_service
@@ -174,16 +290,27 @@ def job_events(request: Request, job_id: str) -> StreamingResponse:
 def get_video_metadata(request: Request, job_id: str) -> dict:
     record = request.app.state.job_service.restore(job_id)
     if not record: raise HTTPException(404, public_error(AppError("JOB_NOT_FOUND", "Job was not found")))
-    return (record.metadata or {}).get("videoMetadata", {"title": "-", "description": "-"})
+    return (record.metadata or {}).get("videoMetadata", {"title": "-", "description": "-", "hashtags": ""})
 
 @router.put("/jobs/{job_id}/video-metadata")
 def save_video_metadata(request: Request, job_id: str, body: VideoMetadataRequest) -> dict:
     record = request.app.state.job_service.restore(job_id)
     if not record: raise HTTPException(404, public_error(AppError("JOB_NOT_FOUND", "Job was not found")))
-    metadata = dict(record.metadata or {}); title=body.title.strip() or "-"; description=body.description if body.description else "-"
-    metadata["videoMetadata"]={"title":title,"description":description}
-    request.app.state.job_service.set_metadata(job_id, metadata)
+    metadata = dict(record.metadata or {})
+    title = body.title.strip() or "-"
+    description = body.description if body.description else "-"
+    hashtags = body.hashtags.strip() if body.hashtags else ""
+    metadata["videoMetadata"] = {"title": title, "description": description, "hashtags": hashtags}
+    request.app.state.job_service.registry.set_metadata(job_id, metadata)
     if not request.app.state.persistence.update_job_metadata(job_id, metadata): raise HTTPException(404, public_error(AppError("JOB_NOT_FOUND", "Job was not found")))
+    full_desc = description
+    if hashtags and hashtags not in description:
+        full_desc = f"{description}\n\n{hashtags}" if description != "-" else hashtags
+    request.app.state.job_service.update_video_metadata_tags(
+        job_id,
+        title=title if title != "-" else "",
+        description=full_desc if full_desc != "-" else "",
+    )
     return metadata["videoMetadata"]
 
 @router.get("/jobs/{job_id}/video")

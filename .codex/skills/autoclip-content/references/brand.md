@@ -2,7 +2,7 @@
 
 - Channel name: **Mamase**
 - Thai descriptor: **จักรวาลของใจ**
-- Closing line: **ค้นพบโลก ค้นพบใจ กับ Mamase**
+- Closing line: **ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ**
 
 ## Mandatory final scene
 
@@ -12,8 +12,9 @@ Every completed package ends with a dedicated branding scene after the editorial
 {
   "id": "scene-NN-brand-outro",
   "image": "images/scene-NN-brand-outro.png",
-  "narration": "ค้นพบโลก ค้นพบใจ กับ Mamase",
-  "subtitle": "Mamase\nจักรวาลของใจ",
+  "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+  "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+  "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
   "motion": "slow_zoom_in",
   "transition": "fade_black"
 }
@@ -22,3 +23,7 @@ Every completed package ends with a dedicated branding scene after the editorial
 Replace `NN` with the next sequential scene number. Copy `assets/mamase-brand-outro.png` into the package using the exact path referenced by the final scene.
 
 Do not redesign, recolor, crop, add text to, or generate a substitute for the canonical branding asset unless พี่พี explicitly requests and approves a replacement.
+
+Deliver the CTA in the same friendly storyteller voice as the clip. It belongs
+only in the final branding scene; do not repeatedly interrupt the story with
+promotional requests.

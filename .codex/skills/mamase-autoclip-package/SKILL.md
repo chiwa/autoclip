@@ -44,28 +44,20 @@ large number into an everyday mental picture, then earn a small pivot such as
 overclaiming. A useful rhythm is: **hook → relatable comparison → surprising
 reveal → playful aside → accurate explanation → warm sense of wonder**.
 
-Use human spoken asides when they reveal the storyteller's reaction and make a
-fact easier to picture—for example, `แต่เดี๋ยวก่อน...`, `ย้ำนะครับ สมมุติ!`,
-or `เอ๊ะ วันนี้แดดก็ดีนี่นา`. They should feel like a real person thinking
-alongside the viewer, never like a repeated catchphrase.
+Use human spoken asides only when they make a fact easier to picture. Keep
+punctuation natural. Allow `...` sparingly in `tts_text` when it creates a natural playful beat; use commas, periods,
+or clean sentence boundaries so Google TTS stays connected and even.
 
 Humor must clarify the science, not replace it. Never invent consequences,
 imply speculation is confirmed, or overstate a measurement for a punchline.
 For Gemini TTS, the channel's default delivery instruction is:
 
-> Read aloud like a charismatic science storyteller with a playful personality.
-> Sound curious, friendly, slightly cheeky, and genuinely excited by surprising
-> facts. Keep the delivery natural and conversational, with small pauses for
-> comedic timing and emphasis. Never sound like a news anchor.
+> Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: "เฮ้ย... จริงดิ?" Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script.
 
 When the Google Gemini TTS provider is selected, use the approved Mamase voice
 profile unless the user overrides it: voice `Fenrir`, `pitch: 0`, and
-`speakingRate: 1.3`. The target feeling is energetic and clear, playful and
-friendly, warm and reassuring—something that makes the listener relaxed and
-curious, never rushed, tense, excessively dramatic, or announcer-like. Add:
-
-> Keep the delivery energetic, clear, playful, warm, and reassuring. Make the
-> listener feel relaxed and curious, never rushed, tense, or overly dramatic.
+`speakingRate: 1.0`. The target feeling is natural, playful, relaxed, confident, and
+naturally conversational, with even volume and relaxed pacing.
 
 For Native AutoClip, Google Gemini TTS uses Application Default Credentials
 created with `gcloud auth application-default login` and its quota project. Do
@@ -73,8 +65,11 @@ not create, store, or put service-account JSON keys in a ZIP or project config.
 The default provider is `google-gemini`; its default voice is `Fenrir`.
 When exposing Gemini settings in AutoClip, make the narration-style prompt and
 speaking rate editable. Always provide a **คืนค่า Mamase default** control that
-restores the approved prompt, Fenrir, and `speakingRate: 1.3`; list voices in
+restores the approved prompt, Fenrir, and `speakingRate: 1.0`; list voices in
 clearly labelled **ชาย** and **หญิง** groups, with Fenrir first.
+Keep narration silence trimming disabled by default. It may remain available as
+an explicit opt-in, but package generation must not trim scene audio edges
+unless the user enables it because the first Thai syllable can be clipped.
 For a Google Gemini render, narration requests may run concurrently (default:
 six scenes per job, configurable through `AUTOCLIP_GOOGLE_TTS_PARALLELISM`)
 because each scene is independent. Keep the completed
@@ -106,9 +101,31 @@ place, process, object, or scientific detail.
 
 ## Visual quality gate — cinematic, not placeholder art
 
-Before packaging, inspect every master image at phone size. Mamase space and
+When the user provides only a topic and asks to create images after reading
+`start.md`, complete the master-image workflow autonomously. Derive the visual
+story, shot list, and prompts yourself; do not ask the user for per-scene
+prompts. If only images were requested, stop after saving and reporting the
+approved masters—do not create JSON or a ZIP without a separate request.
+
+Before delivery or packaging, open and inspect every master image at phone
+size. A written audit or generated manifest alone is not evidence that an image
+passed. Mamase space and
 science clips must feel like a premium cinematic documentary, not a sparse
 slide deck, a generic AI render, or an infographic channel.
+
+Treat `start.md` as the detailed visual authority. The target medium is Premium
+Cinematic Documentary Key Art / Cinematic Editorial Concept Art, not raw
+astrophotography, stock b-roll, wallpaper, or loosely composited web images.
+Every frame needs a large hero subject, a visible story relationship or action,
+three-layer depth, coherent directional lighting, material texture, scale cues,
+and a consistent color script across the set.
+
+For vertical delivery, require at least native `1080x1920`. Prefer native
+`2160x3840` masters when the generator supports it and extra crop/zoom latitude
+is useful, but never upscale a smaller image merely to label it 4K. For
+horizontal work, the equivalents are `1920x1080` minimum and `3840x2160`
+preferred native master. Composition and narration fidelity outrank pixel
+count.
 
 Read `assets/parker_solar_probe_reel/visual-reference.md` before creating a
 space or science Reel. It is the concise, durable quality benchmark; inspect
@@ -145,6 +162,8 @@ style, unreadable or unintended text, any logo/watermark, visibly pasted
 presenter, or a picture that does not make that narration's fact legible.
 For a multi-scene package, do this visual pass before writing the final ZIP;
 regenerate only the failed scenes and retain strong ones.
+In autonomous image mode, repeat generation and inspection for failed scenes
+until all images pass before reporting completion.
 
 ## First-scene hook
 
@@ -228,6 +247,25 @@ the Mamase presenter hook and optionally one reveal. The remaining shots need
 distinct, narration-matched source images with intentional FFmpeg motion and
 focus; do not repeatedly zoom the same frame just to increase scene count.
 
+One ZIP must work unchanged in both Generate modes. Every scene always includes
+its image and FFmpeg `motion`. Add the optional `wan` object only to scenes that
+should use generated motion. Selecting **FFmpeg Motion** renders all scenes with
+FFmpeg and ignores every `wan` object; selecting **Wan 2.2** runs those scenes
+with a `wan` object through Wan and automatically falls back to FFmpeg for the
+others. Do not add a separate per-scene renderer field.
+
+If the user explicitly requests **Wan for every scene**, treat that as a
+package-level creative override: preserve every existing image, narration,
+subtitle, motion, transition, and scene order, then add a valid `wan` object to
+every scene. Give each scene a narration-matched image-to-video prompt, stable
+seed, `frames: 81`, and an appropriate negative prompt. Keep `lip_sync: true`
+only for presenter scenes that need speech; use `false` for b-roll and branding.
+The hook still uses `steps: 25`; ordinary scenes omit `steps` to inherit the
+configured default. This override does not remove FFmpeg compatibility: every
+scene retains its image and `motion`, so choosing **FFmpeg Motion** still renders
+the entire package without consulting any `wan` object. Repackage as a new
+version unless the user explicitly asks to overwrite the previous ZIP.
+
 ### Long-form YouTube pacing
 
 For a roughly 10-minute 16:9 video, outline 18-22 narrative chapters and use
@@ -252,9 +290,9 @@ into the new package as the final scene image and preserve this treatment:
 
 ```json
 {
-  "narration": "ค้นพบโลก ค้นพบใจ กับ Mamase จักรวาลของใจ",
-  "tts_text": "ค้นพบโลก ค้นพบใจ กับ มามาเซ่ จักรวาลของใจ",
-  "subtitle": "ค้นพบโลก ค้นพบใจ\\nMamase จักรวาลของใจ",
+  "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+  "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+  "subtitle": "กดไลก์ · แชร์ · ติดตาม\\nMamase จักรวาลของใจ",
   "motion": "slow_zoom_in",
   "motion_speed": "slow",
   "motion_intensity": 0.1,
@@ -272,6 +310,11 @@ into the new package as the final scene image and preserve this treatment:
 
 Give it the package's next ordered scene id and a relative image path in
 `images/`; it must remain the final `script.json` scene.
+
+Keep this call to action relaxed, friendly, and integrated into the closing
+sentence. Do not use an announcer voice, pressure the viewer, or repeat like,
+share, or follow requests in earlier scenes unless the user asks for a specific
+campaign treatment.
 
 ## Required ZIP contract
 

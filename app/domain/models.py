@@ -49,7 +49,7 @@ class Voice(BaseModel):
 
 
 class WanSceneOptions(BaseModel):
-    """Optional, portable visual-generation hints for a Wan 2.2 scene.
+    """Optional, portable visual-generation hints for a Wan 2.2 / LTX-Video scene.
 
     These contain creative intent only. Connection details, reference-audio
     paths, API tokens, and RunPod host details are configuration, never ZIP
@@ -58,9 +58,9 @@ class WanSceneOptions(BaseModel):
     prompt: str = Field(min_length=3, max_length=2_000)
     negative_prompt: str = Field(default="text, watermark, flicker, jitter", max_length=2_000)
     seed: int | None = Field(default=None, ge=0, le=2_147_483_647)
-    frames: int | None = Field(default=None, ge=17, le=241)
+    frames: int | None = Field(default=None, ge=9, le=300)
     # Optional per-scene quality override. Omit to use the configured default.
-    steps: int | None = Field(default=None, ge=10, le=50)
+    steps: int | None = Field(default=None, ge=1, le=50)
     lip_sync: bool = False
     character_id: str | None = None
 
@@ -70,6 +70,9 @@ class WanSceneOptions(BaseModel):
         if value is not None and not SAFE_ID.fullmatch(value):
             raise ValueError("character_id is not filesystem-safe")
         return value
+
+
+LtxSceneOptions = WanSceneOptions
 
 
 class Scene(BaseModel):
@@ -85,6 +88,17 @@ class Scene(BaseModel):
     motion_intensity: float | None = None
     focus: str = "center"
     wan: WanSceneOptions | None = None
+    ltx: WanSceneOptions | None = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def sync_ai_motion_plan(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "ltx" in data and data["ltx"] is not None and ("wan" not in data or data["wan"] is None):
+                data["wan"] = data["ltx"]
+            elif "wan" in data and data["wan"] is not None and ("ltx" not in data or data["ltx"] is None):
+                data["ltx"] = data["wan"]
+        return data
 
     @field_validator("id")
     @classmethod

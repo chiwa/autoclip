@@ -26,3 +26,12 @@ class WorkspaceManager:
             Path(path).mkdir(parents=True, exist_ok=False if path == base else True)
         return workspace
 
+    def get(self, job_id: str) -> Workspace:
+        base = (self.root / job_id).resolve()
+        if base.parent != self.root.resolve():
+            raise ValueError("invalid job id")
+        workspace = Workspace(base, base / "source", base / "extracted", base / "generated-audio", base / "rendered-scenes", base / "subtitles", base / "output")
+        for path in workspace.__dict__.values():
+            Path(path).mkdir(parents=True, exist_ok=True)
+        return workspace
+

@@ -35,6 +35,16 @@ def create_app() -> FastAPI:
     application.include_router(router)
     static_dir = Path(__file__).parent / "web" / "static"
     application.mount("/static", StaticFiles(directory=static_dir), name="static")
+    assets_dir = Path(__file__).resolve().parents[1] / "assets"
+    if assets_dir.is_dir():
+        application.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+    @application.api_route("/favicon.ico", methods=["GET", "HEAD"], include_in_schema=False)
+    def favicon() -> FileResponse:
+        fav_path = assets_dir / "logo" / "auto-clip-logo.png"
+        if fav_path.is_file():
+            return FileResponse(fav_path, media_type="image/png")
+        return FileResponse(static_dir / "index.html")
 
     @application.get("/", include_in_schema=False)
     def index() -> FileResponse:
@@ -49,6 +59,10 @@ def create_app() -> FastAPI:
         # The automatic package UI changes independently of media assets;
         # never leave a browser using an old download handler from cache.
         return FileResponse(static_dir / "ai.html", headers={"Cache-Control": "no-store"})
+
+    @application.get("/podcast", include_in_schema=False)
+    def podcast_page() -> FileResponse:
+        return FileResponse(static_dir / "podcast.html", headers={"Cache-Control": "no-store"})
 
     @application.get("/antigravity", include_in_schema=False)
     def antigravity_page() -> FileResponse:

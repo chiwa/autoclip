@@ -28,7 +28,7 @@ For full details, reference files, and validation scripts, see also [`../mamase-
 ### Step 1: Script Writing & Review Gate
 1. Select/receive a topic aligned with approved channel themes (strange places worldwide, mysterious science, unexpected space stories, nature extremes, trending verified wonders).
 2. Structure the script into the standard **9-scene format** (8 story scenes + 1 Mamase brand outro).
-3. Write narration in the approved **charismatic science storyteller persona** (curious, playful, warm, slightly cheeky).
+3. Write narration in the approved natural, playful, conversational storyteller persona.
 4. Present the complete script draft in clear Thai (UTF-8) including scene visuals, narration text, suggested camera motions, and transitions for พี่พี's review.
 5. Obtain approval before generating images or JSON.
 
@@ -45,9 +45,13 @@ For full details, reference files, and validation scripts, see also [`../mamase-
 
 ### Step 3: JSON & ZIP Package Assembly
 1. Create `script.json` adhering strictly to the JSON contract:
-   - Voice: `google-gemini`, `Fenrir`, speed `1.3`, charismatic storyteller prompt.
+   - Voice: `google-gemini`, `Fenrir`, speed `1.0`, natural, playful, conversational storyteller prompt.
    - Mandatory phonetic `tts_text` overrides for all foreign terms, acronyms, and numbers.
    - Scene 01 Wan: `steps: 25`, `seed: 901`, `frames: 81`, `lip_sync: true`, `character_id: "mamase-presenter-v1"`.
+   - Every scene keeps an image and FFmpeg motion. Add `wan` only to scenes
+     intended for generated motion. One ZIP works unchanged in both modes:
+     FFmpeg selection renders all scenes with FFmpeg; Wan selection uses Wan
+     for scenes with `wan` and FFmpeg for all remaining scenes.
 2. Ensure final scene uses the canonical locked Mamase Brand Outro asset and wording.
 3. Create `video-metadata.json` with title, description, and hashtags.
 4. Archive at ZIP root without parent wrapping folder:

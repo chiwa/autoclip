@@ -372,8 +372,8 @@ class KokoroThaiTtsProvider:
         last_diagnostic = ""
         for attempt in range(2):
             try:
-                result = subprocess.run(command, capture_output=True, text=True, timeout=180, check=False)
-            except (OSError, subprocess.TimeoutExpired) as exc:
+                result = subprocess.run(command, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=180, check=False)
+            except (OSError, subprocess.TimeoutExpired, UnicodeError) as exc:
                 if attempt == 1:
                     raise AppError("TTS_GENERATION_FAILED", "Wayu Kokoro Thai narration generation timed out") from exc
                 continue

@@ -69,6 +69,21 @@ The VachanaTTS Python package is Apache-2.0, but consumers should independently 
 
 The Docker image installs redistributable `fonts-noto-core` and `fonts-thai-tlwg`. FFmpeg/libass is configured for `Noto Sans Thai`, UTF-8 input, and an explicit 1080×1920 subtitle coordinate space. The Docker integration test burns text containing Thai consonants, vowels, and tone marks. Subtitle size, outline, and bottom margin are configured in `config.yaml`.
 
+## YouTube Podcast Generator
+
+AutoClip includes a dedicated interface for generating horizontal 16:9 YouTube Visual Podcasts from a single cover image and long Thai script without requiring a ZIP package.
+
+- **Web Route**: `GET /podcast` (accessible via the top navigation bar as "สร้าง Podcast").
+- **API Endpoints**: `POST /api/podcast/jobs` (starts generation), `POST /api/podcast/preview-audio` (sample voice preview).
+- **Format**: 1920×1080 Full HD (16:9), 30 FPS, H.264 / AAC 48 kHz stereo.
+- **Thai-Aware Script Chunking**: Long scripts are safely split using paragraph, sentence, and word boundaries (via PyThaiNLP with regex fallbacks) to stay under ~2,800 UTF-8 bytes per chunk.
+- **Parallel Gemini TTS**: Synthesizes audio chunks concurrently (`AUTOCLIP_PODCAST_CONCURRENCY=3`) with exponential backoff retries and manifest-based caching (`podcast_chunks/`). Chunks are losslessly stitched using the FFmpeg concat demuxer.
+- **Bedtime Voice & Style**: Defaults to the calm, warm `Enceladus` voice at speed `1.10` with a relaxing bedtime storytelling prompt.
+- **Sidechain Audio Ducking**: Background music (built-in ambient track or custom uploaded audio) automatically ducks under speech using FFmpeg `sidechaincompress`, ending with a clean fade-out.
+- **Breathing Visual Motion**: A 6-stage gentle breathing motion cycle with dissolve crossfades is generated once and looped via `-stream_loop -1`, avoiding large intermediate disk usage.
+- **16:9 Subtitles**: Timed Thai subtitles rendered in Noto Sans Thai with a subtle semi-transparent background, sized and centered for 16:9 screens.
+- **History & Preview Integration**: Generated podcast videos appear in `/history`, can be previewed at `/jobs/{id}/preview`, and downloaded via `/api/jobs/{id}/video`.
+
 ## Sample and API
 
 Build the checked-in Thai sample package (no third-party Python libraries needed):
@@ -108,7 +123,7 @@ uvicorn app.main:app --reload --port 8000
 
 ## Configuration and media details
 
-Set `AUTOCLIP_CONFIG` to select a YAML file. `AUTOCLIP_WORKSPACE`, `AUTOCLIP_TTS_PROVIDER`, `AUTOCLIP_MAX_UPLOAD_MB`, and `AUTOCLIP_MAX_EXTRACTED_MB` override common settings. Scene videos are H.264/yuv420p at configured 1080×1920/30 fps with AAC 48 kHz stereo. Dummy/local narration is normalized to WAV. Final audio uses `loudnorm`; BGM uses looping, low gain, side-chain compression beneath narration, and a short fade-in.
+Set `AUTOCLIP_CONFIG` to select a YAML file. `AUTOCLIP_WORKSPACE`, `AUTOCLIP_TTS_PROVIDER`, `AUTOCLIP_MAX_UPLOAD_MB`, and `AUTOCLIP_MAX_EXTRACTED_MB` override common settings. Scene videos are H.264/yuv420p at configured 1080×1920/30 fps with AAC 48 kHz stereo. Optional narration edge trimming is disabled by default to avoid clipping Thai onset syllables. When explicitly enabled, it trims only leading/trailing silence before duration measurement and preserves internal pauses. Configure this with `AUTOCLIP_TTS_SILENCE_TRIM_ENABLED`, `AUTOCLIP_TTS_SILENCE_THRESHOLD_DB`, `AUTOCLIP_TTS_MINIMUM_SILENCE_SECONDS`, and `AUTOCLIP_TTS_RETAINED_EDGE_SECONDS`. Final audio uses `loudnorm`; BGM uses looping, low gain, side-chain compression beneath narration, and a short fade-in.
 
 To remove old retained workspaces manually:
 
@@ -133,6 +148,17 @@ For the optional RunPod shot-rendering integration (Wan image-to-video, F5 Thai
 narration, and optional LatentSync), see
 [docs/runpod-shot-pipeline.md](docs/runpod-shot-pipeline.md). It deliberately
 keeps the ZIP contract and normal AutoClip review-to-history workflow unchanged.
+
+The Generate renderer selection deliberately uses one ZIP in both modes:
+
+- **FFmpeg Motion** renders every scene with FFmpeg and ignores optional
+  `wan` objects.
+- **Wan 2.2** is hybrid: scenes containing a `wan` object use Wan image-to-video;
+  scenes without one fall back to their normal FFmpeg `motion` settings.
+
+No per-scene renderer field is required. Add a `wan` object only to shots that
+benefit from true generated motion, while keeping a valid image and FFmpeg
+motion on every scene so the package remains portable.
 # Project History and persistence
 
 AutoClip stores project/job metadata in `workspaces/autoclip.db` (SQLite with foreign keys and WAL); media remains under `workspaces/`. Completed jobs can be opened from `/history` and their video endpoint continues to work after an application restart. Direct ZIP uploads and AI projects are both indexed. Delete moves a project to Trash (`/api/trash/{id}/restore` restores it); permanent deletion is explicit. `GET /api/storage` reports usage and `POST /api/storage/cleanup` removes disposable job intermediates. Keep projects are excluded from automatic retention cleanup.

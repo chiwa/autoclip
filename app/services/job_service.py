@@ -15,18 +15,25 @@ from app.domain.enums import JobStatus
 from app.domain.errors import AppError, public_error
 from app.domain.events import JobEvent, JobEventPublisher, JobEventType, local_now
 from app.domain.models import JobRecord
-from app.infrastructure.ffmpeg import FfmpegRunner, FfprobeRunner
+from app.infrastructure.ffmpeg import FfmpegRunner, FfprobeRunner, build_ffmpeg_metadata_args
 from app.infrastructure.filesystem import Workspace, WorkspaceManager
 from app.infrastructure.tts import create_tts_provider
 from app.services.package_service import PackageService
+from app.services.narration_audio_service import NarrationAudioProcessor
 from app.services.pronunciation_service import PronunciationService
-from app.services.bgm_service import ensure_default_bgm
+from app.services.bgm_service import ensure_default_bgm, resolve_podcast_bgm
 from app.services.video_service import RenderProfile, SceneRenderer, SubtitleRenderer, VideoComposer
 from app.services.persistence import Persistence
 from app.services.wan_service import ComfyWanClient, RunpodComfyLogTailer
+from app.services.ltx_service import RunpodLtxClient, RunpodLtxLogTailer, ltx_frames_for_duration
+from app.services.musetalk_service import RunpodMuseTalkClient, RunpodMuseTalkLogTailer
+from app.services.podcast_chunker import PodcastChunker
+from app.services.podcast_audio_service import PodcastAudioService
+from app.services.podcast_subtitle_service import PodcastSubtitleService
+from app.services.podcast_video_renderer import PodcastVideoRenderer
 
 logger = logging.getLogger("autoclip.jobs")
-SUPPORTED_RENDER_ENGINES = {"ffmpeg_motion", "wan2.2"}
+SUPPORTED_RENDER_ENGINES = {"ffmpeg_motion", "wan2.2", "ltx"}
 SUPPORTED_OUTPUT_FORMATS = {
     "use_json",
     "vertical", "vertical_1080p", "vertical_2k", "vertical_4k",
@@ -57,6 +64,19 @@ def wan_frames_for_duration(duration_seconds: float, requested_frames: int | Non
     requested = max(0, int(requested_frames or 0))
     frames = WAN_FRAME_STEP * max(required, int(math.ceil(max(0, requested - 1) / WAN_FRAME_STEP))) + 1
     return min(frames, WAN_MAX_FRAMES)
+
+
+def scene_render_engine(selected_engine: str, scene) -> str:
+    """Resolve the actual renderer without adding a new ZIP field.
+
+    FFmpeg mode is an explicit all-scenes override. LTX/Wan mode is hybrid: the
+    optional ``ltx`` or ``wan`` object opts that scene into AI motion, while scenes
+    without it keep their existing FFmpeg motion plan.
+    """
+    has_ai_motion = getattr(scene, "ltx", None) is not None or getattr(scene, "wan", None) is not None
+    if selected_engine in {"wan2.2", "ltx"} and has_ai_motion:
+        return selected_engine
+    return "ffmpeg_motion"
 
 
 class JobRegistry:
@@ -108,6 +128,7 @@ class JobService:
         self.executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="autoclip")
         self.ffmpeg = FfmpegRunner()
         self.ffprobe = FfprobeRunner()
+        self.narration_audio = NarrationAudioProcessor(self.ffmpeg, self.ffprobe, settings)
         self.persistence = persistence
         self.pronunciation = PronunciationService()
 
@@ -195,12 +216,121 @@ class JobService:
         finally:
             source.file.close()
 
+    def submit_podcast(
+        self,
+        image_file: Any,
+        title: str,
+        script_text: str,
+        voice: str | None = None,
+        speed: float | None = None,
+        style_prompt: str | None = None,
+        enable_subtitles: bool = True,
+        description: str | None = None,
+        hashtags: str | None = None,
+        bgm_file: Any | None = None,
+        bgm_track: str = "space.mp3",
+        bgm_volume: float | None = None,
+        focus: str = "center",
+    ) -> JobRecord:
+        if not script_text or not script_text.strip():
+            raise AppError("PODCAST_SCRIPT_EMPTY", "กรุณาใส่บทพูดสำหรับ Podcast")
+
+        cleaned_title = title.strip() or "YouTube Podcast"
+        job_id = str(uuid.uuid4())
+        workspace = self.workspaces.create(job_id)
+
+        import shutil
+        # Save cover image
+        if isinstance(image_file, Path):
+            cover_ext = image_file.suffix.lower()
+            cover_dest = workspace.source / f"cover{cover_ext}"
+            shutil.copy(image_file, cover_dest)
+        elif hasattr(image_file, "file") and getattr(image_file, "filename", None):
+            cover_ext = Path(image_file.filename).suffix.lower()
+            cover_dest = workspace.source / f"cover{cover_ext}"
+            with cover_dest.open("wb") as out:
+                shutil.copyfileobj(image_file.file, out)
+        else:
+            raise AppError("PODCAST_IMAGE_INVALID", "ไฟล์ภาพปกไม่ถูกต้อง")
+
+        if cover_dest.suffix.lower() not in {".png", ".jpg", ".jpeg", ".webp"}:
+            raise AppError("PODCAST_IMAGE_INVALID", "ไฟล์ภาพปกต้องเป็น PNG, JPG, JPEG หรือ WebP")
+
+        # Save script text for durability and retries
+        (workspace.source / "script.txt").write_text(script_text, encoding="utf-8")
+
+        # Save BGM file if provided
+        saved_bgm: Path | None = None
+        if bgm_file:
+            if isinstance(bgm_file, Path):
+                if bgm_file.is_file():
+                    saved_bgm = workspace.source / f"bgm{bgm_file.suffix.lower()}"
+                    shutil.copy(bgm_file, saved_bgm)
+            elif hasattr(bgm_file, "file") and getattr(bgm_file, "filename", None):
+                bgm_ext = Path(bgm_file.filename).suffix.lower()
+                if bgm_ext in {".mp3", ".wav", ".m4a", ".aac", ".ogg"}:
+                    saved_bgm = workspace.source / f"bgm{bgm_ext}"
+                    with saved_bgm.open("wb") as out:
+                        shutil.copyfileobj(bgm_file.file, out)
+
+        selected_voice = voice or self.settings.podcast.default_voice
+        selected_speed = float(speed if speed is not None else self.settings.podcast.default_speed)
+        selected_style = self.settings.podcast.resolve_style_prompt(selected_voice, style_prompt)
+        selected_bgm_vol = float(bgm_volume if bgm_volume is not None else self.settings.podcast.default_bgm_volume)
+        selected_focus = focus if focus in {"center", "top", "bottom", "left", "right"} else "center"
+
+        project_id = f"podcast-{uuid.uuid4().hex[:8]}"
+        record = self.registry.set(
+            JobRecord(
+                job_id=job_id,
+                project_id=project_id,
+                status=JobStatus.RECEIVED,
+                progress=0,
+                current_step="เตรียมบท Podcast",
+                tts_provider="google-gemini",
+                subtitle_mode="enable" if enable_subtitles else "disable",
+                render_engine="ffmpeg_motion",
+                output_format="youtube",
+            )
+        )
+        if self.persistence:
+            self.persistence.ensure_project(project_id, cleaned_title, 1, "RENDERING")
+            self.persistence.upsert_job(record)
+
+        self._investigation_log(job_id, "podcast_job_received", title=cleaned_title, voice=selected_voice, speed=selected_speed)
+        self._log(job_id, "INFO", f"Podcast '{cleaned_title}' uploaded")
+        self._progress(job_id, JobStatus.RECEIVED, 2, "เตรียมบท Podcast")
+
+        self.executor.submit(
+            self._process_podcast,
+            job_id,
+            project_id,
+            cleaned_title,
+            script_text,
+            cover_dest,
+            workspace,
+            selected_voice,
+            selected_speed,
+            selected_style,
+            enable_subtitles,
+            description,
+            hashtags,
+            saved_bgm,
+            bgm_track,
+            selected_bgm_vol,
+            selected_focus,
+        )
+        return record
+
     def _progress(self, job_id: str, status: JobStatus, progress: int, step: str) -> None:
         self.registry.update(job_id, status, progress, step)
         if self.persistence:
             current = self.registry.get(job_id)
             if current: self.persistence.upsert_job(current)
         self.events.publish(JobEvent(type=JobEventType.PROGRESS, job_id=job_id, payload={"progress": progress, "status": status, "currentStep": step}))
+
+    def set_metadata(self, job_id: str, metadata: dict) -> None:
+        self.registry.set_metadata(job_id, metadata)
 
     def _log(self, job_id: str, level: str, message: str, technical: bool = False) -> None:
         entry = self.registry.add_log(job_id, level, message)
@@ -250,15 +380,48 @@ class JobService:
                 if current: self.persistence.upsert_job(current)
             self._log(job_id, "INFO", "script.json validated")
             self._log(job_id, "INFO", f"{len(script.scenes)} scenes detected")
+            ltx_client: RunpodLtxClient | None = None
             wan_client: ComfyWanClient | None = None
-            if render_engine == "wan2.2":
-                self._progress(job_id, JobStatus.VALIDATING, 10, "Checking Wan 2.2 connection")
-                self._investigation_log(job_id, "wan_connection_check", configured=self.settings.wan.enabled, comfy_url_configured=bool(self.settings.wan.comfy_url))
-                wan_client = ComfyWanClient(self.settings)
-                wan_client.check_connection()
-                if any(scene.wan is None for scene in script.scenes):
-                    raise AppError("WAN_SCENE_CONFIG_MISSING", "ทุก scene ต้องมี Wan prompt เมื่อเลือก Wan 2.2")
-                self._log(job_id, "SUCCESS", "Connected to ComfyUI Wan 2.2")
+            ai_scene_count = sum(scene_render_engine(render_engine, scene) in {"wan2.2", "ltx"} for scene in script.scenes)
+            ffmpeg_scene_count = len(script.scenes) - ai_scene_count
+            self._investigation_log(
+                job_id,
+                "render_plan_resolved",
+                selected_engine=render_engine,
+                ai_scenes=ai_scene_count,
+                ffmpeg_scenes=ffmpeg_scene_count,
+            )
+            use_ltx = render_engine == "ltx" or (render_engine == "wan2.2" and (getattr(self.settings.ltx, "enabled", True) or bool(getattr(self.settings.ltx, "ssh_host", ""))))
+            if render_engine in {"wan2.2", "ltx"} and ai_scene_count:
+                if use_ltx:
+                    self._progress(job_id, JobStatus.VALIDATING, 10, "Checking LTX Video connection")
+                    self._investigation_log(job_id, "ltx_connection_check", configured=self.settings.ltx.enabled, host_configured=bool(self.settings.ltx.runpod_host))
+                    ltx_client = RunpodLtxClient(self.settings)
+                    ltx_client.check_connection()
+                    self._log(job_id, "SUCCESS", f"Hybrid plan: {ai_scene_count} LTX scenes · {ffmpeg_scene_count} FFmpeg scenes")
+                else:
+                    self._progress(job_id, JobStatus.VALIDATING, 10, "Checking Wan 2.2 connection")
+                    self._investigation_log(job_id, "wan_connection_check", configured=self.settings.wan.enabled, comfy_url_configured=bool(self.settings.wan.comfy_url))
+                    wan_client = ComfyWanClient(self.settings)
+                    wan_client.check_connection()
+                    self._log(job_id, "SUCCESS", f"Hybrid plan: {ai_scene_count} Wan scenes · {ffmpeg_scene_count} FFmpeg scenes")
+            elif render_engine in {"wan2.2", "ltx"}:
+                self._log(job_id, "INFO", "No AI-enabled scenes in ZIP; rendering every scene with FFmpeg Motion")
+            else:
+                self._log(job_id, "INFO", f"FFmpeg Motion override: rendering all {len(script.scenes)} scenes with FFmpeg")
+
+            musetalk_client: RunpodMuseTalkClient | None = None
+            lip_sync_scene_count = sum(bool(getattr(scene, "lip_sync", False) or (scene.ltx and scene.ltx.lip_sync) or (scene.wan and scene.wan.lip_sync)) for scene in script.scenes)
+            if lip_sync_scene_count and getattr(self.settings.musetalk, "enabled", True):
+                self._progress(job_id, JobStatus.VALIDATING, 12, "Checking MuseTalk Lip-sync connection")
+                try:
+                    musetalk_client = RunpodMuseTalkClient(self.settings)
+                    musetalk_client.check_connection()
+                    self._log(job_id, "SUCCESS", f"Lip-sync enabled for {lip_sync_scene_count} scenes (MuseTalk on RunPod)")
+                except Exception as exc:
+                    self._log(job_id, "WARNING", f"MuseTalk Lip-sync unavailable ({exc}); continuing without lip-sync")
+                    musetalk_client = None
+
             selected_provider = self.registry.get(job_id).tts_provider or self.settings.tts.provider
             provider = create_tts_provider(selected_provider, self.settings)
             if getattr(script.voice, "style_prompt", None) and hasattr(provider, "style_prompt"):
@@ -266,6 +429,15 @@ class JobService:
             count = len(script.scenes)
             parallelism = min(count, self.settings.tts.google_parallelism) if selected_provider == "google-gemini" else 1
             self._progress(job_id, JobStatus.GENERATING_AUDIO, 15, f"Generating narration 0 of {count}")
+            trim = self.settings.tts.silence_trim
+            self._investigation_log(
+                job_id,
+                "tts_silence_trim_config",
+                enabled=trim.enabled,
+                threshold_db=trim.threshold_db,
+                minimum_silence_seconds=trim.minimum_silence_seconds,
+                retained_edge_seconds=trim.retained_edge_seconds,
+            )
             if parallelism > 1:
                 self._log(job_id, "INFO", f"Generating Google Gemini narration in parallel ({parallelism} workers)")
                 self._investigation_log(job_id, "tts_parallelism", provider=selected_provider, workers=parallelism, scene_count=count)
@@ -273,14 +445,19 @@ class JobService:
             def synthesize_scene(index: int, scene) -> tuple[int, float]:
                 output = workspace.generated_audio / f"{scene.id}.wav"
                 try:
+                    if output.is_file() and output.stat().st_size > 1000:
+                        self._log(job_id, "INFO", f"Reusing existing narration for scene {index + 1}")
+                        audio_duration = self.narration_audio.process(output)
+                        return index, audio_duration
                     provider.synthesize(self.pronunciation.resolve_scene(scene), script.project.language, script.voice.voice, script.voice.speed, output)
-                    return index, self.ffprobe.duration(output) + self.settings.video.scene_padding_seconds
+                    audio_duration = self.narration_audio.process(output)
+                    return index, audio_duration
                 except AppError:
                     raise
                 except Exception as exc:
                     raise AppError("TTS_GENERATION_FAILED", "Narration audio generation failed", {"sceneId": scene.id}) from exc
 
-            durations_by_index: dict[int, float] = {}
+            raw_audio_durations_by_index: dict[int, float] = {}
             with ThreadPoolExecutor(max_workers=parallelism, thread_name_prefix="autoclip-tts") as audio_executor:
                 futures = {}
                 for index, scene in enumerate(script.scenes):
@@ -289,12 +466,12 @@ class JobService:
                     futures[audio_executor.submit(synthesize_scene, index, scene)] = (index, scene)
                 for completed, future in enumerate(as_completed(futures), start=1):
                     index, scene = futures[future]
-                    _, duration = future.result()
-                    durations_by_index[index] = duration
-                    self._investigation_log(job_id, "tts_completed", render_engine=render_engine, scene_id=scene.id, audio_seconds=round(duration, 3))
+                    _, raw_audio_duration = future.result()
+                    raw_audio_durations_by_index[index] = raw_audio_duration
+                    self._investigation_log(job_id, "tts_completed", render_engine=render_engine, scene_id=scene.id, audio_seconds=round(raw_audio_duration, 3))
                     self._log(job_id, "SUCCESS", f"Narration generated {index + 1} of {count}")
                     self._progress(job_id, JobStatus.GENERATING_AUDIO, 15 + round(25 * completed / count), f"Generated narration {completed} of {count}")
-            durations = [durations_by_index[index] for index in range(count)]
+            raw_audio_durations = [raw_audio_durations_by_index[index] for index in range(count)]
             subtitle_renderer = SubtitleRenderer()
             scene_renderer = SceneRenderer(self.ffmpeg, self.settings, render_profile)
             rendered: list[Path] = []
@@ -303,15 +480,31 @@ class JobService:
             transitions = [scene.transition or self.settings.video.transition for scene in script.scenes[:-1]]
             transition_seconds = 0.0
             if count > 1 and self.settings.video.transition_seconds > 0:
-                transition_seconds = min(self.settings.video.transition_seconds, min(durations) / 2)
-            if not wan_client:
-                rendered = self._render_ffmpeg_scenes(job_id, script, durations, workspace, render_profile, sub_mode, transitions, transition_seconds)
-            for index, (scene, duration) in enumerate(zip(script.scenes, durations) if wan_client else ()):
+                transition_seconds = min(self.settings.video.transition_seconds, min(raw_audio_durations) / 2)
+            durations = [
+                raw_audio_durations[index] + self.settings.video.scene_padding_seconds + (
+                    transition_seconds if index < count - 1 and transitions[index] != "none" else 0.0
+                )
+                for index in range(count)
+            ]
+            if render_engine == "ffmpeg_motion" or ai_scene_count == 0:
+                rendered = self._render_ffmpeg_scenes(job_id, script, durations, raw_audio_durations, workspace, render_profile, sub_mode, transitions, transition_seconds)
+            for index, (scene, duration) in enumerate(zip(script.scenes, durations) if ai_scene_count else ()):
+                actual_engine = scene_render_engine(render_engine, scene)
                 render_progress = 40 + round(35 * index / count)
                 self._progress(job_id, JobStatus.RENDERING_SCENES, render_progress, f"Rendering scene {index + 1} of {count} (in progress)")
                 scene_started = time.monotonic()
-                self._investigation_log(job_id, "scene_render_started", render_engine=render_engine, scene_id=scene.id, scene_index=index + 1, motion=scene.motion, transition=scene.transition or self.settings.video.transition, duration_seconds=round(duration, 3))
-                self._log(job_id, "INFO", f"Motion: {scene.motion} · Transition: {scene.transition or self.settings.video.transition}")
+                self._investigation_log(job_id, "scene_render_started", render_engine=actual_engine, selected_engine=render_engine, scene_id=scene.id, scene_index=index + 1, motion=scene.motion, transition=scene.transition or self.settings.video.transition, duration_seconds=round(duration, 3))
+                self._log(job_id, "INFO", f"Scene renderer: {actual_engine} · Motion: {scene.motion} · Transition: {scene.transition or self.settings.video.transition}")
+
+                final_scene_output = workspace.rendered_scenes / f"{scene.id}.mp4"
+                if final_scene_output.is_file() and final_scene_output.stat().st_size > 1000:
+                    self._log(job_id, "INFO", f"Reusing already rendered video for scene {index + 1}")
+                    rendered.append(final_scene_output)
+                    self._investigation_log(job_id, "scene_render_reused", scene_id=scene.id, output=final_scene_output.name)
+                    self._progress(job_id, JobStatus.RENDERING_SCENES, 40 + round(35 * (index + 1) / count), f"Rendered scene {index + 1} of {count}")
+                    continue
+
                 if sub_mode == "disable":
                     show_sub = False
                 elif sub_mode == "enable":
@@ -320,10 +513,9 @@ class JobService:
                     show_sub = scene.show_subtitle and bool(scene.subtitle)
 
                 if show_sub and (scene.subtitle or scene.narration):
-                    entering_transition = transition_seconds if index > 0 and transitions[index - 1] != "none" else 0.0
                     leaving_transition = transition_seconds if index < count - 1 and transitions[index] != "none" else 0.0
-                    subtitle_start = entering_transition
-                    subtitle_end = duration - leaving_transition
+                    subtitle_start = 0.0
+                    subtitle_end = min(duration - leaving_transition, raw_audio_durations[index] + 0.15)
                     if subtitle_end > subtitle_start + 0.05:
                         self._log(job_id, "INFO", f"Adding Thai subtitles to scene {index + 1}")
                         self._investigation_log(job_id, "subtitle_window", scene_id=scene.id, start_seconds=round(subtitle_start, 3), end_seconds=round(subtitle_end, 3), transition_seconds=round(transition_seconds, 3))
@@ -334,29 +526,135 @@ class JobService:
                 else:
                     self._log(job_id, "INFO", f"Skipping subtitles for scene {index + 1} ({'disabled by global setting' if sub_mode == 'disable' else 'disabled in scene'})")
                     subtitle = None
-                if wan_client:
-                    self._progress(job_id, JobStatus.RENDERING_SCENES, render_progress, f"Rendering Wan scene {index + 1} of {count} (in progress)")
-                    self._log(job_id, "INFO", f"Submitting scene {index + 1} to Wan 2.2")
+                is_lip_sync = bool(getattr(scene, "lip_sync", False) or (scene.ltx and scene.ltx.lip_sync) or (scene.wan and scene.wan.lip_sync))
+                if actual_engine in {"wan2.2", "ltx"} and ltx_client is not None:
+                    ai_opts = scene.ltx or scene.wan
+                    assert ai_opts is not None
+                    ltx_output = workspace.rendered_scenes / f"{scene.id}.ltx.mp4"
+                    if not (ltx_output.is_file() and ltx_output.stat().st_size > 1000):
+                        self._progress(job_id, JobStatus.RENDERING_SCENES, render_progress, f"Rendering LTX scene {index + 1} of {count} (in progress)")
+                        self._log(job_id, "INFO", f"Submitting scene {index + 1} to LTX Video")
+                        is_landscape = render_profile.width > render_profile.height
+                        ltx_width = self.settings.ltx.height if is_landscape else self.settings.ltx.width
+                        ltx_height = self.settings.ltx.width if is_landscape else self.settings.ltx.height
+                        dynamic_frames = ltx_frames_for_duration(duration, ai_opts.frames, fps=self.settings.ltx.fps)
+                        poc_root = str(getattr(self.settings.ltx, "poc_root", "/workspace/ltx-video-poc"))
+                        tailer = RunpodLtxLogTailer(
+                            self.settings,
+                            lambda message: self._technical_log(job_id, f"RunPod | {message}"),
+                            log_file=f"{poc_root}/logs/autoclip-{job_id[:8]}-{scene.id}-inference.log",
+                        )
+                        tailer.start()
+                        try:
+                            ltx_client.render_scene(job_id, scene, workspace.extracted / scene.image, ltx_output, width=ltx_width, height=ltx_height, frames=dynamic_frames)
+                        finally:
+                            tailer.stop()
+                        self._log(job_id, "INFO", f"LTX scene {index + 1} received")
+                    else:
+                        self._log(job_id, "INFO", f"Reusing existing raw LTX video for scene {index + 1}")
+
+                    raw_scene_video = ltx_output
+                    if is_lip_sync and musetalk_client is not None:
+                        lipsync_output = workspace.rendered_scenes / f"{scene.id}.lipsync.mp4"
+                        if not (lipsync_output.is_file() and lipsync_output.stat().st_size > 1000):
+                            self._log(job_id, "INFO", f"Submitting scene {index + 1} to MuseTalk for Lip-sync")
+                            # Scale LTX raw video to final resolution before MuseTalk so lip-sync
+                            # runs at full output quality instead of the small LTX native resolution
+                            # (e.g. 448x768 → 1080x1920). Without this, the face region gets
+                            # upscaled 2.4x after MuseTalk and looks blurry.
+                            ltx_scaled = workspace.rendered_scenes / f"{scene.id}.ltx_scaled.mp4"
+                            if not (ltx_scaled.is_file() and ltx_scaled.stat().st_size > 1000):
+                                self._log(job_id, "INFO", f"Upscaling LTX scene {index + 1} to {render_profile.width}x{render_profile.height} for MuseTalk")
+                                vf_scale = (
+                                    f"scale={render_profile.width}:{render_profile.height}:"
+                                    f"force_original_aspect_ratio=increase:flags=lanczos,"
+                                    f"crop={render_profile.width}:{render_profile.height},setsar=1,"
+                                    f"format=yuv420p"
+                                )
+                                self.ffmpeg.run(
+                                    ["-i", str(ltx_output),
+                                     "-vf", vf_scale,
+                                     "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
+                                     "-pix_fmt", "yuv420p", str(ltx_scaled)],
+                                    "LTX_PRESCALE_FAILED",
+                                )
+                            musetalk_root = str(getattr(self.settings.musetalk, "musetalk_root", "/workspace/musetalk"))
+                            tailer = RunpodMuseTalkLogTailer(
+                                self.settings,
+                                lambda message: self._technical_log(job_id, f"MuseTalk | {message}"),
+                                log_file=f"{musetalk_root}/logs/autoclip-{job_id[:8]}-{scene.id}-inference.log",
+                            )
+                            tailer.start()
+                            try:
+                                musetalk_client.sync_lips(
+                                    job_id,
+                                    scene,
+                                    input_media=ltx_scaled,
+                                    audio=workspace.generated_audio / f"{scene.id}.wav",
+                                    output=lipsync_output,
+                                    bbox_shift=getattr(self.settings.musetalk, "bbox_shift", 0),
+                                )
+                            finally:
+                                tailer.stop()
+                            self._log(job_id, "SUCCESS", f"MuseTalk lip-sync received for scene {index + 1}")
+                        else:
+                            self._log(job_id, "INFO", f"Reusing existing lip-synced video for scene {index + 1}")
+                        raw_scene_video = lipsync_output
+
+                    rendered.append(scene_renderer.render_wan_video(scene, raw_scene_video, workspace.generated_audio / f"{scene.id}.wav", subtitle, duration, final_scene_output))
+                elif actual_engine == "wan2.2" and wan_client is not None:
+                    assert scene.wan is not None
                     wan_output = workspace.rendered_scenes / f"{scene.id}.wan.mp4"
-                    # Keep Wan generation smaller than the final delivery and
-                    # orient the configured profile to the requested format.
-                    # Vertical defaults to 640x1152; landscape swaps it.
-                    is_landscape = render_profile.width > render_profile.height
-                    wan_width = self.settings.wan.height if is_landscape else self.settings.wan.width
-                    wan_height = self.settings.wan.width if is_landscape else self.settings.wan.height
-                    dynamic_frames = wan_frames_for_duration(duration, scene.wan.frames)
-                    self._technical_log(job_id, "RunPod ComfyUI log stream started")
-                    tailer = RunpodComfyLogTailer(self.settings, lambda message: self._technical_log(job_id, f"RunPod | {message}"))
-                    tailer.start()
-                    try:
-                        wan_client.render_scene(job_id, scene, workspace.extracted / scene.image, wan_output, width=wan_width, height=wan_height, frames=dynamic_frames)
-                    finally:
-                        tailer.stop()
-                    self._log(job_id, "INFO", f"Wan scene {index + 1} received; adding narration and subtitles")
-                    rendered.append(scene_renderer.render_wan_video(scene, wan_output, workspace.generated_audio / f"{scene.id}.wav", subtitle, duration, workspace.rendered_scenes / f"{scene.id}.mp4"))
+                    if not (wan_output.is_file() and wan_output.stat().st_size > 1000):
+                        self._progress(job_id, JobStatus.RENDERING_SCENES, render_progress, f"Rendering Wan scene {index + 1} of {count} (in progress)")
+                        self._log(job_id, "INFO", f"Submitting scene {index + 1} to Wan 2.2")
+                        is_landscape = render_profile.width > render_profile.height
+                        wan_width = self.settings.wan.height if is_landscape else self.settings.wan.width
+                        wan_height = self.settings.wan.width if is_landscape else self.settings.wan.height
+                        dynamic_frames = wan_frames_for_duration(duration, scene.wan.frames)
+                        self._technical_log(job_id, "RunPod ComfyUI log stream started")
+                        tailer = RunpodComfyLogTailer(self.settings, lambda message: self._technical_log(job_id, f"RunPod | {message}"))
+                        tailer.start()
+                        try:
+                            wan_client.render_scene(job_id, scene, workspace.extracted / scene.image, wan_output, width=wan_width, height=wan_height, frames=dynamic_frames)
+                        finally:
+                            tailer.stop()
+                        self._log(job_id, "INFO", f"Wan scene {index + 1} received; adding narration and subtitles")
+                    else:
+                        self._log(job_id, "INFO", f"Reusing existing raw Wan video for scene {index + 1}")
+                    rendered.append(scene_renderer.render_wan_video(scene, wan_output, workspace.generated_audio / f"{scene.id}.wav", subtitle, duration, final_scene_output))
+                elif is_lip_sync and musetalk_client is not None:
+                    lipsync_output = workspace.rendered_scenes / f"{scene.id}.lipsync.mp4"
+                    if not (lipsync_output.is_file() and lipsync_output.stat().st_size > 1000):
+                        self._progress(job_id, JobStatus.RENDERING_SCENES, render_progress, f"Rendering MuseTalk Lip-sync scene {index + 1} of {count} (in progress)")
+                        self._log(job_id, "INFO", f"Submitting portrait scene {index + 1} to MuseTalk for Lip-sync")
+                        musetalk_root = str(getattr(self.settings.musetalk, "musetalk_root", "/workspace/musetalk"))
+                        tailer = RunpodMuseTalkLogTailer(
+                            self.settings,
+                            lambda message: self._technical_log(job_id, f"MuseTalk | {message}"),
+                            log_file=f"{musetalk_root}/logs/autoclip-{job_id[:8]}-{scene.id}-inference.log",
+                        )
+                        tailer.start()
+                        try:
+                            musetalk_client.sync_lips(
+                                job_id,
+                                scene,
+                                input_media=workspace.extracted / scene.image,
+                                audio=workspace.generated_audio / f"{scene.id}.wav",
+                                output=lipsync_output,
+                                bbox_shift=getattr(self.settings.musetalk, "bbox_shift", 0),
+                            )
+                        finally:
+                            tailer.stop()
+                        self._log(job_id, "SUCCESS", f"MuseTalk lip-sync received for scene {index + 1}")
+                    else:
+                        self._log(job_id, "INFO", f"Reusing existing lip-synced video for scene {index + 1}")
+                    rendered.append(scene_renderer.render_wan_video(scene, lipsync_output, workspace.generated_audio / f"{scene.id}.wav", subtitle, duration, final_scene_output))
                 else:
-                    rendered.append(scene_renderer.render(scene, workspace.extracted / scene.image, workspace.generated_audio / f"{scene.id}.wav", subtitle, duration, workspace.rendered_scenes / f"{scene.id}.mp4"))
-                self._investigation_log(job_id, "scene_render_completed", render_engine=render_engine, scene_id=scene.id, output=rendered[-1].name, elapsed_ms=round((time.monotonic() - scene_started) * 1000))
+                    self._progress(job_id, JobStatus.RENDERING_SCENES, render_progress, f"Rendering FFmpeg scene {index + 1} of {count} (in progress)")
+                    self._log(job_id, "INFO", f"Scene {index + 1} has no AI motion plan; using FFmpeg Motion")
+                    rendered.append(scene_renderer.render(scene, workspace.extracted / scene.image, workspace.generated_audio / f"{scene.id}.wav", subtitle, duration, final_scene_output))
+                self._investigation_log(job_id, "scene_render_completed", render_engine=actual_engine, selected_engine=render_engine, scene_id=scene.id, output=rendered[-1].name, elapsed_ms=round((time.monotonic() - scene_started) * 1000))
                 self._log(job_id, "SUCCESS", f"Scene rendered {index + 1} of {count}")
                 self._progress(job_id, JobStatus.RENDERING_SCENES, 40 + round(35 * (index + 1) / count), f"Rendered scene {index + 1} of {count}")
             self._progress(job_id, JobStatus.COMPOSING, 80, "Combining scenes")
@@ -366,7 +664,15 @@ class JobService:
             self._log(job_id, "INFO", "Normalizing audio")
             self._progress(job_id, JobStatus.COMPOSING, 92, "Creating final video")
             self._log(job_id, "INFO", "Creating final video")
-            final = VideoComposer(self.ffmpeg, self.settings, render_profile).compose(rendered, workspace.output, bgm, durations, transitions)
+            final = VideoComposer(self.ffmpeg, self.settings, render_profile).compose(
+                rendered,
+                workspace.output,
+                bgm,
+                durations,
+                transitions,
+                title=video_metadata.get("title") if video_metadata.get("title") != "-" else script.project.title,
+                description=video_metadata.get("description") if video_metadata.get("description") != "-" else "",
+            )
             self._investigation_log(job_id, "compose_completed", render_engine=render_engine, final_path=final.name, elapsed_ms=round((time.monotonic() - started) * 1000))
             probe = self.ffprobe.probe(final)
             video_stream = next(stream for stream in probe["streams"] if stream.get("codec_type") == "video")
@@ -416,7 +722,193 @@ class JobService:
             self._investigation_log(job_id, "job_failed", error_code="INTERNAL_ERROR", elapsed_ms=round((time.monotonic() - started) * 1000))
             logger.exception("job_id=%s stage=FAILED error_code=INTERNAL_ERROR", job_id)
 
-    def _render_ffmpeg_scenes(self, job_id: str, script, durations: list[float], workspace: Workspace, render_profile: RenderProfile, sub_mode: str, transitions: list[str], transition_seconds: float) -> list[Path]:
+    def _process_podcast(
+        self,
+        job_id: str,
+        project_id: str,
+        title: str,
+        script_text: str,
+        cover_path: Path,
+        workspace: Workspace,
+        voice: str,
+        speed: float,
+        style_prompt: str,
+        enable_subtitles: bool,
+        description: str = "",
+        hashtags: str = "",
+        bgm_path: Path | None = None,
+        bgm_track: str = "cosmic_drift",
+        bgm_volume: float = 0.08,
+        focus: str = "center",
+    ) -> None:
+        started = time.monotonic()
+        try:
+            self._investigation_log(job_id, "podcast_job_started", title=title, voice=voice, speed=speed)
+            self._progress(job_id, JobStatus.VALIDATING, 5, "เตรียมบท Podcast")
+            self._log(job_id, "INFO", "เตรียมบท Podcast")
+
+            # 1. Chunking
+            chunks = PodcastChunker.chunk(script_text, max_bytes=self.settings.podcast.chunk_max_bytes)
+            if not chunks:
+                raise AppError("PODCAST_SCRIPT_EMPTY", "บทพูดพอดแคสต์ว่างเปล่า")
+
+            chunk_count = len(chunks)
+            self._investigation_log(job_id, "podcast_chunked", total_chunks=chunk_count)
+            self._log(job_id, "INFO", f"แบ่งบทเป็น {chunk_count} ส่วน")
+
+            # 2. Audio Synthesis
+            self._progress(job_id, JobStatus.GENERATING_AUDIO, 15, f"กำลังสร้างเสียง 0 จาก {chunk_count}")
+            provider = create_tts_provider("google-gemini", self.settings)
+            audio_service = PodcastAudioService(self.ffmpeg, self.ffprobe, self.settings)
+
+            def audio_progress(completed: int, total: int, step_desc: str) -> None:
+                pct = 15 + round(50 * completed / max(1, total))
+                self._progress(job_id, JobStatus.GENERATING_AUDIO, pct, step_desc)
+
+            def audio_log(lvl: str, msg: str, tech: bool = False) -> None:
+                if tech:
+                    self._technical_log(job_id, msg)
+                else:
+                    self._log(job_id, lvl, msg)
+
+            stitched_audio, chunk_durations, total_dur = audio_service.synthesize_and_stitch(
+                job_id=job_id,
+                workspace_root=workspace.root,
+                chunks=chunks,
+                provider=provider,
+                voice=voice,
+                speed=speed,
+                style_prompt=style_prompt,
+                language="th-TH",
+                progress_callback=audio_progress,
+                log_callback=audio_log,
+            )
+            self._progress(job_id, JobStatus.GENERATING_AUDIO, 65, "สร้างเสียงครบแล้ว")
+            self._log(job_id, "SUCCESS", "สร้างเสียงครบแล้ว")
+
+            # 3. Subtitles
+            srt_path: Path | None = None
+            if enable_subtitles:
+                self._progress(job_id, JobStatus.RENDERING_SCENES, 70, "กำลังสร้าง Subtitle")
+                self._log(job_id, "INFO", "กำลังสร้าง Subtitle")
+                srt_path = workspace.subtitles / "subtitles.srt"
+                PodcastSubtitleService().generate_srt(chunks, chunk_durations, srt_path)
+
+            # 4. Video Rendering
+            self._progress(job_id, JobStatus.RENDERING_SCENES, 75, "กำลังสร้าง Visual Podcast")
+            self._log(job_id, "INFO", "กำลังสร้าง Visual Podcast (1920x1080 30 FPS)")
+
+            resolved_bgm = bgm_path
+            if resolved_bgm is None:
+                resolved_bgm = resolve_podcast_bgm(self.settings.app.workspace, bgm_track)
+
+            renderer = PodcastVideoRenderer(self.ffmpeg, self.ffprobe, self.settings)
+            final_output = workspace.output / "final.mp4"
+
+            raw_desc = (description or "").strip()
+            raw_hashtags = (hashtags or "").strip()
+
+            if raw_desc:
+                desc_text = raw_desc
+            else:
+                desc_text = (
+                    f"{title}\n\n"
+                    "เรื่องเล่าวิทยาศาสตร์และจักรวาลฟังสบายยามค่ำคืน เจาะลึกความลับของเอกภพผ่านมุมมองฟิสิกส์และดาราศาสตร์\n\n"
+                    "ค้นพบโลก ค้นพบใจ กับ Mamase จักรวาลของใจ"
+                )
+
+            if raw_hashtags and raw_hashtags not in desc_text:
+                full_description = f"{desc_text}\n\n{raw_hashtags}"
+            else:
+                full_description = desc_text
+
+            renderer.render(
+                job_id=job_id,
+                workspace_root=workspace.root,
+                cover_image=cover_path,
+                narration_audio=stitched_audio,
+                total_duration=total_dur,
+                output_path=final_output,
+                subtitle_path=srt_path,
+                bgm_path=resolved_bgm,
+                bgm_volume=bgm_volume,
+                focus=focus,
+                log_callback=audio_log,
+                title=title,
+                description=full_description,
+            )
+
+            # 5. Composing & Completion
+            self._progress(job_id, JobStatus.COMPOSING, 95, "กำลังรวมเสียงและเพลง")
+            probe = self.ffprobe.probe(final_output)
+            video_stream = next(s for s in probe["streams"] if s.get("codec_type") == "video")
+
+            metadata = {
+                "projectTitle": title,
+                "durationSeconds": round(float(probe["format"]["duration"]), 3),
+                "resolution": f"{video_stream['width']}x{video_stream['height']}",
+                "outputFormat": "youtube",
+                "sceneCount": chunk_count,
+                "fileSizeBytes": final_output.stat().st_size,
+                "createdAt": local_now().isoformat(),
+                "videoMetadata": {
+                    "title": title,
+                    "description": full_description,
+                    "hashtags": raw_hashtags,
+                },
+            }
+            self.registry.set_metadata(job_id, metadata)
+            if self.persistence:
+                current = self.registry.get(job_id)
+                if current:
+                    self.persistence.upsert_job(current, final_output, metadata)
+                self.persistence.update_project_status(project_id, "COMPLETED")
+
+            self._progress(job_id, JobStatus.COMPLETED, 100, "วิดีโอพร้อมแล้ว")
+            self._log(job_id, "SUCCESS", "วิดีโอพร้อมแล้ว")
+            self.events.publish(
+                JobEvent(
+                    type=JobEventType.COMPLETED,
+                    job_id=job_id,
+                    payload={
+                        "progress": 100,
+                        "status": JobStatus.COMPLETED,
+                        "previewUrl": f"/jobs/{job_id}/preview",
+                        "videoUrl": f"/api/jobs/{job_id}/video",
+                    },
+                )
+            )
+            self._investigation_log(job_id, "podcast_job_completed", elapsed_ms=round((time.monotonic() - started) * 1000))
+        except AppError as exc:
+            current = self.registry.get(job_id)
+            progress = current.progress if current else 0
+            step = current.current_step if current else "Processing podcast"
+            safe_error = public_error(exc)
+            self.registry.update(job_id, JobStatus.FAILED, progress, step, safe_error)
+            if self.persistence:
+                current = self.registry.get(job_id)
+                if current:
+                    self.persistence.upsert_job(current)
+            self._log(job_id, "ERROR", exc.message)
+            self.events.publish(JobEvent(type=JobEventType.FAILED, job_id=job_id, payload={"progress": progress, "status": JobStatus.FAILED, "code": exc.code, "message": exc.message, "currentStep": step}))
+            self._investigation_log(job_id, "podcast_job_failed", error_code=exc.code, elapsed_ms=round((time.monotonic() - started) * 1000))
+            logger.exception("job_id=%s stage=FAILED error_code=%s", job_id, exc.code)
+        except Exception:
+            error = AppError("INTERNAL_ERROR", "เกิดข้อผิดพลาดในการประมวลผล Podcast")
+            current = self.registry.get(job_id)
+            progress = current.progress if current else 0
+            step = current.current_step if current else "Processing podcast"
+            self.registry.update(job_id, JobStatus.FAILED, progress, step, public_error(error))
+            if self.persistence:
+                current = self.registry.get(job_id)
+                if current:
+                    self.persistence.upsert_job(current)
+            self._log(job_id, "ERROR", error.message)
+            self.events.publish(JobEvent(type=JobEventType.FAILED, job_id=job_id, payload={"progress": progress, "status": JobStatus.FAILED, "code": error.code, "message": error.message, "currentStep": step}))
+            self._investigation_log(job_id, "podcast_job_failed", error_code="INTERNAL_ERROR", elapsed_ms=round((time.monotonic() - started) * 1000))
+            logger.exception("job_id=%s stage=FAILED error_code=INTERNAL_ERROR", job_id)
+
+    def _render_ffmpeg_scenes(self, job_id: str, script, durations: list[float], raw_audio_durations: list[float] | None, workspace: Workspace, render_profile: RenderProfile, sub_mode: str, transitions: list[str], transition_seconds: float) -> list[Path]:
         """Render independent FFmpeg scenes with bounded parallelism.
 
         The final compose remains ordered and single-threaded.  Each worker owns
@@ -431,6 +923,11 @@ class JobService:
             scene = script.scenes[index]
             duration = durations[index]
             started = time.monotonic()
+            final_scene_output = workspace.rendered_scenes / f"{scene.id}.mp4"
+            if final_scene_output.is_file() and final_scene_output.stat().st_size > 1000:
+                self._log(job_id, "INFO", f"Reusing already rendered video for scene {index + 1}")
+                self._investigation_log(job_id, "scene_render_reused", scene_id=scene.id, output=final_scene_output.name)
+                return index, final_scene_output, 0
             self._investigation_log(job_id, "scene_render_started", render_engine="ffmpeg_motion", scene_id=scene.id, scene_index=index + 1, motion=scene.motion, transition=scene.transition or self.settings.video.transition, duration_seconds=round(duration, 3))
             try:
                 if sub_mode == "disable":
@@ -441,13 +938,14 @@ class JobService:
                     show_sub = scene.show_subtitle and bool(scene.subtitle)
                 subtitle = None
                 if show_sub and (scene.subtitle or scene.narration):
-                    entering = transition_seconds if index > 0 and transitions[index - 1] != "none" else 0.0
                     leaving = transition_seconds if index < count - 1 and transitions[index] != "none" else 0.0
-                    end = duration - leaving
-                    if end > entering + 0.05:
-                        subtitle = SubtitleRenderer().write(scene.subtitle or scene.narration, duration, workspace.subtitles / f"{scene.id}.srt", entering, end)
-                        self._investigation_log(job_id, "subtitle_window", scene_id=scene.id, start_seconds=round(entering, 3), end_seconds=round(end, 3), transition_seconds=round(transition_seconds, 3))
-                output = SceneRenderer(self.ffmpeg, self.settings, render_profile).render(scene, workspace.extracted / scene.image, workspace.generated_audio / f"{scene.id}.wav", subtitle, duration, workspace.rendered_scenes / f"{scene.id}.mp4")
+                    subtitle_start = 0.0
+                    raw_audio_duration = raw_audio_durations[index] if raw_audio_durations and index < len(raw_audio_durations) else duration - leaving
+                    subtitle_end = min(duration - leaving, raw_audio_duration + 0.15)
+                    if subtitle_end > subtitle_start + 0.05:
+                        subtitle = SubtitleRenderer().write(scene.subtitle or scene.narration, duration, workspace.subtitles / f"{scene.id}.srt", subtitle_start, subtitle_end)
+                        self._investigation_log(job_id, "subtitle_window", scene_id=scene.id, start_seconds=round(subtitle_start, 3), end_seconds=round(subtitle_end, 3), transition_seconds=round(transition_seconds, 3))
+                output = SceneRenderer(self.ffmpeg, self.settings, render_profile).render(scene, workspace.extracted / scene.image, workspace.generated_audio / f"{scene.id}.wav", subtitle, duration, final_scene_output)
                 return index, output, round((time.monotonic() - started) * 1000)
             except AppError as exc:
                 details = {**exc.details, "sceneId": scene.id}
@@ -487,6 +985,26 @@ class JobService:
             if root in path.parents and path.is_file(): return path
         return self.settings.app.workspace / job_id / "output" / "final.mp4"
 
+    def update_video_metadata_tags(self, job_id: str, title: str, description: str, artist: str = "Mamase") -> bool:
+        try:
+            video_path = self.final_video(job_id)
+            if not video_path.is_file():
+                return False
+            meta_args = build_ffmpeg_metadata_args(title=title, description=description, artist=artist)
+            if not meta_args:
+                return False
+            temp_path = video_path.with_name(f"{video_path.stem}_meta_tmp{video_path.suffix}")
+            self.ffmpeg.run(
+                ["-y", "-i", str(video_path), "-c", "copy", "-movflags", "+faststart", *meta_args, str(temp_path)],
+                "METADATA_REMUX_FAILED",
+            )
+            if temp_path.is_file() and temp_path.stat().st_size > 0:
+                temp_path.replace(video_path)
+                return True
+        except Exception:
+            logger.exception("Failed to update video metadata tags for job_id=%s", job_id)
+        return False
+
     def restore(self, job_id: str) -> JobRecord | None:
         current = self.registry.get(job_id)
         if current and not self.persistence:
@@ -516,4 +1034,32 @@ class JobService:
             row["error"] = {"code":"JOB_INTERRUPTED","message":"งานหยุดลงเมื่อ server restart กรุณาสั่งสร้างใหม่"}
         record = JobRecord(job_id=job_id,status=status,progress=row["progress"],current_step="Job interrupted" if status==JobStatus.FAILED and row.get("interrupted") else ("Video is ready" if status==JobStatus.COMPLETED else "Job restored"),error=row.get("error"),metadata=row.get("metadata"),project_id=row.get("project_id"),render_engine=row.get("render_engine") or "ffmpeg_motion",output_format=row.get("output_format") or "use_json")
         self.registry.set(record)
+        return record
+
+    def retry(self, job_id: str) -> JobRecord:
+        record = self.restore(job_id)
+        if not record:
+            raise AppError("JOB_NOT_FOUND", "ไม่พบงานที่ต้องการลองใหม่")
+        if record.status not in {JobStatus.FAILED, JobStatus.RECEIVED}:
+            raise AppError("JOB_NOT_RETRYABLE", "สามารถลองใหม่ได้เฉพาะงานที่สถานะล้มเหลวเท่านั้น")
+
+        workspace = self.workspaces.get(job_id)
+        if not (workspace.source / "input.zip").is_file():
+            raise AppError("PACKAGE_NOT_FOUND", "ไม่พบไฟล์ต้นฉบับสำหรับลองใหม่ กรุณาอัปโหลดใหม่")
+
+        self.registry.update(
+            job_id,
+            JobStatus.RECEIVED,
+            5,
+            "กำลังเริ่มประมวลผลใหม่อีกครั้ง...",
+            error=None,
+        )
+        record = self.registry.get(job_id)
+        if self.persistence and record:
+            self.persistence.upsert_job(record)
+
+        self._investigation_log(job_id, "job_retry_started", render_engine=record.render_engine if record else "")
+        self._log(job_id, "INFO", "กำลังเริ่มประมวลผลใหม่อีกครั้ง (Retrying job)...")
+        self._progress(job_id, JobStatus.RECEIVED, 5, "กำลังเริ่มประมวลผลใหม่อีกครั้ง...")
+        self.executor.submit(self._process, job_id, workspace)
         return record

@@ -110,3 +110,18 @@ def test_thai_tts_rejects_unsupported_speed():
     response = client.post("/api/tts", data={"text": "สวัสดี", "speed": "3.0"})
     assert response.status_code == 400
     assert response.json()["detail"]["code"] == "TTS_GENERATION_FAILED"
+
+
+def test_retry_unknown_job():
+    response = client.post("/api/jobs/missing-job/retry")
+    assert response.status_code == 404
+    assert response.json()["detail"]["code"] == "JOB_NOT_FOUND"
+
+
+def test_retry_non_failed_job():
+    registry = app.state.job_service.registry
+    registry.create("running-job")
+    registry.update("running-job", "RENDERING_SCENES", 50, "Rendering scene")
+    response = client.post("/api/jobs/running-job/retry")
+    assert response.status_code == 400
+    assert response.json()["detail"]["code"] == "JOB_NOT_RETRYABLE"

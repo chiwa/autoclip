@@ -33,6 +33,13 @@ class VideoSettings(BaseModel):
     ffmpeg_scene_parallelism: int = Field(2, ge=1, le=4)
 
 
+class SilenceTrimSettings(BaseModel):
+    enabled: bool = False
+    threshold_db: float = Field(-45.0, ge=-100, le=0)
+    minimum_silence_seconds: float = Field(0.10, ge=0.01, le=2.0)
+    retained_edge_seconds: float = Field(0.06, ge=0.0, le=0.5)
+
+
 class TtsSettings(BaseModel):
     provider: str = "google-gemini"
     language: str = "th-TH"
@@ -46,13 +53,20 @@ class TtsSettings(BaseModel):
     google_model: str = "gemini-2.5-flash-tts"
     google_voice: str = "Fenrir"
     google_pitch: float = Field(0.0, ge=-20, le=20)
-    google_speaking_rate: float = Field(1.3, ge=0.5, le=2.0)
+    google_speaking_rate: float = Field(1.0, ge=0.5, le=2.0)
     google_parallelism: int = Field(6, ge=1, le=12)
+    silence_trim: SilenceTrimSettings = SilenceTrimSettings()
     google_style_prompt: str = (
-        "Read aloud like a charismatic science storyteller with a playful personality. "
-        "Sound curious, friendly, slightly cheeky, and genuinely excited by surprising facts. "
-        "Keep the delivery natural and conversational, with small pauses for comedic timing and emphasis. "
-        "Never sound like a news anchor."
+        "Read aloud in a natural, playful, conversational Thai voice. "
+        "Sound confident, friendly, and slightly cheeky, like a charismatic Thai creator casually sharing a fascinating discovery with a close friend.\n\n"
+        "Keep the delivery flowing and connected, with a medium-fast pace and clear pronunciation. "
+        "Maintain forward momentum throughout each sentence. Use brief pauses only when they help comprehension or set up a genuinely surprising moment.\n\n"
+        "Vary pitch and rhythm naturally, with a subtle smile in the voice. "
+        "Give surprising facts a spontaneous, amused reaction, as if thinking: \"เฮ้ย... จริงดิ?\" "
+        "Emphasize important words briefly through tone, not by stretching syllables or slowing down.\n\n"
+        "Avoid slow openings, drawn-out words, long dramatic pauses, sleepy pacing, excessive emphasis, and perfectly even sentence timing. "
+        "Never sound like a news presenter, announcer, formal narrator, advertisement, or someone reading from a script.\n\n"
+        "Overall personality: friendly, curious, clever, playful, charming, energetic, and easy to listen to—lively without shouting, expressive without becoming theatrical."
     )
 
 
@@ -85,6 +99,40 @@ class WanSettings(BaseModel):
     sampler_name: str = "uni_pc"
 
 
+class LtxSettings(BaseModel):
+    """Settings reserved for the RunPod LTX-Video 2B Distilled scene renderer."""
+    enabled: bool = False
+    ssh_host: str = ""
+    ssh_port: int = Field(22, gt=0, le=65535)
+    ssh_user: str = "root"
+    ssh_key_path: Path = Path("~/.ssh/id_ed25519_runpod")
+    poc_root: Path = Path("/workspace/ltx-video-poc")
+    runner_path: Path = Path("/workspace/ltx-video-poc/run_i2v.sh")
+    timeout_seconds: int = Field(900, gt=0, le=7200)
+    # 448x768 (9:16) base resolution for LTX-Video 2B Distilled
+    width: int = Field(448, gt=0)
+    height: int = Field(768, gt=0)
+    fps: int = Field(15, gt=0)
+    steps: int = Field(8, ge=1, le=50)
+    seed: int = 171198
+
+    @property
+    def runpod_host(self) -> str:
+        return self.ssh_host
+
+    @property
+    def runpod_port(self) -> int:
+        return self.ssh_port
+
+    @property
+    def runpod_user(self) -> str:
+        return self.ssh_user
+
+    @property
+    def runpod_key_path(self) -> Path:
+        return self.ssh_key_path
+
+
 class RunpodF5Settings(BaseModel):
     enabled: bool = False
     ssh_host: str = ""
@@ -97,6 +145,37 @@ class RunpodF5Settings(BaseModel):
     workdir: Path = Path("/workspace/autoclip/f5")
     runner_path: Path = Path("/workspace/autoclip/runpod_f5_infer.py")
     timeout_seconds: int = Field(900, gt=0, le=7200)
+
+
+class MuseTalkSettings(BaseModel):
+    """Settings reserved for the RunPod MuseTalk real-time audio-driven lip sync."""
+    enabled: bool = True
+    ssh_host: str = ""
+    ssh_port: int = Field(22, gt=0, le=65535)
+    ssh_user: str = "root"
+    ssh_key_path: Path = Path("~/.ssh/id_ed25519_runpod")
+    musetalk_root: Path = Path("/workspace/musetalk")
+    runner_path: Path = Path("/workspace/musetalk/run_lip_sync.sh")
+    timeout_seconds: int = Field(600, gt=0, le=3600)
+    bbox_shift: int = 0
+    use_float16: bool = True
+    version: str = "v1.5"
+
+    @property
+    def runpod_host(self) -> str:
+        return self.ssh_host
+
+    @property
+    def runpod_port(self) -> int:
+        return self.ssh_port
+
+    @property
+    def runpod_user(self) -> str:
+        return self.ssh_user
+
+    @property
+    def runpod_key_path(self) -> Path:
+        return self.ssh_key_path
 
 
 class SubtitleSettings(BaseModel):
@@ -117,6 +196,46 @@ class YouTubeSettings(BaseModel):
     api_key: str = ""
 
 
+class PodcastSettings(BaseModel):
+    chunk_max_bytes: int = Field(1400, gt=100, le=5000)
+    concurrency: int = Field(3, ge=1, le=10)
+    max_retries: int = Field(3, ge=0, le=10)
+    default_voice: str = "Enceladus"
+    default_speed: float = Field(1.10, ge=0.5, le=2.0)
+    default_bgm_track: str = "space.mp3"
+    default_bgm_volume: float = Field(0.08, ge=0.0, le=1.0)
+    default_style_prompt: str = (
+        "Read aloud in a calm, warm, and gently formal Thai voice (male speaker with a deep, masculine, and soothing tone) suitable for a relaxing bedtime podcast. "
+        "Speak smoothly and naturally, like a thoughtful male storyteller guiding the listener through a fascinating subject late at night. "
+        "Maintain a soft, even volume and a relaxed, unhurried pace. "
+        "Use subtle changes in pitch to keep the narration engaging without becoming energetic or dramatic. "
+        "Keep pauses natural, brief, and well placed between ideas. "
+        "Avoid sudden emphasis, sharp changes in volume, exaggerated emotion, playful teasing, advertising language, and news-anchor delivery. "
+        "Pronounce scientific terms, names, and numbers clearly. "
+        "The overall experience should feel peaceful, reassuring, intelligent, and comfortable enough for the listener to gradually fall asleep."
+    )
+    default_female_style_prompt: str = (
+        "Read aloud in a calm, warm, and gently formal Thai voice (female speaker with a gentle, feminine, and soothing tone) suitable for a relaxing bedtime podcast. "
+        "Speak smoothly and naturally, like a thoughtful female storyteller guiding the listener through a fascinating subject late at night. "
+        "Maintain a soft, even volume and a relaxed, unhurried pace. "
+        "Use subtle changes in pitch to keep the narration engaging without becoming energetic or dramatic. "
+        "Keep pauses natural, brief, and well placed between ideas. "
+        "Avoid sudden emphasis, sharp changes in volume, exaggerated emotion, playful teasing, advertising language, and news-anchor delivery. "
+        "Pronounce scientific terms, names, and numbers clearly. "
+        "The overall experience should feel peaceful, reassuring, intelligent, and comfortable enough for the listener to gradually fall asleep."
+    )
+
+    def resolve_style_prompt(self, voice: str | None = None, custom_style: str | None = None) -> str:
+        """Resolves the appropriate style prompt, honoring custom prompts or selecting gendered bedtime defaults."""
+        if custom_style and custom_style.strip():
+            return custom_style.strip()
+        females = {"achernar", "aoede", "autonoe", "callirrhoe", "despina", "erinome", "gacrux", "kore", "leda", "zephyr"}
+        target_voice = (voice or self.default_voice).strip().lower()
+        if target_voice in females:
+            return self.default_female_style_prompt
+        return self.default_style_prompt
+
+
 class Settings(BaseModel):
     app: AppSettings = AppSettings()
     server: ServerSettings = ServerSettings()
@@ -124,9 +243,12 @@ class Settings(BaseModel):
     tts: TtsSettings = TtsSettings()
     audio: AudioSettings = AudioSettings()
     wan: WanSettings = WanSettings()
+    ltx: LtxSettings = LtxSettings()
+    musetalk: MuseTalkSettings = MuseTalkSettings()
     runpod_f5: RunpodF5Settings = RunpodF5Settings()
     subtitle: SubtitleSettings = SubtitleSettings()
     youtube: YouTubeSettings = YouTubeSettings()
+    podcast: PodcastSettings = PodcastSettings()
     openai_api_key: str | None = None
     openai_model: str = "gpt-5-mini"
     image_model: str = "gpt-image-1"
@@ -137,9 +259,13 @@ class Settings(BaseModel):
     ai_instructions: str = "You are the AutoClip Mamase assistant. Create concise factual Thai short-form scripts. Return JSON with message and scenes when asked for a preview. Every scene needs id,narration,subtitle,image_prompt,motion,transition,estimated_duration. Always put the Mamase brand outro last."
 
 
-def _set_nested(data: dict[str, Any], path: tuple[str, str], value: str) -> None:
-    section, key = path
-    data.setdefault(section, {})[key] = value
+def _set_nested(data: dict[str, Any], path: tuple[str, str] | tuple[str, str, str], value: str) -> None:
+    if len(path) == 2:
+        section, key = path
+        data.setdefault(section, {})[key] = value
+    elif len(path) == 3:
+        sec1, sec2, key = path
+        data.setdefault(sec1, {}).setdefault(sec2, {})[key] = value
 
 
 def _dotenv_value(name: str, config_path: Path) -> str | None:
@@ -176,9 +302,40 @@ def load_settings(path: str | Path | None = None) -> Settings:
         "AUTOCLIP_GOOGLE_TTS_MODEL": ("tts", "google_model"),
         "AUTOCLIP_GOOGLE_TTS_VOICE": ("tts", "google_voice"),
         "AUTOCLIP_GOOGLE_TTS_PARALLELISM": ("tts", "google_parallelism"),
+        "AUTOCLIP_TTS_SILENCE_TRIM_ENABLED": ("tts", "silence_trim", "enabled"),
+        "AUTOCLIP_TTS_SILENCE_THRESHOLD_DB": ("tts", "silence_trim", "threshold_db"),
+        "AUTOCLIP_TTS_MINIMUM_SILENCE_SECONDS": ("tts", "silence_trim", "minimum_silence_seconds"),
+        "AUTOCLIP_TTS_RETAINED_EDGE_SECONDS": ("tts", "silence_trim", "retained_edge_seconds"),
         "AUTOCLIP_FFMPEG_SCENE_PARALLELISM": ("video", "ffmpeg_scene_parallelism"),
         "AUTOCLIP_MAX_UPLOAD_MB": ("app", "max_upload_mb"),
         "AUTOCLIP_MAX_EXTRACTED_MB": ("app", "max_extracted_mb"),
+        "AUTOCLIP_LTX_ENABLED": ("ltx", "enabled"),
+        "AUTOCLIP_LTX_SSH_HOST": ("ltx", "ssh_host"),
+        "AUTOCLIP_LTX_RUNPOD_HOST": ("ltx", "ssh_host"),
+        "AUTOCLIP_LTX_SSH_PORT": ("ltx", "ssh_port"),
+        "AUTOCLIP_LTX_RUNPOD_PORT": ("ltx", "ssh_port"),
+        "AUTOCLIP_LTX_SSH_USER": ("ltx", "ssh_user"),
+        "AUTOCLIP_LTX_RUNPOD_USER": ("ltx", "ssh_user"),
+        "AUTOCLIP_LTX_SSH_KEY_PATH": ("ltx", "ssh_key_path"),
+        "AUTOCLIP_LTX_RUNPOD_KEY_PATH": ("ltx", "ssh_key_path"),
+        "AUTOCLIP_LTX_STEPS": ("ltx", "steps"),
+        "AUTOCLIP_LTX_SEED": ("ltx", "seed"),
+        "AUTOCLIP_LTX_FPS": ("ltx", "fps"),
+        "AUTOCLIP_LTX_WIDTH": ("ltx", "width"),
+        "AUTOCLIP_LTX_HEIGHT": ("ltx", "height"),
+        "AUTOCLIP_LTX_TIMEOUT_SECONDS": ("ltx", "timeout_seconds"),
+        "AUTOCLIP_MUSETALK_ENABLED": ("musetalk", "enabled"),
+        "AUTOCLIP_MUSETALK_SSH_HOST": ("musetalk", "ssh_host"),
+        "AUTOCLIP_MUSETALK_RUNPOD_HOST": ("musetalk", "ssh_host"),
+        "AUTOCLIP_MUSETALK_SSH_PORT": ("musetalk", "ssh_port"),
+        "AUTOCLIP_MUSETALK_RUNPOD_PORT": ("musetalk", "ssh_port"),
+        "AUTOCLIP_MUSETALK_SSH_USER": ("musetalk", "ssh_user"),
+        "AUTOCLIP_MUSETALK_RUNPOD_USER": ("musetalk", "ssh_user"),
+        "AUTOCLIP_MUSETALK_SSH_KEY_PATH": ("musetalk", "ssh_key_path"),
+        "AUTOCLIP_MUSETALK_RUNPOD_KEY_PATH": ("musetalk", "ssh_key_path"),
+        "AUTOCLIP_MUSETALK_BBOX_SHIFT": ("musetalk", "bbox_shift"),
+        "AUTOCLIP_MUSETALK_VERSION": ("musetalk", "version"),
+        "AUTOCLIP_MUSETALK_TIMEOUT_SECONDS": ("musetalk", "timeout_seconds"),
         "AUTOCLIP_WAN_ENABLED": ("wan", "enabled"),
         "AUTOCLIP_WAN_COMFY_URL": ("wan", "comfy_url"),
         "AUTOCLIP_WAN_REQUEST_TIMEOUT_SECONDS": ("wan", "request_timeout_seconds"),
@@ -190,6 +347,22 @@ def load_settings(path: str | Path | None = None) -> Settings:
         "RUNPOD_SSH_USER": ("runpod_f5", "ssh_user"),
         "RUNPOD_SSH_KEY_PATH": ("runpod_f5", "ssh_key_path"),
         "AUTOCLIP_RUNPOD_F5_TIMEOUT_SECONDS": ("runpod_f5", "timeout_seconds"),
+        "PODCAST_TTS_CHUNK_MAX_BYTES": ("podcast", "chunk_max_bytes"),
+        "PODCAST_TTS_CONCURRENCY": ("podcast", "concurrency"),
+        "PODCAST_TTS_MAX_RETRIES": ("podcast", "max_retries"),
+        "PODCAST_DEFAULT_VOICE": ("podcast", "default_voice"),
+        "PODCAST_DEFAULT_SPEED": ("podcast", "default_speed"),
+        "PODCAST_DEFAULT_BGM_TRACK": ("podcast", "default_bgm_track"),
+        "PODCAST_DEFAULT_BGM_VOLUME": ("podcast", "default_bgm_volume"),
+        "PODCAST_DEFAULT_STYLE_PROMPT": ("podcast", "default_style_prompt"),
+        "AUTOCLIP_PODCAST_CHUNK_MAX_BYTES": ("podcast", "chunk_max_bytes"),
+        "AUTOCLIP_PODCAST_CONCURRENCY": ("podcast", "concurrency"),
+        "AUTOCLIP_PODCAST_MAX_RETRIES": ("podcast", "max_retries"),
+        "AUTOCLIP_PODCAST_DEFAULT_VOICE": ("podcast", "default_voice"),
+        "AUTOCLIP_PODCAST_DEFAULT_SPEED": ("podcast", "default_speed"),
+        "AUTOCLIP_PODCAST_DEFAULT_BGM_TRACK": ("podcast", "default_bgm_track"),
+        "AUTOCLIP_PODCAST_DEFAULT_BGM_VOLUME": ("podcast", "default_bgm_volume"),
+        "AUTOCLIP_PODCAST_DEFAULT_STYLE_PROMPT": ("podcast", "default_style_prompt"),
     }
     openai_key = os.getenv("OPENAI_API_KEY")
     # Native development does not get Docker Compose's automatic .env
@@ -256,7 +429,11 @@ def load_settings(path: str | Path | None = None) -> Settings:
     if os.getenv("YOUTUBE_API_KEY"): data.setdefault("youtube", {})["api_key"] = os.environ["YOUTUBE_API_KEY"]
     for env_name, target in overrides.items():
         if value := _dotenv_value(env_name, config_path):
-            _set_nested(data, target, value)
+            if len(target) == 2:
+                _set_nested(data, target, value)
+            else:
+                section, parent, key = target
+                data.setdefault(section, {}).setdefault(parent, {})[key] = value
     settings = Settings.model_validate(data)
     # The checked-in config uses Docker paths (for example /app/voices/...)
     # while native development runs from the repository directory. Resolve a

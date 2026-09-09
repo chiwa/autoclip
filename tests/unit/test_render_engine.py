@@ -6,7 +6,8 @@ import zipfile
 
 import pytest
 
-from app.services.job_service import wan_frames_for_duration
+from app.services.job_service import scene_render_engine, wan_frames_for_duration
+from app.services.ltx_service import ltx_frames_for_duration, RunpodLtxClient
 from app.config.settings import AppSettings, Settings, load_settings
 from app.domain.enums import JobStatus
 from app.domain.errors import AppError
@@ -76,6 +77,29 @@ def test_wan_steps_default_to_22_but_a_scene_can_request_25():
     assert client._workflow("job", scene, "hook.png")["9"]["inputs"]["steps"] == 22
 
 
+def test_ffmpeg_selection_overrides_wan_plan_for_every_scene():
+    scene = Script.model_validate({
+        "project": {"id": "hybrid", "title": "Hybrid", "language": "th-TH"},
+        "voice": {"provider": "dummy", "voice": "test", "speed": 1},
+        "scenes": [{"id": "hero", "image": "images/hero.png", "narration": "ทดสอบ", "motion": "none", "wan": {"prompt": "Cosmic particles move"}}],
+    }).scenes[0]
+
+    assert scene_render_engine("ffmpeg_motion", scene) == "ffmpeg_motion"
+
+
+def test_wan_selection_is_hybrid_based_on_optional_wan_object():
+    scenes = Script.model_validate({
+        "project": {"id": "hybrid", "title": "Hybrid", "language": "th-TH"},
+        "voice": {"provider": "dummy", "voice": "test", "speed": 1},
+        "scenes": [
+            {"id": "ai", "image": "images/ai.png", "narration": "ทดสอบ", "motion": "none", "wan": {"prompt": "Cosmic particles move"}},
+            {"id": "still", "image": "images/still.png", "narration": "ทดสอบ", "motion": "slow_zoom_in"},
+        ],
+    }).scenes
+
+    assert [scene_render_engine("wan2.2", scene) for scene in scenes] == ["wan2.2", "ffmpeg_motion"]
+
+
 def test_submit_records_selected_output_format(tmp_path):
     service = build_service(tmp_path)
     archive = BytesIO()
@@ -137,7 +161,7 @@ def test_wan_selection_fails_explicitly_until_connector_is_enabled(tmp_path, mon
     script = Script.model_validate({
         "project": {"id": "lake-natron", "title": "Lake Natron", "language": "th-TH"},
         "voice": {"provider": "dummy", "voice": "test", "speed": 1},
-        "scenes": [{"id": "scene-01", "image": "images/scene-01.png", "narration": "ทดสอบ", "motion": "none"}],
+        "scenes": [{"id": "scene-01", "image": "images/scene-01.png", "narration": "ทดสอบ", "motion": "none", "wan": {"prompt": "Wan connection test"}}],
     })
 
     class FakePackageService:
@@ -179,3 +203,96 @@ def test_submit_applies_motion_resolution_2k_and_4k(tmp_path):
     with zipfile.ZipFile(zip_4k) as zf:
         patched = json.loads(zf.read("script.json"))
         assert patched["project"]["resolution"] == "2160x3840"
+
+
+def test_ltx_frame_count_covers_narration_and_respects_8n_plus_1():
+    # 7.85s at 15 fps = 118 raw frames -> n = ceil((118-1)/8) = ceil(117/8) = 15 -> 15*8+1 = 121 frames
+    # 121 frames / 15 fps = 8.067s >= 7.85s
+    assert ltx_frames_for_duration(7.85) == 121
+    # 3.0s at 15 fps = 45 frames -> n = ceil(44/8) = 6 -> 6*8+1 = 49 frames
+    assert ltx_frames_for_duration(3.0) == 49
+    # 0.5s at 15 fps = 8 frames -> n = ceil(7/8) = 1 -> 1*8+1 = 9 frames
+    assert ltx_frames_for_duration(0.5) == 9
+    # Preserves longer requested frames: 5.0s requires 73 frames; requested 97 (8*12+1) -> 97 frames
+    assert ltx_frames_for_duration(5.0, requested_frames=97) == 97
+    # If requested is not an 8n+1 multiple, round up to 8n+1: requested 80 -> 81 (8*10+1)
+    assert ltx_frames_for_duration(5.0, requested_frames=80) == 81
+
+
+def test_scene_model_supports_both_ltx_and_wan_keys():
+    scene_from_wan = Script.model_validate({
+        "project": {"id": "test-wan", "title": "Test", "language": "th-TH"},
+        "voice": {"provider": "dummy", "voice": "test", "speed": 1},
+        "scenes": [{"id": "s1", "image": "images/s1.png", "narration": "ทดสอบ", "motion": "none", "wan": {"prompt": "A cosmic nebula", "steps": 8}}],
+    }).scenes[0]
+    assert scene_from_wan.wan is not None
+    assert scene_from_wan.ltx is not None
+    assert scene_from_wan.ltx.prompt == "A cosmic nebula"
+    assert scene_from_wan.ltx.steps == 8
+
+    scene_from_ltx = Script.model_validate({
+        "project": {"id": "test-ltx", "title": "Test", "language": "th-TH"},
+        "voice": {"provider": "dummy", "voice": "test", "speed": 1},
+        "scenes": [{"id": "s2", "image": "images/s2.png", "narration": "ทดสอบ", "motion": "none", "ltx": {"prompt": "A solar flare", "frames": 49}}],
+    }).scenes[0]
+    assert scene_from_ltx.ltx is not None
+    assert scene_from_ltx.wan is not None
+    assert scene_from_ltx.wan.prompt == "A solar flare"
+    assert scene_from_ltx.wan.frames == 49
+
+
+def test_scene_render_engine_handles_ltx_hybrid_and_fallbacks():
+    scene_ai = Script.model_validate({
+        "project": {"id": "test", "title": "Test", "language": "th-TH"},
+        "voice": {"provider": "dummy", "voice": "test", "speed": 1},
+        "scenes": [{"id": "s1", "image": "images/s1.png", "narration": "ทดสอบ", "motion": "none", "ltx": {"prompt": "Star formation"}}],
+    }).scenes[0]
+    scene_still = Script.model_validate({
+        "project": {"id": "test", "title": "Test", "language": "th-TH"},
+        "voice": {"provider": "dummy", "voice": "test", "speed": 1},
+        "scenes": [{"id": "s2", "image": "images/s2.png", "narration": "ทดสอบ", "motion": "slow_zoom_in"}],
+    }).scenes[0]
+
+    assert scene_render_engine("ltx", scene_ai) == "ltx"
+    assert scene_render_engine("ltx", scene_still) == "ffmpeg_motion"
+    assert scene_render_engine("ffmpeg_motion", scene_ai) == "ffmpeg_motion"
+    assert scene_render_engine("wan2.2", scene_ai) == "wan2.2"
+
+
+def test_submit_records_selected_ltx_engine(tmp_path):
+    service = build_service(tmp_path)
+    record = service.submit(Upload(), tts_provider="dummy", render_engine="ltx")
+
+    assert record.render_engine == "ltx"
+    latest = service.registry.get(record.job_id)
+    assert any("Render engine selected: ltx" in item["message"] for item in latest.logs)
+
+
+def test_ltx_settings_read_from_dotenv(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / ".env").write_text(
+        "AUTOCLIP_LTX_ENABLED=true\n"
+        "AUTOCLIP_LTX_RUNPOD_HOST=100.200.30.40\n"
+        "AUTOCLIP_LTX_RUNPOD_PORT=2222\n"
+        "AUTOCLIP_LTX_STEPS=8\n",
+        encoding="utf-8",
+    )
+
+    settings = load_settings(tmp_path / "config.yaml")
+    assert settings.ltx.enabled is True
+    assert settings.ltx.runpod_host == "100.200.30.40"
+    assert settings.ltx.runpod_port == 2222
+    assert settings.ltx.steps == 8
+
+
+def test_job_service_retry(tmp_path):
+    service = build_service(tmp_path)
+    record = service.submit(Upload(), tts_provider="dummy", render_engine="ffmpeg_motion")
+    service.registry.update(record.job_id, JobStatus.FAILED, 40, "Rendering failed", {"code": "SCENE_RENDER_FAILED", "message": "Failed"})
+
+    retried = service.retry(record.job_id)
+    assert retried.status == JobStatus.RECEIVED
+    assert retried.progress == 5
+    assert retried.error is None
+    latest = service.registry.get(record.job_id)
+    assert any("กำลังเริ่มประมวลผลใหม่อีกครั้ง" in item["message"] for item in latest.logs)

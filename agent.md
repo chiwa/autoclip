@@ -2,6 +2,32 @@
 
 เอกสารนี้เป็น runbook สำหรับสร้าง environment Wan2.2 TI2V 5B บน RunPod ใหม่ให้เหมือนเครื่องที่ทดสอบสำเร็จแล้ว ห้ามติดตั้ง ComfyUI, CUDA หรือโมเดลขนาดใหญ่บน local Mac งานทั้งหมดต้องทำภายใน RunPod และเก็บไฟล์ใหญ่ใต้ `/workspace`
 
+## Thai Java Zone shared visual style bible
+
+กฎส่วนนี้ใช้กับงาน **Thai Java Zone ทุกชิ้น** และต้องถูกนำไปใช้กับภาพ,
+shot list, scene plan และ image/video generation prompt ทุกซีน:
+
+- ใช้ภาษาภาพแบบ **clean modern software-engineering explainer** ที่อ่านแนวคิด
+  หลักได้ทันทีบนจอมือถือ
+- หนึ่งซีนอธิบายหนึ่งแนวคิดที่ชัดเจนเท่านั้น ใช้ภาพ developer workspace,
+  backend system หรือ software architecture ที่สมจริง เป็นมืออาชีพ และตรงกับ
+  narration ของซีน
+- จัดองค์ประกอบให้สมดุล มี visual hierarchy ชัด ลดของตกแต่งและรายละเอียดที่
+  ไม่ช่วยอธิบายเรื่อง ใช้ soft natural lighting, dark neutral tech background
+  และ subtle depth
+- สร้างและส่งมอบเป็นแนวตั้ง 9:16 โดยรักษาวัตถุสำคัญให้อยู่ใน motion-safe
+  และ subtitle-safe areas
+- ห้ามมีข้อความ, subtitle, watermark, logo, label, fake UI text หรือข้อความ
+  ที่โมเดลภาพสร้างขึ้นภายในภาพ เว้นแต่ผู้ใช้สั่งเป็นกรณีพิเศษ
+- ห้ามใช้ cyberpunk, futuristic holograms, fantasy technology, excessive neon,
+  glowing monoliths หรือ sci-fi movie-poster aesthetics โดยเด็ดขาด
+- ทุก scene prompt ต้อง inherit base style นี้ก่อนเติมรายละเอียดเฉพาะซีน ห้าม
+  คิด visual direction, art style, palette หรือโลกภาพใหม่แยกกันในแต่ละซีน
+  ความต่อเนื่องทั้งชุดเป็นข้อบังคับ ไม่ใช่คำแนะนำ
+
+กฎ Thai Java Zone นี้มีขอบเขตเฉพาะช่องดังกล่าว และไม่แทนที่ visual language
+หรือข้อกำหนดเฉพาะช่องอื่น เช่น Mamase
+
 ## เครื่องที่เคยทดสอบสำเร็จ
 
 - RunPod GPU Pod, Ubuntu 24.04
@@ -296,6 +322,13 @@ RunPod generation. Preserve the product workflow:
   stable error such as `WAN_NOT_CONFIGURED` or `WAN_UNAVAILABLE`.
 
 ### ZIP contract (do not change without approval)
+
+One unchanged ZIP supports both render choices. Every scene always has a valid
+image and FFmpeg `motion`. The optional `wan` object opts only that scene into
+AI motion when the user selects Wan 2.2: scenes with `wan` use Wan and scenes
+without it automatically use FFmpeg Motion. When the user selects FFmpeg
+Motion, every scene uses FFmpeg and all `wan` objects are ignored. Do not add a
+per-scene renderer field and do not require every scene to contain `wan`.
 
 ```text
 script.json                 # required at ZIP root
@@ -618,9 +651,9 @@ Every Mamase clip must end with the established brand outro from
 asks to omit or replace it. Reuse its visual asset and scene treatment as the
 canonical closing scene:
 
-- narration: `ค้นพบโลก ค้นพบใจ กับ Mamase จักรวาลของใจ`
-- `tts_text`: `ค้นพบโลก ค้นพบใจ กับ มามาเซ่ จักรวาลของใจ`
-- subtitle: `ค้นพบโลก ค้นพบใจ\\nMamase จักรวาลของใจ`
+- narration: `ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ`
+- `tts_text`: `ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ`
+- subtitle: `กดไลก์ · แชร์ · ติดตาม\\nMamase จักรวาลของใจ`
 - `motion: "slow_zoom_in"`, speed `slow`, intensity `0.1`, focus `center`,
   transition `none`
 - Wan plan: `Mamase brand outro, glowing cyan orbiting planet in dark navy
@@ -630,6 +663,10 @@ canonical closing scene:
 Place this scene last in `script.json`, retain the prescribed scene order, and
 copy the canonical image into the package under that last scene's relative
 `images/` path.
+
+The CTA must sound warm and conversational, not like an advertisement. Keep it
+in this final branding scene rather than interrupting the editorial content
+with repeated like/share/follow requests.
 
 
 ### Required creative approval order
@@ -719,8 +756,9 @@ Imaginable hook → everyday scale comparison → surprising reveal
 - Turn large scientific quantities into a concrete everyday image where useful
   (for example, compare light-speed travel to laps around Earth), but retain
   the correct qualification and measurement.
-- Use pauses sparingly for curiosity, comic timing, and emphasis; do not pad
-  the script with ellipses or repeat the same fact.
+- Use short natural punctuation in narration. For `tts_text`, do not use
+  ellipses (`...`) only for an intentional, natural playful beat such as
+  `เฮ้ย... จริงดิ?`; do not scatter them through every sentence.
 - Use natural spoken asides when they make the science feel tangible and the
   narrator feel present: `แต่เดี๋ยวก่อน...`, `ย้ำนะครับ สมมุติ!`, or
   `เอ๊ะ วันนี้แดดก็ดีนี่นา`. They are reactions woven into the explanation,
@@ -732,7 +770,7 @@ Imaginable hook → everyday scale comparison → surprising reveal
   still is to discover.
 - Gemini TTS default delivery prompt:
 
-  `Read aloud like a charismatic science storyteller with a playful personality. Sound curious, friendly, slightly cheeky, and genuinely excited by surprising facts. Keep the delivery natural and conversational, with small pauses for comedic timing and emphasis. Never sound like a news anchor.`
+  `Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: "เฮ้ย... จริงดิ?" Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script.`
 
 - Approved Mamase Google Gemini TTS profile, unless the user overrides it:
 
@@ -740,21 +778,22 @@ Imaginable hook → everyday scale comparison → surprising reveal
   {
     "voice": "Fenrir",
     "pitch": 0,
-    "speakingRate": 1.3
+    "speakingRate": 1.0
   }
   ```
 
-  The intended feeling is **energetic, clear, playful, friendly, warm, and
-  reassuring**—a voice that helps the listener relax and stay curious. Extend
-  the delivery prompt with: `Keep the delivery energetic, clear, playful,
-  warm, and reassuring. Make the listener feel relaxed and curious, never
-  rushed, tense, or overly dramatic.`
+  The intended feeling is **natural, playful, relaxed, confident, and naturally
+  conversational**—like a thoughtful friend sharing an interesting story.
+  Keep volume even and pacing relaxed; do not repeatedly punch or stress words.
 
 - Google Gemini TTS is the default provider for Native AutoClip. The UI must
   expose an editable narration-style prompt and speaking rate, with a visible
   **คืนค่า Mamase default** action that always restores the approved prompt,
-  Fenrir, and `speakingRate: 1.3`. Google voices must be grouped as **ชาย** and
+  Fenrir, and `speakingRate: 1.0`. Google voices must be grouped as **ชาย** and
   **หญิง**, with Fenrir first in the male group. It uses
+  silence trimming disabled by default because trimming generated narration can
+  clip the first Thai syllable and make scene joins sound unnatural. Keep the
+  configurable trimming feature available only as an explicit opt-in.
   Application Default Credentials from `gcloud auth application-default login`
   and the quota project set with `gcloud auth application-default
   set-quota-project`. Do not create a service-account JSON key, set
@@ -770,6 +809,24 @@ Imaginable hook → everyday scale comparison → surprising reveal
   job concurrently (`AUTOCLIP_FFMPEG_SCENE_PARALLELISM`, range 1–4). Each
   worker owns its SRT and MP4; sort outputs back into original scene order
   before final composition. Wan 2.2 and final composition stay sequential.
+
+- YouTube Podcast Generator (`/podcast`):
+  - Purpose: Long-form horizontal (16:9 1920×1080 30 FPS) visual podcast from a
+    single cover image and long Thai script without requiring a ZIP package.
+  - Defaults: Voice `Enceladus` (warm bedtime tone), speed `1.10`, bedtime
+    storytelling style prompt, BGM volume `0.08` (8%), subtitles enabled.
+  - Script chunking: `PodcastChunker` splits by paragraph, sentence, and Thai word
+    boundaries (via PyThaiNLP) to strictly remain within `AUTOCLIP_PODCAST_CHUNK_MAX_BYTES`
+    (default 2,800 UTF-8 bytes).
+  - Parallel synthesis: `PodcastAudioService` executes parallel requests bounded by
+    `AUTOCLIP_PODCAST_CONCURRENCY` (default 3) with exponential backoff and
+    persistent workspace chunk caching (`podcast_chunks/`). Losslessly stitched
+    via FFmpeg concat demuxer.
+  - Video motion & audio ducking: `PodcastVideoRenderer` constructs a 6-stage
+    breathing motion cycle looped with `-stream_loop -1` and mixes background
+    music with `asplit=2` sidechain compression beneath spoken narration.
+  - Existing Reel defaults (`Fenrir`, 1.0, 9:16, ZIP packages) remain 100% isolated
+    and intact.
 
 - Hook must create curiosity in the first 2-3 seconds without misleading.
 - Scene 1 in-image typography always has two clear layers: a concise topic

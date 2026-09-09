@@ -32,6 +32,8 @@ Create a factual, engaging Thai short-form science, mystery, world, or trending-
 Return JSON only: {"scenes":[...]}. Create 8-11 scenes including the final brand outro.
 Every scene needs id, narration, tts_text when the narration has English or scientific names,
 subtitle, image_prompt, motion, transition, estimated_duration, and wan.
+Write tts_text as smooth connected speech. Ellipses (...) are allowed sparingly for a natural playful beat,
+for example "เฮ้ย... จริงดิ?", but never scatter them through every sentence.
 Scene 1 must be a premium 9:16 science-documentary key art: the recurring Mamase anime presenter,
 the same black tousled hair and rectangular glasses, an outfit appropriate to the topic, a natural
 expression, a readable Thai topic title and a separate short Thai hook. Reserve lower-center space
@@ -205,10 +207,11 @@ class GeminiAutoProvider:
             "lip_sync": bool(wan.get("lip_sync", False)),
             **({"steps": 25, "character_id": "mamase-presenter-v1"} if index == 1 else ({"steps": wan["steps"]} if isinstance(wan.get("steps"), int) and 10 <= wan["steps"] <= 50 else {})),
         }
+        tts_text = str(raw["tts_text"]).strip() if raw.get("tts_text") else None
         return AiScene(
             id=safe_id,
             narration=narration,
-            tts_text=str(raw["tts_text"]).strip() if raw.get("tts_text") else None,
+            tts_text=tts_text,
             subtitle=str(raw["subtitle"]).strip() if raw.get("subtitle") else narration,
             show_subtitle=bool(raw.get("show_subtitle", True)),
             image_prompt=image_prompt,
@@ -564,7 +567,7 @@ class AiProjectService:
             if scene.wan:
                 payload["wan"] = scene.wan
             scenes.append(payload)
-        script = {"project": {"id": project_id, "title": project.topic or "Mamase AI Project", "language": "th-TH", "resolution": "1080x1920", "fps": 30}, "voice": {"provider": "google-gemini", "voice": "Fenrir", "speed": 1.3, "style_prompt": self.settings.tts.google_style_prompt}, "scenes": scenes}
+        script = {"project": {"id": project_id, "title": project.topic or "Mamase AI Project", "language": "th-TH", "resolution": "1080x1920", "fps": 30}, "voice": {"provider": "google-gemini", "voice": self.settings.tts.google_voice, "speed": self.settings.tts.google_speaking_rate, "style_prompt": self.settings.tts.google_style_prompt}, "scenes": scenes}
         (package_root / "script.json").write_text(json.dumps(script, ensure_ascii=False, indent=2), encoding="utf-8")
         metadata = {"title": project.topic or "Mamase AI Project", "description": f"{project.topic}\n\nค้นพบโลก ค้นพบใจ กับ Mamase จักรวาลของใจ\n#Mamase #จักรวาลของใจ"}
         (package_root / "video-metadata.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")

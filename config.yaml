@@ -17,13 +17,21 @@ video:
   transition: "fade"
   transition_seconds: 0.45
 tts:
-  provider: kokoro-thai
+  provider: google-gemini
   language: th-TH
+  google_voice: Fenrir
+  google_speaking_rate: 1.0
+  google_style_prompt: "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: \"เฮ้ย... จริงดิ?\" Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
   kokoro_enabled: true
   kokoro_model_dir: voices/wayu-kokoro-thai
   kokoro_worker_python: .kokoro-venv/bin/python
   # Slightly slower default for clearer, more natural Thai narration.
   kokoro_speed: 0.85
+  silence_trim:
+    enabled: false
+    threshold_db: -45
+    minimum_silence_seconds: 0.10
+    retained_edge_seconds: 0.06
   thonburian_ref_voice: /app/voices/thonburian-reference.wav
   thonburian_ref_text: "สวัสดีครับ ผมพี จาก Mamase จักรวาลของใจ วันนี้เราจะพาไปค้นพบเรื่องราวที่น่าสนใจจากทั่วโลก ทั้งเรื่องลึกลับ วิทยาศาสตร์ อวกาศ"
 audio:
@@ -39,3 +47,14 @@ subtitle:
   margin_bottom: 180
   outline: 3
   font_file: /usr/share/fonts/truetype/noto/NotoSansThai-Regular.ttf
+ltx:
+  enabled: true
+  width: 448
+  height: 768
+  fps: 15
+  steps: 8
+  seed: 171198
+musetalk:
+  enabled: true
+  bbox_shift: 0
+  version: v1.5

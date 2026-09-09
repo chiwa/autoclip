@@ -198,8 +198,8 @@ class YouTubeSettings(BaseModel):
 
 class PodcastSettings(BaseModel):
     chunk_max_bytes: int = Field(1400, gt=100, le=5000)
-    concurrency: int = Field(3, ge=1, le=10)
-    max_retries: int = Field(3, ge=0, le=10)
+    concurrency: int = Field(6, ge=1, le=10)
+    max_retries: int = Field(5, ge=0, le=10)
     default_voice: str = "Enceladus"
     default_speed: float = Field(1.10, ge=0.5, le=2.0)
     default_bgm_track: str = "space.mp3"

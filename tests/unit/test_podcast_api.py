@@ -31,7 +31,8 @@ def test_podcast_settings_defaults():
     assert settings.podcast.default_voice == "Enceladus"
     assert settings.podcast.default_speed == 1.1
     assert settings.podcast.chunk_max_bytes == 1400
-    assert settings.podcast.concurrency == 3
+    assert settings.podcast.concurrency == 6
+    assert settings.podcast.max_retries == 5
     assert settings.podcast.default_bgm_volume == 0.08
     assert "calm, warm, gently formal native Thai male voice" in settings.podcast.default_style_prompt
     assert "natural standard Thai" in settings.podcast.default_style_prompt
@@ -142,6 +143,15 @@ def test_podcast_english_audio_not_ready():
         response = client.get("/api/jobs/podcast-english-missing/english-audio")
     assert response.status_code == 409
     assert response.json()["detail"]["code"] == "ENGLISH_AUDIO_NOT_READY"
+
+
+def test_retry_podcast_english_audio_endpoint():
+    record = app.state.job_service.registry.create("podcast-english-retry")
+    with patch.object(app.state.job_service, "retry_podcast_english_audio", return_value=record) as retry:
+        response = client.post("/api/jobs/podcast-english-retry/english-audio/retry")
+    assert response.status_code == 202
+    assert response.json()["retrying"] == "englishAudio"
+    retry.assert_called_once_with("podcast-english-retry")
 
 
 def test_podcast_bgm_tracks_catalog():

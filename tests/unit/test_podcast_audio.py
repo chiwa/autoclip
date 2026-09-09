@@ -88,12 +88,100 @@ def test_podcast_audio_retry_logic(tmp_path):
             dummy.synthesize(text, lang, voice, speed, output_path)
 
     chunks = ["ข้อความทดสอบ retry"]
-    output_audio, durations, total_duration = service.synthesize_and_stitch(
-        "job-retry-1", tmp_path, chunks, FlakyProvider(), "Enceladus", 0.95
-    )
+    with pytest.MonkeyPatch.context() as monkeypatch:
+        monkeypatch.setattr("app.services.podcast_audio_service.time.sleep", lambda _: None)
+        output_audio, durations, total_duration = service.synthesize_and_stitch(
+            "job-retry-1", tmp_path, chunks, FlakyProvider(), "Enceladus", 0.95
+        )
 
     assert attempts == 2
     assert output_audio.is_file()
+
+
+def test_podcast_audio_retry_waits_at_least_five_seconds(tmp_path):
+    settings = Settings()
+    settings.podcast.max_retries = 1
+    service = PodcastAudioService(FfmpegRunner(), FfprobeRunner(), settings)
+    dummy = DummyTtsProvider()
+    attempts = 0
+    waits = []
+
+    class RateLimitedProvider:
+        def synthesize(self, text, lang, voice, speed, output_path):
+            nonlocal attempts
+            attempts += 1
+            if attempts == 1:
+                raise AppError("TTS_GENERATION_FAILED", "rate limited", {"retryable": True, "retryAfterSeconds": 2})
+            dummy.synthesize(text, lang, voice, speed, output_path)
+
+    with pytest.MonkeyPatch.context() as monkeypatch:
+        monkeypatch.setattr("app.services.podcast_audio_service.time.sleep", waits.append)
+        service.synthesize_and_stitch("retry-five", tmp_path, ["retry me"], RateLimitedProvider(), "Enceladus", 1.0)
+
+    assert attempts == 2
+    assert waits == [5.0]
+
+
+def test_podcast_audio_does_not_retry_nonretryable_error(tmp_path):
+    settings = Settings()
+    service = PodcastAudioService(FfmpegRunner(), FfprobeRunner(), settings)
+    attempts = 0
+
+    class BadRequestProvider:
+        def synthesize(self, text, lang, voice, speed, output_path):
+            nonlocal attempts
+            attempts += 1
+            raise AppError("TTS_GENERATION_FAILED", "bad request", {"status": 400, "retryable": False})
+
+    with pytest.raises(AppError):
+        service.synthesize_and_stitch("no-retry", tmp_path, ["bad"], BadRequestProvider(), "Enceladus", 1.0)
+    assert attempts == 1
+
+
+def test_targeted_retry_reuses_successful_chunks(tmp_path):
+    settings = Settings()
+    settings.podcast.max_retries = 1
+    service = PodcastAudioService(FfmpegRunner(), FfprobeRunner(), settings)
+    dummy = DummyTtsProvider()
+    first_calls = []
+
+    class PartiallyFailingProvider:
+        def synthesize(self, text, lang, voice, speed, output_path):
+            first_calls.append(text)
+            if text == "failed chunk":
+                raise AppError("TTS_GENERATION_FAILED", "temporary", {"retryable": True})
+            dummy.synthesize(text, lang, voice, speed, output_path)
+
+    with pytest.MonkeyPatch.context() as monkeypatch:
+        monkeypatch.setattr("app.services.podcast_audio_service.time.sleep", lambda _: None)
+        with pytest.raises(AppError) as exc_info:
+            service.synthesize_and_stitch(
+                "targeted-retry",
+                tmp_path,
+                ["successful chunk", "failed chunk"],
+                PartiallyFailingProvider(),
+                "Enceladus",
+                1.0,
+            )
+    assert exc_info.value.details["failedChunkIndexes"] == [1]
+
+    retry_calls = []
+
+    class SuccessfulRetryProvider:
+        def synthesize(self, text, lang, voice, speed, output_path):
+            retry_calls.append(text)
+            dummy.synthesize(text, lang, voice, speed, output_path)
+
+    output, _, _ = service.synthesize_and_stitch(
+        "targeted-retry",
+        tmp_path,
+        ["successful chunk", "failed chunk"],
+        SuccessfulRetryProvider(),
+        "Enceladus",
+        1.0,
+    )
+    assert output.is_file()
+    assert retry_calls == ["failed chunk"]
 
 
 def _make_tone(ffmpeg, path, duration):

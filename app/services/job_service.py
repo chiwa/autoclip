@@ -288,6 +288,19 @@ class JobService:
         )
         selected_bgm_vol = float(bgm_volume if bgm_volume is not None else self.settings.podcast.default_bgm_volume)
         selected_focus = focus if focus in {"center", "top", "bottom", "left", "right"} else "center"
+        (workspace.source / "podcast-settings.json").write_text(
+            json.dumps(
+                {
+                    "voice": selected_voice,
+                    "speed": selected_speed,
+                    "thaiStylePrompt": selected_style,
+                    "englishStylePrompt": selected_english_style,
+                },
+                ensure_ascii=False,
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
 
         project_id = f"podcast-{uuid.uuid4().hex[:8]}"
         record = self.registry.set(
@@ -925,7 +938,12 @@ class JobService:
                         "status": "failed",
                         "available": False,
                         "error": public_error(exc),
+                        "retryUrl": f"/api/jobs/{job_id}/english-audio/retry",
                     }
+                    if "chunkIndex" in exc.details:
+                        english_audio_metadata["failedChunkIndexes"] = [
+                            int(value) for value in exc.details.get("failedChunkIndexes", [exc.details["chunkIndex"]])
+                        ]
                     self._log(job_id, "WARNING", f"English WAV ไม่สำเร็จ: {exc.message}")
                 except Exception:
                     english_audio_metadata = {
@@ -933,6 +951,7 @@ class JobService:
                         "status": "failed",
                         "available": False,
                         "error": {"code": "ENGLISH_AUDIO_FAILED", "message": "สร้าง English WAV ไม่สำเร็จ"},
+                        "retryUrl": f"/api/jobs/{job_id}/english-audio/retry",
                     }
                     self._log(job_id, "WARNING", "สร้าง English WAV ไม่สำเร็จ แต่วิดีโอภาษาไทยยังพร้อมใช้งาน")
                     logger.exception("job_id=%s english_audio_failed", job_id)
@@ -1084,6 +1103,106 @@ class JobService:
 
     def english_audio(self, job_id: str) -> Path:
         return self.settings.app.workspace / job_id / "output" / "podcast-en.wav"
+
+    def retry_podcast_english_audio(self, job_id: str) -> JobRecord:
+        record = self.restore(job_id)
+        if not record:
+            raise AppError("JOB_NOT_FOUND", "Job was not found")
+        if record.status != JobStatus.COMPLETED:
+            raise AppError("JOB_NOT_READY", "รอให้วิดีโอภาษาไทยเสร็จก่อนลองสร้างเสียงอังกฤษใหม่")
+        workspace = self.settings.app.workspace / job_id
+        if not (workspace / "source/script-en.txt").is_file():
+            raise AppError("ENGLISH_SCRIPT_NOT_FOUND", "ไม่พบบทภาษาอังกฤษของงานนี้")
+        if not self.final_video(job_id).is_file():
+            raise AppError("VIDEO_NOT_READY", "Video is not ready")
+        metadata = dict(record.metadata or {})
+        english = dict(metadata.get("englishAudio") or {})
+        if english.get("status") == "retrying":
+            raise AppError("ENGLISH_AUDIO_RETRY_IN_PROGRESS", "กำลังลองสร้างเสียงอังกฤษใหม่อยู่แล้ว")
+        english.update({"requested": True, "status": "retrying", "available": False})
+        metadata["englishAudio"] = english
+        self.registry.set_metadata(job_id, metadata)
+        if self.persistence:
+            self.persistence.update_job_metadata(job_id, metadata)
+        self._log(job_id, "INFO", "กำลัง Retry เฉพาะ English audio ที่ยังไม่สำเร็จ")
+        self.executor.submit(self._retry_podcast_english_audio, job_id)
+        return self.registry.get(job_id) or record
+
+    def _retry_podcast_english_audio(self, job_id: str) -> None:
+        workspace_root = self.settings.app.workspace / job_id
+        try:
+            config_path = workspace_root / "source/podcast-settings.json"
+            config = json.loads(config_path.read_text(encoding="utf-8")) if config_path.is_file() else {}
+            voice = str(config.get("voice") or self.settings.podcast.default_voice)
+            speed = float(config.get("speed") or self.settings.podcast.default_speed)
+            style = str(config.get("englishStylePrompt") or self.settings.podcast.default_english_style_prompt)
+            script_text = (workspace_root / "source/script-en.txt").read_text(encoding="utf-8")
+            chunks = PodcastChunker.chunk(script_text, max_bytes=self.settings.podcast.chunk_max_bytes)
+            provider = create_tts_provider("google-gemini", self.settings)
+            service = PodcastAudioService(self.ffmpeg, self.ffprobe, self.settings)
+
+            def retry_log(level: str, message: str, technical: bool = False) -> None:
+                prefix = "English retry: "
+                if technical:
+                    self._technical_log(job_id, prefix + message)
+                else:
+                    self._log(job_id, level, prefix + message)
+
+            raw_audio, _, raw_duration = service.synthesize_and_stitch(
+                job_id=f"{job_id}-en-retry",
+                workspace_root=workspace_root,
+                chunks=chunks,
+                provider=provider,
+                voice=voice,
+                speed=speed,
+                style_prompt=style,
+                language="en-US",
+                namespace="podcast_chunks_en",
+                output_name="english_narration_raw.wav",
+                log_callback=retry_log,
+            )
+            target_duration = self.ffprobe.duration(self.final_video(job_id))
+            output, final_duration = service.conform_to_video_duration(
+                raw_audio,
+                self.english_audio(job_id),
+                target_duration,
+            )
+            record = self.restore(job_id)
+            metadata = dict((record.metadata if record else None) or {})
+            metadata["englishAudio"] = {
+                "requested": True,
+                "status": "ready",
+                "available": True,
+                "url": f"/api/jobs/{job_id}/english-audio",
+                "durationSeconds": round(final_duration, 3),
+                "sourceDurationSeconds": round(raw_duration, 3),
+                "fileSizeBytes": output.stat().st_size,
+            }
+            self.registry.set_metadata(job_id, metadata)
+            if self.persistence:
+                self.persistence.update_job_metadata(job_id, metadata)
+            self._log(job_id, "SUCCESS", "Retry English audio สำเร็จ พร้อมฟังและดาวน์โหลดแล้ว")
+        except Exception as exc:
+            error = exc if isinstance(exc, AppError) else AppError("ENGLISH_AUDIO_FAILED", "สร้าง English WAV ไม่สำเร็จ")
+            record = self.restore(job_id)
+            metadata = dict((record.metadata if record else None) or {})
+            failed = {
+                "requested": True,
+                "status": "failed",
+                "available": False,
+                "error": public_error(error),
+                "retryUrl": f"/api/jobs/{job_id}/english-audio/retry",
+            }
+            if "chunkIndex" in error.details:
+                failed["failedChunkIndexes"] = [
+                    int(value) for value in error.details.get("failedChunkIndexes", [error.details["chunkIndex"]])
+                ]
+            metadata["englishAudio"] = failed
+            self.registry.set_metadata(job_id, metadata)
+            if self.persistence:
+                self.persistence.update_job_metadata(job_id, metadata)
+            self._log(job_id, "ERROR", f"Retry English audio ไม่สำเร็จ: {error.message}")
+            logger.exception("job_id=%s english_audio_retry_failed", job_id)
 
     def update_video_metadata_tags(self, job_id: str, title: str, description: str, artist: str = "Mamase") -> bool:
         try:

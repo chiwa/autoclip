@@ -283,7 +283,7 @@ AutoClip รองรับการสร้าง YouTube Visual Podcast แ�
 - **ความละเอียด**: 1920×1080 Full HD (16:9), 30 FPS, H.264 / AAC 48 kHz stereo
 - **ระบบตัดแบ่งบท (Thai-Aware Chunking)**: ตัดแบ่งตามย่อหน้า ประโยค และขอบเขตคำภาษาไทย (PyThaiNLP) ไม่เกิน ~2,800 UTF-8 bytes ต่อท่อน
 - **เสียงและสไตล์เริ่มต้น**: Google Gemini TTS เสียง `Enceladus` ความเร็ว `1.10` พร้อม Bedtime Storytelling Style Prompt (เสียงนุ่มนวล อบอุ่น ฟังสบาย เหมาะสำหรับการพักผ่อน)
-- **การประมวลผลเสียงขนาน**: สังเคราะห์แต่ละท่อนแบบขนาน (`AUTOCLIP_PODCAST_CONCURRENCY=3`) มี retry exponential backoff และ manifest-based cache (`podcast_chunks/`) ต่องานด้วย FFmpeg concat demuxer
+- **การประมวลผลเสียงขนาน**: สังเคราะห์แต่ละภาษาแบบขนาน (`AUTOCLIP_PODCAST_CONCURRENCY=6`) มี retry สูงสุด 5 รอบโดยเว้นอย่างน้อย 5 วินาที, รองรับ `Retry-After` จากผู้ให้บริการ และ manifest-based cache (`podcast_chunks/`) ต่องานด้วย FFmpeg concat demuxer สำหรับงานสองภาษาอาจมีคำขอไทยและอังกฤษทำงานพร้อมกัน จึงต้องลดค่านี้หากโครงการ Google เริ่มตอบ `429`
 - **การเคลื่อนไหวและดนตรีประกอบ**: เคลื่อนไหวภาพปกด้วย 6-stage gentle breathing motion cycle ต่อเนื่อง พร้อมระบบ Sidechain Audio Ducking ลดเสียง BGM อัตโนมัติขณะมีเสียงบรรยาย
 - **การแสดงผล**: เชื่อมต่อเข้ากับระบบ Persistence, History (`/history`) และ Preview (`/jobs/{id}/preview`) โดยตรง
 - **ความเข้ากันได้**: แยกการทำงานเป็นอิสระ ไม่กระทบค่าเริ่มต้นหรือพฤติกรรมของหน้าสร้างวิดีโอเดิม (Reel / Shorts) และ ZIP contract

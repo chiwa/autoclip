@@ -17,6 +17,61 @@ const formatBytes = value => value < 1024 ? `${value} B` : `${(value / 1024).toF
     document.querySelector('#download').href = `/api/jobs/${jobId}/video`;
     document.querySelector('#projectTitle').textContent = metadata.projectTitle || '-';
     const summary = document.querySelector('#metadata'); summary.textContent = `Duration: ${Number(metadata.durationSeconds || 0).toFixed(1)}s · Resolution: ${metadata.resolution || '-'} · Scenes: ${metadata.sceneCount || '-'}`; summary.style.display = 'block'; summary.style.textAlign = 'center'; summary.style.padding = '12px 16px'; summary.style.margin = '14px auto 20px';
+    const englishAudio = metadata.englishAudio || {};
+    if (englishAudio.requested) {
+      const englishCard = document.createElement('section'); englishCard.className = 'tool-card';
+      const englishHeading = document.createElement('h2'); englishHeading.textContent = 'English Audio Track';
+      const englishStatus = document.createElement('p'); englishStatus.className = 'muted';
+      const englishActions = document.createElement('div'); englishActions.className = 'actions';
+      englishCard.append(englishHeading, englishStatus, englishActions);
+      summary.after(englishCard);
+
+      const renderEnglishState = state => {
+        englishActions.replaceChildren();
+        if (state.available) {
+          englishStatus.textContent = `พร้อมแล้ว · ${Number(state.durationSeconds || metadata.durationSeconds || 0).toFixed(1)} วินาที`;
+          const player = document.createElement('audio'); player.controls = true; player.preload = 'metadata'; player.src = `/api/jobs/${jobId}/english-audio`;
+          const downloadEnglish = document.createElement('a'); downloadEnglish.className = 'button secondary'; downloadEnglish.href = `/api/jobs/${jobId}/english-audio`; downloadEnglish.download = ''; downloadEnglish.textContent = 'ดาวน์โหลด English WAV';
+          englishActions.append(player, downloadEnglish);
+        } else if (state.status === 'retrying') {
+          englishStatus.textContent = 'กำลัง Retry เฉพาะส่วน English audio ที่ไม่สำเร็จ…';
+        } else {
+          const failedChunks = state.failedChunkIndexes?.length ? ` · failed chunk: ${state.failedChunkIndexes.map(i => i + 1).join(', ')}` : '';
+          englishStatus.textContent = `${state.error?.message || 'English audio ยังไม่พร้อม'}${failedChunks}`;
+          const retryEnglish = document.createElement('button'); retryEnglish.type = 'button'; retryEnglish.className = 'button secondary'; retryEnglish.textContent = 'Retry English Audio';
+          retryEnglish.onclick = async () => {
+            retryEnglish.disabled = true;
+            const retryResponse = await fetch(`/api/jobs/${jobId}/english-audio/retry`, {method: 'POST'});
+            const retryData = await retryResponse.json().catch(() => ({}));
+            if (!retryResponse.ok) {
+              englishStatus.textContent = `${retryData.detail?.code || 'RETRY_FAILED'}: ${retryData.detail?.message || 'เริ่ม Retry ไม่สำเร็จ'}`;
+              retryEnglish.disabled = false;
+              return;
+            }
+            renderEnglishState({status: 'retrying'});
+            pollEnglishAudio();
+          };
+          englishActions.append(retryEnglish);
+        }
+      };
+      let englishPollTimer = null;
+      const pollEnglishAudio = () => {
+        if (englishPollTimer) return;
+        englishPollTimer = setInterval(async () => {
+          const currentResponse = await fetch(`/api/jobs/${jobId}`);
+          if (!currentResponse.ok) return;
+          const current = await currentResponse.json();
+          const state = current.metadata?.englishAudio || {};
+          renderEnglishState(state);
+          if (state.status !== 'retrying') {
+            clearInterval(englishPollTimer);
+            englishPollTimer = null;
+          }
+        }, 3000);
+      };
+      renderEnglishState(englishAudio);
+      if (englishAudio.status === 'retrying') pollEnglishAudio();
+    }
     const card = document.createElement('section'); card.className = 'tool-card video-metadata';
     const heading = document.createElement('h2'); heading.textContent = 'Video Metadata';
     const titleLabel = document.createElement('label'); titleLabel.textContent = 'Title';

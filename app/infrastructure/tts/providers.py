@@ -129,6 +129,13 @@ class GoogleGeminiTtsProvider:
                 details = {"status": response.status_code}
                 if reason:
                     details["reason"] = reason
+                retry_after = response.headers.get("Retry-After")
+                if retry_after:
+                    try:
+                        details["retryAfterSeconds"] = max(0.0, float(retry_after))
+                    except ValueError:
+                        pass
+                details["retryable"] = response.status_code == 429 or response.status_code >= 500
                 raise AppError("TTS_GENERATION_FAILED", "Google Gemini TTS สร้างเสียงไม่สำเร็จ", details)
             audio = base64.b64decode(response.json().get("audioContent", ""))
         except AppError:

@@ -345,6 +345,16 @@ def get_podcast_english_audio(request: Request, job_id: str) -> FileResponse:
     return FileResponse(path, media_type="audio/wav", filename=filename)
 
 
+@router.post("/jobs/{job_id}/english-audio/retry", status_code=202)
+def retry_podcast_english_audio(request: Request, job_id: str) -> dict:
+    try:
+        record = request.app.state.job_service.retry_podcast_english_audio(job_id)
+    except AppError as exc:
+        status = 404 if exc.code == "JOB_NOT_FOUND" else 409 if exc.code == "ENGLISH_AUDIO_RETRY_IN_PROGRESS" else 400
+        raise HTTPException(status, public_error(exc)) from exc
+    return {"jobId": record.job_id, "status": "retrying", "retrying": "englishAudio"}
+
+
 @router.get("/ai/status")
 def ai_status(request: Request) -> dict:
     return {"configured": request.app.state.ai_project_service.configured}

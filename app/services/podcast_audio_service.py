@@ -204,13 +204,32 @@ class PodcastAudioService:
                 except Exception as exc:
                     last_exception = exc
                     attempt += 1
+                    retryable = not isinstance(exc, AppError) or bool(exc.details.get("retryable", True))
+                    if not retryable:
+                        if log_callback:
+                            log_callback(
+                                "TECHNICAL",
+                                f"event=chunk_not_retryable job_id={job_id} chunk={index+1}/{total_chunks} code={exc.code} details={exc.details}",
+                                True,
+                            )
+                        break
                     if attempt <= max_retries:
-                        backoff = min(10.0, (2 ** (attempt - 1)) * 1.5)
+                        provider_delay = 0.0
+                        if isinstance(exc, AppError):
+                            provider_delay = float(exc.details.get("retryAfterSeconds") or 0.0)
+                        backoff = max(5.0, provider_delay)
+                        if log_callback:
+                            details = exc.details if isinstance(exc, AppError) else {"error": str(exc)}
+                            log_callback(
+                                "TECHNICAL",
+                                f"event=chunk_retry_scheduled job_id={job_id} chunk={index+1}/{total_chunks} retry={attempt}/{max_retries} wait={backoff:.2f}s details={details}",
+                                True,
+                            )
                         time.sleep(backoff)
 
             elapsed = round(time.monotonic() - start_time, 2)
             if log_callback:
-                log_callback("ERROR", f"สร้างเสียงส่วนที่ {index + 1} ไม่สำเร็จ (ลอง {max_retries} ครั้ง)", False)
+                log_callback("ERROR", f"สร้างเสียงส่วนที่ {index + 1} ไม่สำเร็จ (รวม {attempt} attempts)", False)
                 log_callback("TECHNICAL", f"event=chunk_failed job_id={job_id} chunk={index+1}/{total_chunks} bytes={byte_count} retry={attempt} elapsed={elapsed}s error={str(last_exception)}", True)
 
             raise AppError(
@@ -221,6 +240,7 @@ class PodcastAudioService:
 
         durations_by_index: dict[int, float] = {}
         paths_by_index: dict[int, Path] = {}
+        failures_by_index: dict[int, Exception] = {}
         completed_count = 0
 
         with ThreadPoolExecutor(max_workers=concurrency, thread_name_prefix="podcast-tts") as executor:
@@ -255,11 +275,25 @@ class PodcastAudioService:
                         progress_callback(completed_count, total_chunks, f"กำลังสร้างเสียงส่วนที่ {completed_count} จาก {total_chunks}")
                     if log_callback:
                         log_callback("SUCCESS", f"สร้างเสียงส่วนที่ {completed_count} จาก {total_chunks} สำเร็จ", False)
-                except Exception:
-                    # Cancel remaining pending tasks
-                    for pending in futures:
-                        pending.cancel()
-                    raise
+                except Exception as exc:
+                    # Let other chunks finish so their successful files and
+                    # manifest entries remain reusable by a targeted retry.
+                    failures_by_index[idx] = exc
+                    if log_callback:
+                        log_callback("WARNING", f"เก็บส่วนที่ {idx + 1} ไว้ Retry ภายหลัง โดยส่วนอื่นยังทำงานต่อ", False)
+
+        if failures_by_index:
+            failed_indexes = sorted(failures_by_index)
+            first_error = failures_by_index[failed_indexes[0]]
+            raise AppError(
+                "PODCAST_TTS_CHUNK_FAILED",
+                f"สร้างเสียง {len(failed_indexes)} ส่วนไม่สำเร็จหลัง Retry ครบ {max_retries} รอบ",
+                {
+                    "chunkIndex": failed_indexes[0],
+                    "failedChunkIndexes": failed_indexes,
+                    "totalChunks": total_chunks,
+                },
+            ) from first_error
 
         # Order chunk results deterministically 0..N-1
         chunk_paths = [paths_by_index[i] for i in range(total_chunks)]

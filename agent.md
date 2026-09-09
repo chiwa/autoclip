@@ -819,7 +819,7 @@ Imaginable hook → everyday scale comparison → surprising reveal
     boundaries (via PyThaiNLP) to strictly remain within `AUTOCLIP_PODCAST_CHUNK_MAX_BYTES`
     (default 2,800 UTF-8 bytes).
   - Parallel synthesis: `PodcastAudioService` executes parallel requests bounded by
-    `AUTOCLIP_PODCAST_CONCURRENCY` (default 3) with exponential backoff and
+    `AUTOCLIP_PODCAST_CONCURRENCY` (default 6 per language) with up to 5 retries separated by at least 5 seconds, provider `Retry-After` handling, and
     persistent workspace chunk caching (`podcast_chunks/`). Losslessly stitched
     via FFmpeg concat demuxer.
   - Video motion & audio ducking: `PodcastVideoRenderer` constructs a 6-stage

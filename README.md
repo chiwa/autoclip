@@ -77,7 +77,7 @@ AutoClip includes a dedicated interface for generating horizontal 16:9 YouTube V
 - **API Endpoints**: `POST /api/podcast/jobs` (starts generation), `POST /api/podcast/preview-audio` (sample voice preview).
 - **Format**: 1920×1080 Full HD (16:9), 30 FPS, H.264 / AAC 48 kHz stereo.
 - **Thai-Aware Script Chunking**: Long scripts are safely split using paragraph, sentence, and word boundaries (via PyThaiNLP with regex fallbacks) to stay under ~2,800 UTF-8 bytes per chunk.
-- **Parallel Gemini TTS**: Synthesizes audio chunks concurrently (`AUTOCLIP_PODCAST_CONCURRENCY=3`) with exponential backoff retries and manifest-based caching (`podcast_chunks/`). Chunks are losslessly stitched using the FFmpeg concat demuxer.
+- **Parallel Gemini TTS**: Synthesizes audio chunks concurrently (`AUTOCLIP_PODCAST_CONCURRENCY=6` per language) with up to 5 retries separated by at least 5 seconds, provider `Retry-After` handling, and manifest-based caching (`podcast_chunks/`). Bilingual jobs may run Thai and English requests simultaneously. Successful chunks remain cached when another chunk fails, so retry regenerates only missing chunks. Chunks are losslessly stitched using the FFmpeg concat demuxer.
 - **Bedtime Voice & Style**: Defaults to the calm, warm `Enceladus` voice at speed `1.10` with a relaxing bedtime storytelling prompt.
 - **Sidechain Audio Ducking**: Background music (built-in ambient track or custom uploaded audio) automatically ducks under speech using FFmpeg `sidechaincompress`, ending with a clean fade-out.
 - **Breathing Visual Motion**: A 6-stage gentle breathing motion cycle with dissolve crossfades is generated once and looped via `-stream_loop -1`, avoiding large intermediate disk usage.

@@ -94,3 +94,48 @@ def test_podcast_audio_retry_logic(tmp_path):
 
     assert attempts == 2
     assert output_audio.is_file()
+
+
+def _make_tone(ffmpeg, path, duration):
+    ffmpeg.run(
+        [
+            "-y", "-f", "lavfi", "-i", f"sine=frequency=440:duration={duration}",
+            "-c:a", "pcm_s16le", str(path),
+        ],
+        "TEST_AUDIO_FAILED",
+    )
+
+
+def test_conform_english_audio_pads_short_track(tmp_path):
+    service = PodcastAudioService(FfmpegRunner(), FfprobeRunner(), Settings())
+    source = tmp_path / "short.wav"
+    output = tmp_path / "short-aligned.wav"
+    _make_tone(service.ffmpeg, source, 0.6)
+
+    _, duration = service.conform_to_video_duration(source, output, 1.0)
+
+    assert output.is_file()
+    assert abs(duration - 1.0) <= 0.1
+
+
+def test_conform_english_audio_speeds_up_without_cutting(tmp_path):
+    service = PodcastAudioService(FfmpegRunner(), FfprobeRunner(), Settings())
+    source = tmp_path / "long.wav"
+    output = tmp_path / "long-aligned.wav"
+    _make_tone(service.ffmpeg, source, 1.2)
+
+    _, duration = service.conform_to_video_duration(source, output, 1.0)
+
+    assert output.is_file()
+    assert abs(duration - 1.0) <= 0.1
+
+
+def test_conform_english_audio_rejects_excessive_speedup(tmp_path):
+    service = PodcastAudioService(FfmpegRunner(), FfprobeRunner(), Settings())
+    source = tmp_path / "too-long.wav"
+    _make_tone(service.ffmpeg, source, 1.4)
+
+    with pytest.raises(AppError) as exc_info:
+        service.conform_to_video_duration(source, tmp_path / "unused.wav", 1.0)
+
+    assert exc_info.value.code == "ENGLISH_AUDIO_TOO_LONG"

@@ -1,9 +1,11 @@
 (() => {
   const $ = selector => document.querySelector(selector);
 
-  const PODCAST_BEDTIME_STYLE_MALE = 'Read aloud in a calm, warm, and gently formal Thai male voice (deep, masculine, and soothing tone) suitable for a relaxing bedtime podcast. Speak smoothly and naturally, like a thoughtful male storyteller guiding the listener through a fascinating subject late at night. Maintain a soft, even volume and a relaxed, unhurried pace. Use subtle changes in pitch to keep the narration engaging without becoming energetic or dramatic. Keep pauses natural, brief, and well placed between ideas. Avoid sudden emphasis, sharp changes in volume, exaggerated emotion, playful teasing, advertising language, and news-anchor delivery. Pronounce scientific terms, names, and numbers clearly. The overall experience should feel peaceful, reassuring, intelligent, and comfortable enough for the listener to gradually fall asleep.';
+  const PODCAST_BEDTIME_STYLE_MALE = 'Read aloud in a calm, warm, gently formal native Thai male voice with a deep, masculine, and soothing tone, suitable for a relaxing bedtime science and history podcast. Speak in natural standard Thai with clear Thai pronunciation, natural Thai rhythm, phrasing, and intonation. The delivery should sound like a thoughtful Thai male storyteller speaking late at night, not like a translated script or a foreign-accented Thai voice. Maintain a soft, even volume and a relaxed, unhurried pace. Speak smoothly and naturally, with gentle transitions between sentences and ideas. Use subtle changes in pitch to keep the narration engaging without becoming energetic, dramatic, theatrical, or overly emotional. Keep pauses natural, brief, and well placed. Do not pause excessively between short phrases or break sentences into unnatural fragments. Read all numbers, years, dates, measurements, percentages, decimal values, and scientific quantities naturally in Thai. Pronounce scientific terms, astronomical names, historical names, foreign proper names, technical terminology, and units clearly. When a foreign name has a commonly used Thai pronunciation, use the natural Thai pronunciation rather than forcing an English accent. Avoid sudden emphasis, sharp changes in volume, exaggerated emotion, playful teasing, advertising language, presenter-style excitement, and news-anchor delivery. Do not sound like a documentary trailer. Do not sound overly solemn or ceremonial. Keep the narration intimate, intelligent, reassuring, and conversational. The overall experience should feel peaceful, warm, thoughtful, cinematic, and comfortable enough for the listener to gradually fall asleep.';
 
   const PODCAST_BEDTIME_STYLE_FEMALE = 'Read aloud in a calm, warm, and gently formal Thai female voice (gentle, feminine, and soothing tone) suitable for a relaxing bedtime podcast. Speak smoothly and naturally, like a thoughtful female storyteller guiding the listener through a fascinating subject late at night. Maintain a soft, even volume and a relaxed, unhurried pace. Use subtle changes in pitch to keep the narration engaging without becoming energetic or dramatic. Keep pauses natural, brief, and well placed between ideas. Avoid sudden emphasis, sharp changes in volume, exaggerated emotion, playful teasing, advertising language, and news-anchor delivery. Pronounce scientific terms, names, and numbers clearly. The overall experience should feel peaceful, reassuring, intelligent, and comfortable enough for the listener to gradually fall asleep.';
+
+  const PODCAST_ENGLISH_STYLE_MALE = 'Read aloud in a calm, warm, gently formal native English male voice with a deep, masculine, and soothing tone, suitable for a relaxing bedtime science and history podcast. Speak in natural, fluent English with clear native English pronunciation, rhythm, stress, phrasing, and intonation. Do not use Thai pronunciation patterns, Thai sentence rhythm, or a Thai accent. The delivery should sound like a thoughtful English-speaking male storyteller guiding the listener through a fascinating subject late at night. Keep the voice intimate, intelligent, reassuring, and natural rather than theatrical. Maintain a soft, even volume and a relaxed, unhurried pace. Speak smoothly, with gentle transitions between sentences and ideas. Use subtle changes in pitch and emphasis to maintain interest without becoming energetic, dramatic, emotional, or overly expressive. Keep pauses natural, brief, and well placed. Do not pause excessively between short phrases, and do not break sentences into unnatural fragments. Read all numbers, years, dates, measurements, percentages, decimal values, scientific quantities, and units naturally in English. For years, use natural spoken English where appropriate. Examples: 1986 means nineteen eighty-six; 2061 means twenty sixty-one; 1910 means nineteen ten. For measurements and decimal values, pronounce every value fully in English. Examples: 68 kilometers per second means sixty-eight kilometers per second; 596 kilometers means five hundred ninety-six kilometers; 7.6 seconds means seven point six seconds; 0.03 means zero point zero three; 4.6 billion years means four point six billion years. Pronounce scientific terms, astronomical names, historical names, technical terminology, and proper nouns clearly and naturally in English. Avoid sudden emphasis, sharp changes in volume, exaggerated emotion, playful teasing, advertising language, presenter-style excitement, documentary-trailer delivery, and news-anchor delivery. Do not sound overly formal, ceremonial, or dramatic. The narration should feel like a calm late-night conversation with an intelligent storyteller. The overall experience should feel peaceful, warm, thoughtful, cinematic, and comfortable enough for the listener to gradually fall asleep.';
 
   const FEMALE_VOICES = new Set(['Achernar', 'Aoede', 'Autonoe', 'Callirrhoe', 'Despina', 'Erinome', 'Gacrux', 'Kore', 'Leda']);
 
@@ -23,17 +25,28 @@
   const coverImg = $('#coverPreviewImg');
   const aspectBadge = $('#aspectRatioBadge');
   const scriptInput = $('#podcastScript');
+  const englishScriptInput = $('#englishPodcastScript');
+  const enableEnglishAudio = $('#enableEnglishAudio');
+  const tabThaiScript = $('#tabThaiScript');
+  const tabEnglishScript = $('#tabEnglishScript');
+  const panelThaiScript = $('#panelThaiScript');
+  const panelEnglishScript = $('#panelEnglishScript');
   const statChars = $('#statCharCount');
   const statBytes = $('#statByteCount');
   const statChunks = $('#statChunkCount');
   const statDuration = $('#statEstDuration');
+  const statEnglishChars = $('#statEnglishCharCount');
+  const statEnglishChunks = $('#statEnglishChunkCount');
 
   const voiceSelect = $('#podcastVoice');
   const speedSlider = $('#podcastSpeed');
   const speedValue = $('#podcastSpeedValue');
   const styleInput = $('#podcastStyle');
+  const englishStyleInput = $('#englishPodcastStyle');
   const btnResetStyle = $('#btnResetPodcastStyle');
+  const btnResetEnglishStyle = $('#btnResetEnglishPodcastStyle');
   const btnPreviewAudio = $('#btnPreviewAudio');
+  const btnPreviewEnglishAudio = $('#btnPreviewEnglishAudio');
   const audioSample = $('#audioSample');
   const audioSampleStatus = $('#audioSampleStatus');
 
@@ -54,8 +67,38 @@
 
   // Initialize defaults
   styleInput.value = getDefaultStyleForVoice(voiceSelect.value);
+  englishStyleInput.value = PODCAST_ENGLISH_STYLE_MALE;
   speedValue.textContent = Number(speedSlider.value).toFixed(2);
   bgmVolumeValue.textContent = `${Number(bgmVolumeSlider.value).toFixed(2)} (${Math.round(bgmVolumeSlider.value * 100)}%)`;
+
+  function selectScriptTab(language) {
+    const english = language === 'english';
+    tabThaiScript.classList.toggle('active', !english);
+    tabEnglishScript.classList.toggle('active', english);
+    tabThaiScript.setAttribute('aria-selected', String(!english));
+    tabEnglishScript.setAttribute('aria-selected', String(english));
+    panelThaiScript.hidden = english;
+    panelEnglishScript.hidden = !english;
+  }
+
+  tabThaiScript.addEventListener('click', () => selectScriptTab('thai'));
+  tabEnglishScript.addEventListener('click', () => selectScriptTab('english'));
+
+  const tabThaiStyle = $('#tabThaiStyle');
+  const tabEnglishStyle = $('#tabEnglishStyle');
+  const panelThaiStyle = $('#panelThaiStyle');
+  const panelEnglishStyle = $('#panelEnglishStyle');
+  function selectStyleTab(language) {
+    const english = language === 'english';
+    tabThaiStyle.classList.toggle('active', !english);
+    tabEnglishStyle.classList.toggle('active', english);
+    tabThaiStyle.setAttribute('aria-selected', String(!english));
+    tabEnglishStyle.setAttribute('aria-selected', String(english));
+    panelThaiStyle.hidden = english;
+    panelEnglishStyle.hidden = !english;
+  }
+  tabThaiStyle.addEventListener('click', () => selectStyleTab('thai'));
+  tabEnglishStyle.addEventListener('click', () => selectStyleTab('english'));
 
   // Focus select helper: suggestion placeholders
   const focusPlaceholders = {
@@ -93,6 +136,13 @@
   }
 
   scriptInput.addEventListener('input', updateScriptStats);
+  englishScriptInput.addEventListener('input', () => {
+    const text = englishScriptInput.value || '';
+    const bytes = new TextEncoder().encode(text).length;
+    statEnglishChars.textContent = text.length.toLocaleString();
+    statEnglishChunks.textContent = (bytes ? Math.max(1, Math.ceil(bytes / 2800)) : 0).toLocaleString();
+    if (text.trim()) enableEnglishAudio.checked = true;
+  });
   speedSlider.addEventListener('input', () => {
     speedValue.textContent = Number(speedSlider.value).toFixed(2);
     updateScriptStats();
@@ -133,7 +183,7 @@
   // Voice & Style Reset
   voiceSelect.addEventListener('change', () => {
     const cur = styleInput.value.trim();
-    if (!cur || cur === PODCAST_BEDTIME_STYLE_MALE || cur === PODCAST_BEDTIME_STYLE_FEMALE || cur.startsWith('Read aloud in a calm, warm, and gently formal Thai')) {
+    if (!cur || cur === PODCAST_BEDTIME_STYLE_MALE || cur === PODCAST_BEDTIME_STYLE_FEMALE || cur.startsWith('Read aloud in a calm, warm, and gently formal Thai') || cur.startsWith('Read aloud in a calm, warm, gently formal male')) {
       styleInput.value = getDefaultStyleForVoice(voiceSelect.value);
     }
   });
@@ -144,6 +194,11 @@
     speedValue.textContent = '1.10';
     styleInput.value = PODCAST_BEDTIME_STYLE_MALE;
     updateScriptStats();
+  });
+
+  btnResetEnglishStyle.addEventListener('click', () => {
+    englishStyleInput.value = PODCAST_ENGLISH_STYLE_MALE;
+    selectStyleTab('english');
   });
 
   // Audio Sample Preview
@@ -165,6 +220,7 @@
       body.append('voice', voiceSelect.value);
       body.append('speed', speedSlider.value);
       body.append('style_prompt', styleInput.value.trim());
+      body.append('language', 'th-TH');
 
       const res = await fetch('/api/podcast/preview-audio', {
         method: 'POST',
@@ -185,6 +241,41 @@
       audioSampleStatus.textContent = `${err.code || 'TTS_PREVIEW_FAILED'}: ${err.message || 'สร้างเสียงตัวอย่างไม่สำเร็จ'}`;
     } finally {
       btnPreviewAudio.disabled = false;
+    }
+  });
+
+  btnPreviewEnglishAudio.addEventListener('click', async () => {
+    btnPreviewEnglishAudio.disabled = true;
+    audioSampleStatus.textContent = 'Generating English voice sample…';
+    try {
+      let previewText = (englishScriptInput.value.trim().split(/[\n.!?]/)[0] || '').trim();
+      if (previewText.length < 15) {
+        previewText = 'Welcome. Tonight, we will travel quietly through space and time, and discover a remarkable story together.';
+      } else if (previewText.length > 200) {
+        previewText = previewText.slice(0, 200);
+      }
+      const body = new FormData();
+      body.append('text', previewText);
+      body.append('voice', voiceSelect.value);
+      body.append('speed', speedSlider.value);
+      body.append('style_prompt', englishStyleInput.value.trim());
+      body.append('language', 'en-US');
+      const res = await fetch('/api/podcast/preview-audio', { method: 'POST', body });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw data.detail || data;
+      }
+      const blob = await res.blob();
+      if (audioSampleUrl) URL.revokeObjectURL(audioSampleUrl);
+      audioSampleUrl = URL.createObjectURL(blob);
+      audioSample.src = audioSampleUrl;
+      audioSample.hidden = false;
+      await audioSample.play();
+      audioSampleStatus.textContent = 'Playing English sample';
+    } catch (err) {
+      audioSampleStatus.textContent = `${err.code || 'TTS_PREVIEW_FAILED'}: ${err.message || 'Could not create English sample'}`;
+    } finally {
+      btnPreviewEnglishAudio.disabled = false;
     }
   });
 
@@ -334,6 +425,14 @@
       return;
     }
 
+    const englishScript = englishScriptInput.value.trim();
+    if (enableEnglishAudio.checked && !englishScript) {
+      selectScriptTab('english');
+      alert('กรุณาใส่ English Podcast Script หรือปิดการสร้าง English WAV');
+      englishScriptInput.focus();
+      return;
+    }
+
     submitBtn.disabled = true;
     submitError.hidden = true;
     submitBtn.textContent = '⏳ กำลังส่งคำสั่งสร้างวิดีโอ…';
@@ -342,9 +441,11 @@
     formData.append('title', title);
     formData.append('cover_image', coverFile);
     formData.append('script', scriptText);
+    formData.append('english_script', enableEnglishAudio.checked ? englishScript : '');
     formData.append('voice', voiceSelect.value);
     formData.append('speed', speedSlider.value);
     formData.append('style_prompt', styleInput.value.trim());
+    formData.append('english_style_prompt', englishStyleInput.value.trim());
     formData.append('enable_subtitles', enableSubtitles.checked ? 'true' : 'false');
     formData.append('bgm_volume', bgmVolumeSlider.value);
     formData.append('description', document.getElementById('podcastDescription').value.trim());

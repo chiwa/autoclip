@@ -176,7 +176,15 @@ class Persistence:
                 latest = db.execute("SELECT * FROM jobs WHERE project_id=? ORDER BY created_at DESC LIMIT 1", (item["id"],)).fetchone()
                 if latest:
                     j=dict(latest); video=bool(j.get("final_path") and Path(j["final_path"]).is_file())
-                    item["latestJob"]={"id":j["id"],"status":j["status"],"progress":j["progress"],"videoAvailable":video,"videoUrl":f"/api/jobs/{j['id']}/video" if video else None,"previewUrl":f"/jobs/{j['id']}/preview" if video else None,"createdAt":j["created_at"],"completedAt":j.get("completed_at")}
+                    metadata = json.loads(j.get("metadata_json") or "{}")
+                    english_audio = metadata.get("englishAudio") if isinstance(metadata, dict) else {}
+                    english_path = self.path.parent / j["id"] / "output" / "podcast-en.wav"
+                    english_available = bool(
+                        isinstance(english_audio, dict)
+                        and english_audio.get("available")
+                        and english_path.is_file()
+                    )
+                    item["latestJob"]={"id":j["id"],"status":j["status"],"progress":j["progress"],"videoAvailable":video,"videoUrl":f"/api/jobs/{j['id']}/video" if video else None,"previewUrl":f"/jobs/{j['id']}/preview" if video else None,"englishAudioAvailable":english_available,"englishAudioUrl":f"/api/jobs/{j['id']}/english-audio" if english_available else None,"englishAudioStatus":english_audio.get("status") if isinstance(english_audio, dict) else None,"createdAt":j["created_at"],"completedAt":j.get("completed_at")}
                     if j["status"] == "COMPLETED": item["status"] = "COMPLETED"
                 else: item["latestJob"] = None
                 result.append(item)

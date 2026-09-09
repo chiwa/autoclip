@@ -15,7 +15,7 @@ class TtsPreviewService:
         self.provider = provider
         self.settings = settings
 
-    def synthesize(self, text: str, voice: str, speed: float, provider_name: str | None = None, style_prompt: str | None = None) -> Path:
+    def synthesize(self, text: str, voice: str, speed: float, provider_name: str | None = None, style_prompt: str | None = None, language: str = "th-TH") -> Path:
         normalized = text.strip()
         if not normalized:
             raise AppError("TTS_GENERATION_FAILED", "กรุณาป้อนข้อความภาษาไทย")
@@ -35,4 +35,4 @@ class TtsPreviewService:
             provider = create_tts_provider(provider_name, self.settings)
         if style_prompt is not None and hasattr(provider, "style_prompt"):
             provider.style_prompt = style_prompt.strip() or None
-        return provider.synthesize(normalized, "th-TH", voice, speed, output_path)
+        return provider.synthesize(normalized, language, voice, speed, output_path)

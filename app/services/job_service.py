@@ -221,9 +221,11 @@ class JobService:
         image_file: Any,
         title: str,
         script_text: str,
+        english_script: str = "",
         voice: str | None = None,
         speed: float | None = None,
         style_prompt: str | None = None,
+        english_style_prompt: str | None = None,
         enable_subtitles: bool = True,
         description: str | None = None,
         hashtags: str | None = None,
@@ -258,6 +260,9 @@ class JobService:
 
         # Save script text for durability and retries
         (workspace.source / "script.txt").write_text(script_text, encoding="utf-8")
+        cleaned_english_script = (english_script or "").strip()
+        if cleaned_english_script:
+            (workspace.source / "script-en.txt").write_text(cleaned_english_script, encoding="utf-8")
 
         # Save BGM file if provided
         saved_bgm: Path | None = None
@@ -276,6 +281,11 @@ class JobService:
         selected_voice = voice or self.settings.podcast.default_voice
         selected_speed = float(speed if speed is not None else self.settings.podcast.default_speed)
         selected_style = self.settings.podcast.resolve_style_prompt(selected_voice, style_prompt)
+        selected_english_style = (
+            english_style_prompt.strip()
+            if english_style_prompt and english_style_prompt.strip()
+            else self.settings.podcast.default_english_style_prompt
+        )
         selected_bgm_vol = float(bgm_volume if bgm_volume is not None else self.settings.podcast.default_bgm_volume)
         selected_focus = focus if focus in {"center", "top", "bottom", "left", "right"} else "center"
 
@@ -307,11 +317,13 @@ class JobService:
             project_id,
             cleaned_title,
             script_text,
+            cleaned_english_script,
             cover_dest,
             workspace,
             selected_voice,
             selected_speed,
             selected_style,
+            selected_english_style,
             enable_subtitles,
             description,
             hashtags,
@@ -728,11 +740,13 @@ class JobService:
         project_id: str,
         title: str,
         script_text: str,
+        english_script: str,
         cover_path: Path,
         workspace: Workspace,
         voice: str,
         speed: float,
         style_prompt: str,
+        english_style_prompt: str,
         enable_subtitles: bool,
         description: str = "",
         hashtags: str = "",
@@ -742,6 +756,7 @@ class JobService:
         focus: str = "center",
     ) -> None:
         started = time.monotonic()
+        english_executor: ThreadPoolExecutor | None = None
         try:
             self._investigation_log(job_id, "podcast_job_started", title=title, voice=voice, speed=speed)
             self._progress(job_id, JobStatus.VALIDATING, 5, "เตรียมบท Podcast")
@@ -760,6 +775,42 @@ class JobService:
             self._progress(job_id, JobStatus.GENERATING_AUDIO, 15, f"กำลังสร้างเสียง 0 จาก {chunk_count}")
             provider = create_tts_provider("google-gemini", self.settings)
             audio_service = PodcastAudioService(self.ffmpeg, self.ffprobe, self.settings)
+
+            english_future = None
+            if english_script:
+                english_chunks = PodcastChunker.chunk(
+                    english_script,
+                    max_bytes=self.settings.podcast.chunk_max_bytes,
+                )
+                self._log(job_id, "INFO", f"เตรียม English audio {len(english_chunks)} ส่วน")
+
+                def synthesize_english_audio():
+                    english_provider = create_tts_provider("google-gemini", self.settings)
+                    english_service = PodcastAudioService(self.ffmpeg, self.ffprobe, self.settings)
+
+                    def english_log(level: str, message: str, technical: bool = False) -> None:
+                        prefix = "English audio: "
+                        if technical:
+                            self._technical_log(job_id, prefix + message)
+                        else:
+                            self._log(job_id, level, prefix + message)
+
+                    return english_service.synthesize_and_stitch(
+                        job_id=f"{job_id}-en",
+                        workspace_root=workspace.root,
+                        chunks=english_chunks,
+                        provider=english_provider,
+                        voice=voice,
+                        speed=speed,
+                        style_prompt=english_style_prompt,
+                        language="en-US",
+                        namespace="podcast_chunks_en",
+                        output_name="english_narration_raw.wav",
+                        log_callback=english_log,
+                    )
+
+                english_executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="podcast-en")
+                english_future = english_executor.submit(synthesize_english_audio)
 
             def audio_progress(completed: int, total: int, step_desc: str) -> None:
                 pct = 15 + round(50 * completed / max(1, total))
@@ -843,9 +894,51 @@ class JobService:
             probe = self.ffprobe.probe(final_output)
             video_stream = next(s for s in probe["streams"] if s.get("codec_type") == "video")
 
+            video_duration = float(probe["format"]["duration"])
+            english_audio_metadata: dict[str, Any] = {
+                "requested": bool(english_script),
+                "status": "not_requested",
+                "available": False,
+            }
+            if english_future is not None:
+                try:
+                    raw_english_audio, _, raw_english_duration = english_future.result()
+                    english_audio_path = workspace.output / "podcast-en.wav"
+                    _, english_duration = audio_service.conform_to_video_duration(
+                        raw_english_audio,
+                        english_audio_path,
+                        video_duration,
+                    )
+                    english_audio_metadata = {
+                        "requested": True,
+                        "status": "ready",
+                        "available": True,
+                        "url": f"/api/jobs/{job_id}/english-audio",
+                        "durationSeconds": round(english_duration, 3),
+                        "sourceDurationSeconds": round(raw_english_duration, 3),
+                        "fileSizeBytes": english_audio_path.stat().st_size,
+                    }
+                    self._log(job_id, "SUCCESS", "English WAV พร้อมดาวน์โหลดแล้ว")
+                except AppError as exc:
+                    english_audio_metadata = {
+                        "requested": True,
+                        "status": "failed",
+                        "available": False,
+                        "error": public_error(exc),
+                    }
+                    self._log(job_id, "WARNING", f"English WAV ไม่สำเร็จ: {exc.message}")
+                except Exception:
+                    english_audio_metadata = {
+                        "requested": True,
+                        "status": "failed",
+                        "available": False,
+                        "error": {"code": "ENGLISH_AUDIO_FAILED", "message": "สร้าง English WAV ไม่สำเร็จ"},
+                    }
+                    self._log(job_id, "WARNING", "สร้าง English WAV ไม่สำเร็จ แต่วิดีโอภาษาไทยยังพร้อมใช้งาน")
+                    logger.exception("job_id=%s english_audio_failed", job_id)
             metadata = {
                 "projectTitle": title,
-                "durationSeconds": round(float(probe["format"]["duration"]), 3),
+                "durationSeconds": round(video_duration, 3),
                 "resolution": f"{video_stream['width']}x{video_stream['height']}",
                 "outputFormat": "youtube",
                 "sceneCount": chunk_count,
@@ -856,6 +949,7 @@ class JobService:
                     "description": full_description,
                     "hashtags": raw_hashtags,
                 },
+                "englishAudio": english_audio_metadata,
             }
             self.registry.set_metadata(job_id, metadata)
             if self.persistence:
@@ -907,6 +1001,9 @@ class JobService:
             self.events.publish(JobEvent(type=JobEventType.FAILED, job_id=job_id, payload={"progress": progress, "status": JobStatus.FAILED, "code": error.code, "message": error.message, "currentStep": step}))
             self._investigation_log(job_id, "podcast_job_failed", error_code="INTERNAL_ERROR", elapsed_ms=round((time.monotonic() - started) * 1000))
             logger.exception("job_id=%s stage=FAILED error_code=INTERNAL_ERROR", job_id)
+        finally:
+            if english_executor is not None:
+                english_executor.shutdown(wait=False, cancel_futures=True)
 
     def _render_ffmpeg_scenes(self, job_id: str, script, durations: list[float], raw_audio_durations: list[float] | None, workspace: Workspace, render_profile: RenderProfile, sub_mode: str, transitions: list[str], transition_seconds: float) -> list[Path]:
         """Render independent FFmpeg scenes with bounded parallelism.
@@ -984,6 +1081,9 @@ class JobService:
             root = self.settings.app.workspace.resolve()
             if root in path.parents and path.is_file(): return path
         return self.settings.app.workspace / job_id / "output" / "final.mp4"
+
+    def english_audio(self, job_id: str) -> Path:
+        return self.settings.app.workspace / job_id / "output" / "podcast-en.wav"
 
     def update_video_metadata_tags(self, job_id: str, title: str, description: str, artist: str = "Mamase") -> bool:
         try:

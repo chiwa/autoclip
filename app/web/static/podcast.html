@@ -126,6 +126,30 @@
     .bgm-mode-group input[type="radio"] {
       accent-color: var(--cyan);
     }
+    .script-tabs {
+      display: inline-flex;
+      gap: 6px;
+      margin-top: 20px;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #08111f;
+    }
+    .script-tab {
+      border: 0;
+      border-radius: 8px;
+      padding: 9px 18px;
+      background: transparent;
+      color: var(--soft);
+      cursor: pointer;
+      font-weight: 700;
+    }
+    .script-tab.active {
+      color: #04111a;
+      background: var(--cyan);
+    }
+    .script-panel[hidden] { display: none; }
+    .script-panel { margin-top: 12px; }
   </style>
 </head>
 <body>
@@ -191,15 +215,36 @@
           <div id="aspectRatioBadge"></div>
         </div>
 
-        <label for="podcastScript">บทพูดยาว (Podcast Script)</label>
-        <textarea id="podcastScript" rows="12" required placeholder="วางบทพูดยาวภาษาไทยที่นี่...
+        <div class="script-tabs" role="tablist" aria-label="ภาษาของบท Podcast">
+          <button id="tabThaiScript" class="script-tab active" type="button" role="tab" aria-selected="true" aria-controls="panelThaiScript">ภาษาไทย · ในวิดีโอ</button>
+          <button id="tabEnglishScript" class="script-tab" type="button" role="tab" aria-selected="false" aria-controls="panelEnglishScript">English · WAV เพิ่มเติม</button>
+        </div>
+
+        <div id="panelThaiScript" class="script-panel" role="tabpanel" aria-labelledby="tabThaiScript">
+          <label for="podcastScript">บทพูดยาวภาษาไทย (เสียงหลักในวิดีโอ)</label>
+          <textarea id="podcastScript" rows="12" required placeholder="วางบทพูดยาวภาษาไทยที่นี่...
 ระบบจะแบ่งท่อนย่อยอัตโนมัติตามเครื่องหมายวรรคตอนและโครงสร้างประโยค โดยแต่ละท่อนไม่เกิน ~2,800 bytes และนำไปสังเคราะห์เสียง Google Gemini TTS แบบขนาน พร้อมตัดต่อเสียงต่อกันอย่างเรียบเนียนไร้รอยต่อ"></textarea>
 
-        <div class="podcast-stats">
-          <span>จำนวนตัวอักษร: <strong id="statCharCount">0</strong> ตัว</span>
-          <span>ขนาดข้อมูล: <strong id="statByteCount">0</strong> bytes</span>
-          <span>แบ่งได้ประมาณ: <strong id="statChunkCount">0</strong> ท่อน</span>
-          <span>ความยาวเสียงโดยประมาณ: <strong id="statEstDuration">0 นาที 0 วินาที</strong></span>
+          <div class="podcast-stats">
+            <span>จำนวนตัวอักษร: <strong id="statCharCount">0</strong> ตัว</span>
+            <span>ขนาดข้อมูล: <strong id="statByteCount">0</strong> bytes</span>
+            <span>แบ่งได้ประมาณ: <strong id="statChunkCount">0</strong> ท่อน</span>
+            <span>ความยาวเสียงโดยประมาณ: <strong id="statEstDuration">0 นาที 0 วินาที</strong></span>
+          </div>
+        </div>
+
+        <div id="panelEnglishScript" class="script-panel" role="tabpanel" aria-labelledby="tabEnglishScript" hidden>
+          <label class="toggle-row" for="enableEnglishAudio">
+            <input id="enableEnglishAudio" type="checkbox">
+            <span>สร้าง English WAV เพิ่ม สำหรับอัปโหลดเป็นภาษาเพิ่มเติมใน YouTube</span>
+          </label>
+          <label for="englishPodcastScript">English Podcast Script</label>
+          <textarea id="englishPodcastScript" rows="12" placeholder="Paste the complete English narration here. AutoClip will split it safely, synthesize it with the shared Voice / Speed and the separate English Style, then match the WAV duration to the Thai video."></textarea>
+          <div class="podcast-stats">
+            <span>Characters: <strong id="statEnglishCharCount">0</strong></span>
+            <span>Estimated chunks: <strong id="statEnglishChunkCount">0</strong></span>
+            <span id="englishDurationHint">English WAV will be padded or gently accelerated to match the final video.</span>
+          </div>
         </div>
       </section>
 
@@ -234,12 +279,24 @@
         <label for="podcastSpeed">ความเร็วเสียง (Speed) <output id="podcastSpeedValue">1.10</output></label>
         <input id="podcastSpeed" type="range" min="0.5" max="2.0" step="0.05" value="1.0">
 
-        <label for="podcastStyle">Podcast Style Prompt (สไตล์การเล่า)</label>
-        <textarea id="podcastStyle" rows="5"></textarea>
+        <div class="script-tabs" role="tablist" aria-label="ภาษาของ Style Prompt">
+          <button id="tabThaiStyle" class="script-tab active" type="button" role="tab" aria-selected="true" aria-controls="panelThaiStyle">Thai Style</button>
+          <button id="tabEnglishStyle" class="script-tab" type="button" role="tab" aria-selected="false" aria-controls="panelEnglishStyle">English Style</button>
+        </div>
+        <div id="panelThaiStyle" class="script-panel" role="tabpanel" aria-labelledby="tabThaiStyle">
+          <label for="podcastStyle">Thai Style Prompt (สไตล์เสียงภาษาไทย)</label>
+          <textarea id="podcastStyle" rows="8"></textarea>
+        </div>
+        <div id="panelEnglishStyle" class="script-panel" role="tabpanel" aria-labelledby="tabEnglishStyle" hidden>
+          <label for="englishPodcastStyle">English Style Prompt</label>
+          <textarea id="englishPodcastStyle" rows="8"></textarea>
+        </div>
 
         <div class="tts-preview-controls">
-          <button id="btnResetPodcastStyle" type="button" class="secondary">คืนค่า Podcast Style</button>
-          <button id="btnPreviewAudio" type="button" class="secondary">ฟังเสียงตัวอย่าง (Sample Audio)</button>
+          <button id="btnResetPodcastStyle" type="button" class="secondary">คืนค่า Thai Style</button>
+          <button id="btnResetEnglishPodcastStyle" type="button" class="secondary">Reset English Style</button>
+          <button id="btnPreviewAudio" type="button" class="secondary">ฟังตัวอย่างภาษาไทย</button>
+          <button id="btnPreviewEnglishAudio" type="button" class="secondary">Preview English Voice</button>
           <audio id="audioSample" controls preload="none" hidden></audio>
           <span id="audioSampleStatus" class="muted" role="status"></span>
         </div>
@@ -341,6 +398,6 @@
 </main>
 
 <script src="/static/nav.js"></script>
-<script src="/static/podcast.js?v=1"></script>
+<script src="/static/podcast.js?v=3"></script>
 </body>
 </html>

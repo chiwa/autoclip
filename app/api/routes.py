@@ -86,6 +86,7 @@ def podcast_preview_audio(
     voice: str = Form("Enceladus"),
     speed: float = Form(1.10),
     style_prompt: str | None = Form(None),
+    language: str = Form("th-TH"),
 ) -> FileResponse:
     sample_text = (text or "").strip()
     if not sample_text:
@@ -108,6 +109,7 @@ def podcast_preview_audio(
             speed=speed,
             provider_name="google-gemini",
             style_prompt=request.app.state.settings.podcast.resolve_style_prompt(voice, style_prompt),
+            language="en-US" if language.lower().startswith("en") else "th-TH",
         )
     except AppError as exc:
         raise HTTPException(400, public_error(exc)) from exc
@@ -150,11 +152,13 @@ def create_podcast_job(
     title: str = Form("YouTube Podcast"),
     script: str | None = Form(None),
     script_text: str | None = Form(None),
+    english_script: str = Form(""),
     voice: str = Form("Enceladus"),
     description: str = Form(""),
     hashtags: str = Form(""),
     speed: float = Form(1.10),
     style_prompt: str | None = Form(None),
+    english_style_prompt: str | None = Form(None),
     enable_subtitles: bool = Form(True),
     bgm_file: UploadFile | None = File(None),
     bgm_track: str = Form("space.mp3"),
@@ -169,9 +173,11 @@ def create_podcast_job(
             image_file=cover_image,
             title=title,
             script_text=effective_script,
+            english_script=english_script,
             voice=voice,
             speed=speed,
             style_prompt=style_prompt,
+            english_style_prompt=english_style_prompt,
             enable_subtitles=enable_subtitles,
             description=description,
             hashtags=hashtags,
@@ -325,6 +331,18 @@ def get_video(request: Request, job_id: str) -> FileResponse:
         raise HTTPException(500, public_error(AppError("INTERNAL_ERROR", "Completed video is unavailable")))
     filename = f"{record.project_id}.mp4" if record.project_id else "final.mp4"
     return FileResponse(path, media_type="video/mp4", filename=filename)
+
+
+@router.get("/jobs/{job_id}/english-audio")
+def get_podcast_english_audio(request: Request, job_id: str) -> FileResponse:
+    record = request.app.state.job_service.restore(job_id)
+    if not record:
+        raise HTTPException(404, public_error(AppError("JOB_NOT_FOUND", "Job was not found")))
+    path = request.app.state.job_service.english_audio(job_id)
+    if not path.is_file():
+        raise HTTPException(409, public_error(AppError("ENGLISH_AUDIO_NOT_READY", "English audio is not ready")))
+    filename = f"{record.project_id}-en.wav" if record.project_id else "podcast-en.wav"
+    return FileResponse(path, media_type="audio/wav", filename=filename)
 
 
 @router.get("/ai/status")

@@ -17,6 +17,9 @@ def test_podcast_page_route():
     assert "Enceladus" in response.text
     assert "1.10" in response.text
     assert "1920×1080" in response.text
+    assert "tabThaiScript" in response.text
+    assert "tabEnglishScript" in response.text
+    assert "englishPodcastScript" in response.text
     assert "/static/podcast.js" in response.text
 
 
@@ -27,7 +30,9 @@ def test_podcast_settings_defaults():
     assert settings.podcast.chunk_max_bytes == 1400
     assert settings.podcast.concurrency == 3
     assert settings.podcast.default_bgm_volume == 0.08
-    assert "calm, warm, and gently formal Thai voice" in settings.podcast.default_style_prompt
+    assert "calm, warm, gently formal native Thai male voice" in settings.podcast.default_style_prompt
+    assert "natural standard Thai" in settings.podcast.default_style_prompt
+    assert "native English pronunciation" in settings.podcast.default_english_style_prompt
 
 
 def test_podcast_preview_audio(tmp_path):
@@ -63,6 +68,18 @@ def test_podcast_preview_audio_empty_text_uses_default(tmp_path):
         assert "ยินดีต้อนรับ" in kwargs.get("text", "")
 
 
+def test_podcast_preview_audio_uses_english_language(tmp_path):
+    dummy_wav = tmp_path / "english-sample.wav"
+    dummy_wav.write_bytes(b"RIFFenglishwav")
+    with patch.object(app.state.tts_preview_service, "synthesize", return_value=dummy_wav) as mock_synth:
+        response = client.post(
+            "/api/podcast/preview-audio",
+            data={"text": "Welcome to tonight's story.", "language": "en-US", "style_prompt": "English style"},
+        )
+    assert response.status_code == 200
+    assert mock_synth.call_args.kwargs["language"] == "en-US"
+
+
 def test_podcast_submit_job_validation_empty_script():
     img = Image.new("RGB", (100, 100), color="blue")
     img_buf = BytesIO()
@@ -93,9 +110,11 @@ def test_podcast_submit_job_success():
             data={
                 "title": "มหาสมุทรบนเอนเซลาดัส",
                 "script": "ใต้ผืนน้ำแข็งอันหนาวเหน็บ มีมหาสมุทรน้ำเหลวซ่อนอยู่",
+                "english_script": "A hidden ocean lies beneath the frozen surface.",
                 "voice": "Enceladus",
                 "speed": "0.95",
                 "style_prompt": "Bedtime tone",
+                "english_style_prompt": "Native English bedtime tone",
                 "enable_subtitles": "true",
                 "bgm_volume": "0.08",
             },
@@ -106,6 +125,20 @@ def test_podcast_submit_job_success():
         assert data["jobId"] == "podcast-test-job"
         assert data["status"] == "RECEIVED"
         assert mock_submit.called
+        assert mock_submit.call_args.kwargs["english_script"].startswith("A hidden ocean")
+        assert mock_submit.call_args.kwargs["english_style_prompt"] == "Native English bedtime tone"
+
+
+def test_podcast_english_audio_not_ready():
+    record = app.state.job_service.registry.create("podcast-english-missing")
+    with patch.object(app.state.job_service, "restore", return_value=record), patch.object(
+        app.state.job_service,
+        "english_audio",
+        return_value=app.state.settings.app.workspace / "missing-podcast-en.wav",
+    ):
+        response = client.get("/api/jobs/podcast-english-missing/english-audio")
+    assert response.status_code == 409
+    assert response.json()["detail"]["code"] == "ENGLISH_AUDIO_NOT_READY"
 
 
 def test_podcast_bgm_tracks_catalog():

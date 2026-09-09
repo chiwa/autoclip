@@ -25,6 +25,64 @@ class PodcastAudioService:
         self.ffprobe = ffprobe
         self.settings = settings
 
+    def conform_to_video_duration(
+        self,
+        input_audio: Path,
+        output_audio: Path,
+        target_duration: float,
+        max_speedup: float = 1.25,
+    ) -> tuple[Path, float]:
+        """Create a YouTube alternate track that ends with the video.
+
+        Short tracks receive trailing silence. Slightly long tracks are sped up
+        without dropping content. Excessively long tracks are rejected instead
+        of being truncated or made unnaturally fast.
+        """
+        source_duration = self.ffprobe.duration(input_audio)
+        if target_duration <= 0 or source_duration <= 0:
+            raise AppError("ENGLISH_AUDIO_DURATION_INVALID", "ไม่สามารถตรวจสอบความยาวเสียงภาษาอังกฤษได้")
+
+        ratio = source_duration / target_duration
+        if ratio > max_speedup:
+            raise AppError(
+                "ENGLISH_AUDIO_TOO_LONG",
+                "บทภาษาอังกฤษยาวเกินวิดีโอ กรุณาย่อบทแล้วลองสร้างเสียงอังกฤษใหม่",
+                {
+                    "audioDurationSeconds": round(source_duration, 3),
+                    "videoDurationSeconds": round(target_duration, 3),
+                    "requiredSpeedup": round(ratio, 3),
+                    "maxSpeedup": max_speedup,
+                },
+            )
+
+        output_audio.parent.mkdir(parents=True, exist_ok=True)
+        audio_filter = (
+            f"atempo={ratio:.8f},apad=whole_dur={target_duration:.6f},"
+            f"atrim=duration={target_duration:.6f}"
+            if ratio > 1.001
+            else f"apad=whole_dur={target_duration:.6f},atrim=duration={target_duration:.6f}"
+        )
+        self.ffmpeg.run(
+            [
+                "-y",
+                "-i", str(input_audio),
+                "-af", audio_filter,
+                "-c:a", "pcm_s16le",
+                "-ar", "48000",
+                "-ac", "2",
+                str(output_audio),
+            ],
+            "ENGLISH_AUDIO_ALIGNMENT_FAILED",
+        )
+        final_duration = self.ffprobe.duration(output_audio)
+        if abs(final_duration - target_duration) > 0.1:
+            output_audio.unlink(missing_ok=True)
+            raise AppError(
+                "ENGLISH_AUDIO_ALIGNMENT_FAILED",
+                "ปรับความยาวเสียงภาษาอังกฤษให้ตรงกับวิดีโอไม่สำเร็จ",
+            )
+        return output_audio, final_duration
+
     @staticmethod
     def _text_hash(text: str, style_prompt: str | None = None) -> str:
         content = f"v2\n{text}\n---\n{style_prompt or ''}"
@@ -67,6 +125,8 @@ class PodcastAudioService:
         speed: float,
         style_prompt: str | None = None,
         language: str = "th-TH",
+        namespace: str = "podcast_chunks",
+        output_name: str = "full_narration.wav",
         progress_callback: Callable[[int, int, str], None] | None = None,
         log_callback: Callable[[str, str, bool], None] | None = None,
     ) -> tuple[Path, list[float], float]:
@@ -78,7 +138,7 @@ class PodcastAudioService:
         if not chunks:
             raise AppError("PODCAST_SCRIPT_EMPTY", "บทพูดพอดแคสต์ว่างเปล่า")
 
-        chunks_dir = workspace_root / "podcast_chunks"
+        chunks_dir = workspace_root / namespace
         chunks_dir.mkdir(parents=True, exist_ok=True)
         manifest_path = chunks_dir / "manifest.json"
 
@@ -211,7 +271,7 @@ class PodcastAudioService:
             for p in chunk_paths:
                 f.write(f"file '{p.resolve().as_posix()}'\n")
 
-        output_audio = workspace_root / "full_narration.wav"
+        output_audio = workspace_root / output_name
         if log_callback:
             log_callback("INFO", "กำลังต่อเสียงแต่ละส่วนตามลำดับเดิม", False)
             log_callback("TECHNICAL", f"event=stitch_started job_id={job_id} total_chunks={total_chunks}", True)

@@ -29,8 +29,14 @@
   const enableEnglishAudio = $('#enableEnglishAudio');
   const tabThaiScript = $('#tabThaiScript');
   const tabEnglishScript = $('#tabEnglishScript');
+  const tabImportJson = $('#tabImportJson');
   const panelThaiScript = $('#panelThaiScript');
   const panelEnglishScript = $('#panelEnglishScript');
+  const panelImportJson = $('#panelImportJson');
+  const podcastJsonInput = $('#podcastJsonInput');
+  const btnApplyPodcastJson = $('#btnApplyPodcastJson');
+  const btnClearPodcastJson = $('#btnClearPodcastJson');
+  const podcastJsonStatus = $('#podcastJsonStatus');
   const statChars = $('#statCharCount');
   const statBytes = $('#statByteCount');
   const statChunks = $('#statChunkCount');
@@ -73,16 +79,130 @@
 
   function selectScriptTab(language) {
     const english = language === 'english';
-    tabThaiScript.classList.toggle('active', !english);
+    const json = language === 'json';
+    tabThaiScript.classList.toggle('active', !english && !json);
     tabEnglishScript.classList.toggle('active', english);
-    tabThaiScript.setAttribute('aria-selected', String(!english));
+    tabImportJson.classList.toggle('active', json);
+    tabThaiScript.setAttribute('aria-selected', String(!english && !json));
     tabEnglishScript.setAttribute('aria-selected', String(english));
-    panelThaiScript.hidden = english;
+    tabImportJson.setAttribute('aria-selected', String(json));
+    panelThaiScript.hidden = english || json;
     panelEnglishScript.hidden = !english;
+    panelImportJson.hidden = !json;
   }
 
   tabThaiScript.addEventListener('click', () => selectScriptTab('thai'));
   tabEnglishScript.addEventListener('click', () => selectScriptTab('english'));
+  tabImportJson.addEventListener('click', () => selectScriptTab('json'));
+
+  function normalizedJsonText(raw) {
+    return raw.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+  }
+
+  function importedText(value) {
+    return typeof value === 'string'
+      ? value.replace(/\\r\\n/g, '\n').replace(/\\n/g, '\n').trim()
+      : '';
+  }
+
+  function applyPodcastJson({ quiet = false } = {}) {
+    const raw = normalizedJsonText(podcastJsonInput.value || '');
+    if (!raw) {
+      if (!quiet) podcastJsonStatus.textContent = 'กรุณาวาง Podcast JSON ก่อน';
+      return false;
+    }
+    let data;
+    try {
+      data = JSON.parse(raw);
+    } catch (error) {
+      if (!quiet) podcastJsonStatus.textContent = `JSON ไม่ถูกต้อง: ${error.message}`;
+      return false;
+    }
+    if (!data || Array.isArray(data) || typeof data !== 'object') {
+      podcastJsonStatus.textContent = 'JSON root ต้องเป็น object';
+      return false;
+    }
+
+    const filled = [];
+    const title = importedText(typeof data.title === 'string' ? data.title : data.title?.youtube);
+    if (title) {
+      titleInput.value = title;
+      filled.push('Title');
+    }
+
+    const caption = data.caption || {};
+    const descriptionParts = [caption.bilingual_intro, caption.thai, caption.english]
+      .map(importedText)
+      .filter(Boolean);
+    if (descriptionParts.length) {
+      $('#podcastDescription').value = descriptionParts.join('\n\n');
+      filled.push('Description');
+    }
+    if (Array.isArray(data.hashtags)) {
+      $('#podcastHashtags').value = data.hashtags.filter(value => typeof value === 'string').join(' ');
+      filled.push('Hashtags');
+    } else if (typeof data.hashtags === 'string') {
+      $('#podcastHashtags').value = data.hashtags.trim();
+      filled.push('Hashtags');
+    }
+
+    const thaiTts = data.tts?.thai || {};
+    const englishTts = data.tts?.english || {};
+    const thaiScript = importedText(thaiTts.script);
+    const englishScript = importedText(englishTts.script);
+    const thaiStyle = importedText(thaiTts.style);
+    const englishStyle = importedText(englishTts.style);
+    if (thaiScript) {
+      scriptInput.value = thaiScript;
+      scriptInput.dispatchEvent(new Event('input'));
+      filled.push('Thai script');
+    }
+    if (englishScript) {
+      englishScriptInput.value = englishScript;
+      englishScriptInput.dispatchEvent(new Event('input'));
+      filled.push('English script');
+    }
+    if (thaiStyle) {
+      styleInput.value = thaiStyle;
+      filled.push('Thai style');
+    }
+    if (englishStyle) {
+      englishStyleInput.value = englishStyle;
+      filled.push('English style');
+    }
+
+    const requestedVoice = thaiTts.voice || englishTts.voice || data.tts?.voice;
+    if (typeof requestedVoice === 'string' && [...voiceSelect.options].some(option => option.value === requestedVoice)) {
+      voiceSelect.value = requestedVoice;
+      filled.push('Voice');
+    }
+    const requestedSpeed = Number(thaiTts.speed ?? englishTts.speed ?? data.tts?.speed);
+    if (Number.isFinite(requestedSpeed) && requestedSpeed >= 0.5 && requestedSpeed <= 2.0) {
+      speedSlider.value = String(requestedSpeed);
+      speedSlider.dispatchEvent(new Event('input'));
+      filled.push('Speed');
+    }
+
+    const wantsEnglish = typeof data.audio?.generate_english_audio === 'boolean'
+      ? data.audio.generate_english_audio
+      : Boolean(englishScriptInput.value.trim());
+    enableEnglishAudio.checked = wantsEnglish;
+    filled.push(wantsEnglish ? 'English WAV enabled' : 'English WAV disabled');
+
+    podcastJsonStatus.textContent = filled.length
+      ? `Auto Fill สำเร็จ: ${filled.join(', ')}`
+      : 'อ่าน JSON ได้ แต่ไม่พบ field ที่ AutoClip รองรับ';
+    return true;
+  }
+
+  btnApplyPodcastJson.addEventListener('click', () => applyPodcastJson());
+  btnClearPodcastJson.addEventListener('click', () => {
+    podcastJsonInput.value = '';
+    podcastJsonStatus.textContent = 'ล้าง JSON แล้ว (ข้อมูลที่ Auto Fill ลงฟอร์มยังคงอยู่)';
+  });
+  podcastJsonInput.addEventListener('paste', () => {
+    setTimeout(() => applyPodcastJson({ quiet: true }), 0);
+  });
 
   const tabThaiStyle = $('#tabThaiStyle');
   const tabEnglishStyle = $('#tabEnglishStyle');

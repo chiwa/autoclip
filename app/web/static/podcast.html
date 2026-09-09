@@ -218,6 +218,7 @@
         <div class="script-tabs" role="tablist" aria-label="ภาษาของบท Podcast">
           <button id="tabThaiScript" class="script-tab active" type="button" role="tab" aria-selected="true" aria-controls="panelThaiScript">ภาษาไทย · ในวิดีโอ</button>
           <button id="tabEnglishScript" class="script-tab" type="button" role="tab" aria-selected="false" aria-controls="panelEnglishScript">English · WAV เพิ่มเติม</button>
+          <button id="tabImportJson" class="script-tab" type="button" role="tab" aria-selected="false" aria-controls="panelImportJson">Import JSON</button>
         </div>
 
         <div id="panelThaiScript" class="script-panel" role="tabpanel" aria-labelledby="tabThaiScript">
@@ -245,6 +246,16 @@
             <span>Estimated chunks: <strong id="statEnglishChunkCount">0</strong></span>
             <span id="englishDurationHint">English WAV will be padded or gently accelerated to match the final video.</span>
           </div>
+        </div>
+
+        <div id="panelImportJson" class="script-panel" role="tabpanel" aria-labelledby="tabImportJson" hidden>
+          <label for="podcastJsonInput">Podcast JSON</label>
+          <textarea id="podcastJsonInput" rows="12" spellcheck="false" placeholder='วาง JSON ที่มี title, caption, hashtags, tts.thai, tts.english และ audio ที่นี่'></textarea>
+          <div class="actions" style="margin-top: 12px;">
+            <button id="btnApplyPodcastJson" type="button" class="button secondary">Auto Fill จาก JSON</button>
+            <button id="btnClearPodcastJson" type="button" class="button secondary">ล้าง JSON</button>
+          </div>
+          <p id="podcastJsonStatus" class="muted" role="status">ระบบจะเติมเฉพาะข้อมูลในฟอร์ม ไม่อัปโหลดภาพปกหรือไฟล์ BGM</p>
         </div>
       </section>
 
@@ -398,6 +409,6 @@
 </main>
 
 <script src="/static/nav.js"></script>
-<script src="/static/podcast.js?v=3"></script>
+<script src="/static/podcast.js?v=4"></script>
 </body>
 </html>

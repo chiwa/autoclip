@@ -20,6 +20,9 @@ def test_podcast_page_route():
     assert "tabThaiScript" in response.text
     assert "tabEnglishScript" in response.text
     assert "englishPodcastScript" in response.text
+    assert "tabImportJson" in response.text
+    assert "podcastJsonInput" in response.text
+    assert "Auto Fill จาก JSON" in response.text
     assert "/static/podcast.js" in response.text
 
 

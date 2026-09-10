@@ -36,6 +36,7 @@ def test_podcast_settings_defaults():
     assert settings.podcast.concurrency == 3
     assert settings.podcast.max_retries == 5
     assert settings.podcast.default_bgm_volume == 0.08
+    assert settings.podcast.default_bgm_track == "mamase-podcast-bg.mp3"
     assert "connected phrasing" in settings.podcast.default_style_prompt
     assert "Avoid short choppy pauses" in settings.podcast.default_style_prompt
     assert settings.podcast.default_english_style_prompt == settings.podcast.default_style_prompt
@@ -163,9 +164,10 @@ def test_podcast_bgm_tracks_catalog():
     assert "tracks" in data
     tracks = data["tracks"]
     track_ids = [t["id"] for t in tracks]
+    assert "mamase-podcast-bg.mp3" in track_ids
+    default_track = next(t for t in tracks if t["id"] == "mamase-podcast-bg.mp3")
+    assert default_track["is_default"] is True
     assert "space.mp3" in track_ids
-    space_track = next(t for t in tracks if t["id"] == "space.mp3")
-    assert space_track["is_default"] is True
     # Existing built-in tracks are also present
     assert "cosmic_drift" in track_ids
     assert "starlight_lullaby" in track_ids

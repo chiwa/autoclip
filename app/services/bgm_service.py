@@ -174,12 +174,17 @@ def _synthesize_space_track(
 
 SOUNDS_DIR = Path(__file__).resolve().parents[2] / "assets" / "sounds"
 SUPPORTED_AUDIO_EXTENSIONS = {".mp3", ".wav", ".m4a", ".aac", ".ogg", ".flac"}
+DEFAULT_PODCAST_BGM = "mamase-podcast-bg.mp3"
 
 
 KNOWN_METADATA: dict[str, dict[str, str]] = {
+    "mamase-podcast-bg.mp3": {
+        "name": "🎧 Mamase Podcast BGM (ค่าเริ่มต้นใหม่)",
+        "description": "เพลงประกอบ Podcast หลักของ Mamase จากไฟล์ที่พี่พีเลือก",
+    },
     "space.mp3": {
-        "name": "🌌 space.mp3 (ค่าเริ่มต้น)",
-        "description": "เพลงอวกาศผ่อนคลายจาก /assets/sounds/space.mp3 (ค่าเริ่มต้น)",
+        "name": "🌌 space.mp3 (เพลงเดิม)",
+        "description": "เพลงอวกาศผ่อนคลายเดิมจาก /assets/sounds/space.mp3",
     },
     "deep-nebula.wav": {
         "name": "🪐 deep-nebula.wav — Deep Nebula (เนบิวลาลึกภวังค์ — แนะนำ)",
@@ -208,8 +213,8 @@ def get_podcast_bgm_catalog(sounds_dir: Path | None = None) -> list[dict[str, An
     """Return client-safe catalog of podcast background tracks.
 
     Includes:
-    1. space.mp3 as default, plus any other audio files found in /assets/sounds.
-    2. Priority ordering: space.mp3 first, deep-nebula second, then others.
+    1. The configured Mamase MP3 as default, plus other files in /assets/sounds.
+    2. Priority ordering: default track first, then other asset files.
     3. Built-in ambient tracks (aliased or fallback).
     """
     directory = (sounds_dir or SOUNDS_DIR).resolve()
@@ -226,14 +231,14 @@ def get_podcast_bgm_catalog(sounds_dir: Path | None = None) -> list[dict[str, An
 
     def sort_key(p: Path) -> tuple[int, str]:
         name = p.name.lower()
-        if name == "space.mp3":
+        if name == DEFAULT_PODCAST_BGM:
             return (0, name)
         return (1, name)
 
     sorted_files = sorted(found_files, key=sort_key)
 
     for f in sorted_files:
-        is_default = (f.name.lower() == "space.mp3")
+        is_default = (f.name.lower() == DEFAULT_PODCAST_BGM)
         meta = KNOWN_METADATA.get(f.name.lower())
         display_name = meta["name"] if meta else f"🎵 {f.name}"
         desc = meta["description"] if meta else f"ไฟล์เสียง {f.name} จาก /assets/sounds"
@@ -246,13 +251,13 @@ def get_podcast_bgm_catalog(sounds_dir: Path | None = None) -> list[dict[str, An
             "source": "assets_sounds",
         })
 
-    # Ensure space.mp3 is always present as default option
-    if not any(t["id"] == "space.mp3" for t in tracks):
+    # Keep a client-safe default entry even if the local asset is temporarily missing.
+    if not any(t["id"] == DEFAULT_PODCAST_BGM for t in tracks):
         tracks.insert(0, {
-            "id": "space.mp3",
-            "name": "🌌 space.mp3 (ค่าเริ่มต้น)",
-            "description": "ไฟล์เสียง space.mp3 จาก /assets/sounds (ค่าเริ่มต้น)",
-            "filename": "space.mp3",
+            "id": DEFAULT_PODCAST_BGM,
+            "name": "🎧 Mamase Podcast BGM (ค่าเริ่มต้นใหม่)",
+            "description": "เพลงประกอบ Podcast หลักของ Mamase จากไฟล์ที่พี่พีเลือก",
+            "filename": DEFAULT_PODCAST_BGM,
             "is_default": True,
             "source": "assets_sounds",
         })
@@ -295,7 +300,7 @@ def ensure_space_ambient_track(workspace: Path, track_id: str) -> Path:
     )
 
 
-def ensure_podcast_bgm(workspace: Path, track_id: str = "space.mp3") -> Path:
+def ensure_podcast_bgm(workspace: Path, track_id: str = DEFAULT_PODCAST_BGM) -> Path:
     """Ensure podcast BGM track is available on disk and return its path."""
     return resolve_podcast_bgm(workspace, track_id)
 
@@ -305,13 +310,13 @@ def resolve_podcast_bgm(
     track_id: str | None = None,
     sounds_dir: Path | None = None,
 ) -> Path:
-    """Resolve podcast BGM path from /assets/sounds or built-in tracks, defaulting to space.mp3."""
+    """Resolve a Podcast BGM, defaulting to the selected Mamase track."""
     directory = (sounds_dir or SOUNDS_DIR).resolve()
     directory.mkdir(parents=True, exist_ok=True)
 
     target_name = (track_id or "").strip()
-    if not target_name or target_name in {"default", "system", "space.mp3", "/assets/sounds/space.mp3"}:
-        target_name = "space.mp3"
+    if not target_name or target_name in {"default", "system"}:
+        target_name = DEFAULT_PODCAST_BGM
     elif "/" in target_name or "\\" in target_name:
         target_name = Path(target_name).name
 
@@ -328,10 +333,11 @@ def resolve_podcast_bgm(
     if ambient_match:
         return ensure_space_ambient_track(workspace, ambient_match["id"])
 
-    # Fallback 1: space.mp3 in directory
-    default_space = directory / "space.mp3"
-    if default_space.is_file():
-        return default_space
+    # Fallback 1: selected Mamase default, then the legacy space.mp3.
+    for fallback_name in (DEFAULT_PODCAST_BGM, "space.mp3"):
+        fallback = directory / fallback_name
+        if fallback.is_file():
+            return fallback
 
     # Fallback 2: default workspace bgm
     return ensure_default_bgm(workspace)

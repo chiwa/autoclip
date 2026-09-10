@@ -814,7 +814,8 @@ Imaginable hook → everyday scale comparison → surprising reveal
   - Purpose: Long-form horizontal (16:9 1920×1080 30 FPS) visual podcast from a
     single cover image and long Thai script without requiring a ZIP package.
   - Defaults: Voice `Iapetus`, speed `0.90`, connected conversational phrasing
-    with brief pauses only at punctuation/topic changes, BGM volume `0.08`
+    with brief pauses only at punctuation/topic changes, BGM
+    `assets/sounds/mamase-podcast-bg.mp3` at volume `0.08`
     (8%), subtitles enabled.
   - The Podcast UI can persist the current voice, speed, and Thai/English style
     prompts as browser-local defaults, with an explicit restore-system-defaults

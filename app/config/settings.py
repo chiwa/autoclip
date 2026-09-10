@@ -202,7 +202,7 @@ class PodcastSettings(BaseModel):
     max_retries: int = Field(5, ge=0, le=10)
     default_voice: str = "Iapetus"
     default_speed: float = Field(0.90, ge=0.5, le=2.0)
-    default_bgm_track: str = "space.mp3"
+    default_bgm_track: str = "mamase-podcast-bg.mp3"
     default_bgm_volume: float = Field(0.08, ge=0.0, le=1.0)
     default_style_prompt: str = (
         "Speak smoothly with connected phrasing and a natural conversational rhythm. "

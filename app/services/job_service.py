@@ -230,7 +230,7 @@ class JobService:
         description: str | None = None,
         hashtags: str | None = None,
         bgm_file: Any | None = None,
-        bgm_track: str = "space.mp3",
+        bgm_track: str = "mamase-podcast-bg.mp3",
         bgm_volume: float | None = None,
         focus: str = "center",
     ) -> JobRecord:
@@ -1166,7 +1166,7 @@ class JobService:
             voice = str(config.get("voice") or self.settings.podcast.default_voice)
             speed = float(config.get("speed") or self.settings.podcast.default_speed)
             style = str(config.get("englishStylePrompt") or self.settings.podcast.default_english_style_prompt)
-            bgm_track = str(config.get("bgmTrack") or "space.mp3")
+            bgm_track = str(config.get("bgmTrack") or self.settings.podcast.default_bgm_track)
             bgm_volume = float(config.get("bgmVolume", self.settings.podcast.default_bgm_volume))
             script_text = (workspace_root / "source/script-en.txt").read_text(encoding="utf-8")
             chunks = PodcastChunker.chunk(script_text, max_bytes=self.settings.podcast.chunk_max_bytes)
@@ -1359,7 +1359,7 @@ class JobService:
                 str(config.get("description") or ""),
                 str(config.get("hashtags") or ""),
                 bgm_path,
-                str(config.get("bgmTrack") or "space.mp3"),
+                str(config.get("bgmTrack") or self.settings.podcast.default_bgm_track),
                 float(config.get("bgmVolume", self.settings.podcast.default_bgm_volume)),
                 str(config.get("focus") or "center"),
             )

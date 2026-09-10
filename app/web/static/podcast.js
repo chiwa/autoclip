@@ -443,7 +443,8 @@
   const systemBgmWrap = document.getElementById('systemBgmWrapper');
 
   const TRACK_DESCRIPTIONS = {
-    'space.mp3': 'ไฟล์เสียง space.mp3 จาก /assets/sounds (ค่าเริ่มต้น)',
+    'mamase-podcast-bg.mp3': 'เพลงประกอบ Podcast หลักของ Mamase จากไฟล์ที่พี่พีเลือก',
+    'space.mp3': 'เพลงอวกาศผ่อนคลายเดิมจาก /assets/sounds/space.mp3',
     cosmic_drift: 'โทนอวกาศเวิ้งว้าง นุ่มลึก เบสอุ่นละมุน ไม่รบกวนเสียงพูด เหมาะสำหรับการพักผ่อน',
     starlight_lullaby: 'แสงดาวกล่อมนอน แอมเบียนต์นุ่มละมุนผสมประกายดาวแผ่วเบา ช่วยคลายความเหนื่อยล้า',
     deep_nebula: 'เนบิวลาลึกภวังค์ บรรยากาศอบอุ่นโอบอุ้มจิตใจ ผสมผสานคลื่น Theta Wave',
@@ -474,7 +475,7 @@
         if (track.description) {
           TRACK_DESCRIPTIONS[track.id] = track.description;
         }
-        if (track.is_default || track.id === 'space.mp3') {
+        if (track.is_default || track.id === 'mamase-podcast-bg.mp3') {
           opt.selected = true;
         }
         if (track.source === 'builtin') {
@@ -544,7 +545,7 @@
       if (isCustom && customBgmUrl) {
         audioBgm.src = customBgmUrl;
       } else {
-        const track = bgmTrackSelect ? bgmTrackSelect.value : 'space.mp3';
+        const track = bgmTrackSelect ? bgmTrackSelect.value : 'mamase-podcast-bg.mp3';
         audioBgm.src = `/api/podcast/bgm-preview/${encodeURIComponent(track)}`;
       }
       audioBgm.volume = Math.min(1.0, Math.max(0.0, Number(bgmVolumeSlider.value) * 2.5));
@@ -613,7 +614,7 @@
     if (isCustom && customBgmFile.files[0]) {
       formData.append('bgm_file', customBgmFile.files[0]);
     } else {
-      const track = bgmTrackSelect ? bgmTrackSelect.value : 'cosmic_drift';
+      const track = bgmTrackSelect ? bgmTrackSelect.value : 'mamase-podcast-bg.mp3';
       formData.append('bgm_track', track);
     }
 

@@ -161,7 +161,7 @@ def create_podcast_job(
     english_style_prompt: str | None = Form(None),
     enable_subtitles: bool = Form(True),
     bgm_file: UploadFile | None = File(None),
-    bgm_track: str = Form("space.mp3"),
+    bgm_track: str = Form("mamase-podcast-bg.mp3"),
     bgm_volume: float = Form(0.08),
     focus: str = Form("center"),
 ) -> dict:

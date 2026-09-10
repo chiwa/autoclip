@@ -4,6 +4,7 @@ import hashlib
 import json
 import logging
 import math
+import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
@@ -21,10 +22,17 @@ logger = logging.getLogger("autoclip.podcast.audio")
 class PodcastAudioService:
     """Manages parallel TTS synthesis, retries, chunk caching, and stitching for podcast scripts."""
 
-    def __init__(self, ffmpeg: FfmpegRunner, ffprobe: FfprobeRunner, settings: Settings):
+    def __init__(
+        self,
+        ffmpeg: FfmpegRunner,
+        ffprobe: FfprobeRunner,
+        settings: Settings,
+        request_limiter: threading.Semaphore | None = None,
+    ):
         self.ffmpeg = ffmpeg
         self.ffprobe = ffprobe
         self.settings = settings
+        self.request_limiter = request_limiter
 
     def conform_to_video_duration(
         self,
@@ -246,7 +254,14 @@ class PodcastAudioService:
                     if log_callback and attempt > 0:
                         log_callback("WARNING", f"ลองสร้างเสียงส่วนที่ {index + 1} ใหม่ (ครั้งที่ {attempt})", False)
 
-                    provider.synthesize(text, language, voice, speed, chunk_file)
+                    if self.request_limiter is None:
+                        provider.synthesize(text, language, voice, speed, chunk_file)
+                    else:
+                        # Thai and English workers share this job-level limit.
+                        # Hold it only around the provider call so retry waits do
+                        # not block otherwise healthy requests.
+                        with self.request_limiter:
+                            provider.synthesize(text, language, voice, speed, chunk_file)
                     self._polish_chunk_audio(chunk_file)
                     duration = self.ffprobe.duration(chunk_file)
                     elapsed = round(time.monotonic() - start_time, 2)

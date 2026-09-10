@@ -31,7 +31,7 @@ def test_podcast_settings_defaults():
     assert settings.podcast.default_voice == "Enceladus"
     assert settings.podcast.default_speed == 1.1
     assert settings.podcast.chunk_max_bytes == 1400
-    assert settings.podcast.concurrency == 6
+    assert settings.podcast.concurrency == 3
     assert settings.podcast.max_retries == 5
     assert settings.podcast.default_bgm_volume == 0.08
     assert "calm, warm, gently formal native Thai male voice" in settings.podcast.default_style_prompt

@@ -298,6 +298,11 @@ class JobService:
                     "bgmTrack": bgm_track,
                     "bgmVolume": selected_bgm_vol,
                     "customBgmFile": saved_bgm.name if saved_bgm else None,
+                    "title": cleaned_title,
+                    "description": description or "",
+                    "hashtags": hashtags or "",
+                    "enableSubtitles": enable_subtitles,
+                    "focus": selected_focus,
                 },
                 ensure_ascii=False,
                 indent=2,
@@ -790,9 +795,16 @@ class JobService:
             # 2. Audio Synthesis
             self._progress(job_id, JobStatus.GENERATING_AUDIO, 15, f"กำลังสร้างเสียง 0 จาก {chunk_count}")
             provider = create_tts_provider("google-gemini", self.settings)
-            audio_service = PodcastAudioService(self.ffmpeg, self.ffprobe, self.settings)
+            tts_request_limiter = threading.BoundedSemaphore(self.settings.podcast.concurrency)
+            audio_service = PodcastAudioService(
+                self.ffmpeg,
+                self.ffprobe,
+                self.settings,
+                request_limiter=tts_request_limiter,
+            )
 
             english_future = None
+            synthesize_english_audio = None
             if english_script:
                 english_chunks = PodcastChunker.chunk(
                     english_script,
@@ -802,7 +814,12 @@ class JobService:
 
                 def synthesize_english_audio():
                     english_provider = create_tts_provider("google-gemini", self.settings)
-                    english_service = PodcastAudioService(self.ffmpeg, self.ffprobe, self.settings)
+                    english_service = PodcastAudioService(
+                        self.ffmpeg,
+                        self.ffprobe,
+                        self.settings,
+                        request_limiter=tts_request_limiter,
+                    )
 
                     def english_log(level: str, message: str, technical: bool = False) -> None:
                         prefix = "English audio: "
@@ -824,9 +841,6 @@ class JobService:
                         output_name="english_narration_raw.wav",
                         log_callback=english_log,
                     )
-
-                english_executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="podcast-en")
-                english_future = english_executor.submit(synthesize_english_audio)
 
             def audio_progress(completed: int, total: int, step_desc: str) -> None:
                 pct = 15 + round(50 * completed / max(1, total))
@@ -852,6 +866,14 @@ class JobService:
             )
             self._progress(job_id, JobStatus.GENERATING_AUDIO, 65, "สร้างเสียงครบแล้ว")
             self._log(job_id, "SUCCESS", "สร้างเสียงครบแล้ว")
+
+            # Do not let English requests compete with Thai narration. Start
+            # them only after every Thai chunk is safely cached; they may then
+            # overlap with local subtitle/video rendering to save wall time.
+            if synthesize_english_audio is not None:
+                self._log(job_id, "INFO", "เสียงไทยครบแล้ว กำลังเริ่มสร้าง English audio")
+                english_executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="podcast-en")
+                english_future = english_executor.submit(synthesize_english_audio)
 
             # 3. Subtitles
             srt_path: Path | None = None
@@ -1284,6 +1306,65 @@ class JobService:
             raise AppError("JOB_NOT_RETRYABLE", "สามารถลองใหม่ได้เฉพาะงานที่สถานะล้มเหลวเท่านั้น")
 
         workspace = self.workspaces.get(job_id)
+        podcast_script = workspace.source / "script.txt"
+        podcast_covers = sorted(
+            path
+            for path in workspace.source.glob("cover.*")
+            if path.suffix.lower() in {".png", ".jpg", ".jpeg", ".webp"}
+        )
+        if podcast_script.is_file() and podcast_covers:
+            config_path = workspace.source / "podcast-settings.json"
+            config = json.loads(config_path.read_text(encoding="utf-8")) if config_path.is_file() else {}
+            title = str(config.get("title") or "").strip()
+            if not title and self.persistence and record.project_id:
+                project = next(
+                    (item for item in self.persistence.list_projects(include_trashed=True) if item.get("id") == record.project_id),
+                    None,
+                )
+                title = str((project or {}).get("title") or "").strip()
+            title = title or "YouTube Podcast"
+            english_path = workspace.source / "script-en.txt"
+            custom_bgm_name = config.get("customBgmFile")
+            custom_bgm = workspace.source / str(custom_bgm_name) if custom_bgm_name else None
+            bgm_path = custom_bgm if custom_bgm and custom_bgm.is_file() else None
+
+            self.registry.update(
+                job_id,
+                JobStatus.RECEIVED,
+                5,
+                "กำลัง Retry เฉพาะส่วน Podcast ที่ยังไม่สำเร็จ...",
+                error=None,
+            )
+            retried = self.registry.get(job_id)
+            if self.persistence and retried:
+                self.persistence.upsert_job(retried)
+                if record.project_id:
+                    self.persistence.update_project_status(record.project_id, "RENDERING")
+            self._log(job_id, "INFO", "กำลัง Retry Podcast จากส่วนเสียงที่ cache ไว้")
+            self._investigation_log(job_id, "podcast_retry_started", project_id=record.project_id or "")
+            self.executor.submit(
+                self._process_podcast,
+                job_id,
+                record.project_id or f"podcast-{uuid.uuid4().hex[:8]}",
+                title,
+                podcast_script.read_text(encoding="utf-8"),
+                english_path.read_text(encoding="utf-8") if english_path.is_file() else "",
+                podcast_covers[0],
+                workspace,
+                str(config.get("voice") or self.settings.podcast.default_voice),
+                float(config.get("speed") or self.settings.podcast.default_speed),
+                str(config.get("thaiStylePrompt") or self.settings.podcast.default_style_prompt),
+                str(config.get("englishStylePrompt") or self.settings.podcast.default_english_style_prompt),
+                bool(config.get("enableSubtitles", True)),
+                str(config.get("description") or ""),
+                str(config.get("hashtags") or ""),
+                bgm_path,
+                str(config.get("bgmTrack") or "space.mp3"),
+                float(config.get("bgmVolume", self.settings.podcast.default_bgm_volume)),
+                str(config.get("focus") or "center"),
+            )
+            return retried or record
+
         if not (workspace.source / "input.zip").is_file():
             raise AppError("PACKAGE_NOT_FOUND", "ไม่พบไฟล์ต้นฉบับสำหรับลองใหม่ กรุณาอัปโหลดใหม่")
 

@@ -818,10 +818,13 @@ Imaginable hook → everyday scale comparison → surprising reveal
   - Script chunking: `PodcastChunker` splits by paragraph, sentence, and Thai word
     boundaries (via PyThaiNLP) to strictly remain within `AUTOCLIP_PODCAST_CHUNK_MAX_BYTES`
     (default 2,800 UTF-8 bytes).
-  - Parallel synthesis: `PodcastAudioService` executes parallel requests bounded by
-    `AUTOCLIP_PODCAST_CONCURRENCY` (default 6 per language) with up to 5 retries separated by at least 5 seconds, provider `Retry-After` handling, and
+  - Parallel synthesis: finish and cache all Thai chunks before starting
+    English synthesis. Each language is bounded by
+    `AUTOCLIP_PODCAST_CONCURRENCY` (default 3 concurrent requests) with up to 5 retries separated by at least 5 seconds, provider `Retry-After` handling, and
     persistent workspace chunk caching (`podcast_chunks/`). Losslessly stitched
     via FFmpeg concat demuxer.
+  - A failed Podcast can be retried from its progress page. Reuse valid cached
+    chunks and regenerate only missing/failed chunks before continuing render.
   - Video motion & audio ducking: `PodcastVideoRenderer` constructs a 6-stage
     breathing motion cycle looped with `-stream_loop -1` and mixes background
     music with `asplit=2` sidechain compression beneath spoken narration.

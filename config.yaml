@@ -47,6 +47,17 @@ subtitle:
   margin_bottom: 180
   outline: 3
   font_file: /usr/share/fonts/truetype/noto/NotoSansThai-Regular.ttf
+podcast:
+  ending_scene:
+    enabled: true
+    image: assets/images/end-of-scence.png
+    song: assets/audio/end-scence-song.mp3
+    disable_subtitles: true
+    motion: none
+    fade_in_seconds: 0.75
+    fade_out_seconds: 1.0
+    apply_to_thai_video: true
+    apply_to_english_audio: true
 ltx:
   enabled: true
   width: 448

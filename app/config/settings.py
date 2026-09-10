@@ -196,6 +196,18 @@ class YouTubeSettings(BaseModel):
     api_key: str = ""
 
 
+class PodcastEndingSceneSettings(BaseModel):
+    enabled: bool = True
+    image: Path = Path("assets/images/end-of-scence.png")
+    song: Path = Path("assets/audio/end-scence-song.mp3")
+    disable_subtitles: bool = True
+    motion: str = "none"
+    apply_to_thai_video: bool = True
+    apply_to_english_audio: bool = True
+    fade_in_seconds: float = Field(0.75, ge=0.0, le=2.0)
+    fade_out_seconds: float = Field(1.0, ge=0.0, le=5.0)
+
+
 class PodcastSettings(BaseModel):
     chunk_max_bytes: int = Field(1400, gt=100, le=5000)
     concurrency: int = Field(3, ge=1, le=10)
@@ -204,6 +216,7 @@ class PodcastSettings(BaseModel):
     default_speed: float = Field(0.90, ge=0.5, le=2.0)
     default_bgm_track: str = "mamase-podcast-bg.mp3"
     default_bgm_volume: float = Field(0.08, ge=0.0, le=1.0)
+    ending_scene: PodcastEndingSceneSettings = PodcastEndingSceneSettings()
     default_style_prompt: str = (
         "Speak smoothly with connected phrasing and a natural conversational rhythm. "
         "Avoid short choppy pauses between phrases. Keep sentence transitions fluid, "
@@ -353,6 +366,14 @@ def load_settings(path: str | Path | None = None) -> Settings:
         "PODCAST_DEFAULT_BGM_VOLUME": ("podcast", "default_bgm_volume"),
         "PODCAST_DEFAULT_STYLE_PROMPT": ("podcast", "default_style_prompt"),
         "PODCAST_DEFAULT_ENGLISH_STYLE_PROMPT": ("podcast", "default_english_style_prompt"),
+        "PODCAST_ENDING_SCENE_ENABLED": ("podcast", "ending_scene", "enabled"),
+        "PODCAST_ENDING_SCENE_IMAGE": ("podcast", "ending_scene", "image"),
+        "PODCAST_ENDING_SCENE_SONG": ("podcast", "ending_scene", "song"),
+        "PODCAST_ENDING_SCENE_APPLY_TO_THAI_VIDEO": ("podcast", "ending_scene", "apply_to_thai_video"),
+        "PODCAST_ENDING_SCENE_APPLY_TO_ENGLISH_AUDIO": ("podcast", "ending_scene", "apply_to_english_audio"),
+        "AUTOCLIP_PODCAST_ENDING_SCENE_ENABLED": ("podcast", "ending_scene", "enabled"),
+        "AUTOCLIP_PODCAST_ENDING_SCENE_IMAGE": ("podcast", "ending_scene", "image"),
+        "AUTOCLIP_PODCAST_ENDING_SCENE_SONG": ("podcast", "ending_scene", "song"),
         "AUTOCLIP_PODCAST_CHUNK_MAX_BYTES": ("podcast", "chunk_max_bytes"),
         "AUTOCLIP_PODCAST_CONCURRENCY": ("podcast", "concurrency"),
         "AUTOCLIP_PODCAST_MAX_RETRIES": ("podcast", "max_retries"),

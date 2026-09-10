@@ -12,7 +12,7 @@ from PIL import Image
 from app.config.settings import Settings
 from app.domain.errors import AppError
 from app.infrastructure.ffmpeg import FfmpegRunner, FfprobeRunner, build_ffmpeg_metadata_args
-from app.services.podcast_audio_mix import build_podcast_audio_mix_filter
+from app.services.podcast_audio_mix import build_podcast_audio_mix_filter, build_podcast_ending_filter
 
 logger = logging.getLogger("autoclip.podcast.video")
 
@@ -175,6 +175,9 @@ class PodcastVideoRenderer:
         subtitle_path: Path | None = None,
         bgm_path: Path | None = None,
         bgm_volume: float = 0.08,
+        ending_song_path: Path | None = None,
+        ending_song_duration: float = 0.0,
+        ending_image_path: Path | None = None,
         focus: str = "center",
         log_callback: Callable[[str, str, bool], None] | None = None,
         title: str = "",
@@ -218,7 +221,11 @@ class PodcastVideoRenderer:
                     f"Outline={ass_outline:.2f},Shadow=0.5,Alignment=2,MarginV={ass_margin_v},"
                     f"MarginL={ass_safe_margin},MarginR={ass_safe_margin}"
                 ).replace(",", r"\,")
-                vf_filters.append(f"subtitles={escaped}:original_size=1920x1080:charenc=UTF-8:force_style={style}")
+                subtitle_filter = f"subtitles={escaped}:original_size=1920x1080:charenc=UTF-8:force_style={style}"
+                if ending_song_path is not None and ending_image_path is not None:
+                    transition = min(self.settings.podcast.ending_scene.fade_in_seconds, total_duration, ending_song_duration)
+                    subtitle_filter += f":enable='lt(t,{max(0.0, total_duration - transition):.3f})'"
+                vf_filters.append(subtitle_filter)
                 if log_callback:
                     log_callback("INFO", "กำลังฝัง Subtitle ภาษาไทยลงในวิดีโอ", False)
             else:
@@ -236,17 +243,44 @@ class PodcastVideoRenderer:
         meta_args = build_ffmpeg_metadata_args(title=title, description=description, artist="Mamase (จักรวาลของใจ)")
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
+        has_ending = ending_song_path is not None and ending_image_path is not None
+        final_duration = total_duration + (ending_song_duration if has_ending else 0.0)
+        visual_filter: str | None = None
+        video_map = "0:v"
+        if has_ending:
+            visual_fade = min(self.settings.podcast.ending_scene.fade_in_seconds, total_duration, ending_song_duration)
+            visual_out_fade = min(self.settings.podcast.ending_scene.fade_out_seconds, ending_song_duration)
+            ending_image_input = 3 if not (bgm_path and bgm_path.is_file()) else 4
+            end_fade_start = max(0.0, ending_song_duration + visual_fade - visual_out_fade)
+            visual_filter = (
+                f"[0:v]{vf_str},trim=duration={total_duration:.3f},setpts=PTS-STARTPTS[episode];"
+                f"[{ending_image_input}:v]scale=1920:1080:force_original_aspect_ratio=decrease,"
+                f"pad=1920:1080:(ow-iw)/2:(oh-ih)/2:black,fps=30,format=yuv420p,"
+                f"fade=t=out:st={end_fade_start:.3f}:d={visual_out_fade:.3f},setpts=PTS-STARTPTS[endcard];"
+                f"[episode][endcard]xfade=transition=fade:duration={visual_fade:.3f}:offset={total_duration - visual_fade:.3f}[vout]"
+            )
+            video_map = "[vout]"
         if bgm_path and bgm_path.is_file():
             if log_callback:
                 log_callback("INFO", f"กำลังผสม Background Music (ระดับเสียง {bgm_volume:.2f}) พร้อม Sidechain Ducking", False)
             inputs.extend(["-stream_loop", "-1", "-i", str(bgm_path)])
-            audio_filter = build_podcast_audio_mix_filter(1, 2, total_duration, bgm_volume)
+            if has_ending:
+                inputs.extend(["-i", str(ending_song_path)])
+                inputs.extend(["-loop", "1", "-t", f"{ending_song_duration + visual_fade:.3f}", "-i", str(ending_image_path)])
+                audio_filter = build_podcast_audio_mix_filter(1, 2, total_duration, bgm_volume, output_label="main")
+                audio_filter += ";" + build_podcast_ending_filter(
+                    "main", 3, ending_song_duration,
+                    fade_in_seconds=self.settings.podcast.ending_scene.fade_in_seconds,
+                    fade_out_seconds=self.settings.podcast.ending_scene.fade_out_seconds,
+                )
+            else:
+                audio_filter = build_podcast_audio_mix_filter(1, 2, total_duration, bgm_volume)
             cmd = [
                 *inputs,
-                "-t", f"{total_duration:.3f}",
-                "-vf", vf_str,
-                "-filter_complex", audio_filter,
-                "-map", "0:v",
+                "-t", f"{final_duration:.3f}",
+                *([] if visual_filter else ["-vf", vf_str]),
+                "-filter_complex", (visual_filter + ";" + audio_filter) if visual_filter else audio_filter,
+                "-map", video_map,
                 "-map", "[a]",
                 *meta_args,
                 "-c:v", "libx264",
@@ -265,14 +299,27 @@ class PodcastVideoRenderer:
         else:
             if log_callback:
                 log_callback("INFO", "กำลังปรับระดับความดังของเสียงบรรยาย (Loudness normalization)", False)
-            audio_filter = "volume=1.0,loudnorm=I=-16:LRA=11:TP=-1.5"
+            if has_ending:
+                inputs.extend(["-i", str(ending_song_path)])
+                inputs.extend(["-loop", "1", "-t", f"{ending_song_duration + visual_fade:.3f}", "-i", str(ending_image_path)])
+                audio_filter = (
+                    "[1:a]volume=1.0,loudnorm=I=-16:LRA=11:TP=-1.5[main];"
+                    + build_podcast_ending_filter(
+                        "main", 2, ending_song_duration,
+                        fade_in_seconds=self.settings.podcast.ending_scene.fade_in_seconds,
+                        fade_out_seconds=self.settings.podcast.ending_scene.fade_out_seconds,
+                    )
+                )
+                audio_args = ["-filter_complex", visual_filter + ";" + audio_filter, "-map", "[a]"]
+            else:
+                audio_filter = "volume=1.0,loudnorm=I=-16:LRA=11:TP=-1.5"
+                audio_args = ["-af", audio_filter, "-map", "1:a"]
             cmd = [
                 *inputs,
-                "-t", f"{total_duration:.3f}",
-                "-vf", vf_str,
-                "-af", audio_filter,
-                "-map", "0:v",
-                "-map", "1:a",
+                "-t", f"{final_duration:.3f}",
+                *([] if visual_filter else ["-vf", vf_str]),
+                "-map", video_map,
+                *audio_args,
                 *meta_args,
                 "-c:v", "libx264",
                 "-preset", "veryfast",
@@ -289,12 +336,12 @@ class PodcastVideoRenderer:
             ]
 
         # Execute final composition
-        timeout_sec = max(900, int(total_duration * 2) + 180)
+        timeout_sec = max(900, int(final_duration * 2) + 180)
         self.ffmpeg.run(cmd, "PODCAST_RENDER_FAILED", timeout_seconds=timeout_sec)
 
         elapsed = round(time.monotonic() - started_at, 2)
         if log_callback:
             log_callback("SUCCESS", f"สร้าง YouTube Podcast สำเร็จ (ขนาด {round(output_path.stat().st_size / (1024*1024), 2)} MB ใน {elapsed}s)", False)
-            log_callback("TECHNICAL", f"event=podcast_rendered job_id={job_id} duration={total_duration}s elapsed={elapsed}s bytes={output_path.stat().st_size}", True)
+            log_callback("TECHNICAL", f"event=podcast_rendered job_id={job_id} narration_duration={total_duration}s final_duration={final_duration}s elapsed={elapsed}s bytes={output_path.stat().st_size}", True)
 
         return output_path

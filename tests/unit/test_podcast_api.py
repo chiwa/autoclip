@@ -40,6 +40,23 @@ def test_podcast_settings_defaults():
     assert "connected phrasing" in settings.podcast.default_style_prompt
     assert "Avoid short choppy pauses" in settings.podcast.default_style_prompt
     assert settings.podcast.default_english_style_prompt == settings.podcast.default_style_prompt
+    assert settings.podcast.ending_scene.enabled is True
+    assert settings.podcast.ending_scene.apply_to_thai_video is True
+    assert settings.podcast.ending_scene.apply_to_english_audio is True
+    assert settings.podcast.ending_scene.image.name == "end-of-scence.png"
+    assert settings.podcast.ending_scene.song.name == "end-scence-song.mp3"
+
+
+def test_podcast_ending_song_reads_environment(monkeypatch, tmp_path):
+    from app.config.settings import load_settings
+
+    config = tmp_path / "config.yaml"
+    config.write_text("{}", encoding="utf-8")
+    monkeypatch.setenv("PODCAST_ENDING_SCENE_ENABLED", "false")
+    monkeypatch.setenv("PODCAST_ENDING_SCENE_SONG", "/tmp/custom-ending.mp3")
+    settings = load_settings(config)
+    assert settings.podcast.ending_scene.enabled is False
+    assert str(settings.podcast.ending_scene.song) == "/tmp/custom-ending.mp3"
 
 
 def test_podcast_preview_audio(tmp_path):

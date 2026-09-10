@@ -271,3 +271,34 @@ def test_create_alternate_track_without_bgm_keeps_aligned_narration(tmp_path):
 
     assert output.is_file()
     assert abs(duration - 1.0) <= 0.1
+
+
+def test_create_alternate_track_appends_complete_ending_after_duration_matching(tmp_path):
+    service = PodcastAudioService(FfmpegRunner(), FfprobeRunner(), Settings())
+    narration = tmp_path / "narration.wav"
+    ending = tmp_path / "ending.wav"
+    output = tmp_path / "podcast-en.wav"
+    _make_tone(service.ffmpeg, narration, 0.6)
+    _make_tone(service.ffmpeg, ending, 0.45)
+
+    _, duration = service.create_alternate_track(
+        narration,
+        output,
+        1.0,
+        ending_song_path=ending,
+        ending_song_duration=service.ffprobe.duration(ending),
+    )
+
+    assert abs(duration - 1.45) <= 0.12
+    assert service.ffprobe.duration(output) > 1.35
+
+
+def test_create_alternate_track_disabled_keeps_previous_duration(tmp_path):
+    service = PodcastAudioService(FfmpegRunner(), FfprobeRunner(), Settings())
+    narration = tmp_path / "narration.wav"
+    output = tmp_path / "podcast-en.wav"
+    _make_tone(service.ffmpeg, narration, 0.6)
+
+    _, duration = service.create_alternate_track(narration, output, 1.0)
+
+    assert abs(duration - 1.0) <= 0.1

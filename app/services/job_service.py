@@ -31,6 +31,7 @@ from app.services.podcast_chunker import PodcastChunker
 from app.services.podcast_audio_service import PodcastAudioService
 from app.services.podcast_subtitle_service import PodcastSubtitleService
 from app.services.podcast_video_renderer import PodcastVideoRenderer
+from app.services.podcast_ending_song import resolve_podcast_ending_scene
 
 logger = logging.getLogger("autoclip.jobs")
 SUPPORTED_RENDER_ENGINES = {"ffmpeg_motion", "wan2.2", "ltx"}
@@ -303,6 +304,7 @@ class JobService:
                     "hashtags": hashtags or "",
                     "enableSubtitles": enable_subtitles,
                     "focus": selected_focus,
+                    "endingSceneEnabled": self.settings.podcast.ending_scene.enabled,
                 },
                 ensure_ascii=False,
                 indent=2,
@@ -783,6 +785,12 @@ class JobService:
             self._progress(job_id, JobStatus.VALIDATING, 5, "เตรียมบท Podcast")
             self._log(job_id, "INFO", "เตรียมบท Podcast")
 
+            ending_image_path, ending_song_path, ending_song_duration = resolve_podcast_ending_scene(self.settings, self.ffprobe)
+            thai_ending = bool(ending_song_path and self.settings.podcast.ending_scene.apply_to_thai_video)
+            english_ending = bool(ending_song_path and self.settings.podcast.ending_scene.apply_to_english_audio)
+            if ending_song_path:
+                self._log(job_id, "INFO", f"ตรวจพบ Mamase Ending Theme ({ending_song_duration:.2f} วินาที)")
+
             # 1. Chunking
             chunks = PodcastChunker.chunk(script_text, max_bytes=self.settings.podcast.chunk_max_bytes)
             if not chunks:
@@ -921,6 +929,9 @@ class JobService:
                 subtitle_path=srt_path,
                 bgm_path=resolved_bgm,
                 bgm_volume=bgm_volume,
+                ending_song_path=ending_song_path if thai_ending else None,
+                ending_song_duration=ending_song_duration if thai_ending else 0.0,
+                ending_image_path=ending_image_path if thai_ending else None,
                 focus=focus,
                 log_callback=audio_log,
                 title=title,
@@ -945,9 +956,11 @@ class JobService:
                     _, english_duration = audio_service.create_alternate_track(
                         raw_english_audio,
                         english_audio_path,
-                        video_duration,
+                        total_dur,
                         bgm_path=resolved_bgm,
                         bgm_volume=bgm_volume,
+                        ending_song_path=ending_song_path if english_ending else None,
+                        ending_song_duration=ending_song_duration if english_ending else 0.0,
                     )
                     english_audio_metadata = {
                         "requested": True,
@@ -960,6 +973,8 @@ class JobService:
                         "bgmIncluded": bool(resolved_bgm and resolved_bgm.is_file()),
                         "bgmTrack": bgm_track,
                         "bgmVolume": bgm_volume,
+                        "narrationDurationSeconds": round(total_dur, 3),
+                        "endingSongIncluded": english_ending,
                     }
                     self._log(job_id, "SUCCESS", "English WAV พร้อมดาวน์โหลดแล้ว")
                 except AppError as exc:
@@ -988,6 +1003,14 @@ class JobService:
             metadata = {
                 "projectTitle": title,
                 "durationSeconds": round(video_duration, 3),
+                "narrationDurationSeconds": round(total_dur, 3),
+                "endingSong": {
+                    "enabled": bool(ending_song_path),
+                    "file": ending_song_path.name if ending_song_path else None,
+                    "durationSeconds": round(ending_song_duration, 3) if ending_song_path else 0,
+                    "appliedToThaiVideo": thai_ending,
+                    "appliedToEnglishAudio": english_ending,
+                },
                 "resolution": f"{video_stream['width']}x{video_stream['height']}",
                 "outputFormat": "youtube",
                 "sceneCount": chunk_count,
@@ -1193,19 +1216,31 @@ class JobService:
                 output_name="english_narration_raw.wav",
                 log_callback=retry_log,
             )
-            target_duration = self.ffprobe.duration(self.final_video(job_id))
+            narration_file = workspace_root / "full_narration.wav"
+            target_duration = float(config.get("narrationDurationSeconds") or 0)
+            if target_duration <= 0 and narration_file.is_file():
+                target_duration = self.ffprobe.duration(narration_file)
+            if target_duration <= 0:
+                record = self.restore(job_id)
+                target_duration = float(((record.metadata if record else {}) or {}).get("narrationDurationSeconds") or 0)
+            if target_duration <= 0:
+                raise AppError("PODCAST_NARRATION_DURATION_MISSING", "ไม่พบความยาวบทพูดไทยสำหรับจับคู่เสียงภาษาอังกฤษ")
             custom_bgm_name = config.get("customBgmFile")
             custom_bgm = workspace_root / "source" / str(custom_bgm_name) if custom_bgm_name else None
             bgm_path = custom_bgm if custom_bgm and custom_bgm.is_file() else resolve_podcast_bgm(
                 self.settings.app.workspace,
                 bgm_track,
             )
+            _, ending_song_path, ending_song_duration = resolve_podcast_ending_scene(self.settings, self.ffprobe)
+            include_ending = bool(ending_song_path and self.settings.podcast.ending_scene.apply_to_english_audio)
             output, final_duration = service.create_alternate_track(
                 raw_audio,
                 self.english_audio(job_id),
                 target_duration,
                 bgm_path=bgm_path,
                 bgm_volume=bgm_volume,
+                ending_song_path=ending_song_path if include_ending else None,
+                ending_song_duration=ending_song_duration if include_ending else 0.0,
             )
             record = self.restore(job_id)
             metadata = dict((record.metadata if record else None) or {})
@@ -1220,6 +1255,8 @@ class JobService:
                 "bgmIncluded": bool(bgm_path and bgm_path.is_file()),
                 "bgmTrack": bgm_track,
                 "bgmVolume": bgm_volume,
+                "narrationDurationSeconds": round(target_duration, 3),
+                "endingSongIncluded": include_ending,
             }
             self.registry.set_metadata(job_id, metadata)
             if self.persistence:

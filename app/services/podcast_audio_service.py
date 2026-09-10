@@ -14,7 +14,7 @@ from app.config.settings import Settings
 from app.domain.errors import AppError
 from app.infrastructure.ffmpeg import FfmpegRunner, FfprobeRunner
 from app.infrastructure.tts.providers import TtsProvider
-from app.services.podcast_audio_mix import build_podcast_audio_mix_filter
+from app.services.podcast_audio_mix import build_podcast_audio_mix_filter, build_podcast_ending_filter
 
 logger = logging.getLogger("autoclip.podcast.audio")
 
@@ -99,6 +99,8 @@ class PodcastAudioService:
         target_duration: float,
         bgm_path: Path | None = None,
         bgm_volume: float = 0.08,
+        ending_song_path: Path | None = None,
+        ending_song_duration: float = 0.0,
     ) -> tuple[Path, float]:
         """Align narration and create the final WAV alternate track.
 
@@ -109,8 +111,10 @@ class PodcastAudioService:
         output_audio.parent.mkdir(parents=True, exist_ok=True)
         aligned_audio = output_audio.with_name(f".{output_audio.stem}.aligned.tmp.wav")
         mixed_audio = output_audio.with_name(f".{output_audio.stem}.mixed.tmp.wav")
+        final_audio = output_audio.with_name(f".{output_audio.stem}.final.tmp.wav")
         aligned_audio.unlink(missing_ok=True)
         mixed_audio.unlink(missing_ok=True)
+        final_audio.unlink(missing_ok=True)
         try:
             self.conform_to_video_duration(input_audio, aligned_audio, target_duration)
             if bgm_path and bgm_path.is_file():
@@ -133,17 +137,40 @@ class PodcastAudioService:
             else:
                 aligned_audio.replace(mixed_audio)
 
-            final_duration = self.ffprobe.duration(mixed_audio)
-            if abs(final_duration - target_duration) > 0.1:
+            narration_duration = self.ffprobe.duration(mixed_audio)
+            if abs(narration_duration - target_duration) > 0.1:
                 raise AppError(
                     "ENGLISH_AUDIO_MIX_FAILED",
                     "ผสมเสียงภาษาอังกฤษกับเพลงประกอบไม่สำเร็จ",
                 )
-            mixed_audio.replace(output_audio)
+            expected_duration = target_duration
+            if ending_song_path is not None:
+                ending_filter = build_podcast_ending_filter(
+                    "0:a", 1, ending_song_duration,
+                    fade_in_seconds=self.settings.podcast.ending_scene.fade_in_seconds,
+                    fade_out_seconds=self.settings.podcast.ending_scene.fade_out_seconds,
+                )
+                self.ffmpeg.run(
+                    [
+                        "-y", "-i", str(mixed_audio), "-i", str(ending_song_path),
+                        "-filter_complex", ending_filter, "-map", "[a]",
+                        "-c:a", "pcm_s16le", "-ar", "48000", "-ac", "2", str(final_audio),
+                    ],
+                    "ENGLISH_AUDIO_ENDING_SONG_FAILED",
+                )
+                expected_duration += ending_song_duration
+                final_audio.replace(output_audio)
+            else:
+                mixed_audio.replace(output_audio)
+            final_duration = self.ffprobe.duration(output_audio)
+            if abs(final_duration - expected_duration) > 0.15:
+                output_audio.unlink(missing_ok=True)
+                raise AppError("ENGLISH_AUDIO_ENDING_SONG_FAILED", "ต่อเพลงจบเข้ากับเสียงภาษาอังกฤษไม่สำเร็จ")
             return output_audio, final_duration
         finally:
             aligned_audio.unlink(missing_ok=True)
             mixed_audio.unlink(missing_ok=True)
+            final_audio.unlink(missing_ok=True)
 
     @staticmethod
     def _text_hash(text: str, style_prompt: str | None = None) -> str:

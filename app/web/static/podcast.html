@@ -173,7 +173,7 @@
           <span class="eyebrow">YOUTUBE VISUAL PODCAST</span>
           <h1>เปลี่ยนเรื่องเล่ายาวเป็น Visual Podcast 16:9</h1>
           <p class="muted">
-            สร้างวิดีโอ YouTube แนวนอน Full HD (1920×1080, 30 FPS) จากภาพปก 1 ภาพและบทพูดยาว พร้อมเสียงบรรยาย Google Gemini (Enceladus Bedtime Tone), BGM คลอเบาๆ, ซับไตเติล และ Breathing Motion อัตโนมัติ
+            สร้างวิดีโอ YouTube แนวนอน Full HD (1920×1080, 30 FPS) จากภาพปก 1 ภาพและบทพูดยาว พร้อมเสียงบรรยาย Google Gemini (Iapetus), BGM คลอเบาๆ, ซับไตเติล และ Breathing Motion อัตโนมัติ
           </p>
         </div>
         <div class="hero-logo-badge">
@@ -262,16 +262,16 @@
       <!-- Section 2: เสียงบรรยาย (TTS Settings) -->
       <section class="workspace-section">
         <h2>2. เสียงบรรยาย (Google Gemini TTS)</h2>
-        <p class="muted">ใช้เสียง Google Gemini Enceladus พร้อม Podcast Bedtime Style Prompt เป็นค่าเริ่มต้น</p>
+        <p class="muted">ใช้เสียง Google Gemini Iapetus พร้อมสไตล์พูดลื่นไหลและเชื่อมประโยคอย่างเป็นธรรมชาติเป็นค่าเริ่มต้น</p>
 
         <label for="podcastVoice">เสียงผู้บรรยาย</label>
         <select id="podcastVoice">
           <optgroup label="เสียงผู้ชาย (Male)">
-            <option value="Enceladus" selected>Enceladus (แนะนำ · ค่าเริ่มต้น Podcast — นุ่ม อบอุ่น ฟังสบาย)</option>
+            <option value="Enceladus">Enceladus (นุ่ม อบอุ่น ฟังสบาย)</option>
             <option value="Fenrir">Fenrir (Mamase Reel default · มีชีวิตชีวา ขี้เล่น)</option>
             <option value="Alnilam">Alnilam</option>
             <option value="Charon">Charon</option>
-            <option value="Iapetus">Iapetus</option>
+            <option value="Iapetus" selected>Iapetus (แนะนำ · ค่าเริ่มต้น Podcast — พูดลื่นไหล)</option>
             <option value="Orus">Orus</option>
           </optgroup>
           <optgroup label="เสียงผู้หญิง (Female)">
@@ -287,8 +287,8 @@
           </optgroup>
         </select>
 
-        <label for="podcastSpeed">ความเร็วเสียง (Speed) <output id="podcastSpeedValue">1.10</output></label>
-        <input id="podcastSpeed" type="range" min="0.5" max="2.0" step="0.05" value="1.0">
+        <label for="podcastSpeed">ความเร็วเสียง (Speed) <output id="podcastSpeedValue">0.90</output></label>
+        <input id="podcastSpeed" type="range" min="0.5" max="2.0" step="0.05" value="0.90">
 
         <div class="script-tabs" role="tablist" aria-label="ภาษาของ Style Prompt">
           <button id="tabThaiStyle" class="script-tab active" type="button" role="tab" aria-selected="true" aria-controls="panelThaiStyle">Thai Style</button>
@@ -304,6 +304,8 @@
         </div>
 
         <div class="tts-preview-controls">
+          <button id="btnSavePodcastDefaults" type="button" class="button">บันทึกค่าปัจจุบันเป็นค่าเริ่มต้น</button>
+          <button id="btnRestorePodcastDefaults" type="button" class="secondary">คืนค่าระบบ</button>
           <button id="btnResetPodcastStyle" type="button" class="secondary">คืนค่า Thai Style</button>
           <button id="btnResetEnglishPodcastStyle" type="button" class="secondary">Reset English Style</button>
           <button id="btnPreviewAudio" type="button" class="secondary">ฟังตัวอย่างภาษาไทย</button>

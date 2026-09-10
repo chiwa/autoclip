@@ -83,8 +83,8 @@ def preview_background_music(request: Request) -> FileResponse:
 def podcast_preview_audio(
     request: Request,
     text: str | None = Form(None),
-    voice: str = Form("Enceladus"),
-    speed: float = Form(1.10),
+    voice: str = Form("Iapetus"),
+    speed: float = Form(0.90),
     style_prompt: str | None = Form(None),
     language: str = Form("th-TH"),
 ) -> FileResponse:
@@ -156,7 +156,7 @@ def create_podcast_job(
     voice: str = Form("Enceladus"),
     description: str = Form(""),
     hashtags: str = Form(""),
-    speed: float = Form(1.10),
+    speed: float = Form(0.90),
     style_prompt: str | None = Form(None),
     english_style_prompt: str | None = Form(None),
     enable_subtitles: bool = Form(True),

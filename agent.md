@@ -813,8 +813,12 @@ Imaginable hook → everyday scale comparison → surprising reveal
 - YouTube Podcast Generator (`/podcast`):
   - Purpose: Long-form horizontal (16:9 1920×1080 30 FPS) visual podcast from a
     single cover image and long Thai script without requiring a ZIP package.
-  - Defaults: Voice `Enceladus` (warm bedtime tone), speed `1.10`, bedtime
-    storytelling style prompt, BGM volume `0.08` (8%), subtitles enabled.
+  - Defaults: Voice `Iapetus`, speed `0.90`, connected conversational phrasing
+    with brief pauses only at punctuation/topic changes, BGM volume `0.08`
+    (8%), subtitles enabled.
+  - The Podcast UI can persist the current voice, speed, and Thai/English style
+    prompts as browser-local defaults, with an explicit restore-system-defaults
+    action. This must not change Reel/Generate defaults.
   - Script chunking: `PodcastChunker` splits by paragraph, sentence, and Thai word
     boundaries (via PyThaiNLP) to strictly remain within `AUTOCLIP_PODCAST_CHUNK_MAX_BYTES`
     (default 2,800 UTF-8 bytes).

@@ -200,37 +200,17 @@ class PodcastSettings(BaseModel):
     chunk_max_bytes: int = Field(1400, gt=100, le=5000)
     concurrency: int = Field(3, ge=1, le=10)
     max_retries: int = Field(5, ge=0, le=10)
-    default_voice: str = "Enceladus"
-    default_speed: float = Field(1.10, ge=0.5, le=2.0)
+    default_voice: str = "Iapetus"
+    default_speed: float = Field(0.90, ge=0.5, le=2.0)
     default_bgm_track: str = "space.mp3"
     default_bgm_volume: float = Field(0.08, ge=0.0, le=1.0)
     default_style_prompt: str = (
-        "Read aloud in a calm, warm, gently formal native Thai male voice with a deep, masculine, and soothing tone, suitable for a relaxing bedtime science and history podcast. "
-        "Speak in natural standard Thai with clear Thai pronunciation, natural Thai rhythm, phrasing, and intonation. The delivery should sound like a thoughtful Thai male storyteller speaking late at night, not like a translated script or a foreign-accented Thai voice. "
-        "Maintain a soft, even volume and a relaxed, unhurried pace. Speak smoothly and naturally, with gentle transitions between sentences and ideas. "
-        "Use subtle changes in pitch to keep the narration engaging without becoming energetic, dramatic, theatrical, or overly emotional. "
-        "Keep pauses natural, brief, and well placed. Do not pause excessively between short phrases or break sentences into unnatural fragments. "
-        "Read all numbers, years, dates, measurements, percentages, decimal values, and scientific quantities naturally in Thai. "
-        "Pronounce scientific terms, astronomical names, historical names, foreign proper names, technical terminology, and units clearly. When a foreign name has a commonly used Thai pronunciation, use the natural Thai pronunciation rather than forcing an English accent. "
-        "Avoid sudden emphasis, sharp changes in volume, exaggerated emotion, playful teasing, advertising language, presenter-style excitement, and news-anchor delivery. "
-        "Do not sound like a documentary trailer. Do not sound overly solemn or ceremonial. Keep the narration intimate, intelligent, reassuring, and conversational. "
-        "The overall experience should feel peaceful, warm, thoughtful, cinematic, and comfortable enough for the listener to gradually fall asleep."
+        "Speak smoothly with connected phrasing and a natural conversational rhythm. "
+        "Avoid short choppy pauses between phrases. Keep sentence transitions fluid, "
+        "with gentle pacing and subtle emphasis. Use brief natural pauses only at "
+        "punctuation or topic changes."
     )
-    default_english_style_prompt: str = (
-        "Read aloud in a calm, warm, gently formal native English male voice with a deep, masculine, and soothing tone, suitable for a relaxing bedtime science and history podcast. "
-        "Speak in natural, fluent English with clear native English pronunciation, rhythm, stress, phrasing, and intonation. Do not use Thai pronunciation patterns, Thai sentence rhythm, or a Thai accent. "
-        "The delivery should sound like a thoughtful English-speaking male storyteller guiding the listener through a fascinating subject late at night. Keep the voice intimate, intelligent, reassuring, and natural rather than theatrical. "
-        "Maintain a soft, even volume and a relaxed, unhurried pace. Speak smoothly, with gentle transitions between sentences and ideas. "
-        "Use subtle changes in pitch and emphasis to maintain interest without becoming energetic, dramatic, emotional, or overly expressive. "
-        "Keep pauses natural, brief, and well placed. Do not pause excessively between short phrases, and do not break sentences into unnatural fragments. "
-        "Read all numbers, years, dates, measurements, percentages, decimal values, scientific quantities, and units naturally in English. "
-        "For years, use natural spoken English where appropriate. Examples: 1986 means nineteen eighty-six; 2061 means twenty sixty-one; 1910 means nineteen ten. "
-        "For measurements and decimal values, pronounce every value fully in English. Examples: 68 kilometers per second means sixty-eight kilometers per second; 596 kilometers means five hundred ninety-six kilometers; 7.6 seconds means seven point six seconds; 0.03 means zero point zero three; 4.6 billion years means four point six billion years. "
-        "Pronounce scientific terms, astronomical names, historical names, technical terminology, and proper nouns clearly and naturally in English. "
-        "Avoid sudden emphasis, sharp changes in volume, exaggerated emotion, playful teasing, advertising language, presenter-style excitement, documentary-trailer delivery, and news-anchor delivery. "
-        "Do not sound overly formal, ceremonial, or dramatic. The narration should feel like a calm late-night conversation with an intelligent storyteller. "
-        "The overall experience should feel peaceful, warm, thoughtful, cinematic, and comfortable enough for the listener to gradually fall asleep."
-    )
+    default_english_style_prompt: str = default_style_prompt
     default_female_style_prompt: str = (
         "Read aloud in a calm, warm, and gently formal Thai voice (female speaker with a gentle, feminine, and soothing tone) suitable for a relaxing bedtime podcast. "
         "Speak smoothly and naturally, like a thoughtful female storyteller guiding the listener through a fascinating subject late at night. "

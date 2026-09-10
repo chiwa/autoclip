@@ -14,8 +14,10 @@ def test_podcast_page_route():
     assert response.status_code == 200
     assert "AutoClip · สร้าง YouTube Podcast" in response.text
     assert "podcastForm" in response.text
-    assert "Enceladus" in response.text
-    assert "1.10" in response.text
+    assert "Iapetus" in response.text
+    assert "0.90" in response.text
+    assert "btnSavePodcastDefaults" in response.text
+    assert "btnRestorePodcastDefaults" in response.text
     assert "1920×1080" in response.text
     assert "tabThaiScript" in response.text
     assert "tabEnglishScript" in response.text
@@ -28,15 +30,15 @@ def test_podcast_page_route():
 
 def test_podcast_settings_defaults():
     settings = load_settings()
-    assert settings.podcast.default_voice == "Enceladus"
-    assert settings.podcast.default_speed == 1.1
+    assert settings.podcast.default_voice == "Iapetus"
+    assert settings.podcast.default_speed == 0.9
     assert settings.podcast.chunk_max_bytes == 1400
     assert settings.podcast.concurrency == 3
     assert settings.podcast.max_retries == 5
     assert settings.podcast.default_bgm_volume == 0.08
-    assert "calm, warm, gently formal native Thai male voice" in settings.podcast.default_style_prompt
-    assert "natural standard Thai" in settings.podcast.default_style_prompt
-    assert "native English pronunciation" in settings.podcast.default_english_style_prompt
+    assert "connected phrasing" in settings.podcast.default_style_prompt
+    assert "Avoid short choppy pauses" in settings.podcast.default_style_prompt
+    assert settings.podcast.default_english_style_prompt == settings.podcast.default_style_prompt
 
 
 def test_podcast_preview_audio(tmp_path):

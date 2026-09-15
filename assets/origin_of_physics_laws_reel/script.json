@@ -1,0 +1,78 @@
+{
+  "project": {
+    "id": "mamase-origin-of-physics-laws-reel-v1",
+    "title": "ทำไมจักรวาลถึงมีกฎ? แล้วใครกำหนดกฎฟิสิกส์เหล่านี้?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.05,
+    "language": "th-TH",
+    "style_prompt": "Read aloud in a natural, curious, thought-provoking conversational Thai voice. Sound relaxed, confident, and deeply intriguing, like casually unraveling profound mysteries of the universe with a close friend. Keep the delivery spontaneous, human, and engaging — never formal, lecture-like, or robotic. Add subtle pauses before deep realizations. Pace should be medium to energetic, crisp and clear."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ทำไมจักรวาลที่ใหญ่จนแทบจินตนาการไม่ออก ถึงดูเหมือนยอมทำตามกฎฟิสิกส์ชุดเดียวกัน?",
+      "tts_text": "ทำไมจักรวาลที่ใหญ่จนแทบจินตนาการไม่ออก ถึงดูเหมือนยอมทำตามกฎฟิสิกส์ชุดเดียวกัน?",
+      "subtitle": "ทำไมจักรวาลที่กว้างใหญ่ไพศาล\nถึงยอมทำตาม กฎฟิสิกส์ชุดเดียวกัน?",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-02-distant-galaxies-physics",
+      "image": "images/scene-02-distant-galaxies-physics.png",
+      "narration": "แสงจากกาแล็กซีที่อยู่ห่างออกไปหลายพันล้านปีแสง ยังดูเหมือนทำงานตามฟิสิกส์แบบเดียวกับในห้องทดลองบนโลก",
+      "tts_text": "แสงจากกาแล็กซีที่อยู่ห่างออกไปหลายพันล้านปีแสง ยังดูเหมือนทำงานตามฟิสิกส์แบบเดียวกับในห้องทดลองบนโลก",
+      "subtitle": "แสงจากกาแล็กซีห่างไกลหลายพันล้านปีแสง\nยังทำงานตามฟิสิกส์แบบเดียวกับบนโลก",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-cosmic-forge-constants",
+      "image": "images/scene-03-cosmic-forge-constants.png",
+      "narration": "และค่าคงที่พื้นฐานบางตัวก็มีค่าที่เฉพาะเจาะจงอย่างน่าประหลาด ถ้าความแรงของแรงบางชนิดเปลี่ยนไป กระบวนการสร้างธาตุภายในดาวอาจเปลี่ยนไปอย่างมหาศาล",
+      "tts_text": "และค่าคงที่พื้นฐานบางตัวก็มีค่าที่เฉพาะเจาะจงอย่างน่าประหลาด ถ้าความแรงของแรงบางชนิดเปลี่ยนไป กระบวนการสร้างธาตุภายในดาวอาจเปลี่ยนไปอย่างมหาศาล",
+      "subtitle": "ค่าคงที่พื้นฐานของธรรมชาติ\nหากเปลี่ยนไปเพียงนิด ดาวอาจหลอมธาตุไม่ได้เลย",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-04-multiverse-anthropic",
+      "image": "images/scene-04-multiverse-anthropic.png",
+      "narration": "แล้วทำไมค่าพวกนี้ถึงเป็นแบบนี้? บางแนวคิดเสนอว่าอาจมีพหุภพมากมาย ที่มีกฎหรือค่าคงที่ต่างกัน และเราบังเอิญอยู่ในจักรวาลที่เอื้อต่อการเกิดผู้สังเกตอย่างเรา",
+      "tts_text": "แล้วทำไมค่าพวกนี้ถึงเป็นแบบนี้? บางแนวคิดเสนอว่าอาจมีพหุภพมากมาย ที่มีกฎหรือค่าคงที่ต่างกัน และเราบังเอิญอยู่ในจักรวาลที่เอื้อต่อการเกิดผู้สังเกตอย่างเรา",
+      "subtitle": "หรือมีพหุภพมากมายนับไม่ถ้วน?\nและเราบังเอิญอยู่ในจักรวาลที่เอื้อต่อชีวิต",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-05-inevitable-geometry-cta",
+      "image": "images/scene-05-inevitable-geometry-cta.png",
+      "narration": "แต่อีกแนวคิดหนึ่งถามลึกกว่านั้นว่า หรือกฎฟิสิกส์อาจเป็นโครงสร้างบางอย่างที่จักรวาลหลีกเลี่ยงไม่ได้ตั้งแต่แรก แล้วคุณคิดว่า กฎฟิสิกส์เป็นสิ่งที่จักรวาลหลีกเลี่ยงไม่ได้ หรือเป็นแค่กฎชุดหนึ่งจากความเป็นไปได้อีกนับไม่ถ้วน?",
+      "tts_text": "แต่อีกแนวคิดหนึ่งถามลึกกว่านั้นว่า หรือกฎฟิสิกส์อาจเป็นโครงสร้างบางอย่างที่จักรวาลหลีกเลี่ยงไม่ได้ตั้งแต่แรก แล้วคุณคิดว่า กฎฟิสิกส์เป็นสิ่งที่จักรวาลหลีกเลี่ยงไม่ได้ หรือเป็นแค่กฎชุดหนึ่งจากความเป็นไปได้อีกนับไม่ถ้วน?",
+      "subtitle": "แล้วคุณคิดว่า กฎฟิสิกส์คือสิ่งที่เลี่ยงไม่ได้\nหรือเป็นแค่ 1 ในความเป็นไปได้นับไม่ถ้วน?",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

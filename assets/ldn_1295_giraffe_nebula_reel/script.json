@@ -1,0 +1,182 @@
+{
+  "project": {
+    "id": "ldn-1295-giraffe-nebula-reel",
+    "title": "LDN 1295: The Giraffe Nebula — เนบิวลายีราฟยักษ์แห่งกลุ่มดาวแคสซิโอเปีย",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Clear, engaging, warm, authoritative Thai documentary presenter tone."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "สวัสดีครับทุกคน เคยเห็นยีราฟยักษ์กำลังเดินเล่นอยู่กลางอวกาศไหมครับ? ภาพล่าสุดจาก NASA APOD บันทึกเงาดำปริศนาที่ดูเหมือนยีราฟตัวมหึมาอย่างน่าทึ่ง!",
+      "tts_text": "สวัสดีครับทุกคน เคยเห็นยีราฟยักษ์กำลังเดินเล่นอยู่กลางอวกาศไหมครับ? ภาพล่าสุดจาก นาซา เอพอด บันทึกเงาดำปริศนาที่ดูเหมือนยีราฟตัวมหึมาอย่างน่าทึ่ง!",
+      "subtitle": "เนบิวลายีราฟยักษ์กลางอวกาศ!\nสัตว์ประหลาด หรือเนบิวลามืด?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Preserve the key art typography, Mamase logo, and presenter. The cosmic Giraffe Nebula LDN 1295 stretching vertically across deep space starfield. Subtle twinkling background stars, gentle volumetric dust drift, slow cinematic push.",
+        "negative_prompt": "text modification, title distortion, face distortion, flicker, jitter, sudden camera movement, watermark",
+        "seed": 12951,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-dark-silhouette",
+      "image": "images/scene-02-dark-silhouette.png",
+      "narration": "นี่คือ LDN 1295 หรือ 'เนบิวลายีราฟ' ที่ซ่อนตัวอยู่ในกลุ่มดาวแคสซิโอเปีย คอยบดบังแสงดาวเบื้องหลังจนเกิดเป็นเงาทะมึนอันลึกลับ",
+      "tts_text": "นี่คือ แอลดีเอ็น หนึ่งสองเก้าห้า หรือ เนบิวลายีราฟ ที่ซ่อนตัวอยู่ในกลุ่มดาวแคสซิโอเปีย คอยบดบังแสงดาวเบื้องหลังจนเกิดเป็นเงาทะมึนอันลึกลับ",
+      "subtitle": "LDN 1295 'เนบิวลายีราฟ'\nเงาดำลึกลับในกลุ่มดาวแคสซิโอเปีย",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Authentic astrophotography of LDN 1295 Giraffe Nebula in Cassiopeia. Dense silhouette of interstellar dust absorbing visible starlight, delicate wispy molecular clouds, slow hypnotic zoom.",
+        "negative_prompt": "text, watermark, logo, HUD, cartoon, blur, low quality",
+        "seed": 12952,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-beverly-lynds-catalog",
+      "image": "images/scene-03-beverly-lynds-catalog.png",
+      "narration": "มันถูกค้นพบและบันทึกไว้ในแคตตาล็อกเนบิวลามืด โดย เบเวอร์ลี ลินด์ส นักดาราศาสตร์หญิงระดับตำนานตั้งแต่ปี 1962",
+      "tts_text": "มันถูกค้นพบและบันทึกไว้ในแคตตาล็อกเนบิวลามืด โดย เบเวอร์ลี ลินด์ส นักดาราศาสตร์หญิงระดับตำนานตั้งแต่ปี หนึ่งเก้าหกสอง",
+      "subtitle": "บันทึกในแคตตาล็อกเนบิวลามืด\nโดย Beverly Lynds ตั้งแต่ปี 1962",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "1960s astronomical observatory lab with vintage warm red lighting. Female astronomer examining dark nebula photographic glass plates with loupe, authentic historical documentary pan.",
+        "negative_prompt": "text, numbers, watermark, logo, glitch, modern computer",
+        "seed": 12953,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-pareidolia-pattern",
+      "image": "images/scene-04-pareidolia-pattern.png",
+      "narration": "แต่ทำไมสมองเราถึงเห็นเป็นยีราฟ? วิทยาศาสตร์เรียกสิ่งนี้ว่า 'แพริโดเลีย' สัญชาตญาณเอาตัวรอดของมนุษย์ที่คอยมองหารูปร่างสัตว์ในความมืด",
+      "tts_text": "แต่ทำไมสมองเราถึงเห็นเป็นยีราฟ? วิทยาศาสตร์เรียกสิ่งนี้ว่า แพริโดเลีย สัญชาตญาณเอาตัวรอดของมนุษย์ที่คอยมองหารูปร่างสัตว์ในความมืด",
+      "subtitle": "ทำไมสมองถึงเห็นเป็นยีราฟ?\nปรากฏการณ์ 'แพริโดเลีย' ในความมืด",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Mystical cosmic pareidolia visualization. Golden cosmic dust and starlight forming an ethereal galloping animal silhouette across deep space, glowing constellation nodes, smooth slow zoom.",
+        "negative_prompt": "text, letters, words, watermark, logo, cartoonish faces",
+        "seed": 12954,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-cold-molecular-dust",
+      "image": "images/scene-05-cold-molecular-dust.png",
+      "narration": "แต่แท้จริงแล้ว เงาดำนี้ไม่ใช่ความว่างเปล่า มันคือกลุ่มก้อนฝุ่นคอสมิกและก๊าซโมเลกุลที่หนาทึบและเย็นจัดถึงติดลบสองร้อยห้าสิบองศาเซลเซียส",
+      "tts_text": "แต่แท้จริงแล้ว เงาดำนี้ไม่ใช่ความว่างเปล่า มันคือกลุ่มก้อนฝุ่นคอสมิกและก๊าซโมเลกุลที่หนาทึบและเย็นจัดถึงติดลบสองร้อยห้าสิบองศาเซลเซียส",
+      "subtitle": "แท้จริงไม่ใช่ความว่างเปล่า\nแต่คือฝุ่นและก๊าซหนาทึบ -250°C",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Deep space massive dark molecular cloud absorbing background starfield. Dense textured carbon and silicate soot pillars, freezing cosmic cold, smooth majestic push-in.",
+        "negative_prompt": "text, watermark, logo, HUD, blur, flicker",
+        "seed": 12955,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-infrared-penetration",
+      "image": "images/scene-06-infrared-penetration.png",
+      "narration": "ถ้าเราใช้กล้องโทรทรรศน์อินฟราเรดส่องทะลุม่านฝุ่นเข้าไป จะพบว่าความมืดนี้ไม่ได้เงียบงัน แต่มีแกนดาวเกิดใหม่กำลังก่อตัวอยู่ข้างใน!",
+      "tts_text": "ถ้าเราใช้กล้องโทรทรรศน์อินฟราเรดส่องทะลุม่านฝุ่นเข้าไป จะพบว่าความมืดนี้ไม่ได้เงียบงัน แต่มีแกนดาวเกิดใหม่กำลังก่อตัวอยู่ข้างใน!",
+      "subtitle": "ส่องอินฟราเรดทะลุม่านฝุ่นมืด\nพบแกนดาวเกิดใหม่ซ่อนอยู่ข้างใน!",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "James Webb Space Telescope view of protostar L1527 cosmic hourglass. Fiery orange and blue glowing gas cavities illuminated by hidden protostellar disk, slow cinematic push into the neck.",
+        "negative_prompt": "text, watermark, logo, labels, HUD, jitter",
+        "seed": 12956,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-star-nursery",
+      "image": "images/scene-07-star-nursery.png",
+      "narration": "แรงโน้มถ่วงกำลังดึงดูดฝุ่นและก๊าซให้บีบอัดตัวลงเรื่อย ๆ เพื่อรอวันจุดระเบิดฟิวชัน กำเนิดเป็นดวงอาทิตย์ดวงใหม่และระบบสุริยะในอนาคต",
+      "tts_text": "แรงโน้มถ่วงกำลังดึงดูดฝุ่นและก๊าซให้บีบอัดตัวลงเรื่อย ๆ เพื่อรอวันจุดระเบิดฟิวชัน กำเนิดเป็นดวงอาทิตย์ดวงใหม่และระบบสุริยะในอนาคต",
+      "subtitle": "แรงโน้มถ่วงบีบอัดจุดฟิวชัน\nกำเนิดดวงอาทิตย์และระบบสุริยะใหม่",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "JWST HH 211 supersonic protostellar bipolar jets piercing dark interstellar space. Brilliant shockwaves glowing in pink and blue molecular hydrogen, energetic cosmic star birth.",
+        "negative_prompt": "text, watermark, logo, bad anatomy, cartoon, wobble",
+        "seed": 12957,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-08-philosophical-climax",
+      "image": "images/scene-08-philosophical-climax.png",
+      "narration": "ในจักรวาล... ความมืดมิดไม่ได้หมายถึงจุดจบ แต่คือครรภ์มารดาอันอุดมสมบูรณ์ ที่กำลังซุ่มฟูมฟักแสงสว่างให้กับเอกภพ",
+      "tts_text": "ในจักรวาล... ความมืดมิดไม่ได้หมายถึงจุดจบ แต่คือครรภ์มารดาอันอุดมสมบูรณ์ ที่กำลังซุ่มฟูมฟักแสงสว่างให้กับเอกภพ",
+      "subtitle": "ความมืดมิดไม่ใช่จุดจบ\nแต่คือครรภ์มารดาที่ฟูมฟักแสงสว่าง",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "JWST Rho Ophiuchi star-forming cloud complex. Golden dust clouds, newborn stars with bright diffraction spikes, deep contrast between darkness and illumination, slow awe-inspiring pull out.",
+        "negative_prompt": "text, watermark, logo, jitter, blur",
+        "seed": 12958,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": false,
+      "show_subtitle": false,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.05,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

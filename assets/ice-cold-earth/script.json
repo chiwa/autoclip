@@ -1,0 +1,209 @@
+{
+  "project": {
+    "id": "mamase-ice-cold-earth-reel-v1",
+    "title": "โลกอีกใบที่อาจเย็นจนตาย? ปริศนาแฝดโลก HD 137010 b บนขอบเขตแห่งความเยือกแข็ง",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: 'เฮ้ย... จริงดิ?' Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "สวัสดีครับ ยินดีต้อนรับสู่ Mamase จักรวาลของใจ ถ้าวันหนึ่งเราค้นพบโลกอีกใบที่ขนาดเท่ากับเราเป๊ะๆ... แต่ทั้งดวงกลับเย็นยะเยือกจนแทบไร้ชีวิตล่ะ?",
+      "tts_text": "สวัสดีครับ ยินดีต้อนรับสู่ มามาเซ่ จักรวาลของใจ ถ้าวันหนึ่งเราค้นพบโลกอีกใบที่ขนาดเท่ากับเราเป๊ะๆ... แต่ทั้งดวงกลับเย็นยะเยือกจนแทบไร้ชีวิตล่ะ?",
+      "subtitle": "ถ้าเราพบโลกอีกใบ... แต่เย็นยะเยือกจนแทบไร้ชีวิต?",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "right",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Use the canonical Mamase anime presenter identity, friendly Thai male with tousled black hair, thin rectangular glasses and navy blazer, talking enthusiastically on the right side of the frame. On the left is the colossal frozen exoplanet HD 137010 b with cyan atmospheric glow and orange host star. Subtle natural head movement, expressive speaking gestures, stable composition.",
+        "negative_prompt": "extra person, extra text, watermark, logo, distorted face, distorted hands, duplicated fingers, blurry stars, flicker, jitter, sudden camera movement",
+        "seed": 13701,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-kepler-transit",
+      "image": "images/scene-02-kepler-transit.png",
+      "narration": "นี่คือการค้นพบดาวเคราะห์นอกระบบสุริยะดวงใหม่ชื่อว่า เอชดี หนึ่งสามเจ็ดศูนย์หนึ่งศูนย์ บี ผ่านการตรวจจับแสงดาวที่ริบหรี่ลงโดยกล้องเคปเลอร์",
+      "tts_text": "นี่คือการค้นพบดาวเคราะห์นอกระบบสุริยะดวงใหม่ชื่อว่า เอชดี หนึ่ง สาม เจ็ด ศูนย์ หนึ่ง ศูนย์ บี ผ่านการตรวจจับแสงดาวที่ริบหรี่ลงโดยกล้อง เคปเลอร์",
+      "subtitle": "HD 137010 b: การค้นพบโดยกล้องเคปเลอร์",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic documentary view of Kepler Space Telescope observing a distant orange dwarf star in deep space, subtle silhouette dot of exoplanet transiting across the stellar disc, gentle space drift, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 13702,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-twin-comparison",
+      "image": "images/scene-03-twin-comparison.png",
+      "narration": "มันมีขนาดใหญ่กว่าโลกของเราเพียงหนึ่งจุดศูนย์หกเท่า เรียกว่าแทบจะเป็นฝาแฝดกับโลก แต่สภาพแวดล้อมกลับแตกต่างกันคนละขั้ว",
+      "tts_text": "มันมีขนาดใหญ่กว่าโลกของเราเพียง หนึ่ง จุด ศูนย์ หก เท่า เรียกว่าแทบจะเป็นฝาแฝดกับโลก แต่สภาพแวดล้อมกลับแตกต่างกันคนละขั้ว",
+      "subtitle": "ขนาด 1.06 เท่าของโลก: แฝดเหมือนที่ต่างขั้ว",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Cinematic side-by-side scale comparison in space between vibrant blue marble Earth and pale ice-covered frozen exoplanet HD 137010 b under identical distant stellar lighting, cosmic documentary realism, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 13703,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-dim-orange-star",
+      "image": "images/scene-04-dim-orange-star.png",
+      "narration": "เพราะดาวฤกษ์แม่ของมัน เป็นดาวแคระส้มที่ส่องแสงริบหรี่ ทำให้ดาวดวงนี้ได้รับพลังงานความร้อนเพียงยี่สิบเก้าเปอร์เซ็นต์ของที่โลกได้รับเท่านั้น",
+      "tts_text": "เพราะดาวฤกษ์แม่ของมัน เป็นดาวแคระส้มที่ส่องแสงริบหรี่ ทำให้ดาวดวงนี้ได้รับพลังงานความร้อนเพียง ยี่สิบเก้า เปอร์เซ็นต์ ของที่โลกได้รับเท่านั้น",
+      "subtitle": "โคจรรอบดาวแคระส้ม: ได้รับความร้อนเพียง 29% ของโลก",
+      "motion": "pan_down",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "top",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Colossal orange dwarf star emitting soft amber rays across the dark cosmic void, partially illuminating the frozen crescent of exoplanet HD 137010 b below, dramatic cinematic space lighting, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 13704,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-deep-freeze-surface",
+      "image": "images/scene-05-deep-freeze-surface.png",
+      "narration": "หากไร้ชั้นบรรยากาศที่เหมาะสม อุณหภูมิพื้นผิวจะดิ่งฮวบลงต่ำกว่าลบเจ็ดสิบองศาเซลเซียส กลายเป็นดาวเคราะห์ก้อนน้ำแข็งมหึมาไปตลอดกาล",
+      "tts_text": "หากไร้ชั้นบรรยากาศที่เหมาะสม อุณหภูมิพื้นผิวจะดิ่งฮวบลงต่ำกว่า ลบ เจ็ดสิบ องศาเซลเซียส กลายเป็นดาวเคราะห์ก้อนน้ำแข็งมหึมาไปตลอดกาล",
+      "subtitle": "อุณหภูมิต่ำกว่า -70°C: ดาวเคราะห์น้ำแข็งนิรันดร์",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "bottom",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Ground level view of alien glacial world surface, vast cracked ice sheets and blue ice crevasses stretching to horizon, pale dim orange star rising through cold atmospheric haze, cinematic documentary, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 13705,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-habitable-zone-edge",
+      "image": "images/scene-06-habitable-zone-edge.png",
+      "narration": "แต่นักดาราศาสตร์พบว่า มันกำลังโคจรอยู่บนเส้นขอบนอกสุดของเขตเอื้อต่อการมีชีวิต หรือ แฮบิเทเบิลโซน พอดีเป๊ะ",
+      "tts_text": "แต่นักดาราศาสตร์พบว่า มันกำลังโคจรอยู่บนเส้นขอบนอกสุดของเขตเอื้อต่อการมีชีวิต หรือ แฮบิเทเบิล โซน พอดีเป๊ะ",
+      "subtitle": "โคจรบนขอบนอกสุดของ Habitable Zone พอดี",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Orbital planetary system diagram in space, glowing green and cyan habitable zone ring around central orange star, exoplanet orbiting precisely along outer boundary, smooth cosmic drift, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 13706,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-greenhouse-atmosphere",
+      "image": "images/scene-07-greenhouse-atmosphere.png",
+      "narration": "นั่นหมายความว่า ถ้ามันมีชั้นบรรยากาศเรือนกระจกที่หนาแน่นพอ ก๊าซคาร์บอนไดออกไซด์อาจช่วยกักเก็บความอบอุ่นและละลายผืนน้ำแข็งได้",
+      "tts_text": "นั่นหมายความว่า ถ้ามันมีชั้นบรรยากาศเรือนกระจกที่หนาแน่นพอ ก๊าซ คาร์บอนไดออกไซด์ อาจช่วยกักเก็บความอบอุ่นและละลายผืนน้ำแข็งได้",
+      "subtitle": "ก๊าซเรือนกระจกหนาทึบ: กุญแจกักเก็บความอบอุ่น",
+      "motion": "pan_up",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Close-up macro view of curved planetary limb with dense layered atmosphere scattering dim orange starlight into luminous golden and cyan twilight hues, cosmic science realism, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 13707,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-08-subsurface-ocean",
+      "image": "images/scene-08-subsurface-ocean.png",
+      "narration": "หรือแม้กระทั่งใต้แผ่นน้ำแข็งลึกลงไป ปล่องความร้อนใต้พิภพอาจกำลังหล่อเลี้ยงมหาสมุทรและสิ่งมีชีวิตลึกลับ แบบเดียวกับใต้ทะเลลึกของโลก",
+      "tts_text": "หรือแม้กระทั่งใต้แผ่นน้ำแข็งลึกลงไป ปล่องความร้อนใต้พิภพอาจกำลังหล่อเลี้ยงมหาสมุทรและสิ่งมีชีวิตลึกลับ แบบเดียวกับใต้ทะเลลึกของโลก",
+      "subtitle": "มหาสมุทรใต้ผืนน้ำแข็ง: โอเอซิสลึกลับแห่งความอบอุ่น",
+      "motion": "pan_up",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "bottom",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Deep underwater geothermal hydrothermal black smoker vent glowing with fiery volcanic orange heat beneath a thick subterranean glacial ice ceiling, red tube worms around mineral chimneys, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 13708,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-09-future-eyes-wonder",
+      "image": "images/scene-09-future-eyes-wonder.png",
+      "narration": "ไม่แน่ว่าในอนาคตอันใกล้ กล้องโทรทรรศน์รุ่นใหม่อย่างเจมส์เวบบ์ อาจเฉลยให้เราได้ยินว่า โลกน้ำแข็งใบนี้... มีชีวิตซ่อนอยู่จริงหรือไม่",
+      "tts_text": "ไม่แน่ว่าในอนาคตอันใกล้ กล้องโทรทรรศน์รุ่นใหม่อย่าง เจมส์ เวบบ์ อาจเฉลยให้เราได้ยินว่า โลกน้ำแข็งใบนี้... มีชีวิตซ่อนอยู่จริงหรือไม่",
+      "subtitle": "JWST และกล้องรุ่นใหม่: กำลังตามล่าร่องรอยชีวิต",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "High-end documentary composite showing ground-based astronomical observatory firing orange laser guide star into starry heavens alongside James Webb Space Telescope in space analyzing exoplanet spectra, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 13709,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-10-mamase-outro",
+      "image": "images/scene-10-mamase-outro.png",
+      "narration": "ค้นพบโลก ค้นพบใจ กับ Mamase จักรวาลของใจ",
+      "tts_text": "ค้นพบโลก ค้นพบใจ กับ มามาเซ่ จักรวาลของใจ",
+      "subtitle": "ค้นพบโลก ค้นพบใจ\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Mamase brand outro, glowing cyan orbiting planet in dark navy space, peaceful and contemplative.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, extra planet, extra stars, flicker, jitter",
+        "seed": 98,
+        "frames": 81,
+        "lip_sync": false
+      }
+    }
+  ]
+}

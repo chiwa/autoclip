@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>AutoClip · สร้าง YouTube Podcast</title>
   <link rel="icon" type="image/png" href="/static/auto-clip-logo.png">
-  <link rel="stylesheet" href="/static/style.css?v=20">
+  <link rel="stylesheet" href="/static/style.css?v=24">
   <link rel="stylesheet" href="/static/workspace.css?v=2">
   <style>
     .podcast-stats {
@@ -167,6 +167,7 @@
   </header>
 
   <form id="podcastForm">
+    <section id="channelPicker" class="tool-card"></section>
     <div class="tool-card hero-card">
       <div class="hero-header">
         <div>
@@ -411,7 +412,9 @@
   </form>
 </main>
 
-<script src="/static/nav.js"></script>
+<script src="/static/nav.js?v=4"></script>
+<script src="/static/channels.js?v=1"></script>
+<script>AutoClipChannels.mount('#channelPicker');</script>
 <script src="/static/podcast.js?v=4"></script>
 </body>
 </html>

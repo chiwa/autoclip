@@ -1,0 +1,209 @@
+{
+  "project": {
+    "id": "mamase-dragonfly-titan-reel-v1",
+    "title": "NASA กำลังส่งโดรนไป Titan — เพื่อตามหาเคมีก่อนชีวิต",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound confident, friendly, curious, and slightly cheeky, like a charismatic Thai creator casually sharing a fascinating discovery with a close friend. Keep the delivery flowing and connected, with a medium-fast pace and clear pronunciation. Use brief natural pauses only when they help comprehension. Never sound like a news presenter, announcer, advertisement, or formal narrator."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "NASA กำลังสร้างโดรนลำหนึ่งครับ แต่มันไม่ได้จะบินบนโลก เพราะปลายทางของมันคือ Titan ดวงจันทร์สีส้มของดาวเสาร์",
+      "tts_text": "นาซา กำลังสร้างโดรนลำหนึ่งครับ แต่มันไม่ได้จะบินบนโลก เพราะปลายทางของมันคือ ไททัน ดวงจันทร์สีส้มของดาวเสาร์",
+      "subtitle": "โดรนบน Titan\nตามหาเคมีก่อนชีวิต",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "right",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Canonical Mamase anime male presenter with rectangular glasses and tousled black hair, wearing a dark amber expedition jacket, face-forward and speaking naturally on Titan. Subtle head movement, blinking, gentle pointing gesture. Dragonfly octocopter hovers behind him above dark organic dunes, rotor wash moves orange haze, stable cinematic composition.",
+        "negative_prompt": "extra person, text mutation, watermark, logo, distorted face, distorted hands, duplicated fingers, malformed rotorcraft, aliens, flicker, jitter, sudden camera movement",
+        "seed": 2601,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-titan-world",
+      "image": "images/scene-02-titan-world.png",
+      "narration": "Titan มีบรรยากาศหนา มีเมฆ มีฝน มีแม่น้ำ และมีทะเลสาบจริงๆ แต่ของเหลวเหล่านั้นไม่ใช่น้ำครับ ส่วนใหญ่คือ methane และ ethane",
+      "tts_text": "ไททัน มีบรรยากาศหนา มีเมฆ มีฝน มีแม่น้ำ และมีทะเลสาบจริงจริง แต่ของเหลวเหล่านั้นไม่ใช่น้ำครับ ส่วนใหญ่คือ มีเทน และ อีเทน",
+      "subtitle": "มีเมฆ · ฝน · แม่น้ำ · ทะเลสาบ\nแต่ไม่ใช่น้ำ",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Low aerial flight above Titan's branching methane rivers and glassy hydrocarbon lake, slow forward camera glide, subtle rain curtains and moving amber haze, realistic alien landscape, smooth cinematic motion.",
+        "negative_prompt": "text, labels, logo, watermark, vegetation, blue sky, ocean waves, flicker, jitter, warped terrain, sudden motion",
+        "seed": 2602,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-flight",
+      "image": "images/scene-03-flight.png",
+      "narration": "บรรยากาศที่หนาแน่นกว่าโลก ประกอบกับแรงโน้มถ่วงที่ต่ำ ทำให้ที่นี่เหมาะกับการบินมาก และนั่นคือเหตุผลที่ NASA เลือกส่งยานแบบ rotorcraft",
+      "tts_text": "บรรยากาศที่หนาแน่นกว่าโลก ประกอบกับแรงโน้มถ่วงที่ต่ำ ทำให้ที่นี่เหมาะกับการบินมาก และนั่นคือเหตุผลที่ นาซา เลือกส่งยานแบบ โรเตอร์คราฟต์",
+      "subtitle": "อากาศหนา + แรงโน้มถ่วงต่ำ\nเหมาะกับการบิน",
+      "motion": "cinematic_push_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.15,
+      "focus": "top",
+      "transition": "smooth_left",
+      "wan": {
+        "prompt": "Scientifically credible Dragonfly octocopter flies low over Titan's dark organic dunes, all rotors spinning smoothly, rotor wash lifts amber dust, gentle camera tracking, stable aircraft geometry, cinematic orange atmosphere.",
+        "negative_prompt": "text, logo, watermark, malformed rotors, missing arms, duplicated aircraft, flicker, jitter, crash, sudden camera movement",
+        "seed": 2603,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-exploration",
+      "image": "images/scene-04-exploration.png",
+      "narration": "แทนที่จะคลานไปช้าๆ แบบรถสำรวจ Dragonfly จะบินจากพื้นที่หนึ่งไปอีกพื้นที่หนึ่ง ลงจอด แล้วเลือกจุดศึกษาที่น่าสนใจได้ไกลกว่ามาก",
+      "tts_text": "แทนที่จะคลานไปช้าช้า แบบรถสำรวจ ดรากอนฟลาย จะบินจากพื้นที่หนึ่งไปอีกพื้นที่หนึ่ง ลงจอด แล้วเลือกจุดศึกษาที่น่าสนใจได้ไกลกว่ามาก",
+      "subtitle": "บินสำรวจได้ไกลกว่า\nรถสำรวจแบบเดิม",
+      "motion": "documentary_pan",
+      "motion_speed": "normal",
+      "motion_intensity": 0.14,
+      "focus": "left",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Dragonfly lifts off from a Titan ridge and flies toward distant dunes, icy ridges and an impact basin, smooth diagonal tracking shot, dust settles below, stable cinematic landscape parallax.",
+        "negative_prompt": "text, route lines, map, logo, watermark, malformed aircraft, flicker, jitter, looping, sudden camera movement",
+        "seed": 2604,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-science",
+      "image": "images/scene-05-science.png",
+      "narration": "แต่สิ่งที่ภารกิจนี้ตามหา ไม่ใช่ตัวเอเลี่ยน และไม่ใช่หลักฐานยืนยันว่ามีชีวิตอยู่บน Titan นะครับ",
+      "tts_text": "แต่สิ่งที่ภารกิจนี้ตามหา ไม่ใช่ตัวเอเลี่ยน และไม่ใช่หลักฐานยืนยันว่ามีชีวิตอยู่บน ไททัน นะครับ",
+      "subtitle": "ไม่ได้ไปค้นหาเอเลี่ยนโดยตรง",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "fade_black",
+      "wan": {
+        "prompt": "Dragonfly stands firmly on Titan and carefully lowers its sampling drill into dark organic soil, subtle mechanical movement and drifting orange haze, restrained scientific documentary mood, stable camera.",
+        "negative_prompt": "aliens, creatures, text, logo, watermark, laser, explosion, malformed drill, flicker, jitter, sudden motion",
+        "seed": 2605,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-prebiotic-chemistry",
+      "image": "images/scene-06-prebiotic-chemistry.png",
+      "narration": "มันกำลังศึกษาเคมีก่อนกำเนิดชีวิต ว่าสารอินทรีย์ที่ซับซ้อนสามารถเปลี่ยนแปลง และเดินทางเข้าใกล้จุดเริ่มต้นของชีวิตได้แค่ไหน",
+      "tts_text": "มันกำลังศึกษาเคมีก่อนกำเนิดชีวิต ว่าสารอินทรีย์ที่ซับซ้อนสามารถเปลี่ยนแปลง และเดินทางเข้าใกล้จุดเริ่มต้นของชีวิตได้แค่ไหน",
+      "subtitle": "เคมีก่อนกำเนิดชีวิต\nเดินทางมาไกลแค่ไหน?",
+      "motion": "gentle_float",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "left",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Macro cinematic organic chemistry within Titan ice and dark grains, delicate molecular structures drift slowly among liquid droplets and amber particles, subtle depth of field, Dragonfly distant in haze, elegant scientific motion.",
+        "negative_prompt": "DNA, cells, organisms, aliens, text, symbols, labels, watermark, logo, flicker, jitter, chaotic motion",
+        "seed": 2606,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-sampling",
+      "image": "images/scene-07-sampling.png",
+      "narration": "เมื่อยานลงจอด มันจะเก็บตัวอย่างพื้นผิว แล้วใช้เครื่องมือบนยานวิเคราะห์องค์ประกอบและโมเลกุลที่ซ่อนอยู่ภายใน",
+      "tts_text": "เมื่อยานลงจอด มันจะเก็บตัวอย่างพื้นผิว แล้วใช้เครื่องมือบนยานวิเคราะห์องค์ประกอบและโมเลกุลที่ซ่อนอยู่ภายใน",
+      "subtitle": "ลงจอด · เก็บตัวอย่าง · วิเคราะห์โมเลกุล",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Extreme close-up of Dragonfly's rotary sampling drill collecting dark Titan grains into an analysis inlet, drill turns slowly, tiny grains fall naturally, subtle cable vibration and amber dust, stable macro camera.",
+        "negative_prompt": "text, labels, logo, watermark, hands, laser, broken machinery, malformed drill, flicker, jitter, sudden camera movement",
+        "seed": 2607,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-08-selk-crater",
+      "image": "images/scene-08-selk-crater.png",
+      "narration": "หนึ่งในพื้นที่สำคัญคือหลุมอุกกาบาต Selk การชนในอดีตอาจทำให้น้ำแข็งละลาย จนน้ำเหลวได้สัมผัสกับสารอินทรีย์เป็นเวลานาน",
+      "tts_text": "หนึ่งในพื้นที่สำคัญคือหลุมอุกกาบาต เซลก์ การชนในอดีตอาจทำให้น้ำแข็งละลาย จนน้ำเหลวได้สัมผัสกับสารอินทรีย์เป็นเวลานาน",
+      "subtitle": "Selk Crater\nน้ำเหลวอาจเคยสัมผัสสารอินทรีย์",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Slow cinematic flight toward Selk crater on Titan, fractured water-ice layers and dark organic material catch amber light, Dragonfly crosses above the rim for scale, gentle atmospheric haze, stable geology.",
+        "negative_prompt": "text, arrows, labels, logo, watermark, lava, explosion, aliens, warped crater, flicker, jitter, sudden motion",
+        "seed": 2608,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-09-big-question",
+      "image": "images/scene-09-big-question.png",
+      "narration": "เพราะฉะนั้น Dragonfly ไม่ได้กำลังถามว่า Titan มีสิ่งมีชีวิตไหม แต่มันกำลังถามว่า ก่อนชีวิตจะเกิดขึ้น เคมีต้องเดินทางมาไกลแค่ไหน",
+      "tts_text": "เพราะฉะนั้น ดรากอนฟลาย ไม่ได้กำลังถามว่า ไททัน มีสิ่งมีชีวิตไหม แต่มันกำลังถามว่า ก่อนชีวิตจะเกิดขึ้น เคมีต้องเดินทางมาไกลแค่ไหน",
+      "subtitle": "ก่อนชีวิตจะเกิดขึ้น\nเคมีต้องเดินทางมาไกลแค่ไหน?",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "fade_black",
+      "wan": {
+        "prompt": "Dragonfly rests on a high Titan ridge overlooking methane channels and dark dunes, subtle amber particles rise from sampled ground, haze moves slowly, quiet pull-back reveals immense alien landscape and distant Saturn glow.",
+        "negative_prompt": "aliens, life forms, DNA, text, labels, logo, watermark, fantasy city, flicker, jitter, sudden camera movement",
+        "seed": 2609,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-10-outro",
+      "image": "images/scene-10-outro.png",
+      "narration": "และบางที โลกสีส้มที่อยู่ไกลออกไปดวงนี้ อาจช่วยให้เราเข้าใจว่าชีวิตบนโลกเริ่มต้นขึ้นได้อย่างไร ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "และบางที โลกสีส้มที่อยู่ไกลออกไปดวงนี้ อาจช่วยให้เราเข้าใจว่าชีวิตบนโลกเริ่มต้นขึ้นได้อย่างไร ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Mamase brand outro, glowing cyan orbiting planet in dark navy space, peaceful and contemplative, extremely subtle slow camera push-in.",
+        "negative_prompt": "text mutation, watermark, blur, extra planet, flicker, jitter, sudden camera movement",
+        "seed": 98,
+        "frames": 81,
+        "lip_sync": false
+      }
+    }
+  ]
+}

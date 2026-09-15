@@ -1,0 +1,919 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AutoClip · Quick Reel</title>
+  <link rel="icon" type="image/png" href="/static/auto-clip-logo.png">
+  <link rel="stylesheet" href="/static/style.css?v=24">
+  <link rel="stylesheet" href="/static/workspace.css?v=2">
+  <style>
+    .qr-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 10px;
+      padding: 12px 16px;
+      background: #09111e;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      font-size: 0.88rem;
+    }
+    .qr-stats span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--soft);
+    }
+    .qr-stats strong {
+      color: var(--cyan);
+    }
+    .preview-box {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .multi-image-dropzone {
+      margin-top: 12px;
+      padding: 22px;
+      border: 2px dashed #315375;
+      border-radius: 14px;
+      background: rgba(9, 22, 38, 0.72);
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .15s ease, background .15s ease, transform .15s ease;
+    }
+    .multi-image-dropzone.is-dragging {
+      border-color: var(--cyan);
+      background: rgba(27, 74, 108, 0.45);
+      transform: translateY(-1px);
+    }
+    .image-order-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .image-order-card {
+      position: relative;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #09111e;
+      cursor: grab;
+    }
+    .image-order-card.dragging { opacity: .45; }
+    .image-order-card img {
+      width: 100%;
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #12141a;
+    }
+    .image-order-number {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      min-width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, .78);
+      color: #fff;
+      font-weight: 800;
+    }
+    .image-order-name {
+      margin: 7px 2px 5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: .78rem;
+      color: var(--soft);
+    }
+    .image-order-actions { display: flex; gap: 5px; }
+    .image-order-actions button {
+      flex: 1;
+      min-width: 0;
+      padding: 6px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #101d2d;
+      color: #fff;
+      cursor: pointer;
+    }
+    .image-preview-frame {
+      width: 270px;
+      height: 480px;
+      border-radius: 14px;
+      border: 2px solid var(--line);
+      background: #12141a;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .image-preview-frame img {
+      width: 100%;
+      height: 100%;
+    }
+    .image-preview-frame img.fit-cover {
+      object-fit: cover;
+    }
+    .image-preview-frame img.fit-contain {
+      object-fit: contain;
+    }
+    .hook-overlay-preview {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      text-align: center;
+      color: #fff;
+      font-weight: bold;
+      font-size: 1.1rem;
+      line-height: 1.3;
+      text-shadow: 0 0 6px rgba(0,0,0,0.9), 0 2px 4px rgba(0,0,0,0.9);
+      pointer-events: none;
+      word-break: break-word;
+      z-index: 2;
+    }
+    .hook-pos-top { top: 24px; }
+    .hook-pos-center { top: 45%; transform: translateY(-50%); }
+    .hook-pos-bottom { bottom: 65px; }
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 14px;
+      cursor: pointer;
+    }
+    .toggle-row input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--cyan);
+      cursor: pointer;
+    }
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .btn-choice {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #0d1624;
+      color: var(--soft);
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-align: center;
+      transition: all 0.15s ease;
+    }
+    .btn-choice.active {
+      background: #132742;
+      border-color: var(--cyan);
+      color: #fff;
+      font-weight: bold;
+    }
+    .result-container {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .video-preview-player {
+      width: 315px;
+      height: 560px;
+      border-radius: 16px;
+      background: #000;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+    .progress-box {
+      margin-top: 16px;
+      padding: 18px;
+      background: #09121f;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      text-align: center;
+    }
+    .progress-bar-wrap {
+      width: 100%;
+      height: 10px;
+      background: #152238;
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 12px 0;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #2b7fff, #00d2ff);
+      transition: width 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <a class="brand" href="/"><img class="brand-logo" src="/static/auto-clip-logo.png" alt="AutoClip Logo">AutoClip</a>
+    <nav class="app-nav">
+      <a href="/">สร้างวิดีโอ</a>
+      <a class="active" href="/quick-reel">Quick Reel</a>
+      <a href="/ai">สร้างด้วย AI</a>
+      <a href="/podcast">สร้าง Podcast</a>
+      <a href="/zodiac-weekly">🔮 ดวง 12 ราศี</a>
+      <a href="/history">History</a>
+    </nav>
+  </header>
+
+  <form id="quickReelForm">
+    <section id="channelPicker" class="tool-card"></section>
+    <div class="tool-card hero-card">
+      <div class="hero-header">
+        <div>
+          <span class="eyebrow">QUICK REEL · 9:16 VERTICAL</span>
+          <h1>หลายภาพ • เสียงเดียว • พร้อมโพสต์</h1>
+          <p class="muted">
+            อัปโหลดภาพตามลำดับที่ต้องการ ระบบจะกระจายเวลาให้เท่ากัน ใส่ Crossfade และสร้างคลิปแนวตั้ง Full HD พร้อม Gemini TTS, Hook Text และ Subtitles
+          </p>
+        </div>
+        <div class="hero-logo-badge">
+          <img src="/static/auto-clip-logo.png" alt="AutoClip Logo" class="hero-logo-img">
+        </div>
+      </div>
+
+      <!-- 0. นำเข้าข้อมูล (JSON) -->
+      <section class="workspace-section">
+        <h2>นำเข้าข้อมูล (Import JSON)</h2>
+        <p class="muted">วางโค้ด JSON เพื่อเติมชื่อคลิป, แคปชั่น และบทพูดโดยอัตโนมัติ โดย <code>tts</code> รับได้ทั้งข้อความเดียวหรือ array หลายช่วง: <code>tts[0]</code> คู่กับรูปที่ 1, <code>tts[1]</code> คู่กับรูปที่ 2 ตามลำดับ</p>
+        <textarea id="jsonImport" rows="6" placeholder='{
+  "topic": "ชื่อคลิป",
+  "description": "แคปชั่น",
+  "tts": ["บทพูดช่วงแรก", "บทพูดช่วงถัดไป"]
+}' style="font-family: monospace; font-size: 13px; line-height: 1.4; padding: 12px; border-radius: 8px; border: 1px solid rgba(140,115,255,0.4); background: rgba(0,0,0,0.3); color: #c8adff;"></textarea>
+      </section>
+
+      <!-- 1. ภาพหลัก -->
+      <section class="workspace-section">
+        <h2>1. เลือกและเรียงรูปภาพ</h2>
+        <p class="muted">รองรับ PNG, JPG, JPEG และ WebP สูงสุด 20 รูป ลำดับแรกจะยึดตามตอน Browse หรือลากมาวาง และสามารถลากการ์ดเพื่อจัดใหม่ได้</p>
+
+        <label id="imageDropzone" class="multi-image-dropzone" for="imageFile">
+          <strong>เลือกรูปภาพ หรือลากหลายรูปมาวางที่นี่</strong><br>
+          <span class="muted">ระบบจะเล่นภาพตามหมายเลขบนการ์ด</span>
+          <input id="imageFile" type="file" accept="image/png,image/jpeg,image/webp" multiple hidden>
+        </label>
+        <div id="imageInfo" class="muted">ยังไม่ได้เลือกรูปภาพ</div>
+        <div id="imageOrderList" class="image-order-list" aria-live="polite"></div>
+
+        <div style="margin-top: 14px;">
+          <label>การจัดวางภาพ (Image Fit)</label>
+          <div class="btn-group">
+            <button type="button" id="btnFitCover" class="btn-choice active" data-fit="cover">Cover (เต็มจอ ครอปกลาง)</button>
+            <button type="button" id="btnFitContain" class="btn-choice" data-fit="contain">Contain (เก็บทั้งภาพ พื้นหลังมืด)</button>
+          </div>
+        </div>
+
+        <div id="previewBox" class="preview-box" hidden>
+          <div class="image-preview-frame">
+            <img id="imgPreview" class="fit-cover" alt="Preview">
+            <div id="hookPreview" class="hook-overlay-preview hook-pos-top" hidden></div>
+          </div>
+          <span class="muted" style="font-size: 0.8rem;">ตัวอย่างภาพลำดับแรก 9:16 (1080×1920)</span>
+        </div>
+      </section>
+
+      <!-- 2. บทพูดและแคปชั่น -->
+      <section class="workspace-section">
+        <h2>2. บทพูดและแคปชั่น (Script & Caption)</h2>
+        
+        <label for="topicInput" style="margin-top:0">ชื่อคลิป (Topic / Title)</label>
+        <input id="topicInput" type="text" placeholder="ตัวอย่าง: ความลับของหลุมดำ" maxlength="100" style="width:100%; margin-bottom:14px">
+        
+        <label for="descInput">คำอธิบายคลิป (YouTube/TikTok Caption)</label>
+        <textarea id="descInput" rows="3" placeholder="ใส่แคปชั่นหรือแฮชแท็กสำหรับโพสต์ลงโซเชียล..."></textarea>
+        
+        <label for="scriptText">วางบทพูดย่อหน้าเดียว ความยาวคลิปจะยึดตามระยะเวลาของเสียงบรรยายจริงโดยตรง</label>
+        <textarea id="scriptText" rows="6" required placeholder="วางบทพูดภาษาไทยที่นี่...
+เช่น คุณรู้หรือไม่ว่า ทำไมหลุมดำถึงไม่มีวันเต็ม? ความจริงทางฟิสิกส์บอกว่า ทุกสิ่งที่ตกลงไปจะกลายเป็นส่วนหนึ่งของมวลและขยายขอบเขตฟ้าของมันออกไปเรื่อย ๆ แบบไม่มีที่สิ้นสุด"></textarea>
+
+        <div class="qr-stats">
+          <span>จำนวนตัวอักษร: <strong id="statChars">0</strong> ตัว</span>
+          <span>จำนวนคำโดยประมาณ: <strong id="statWords">0</strong> คำ</span>
+          <span>ความยาวคลิปโดยประมาณ: <strong id="statDuration">0 วินาที</strong></span>
+        </div>
+      </section>
+
+      <!-- 3. ลูกเล่นและการเคลื่อนไหว -->
+      <section class="workspace-section">
+        <h2>3. ปรับแต่งลูกเล่น (Voice, Motion, Hook &amp; Subtitle)</h2>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+          <div>
+            <label for="voiceSelect">เสียงผู้บรรยาย (Google Gemini TTS)</label>
+            <select id="voiceSelect">
+              <option value="Iapetus" selected>Iapetus (แนะนำ · เสียงคมชัด เป็นธรรมชาติ มีพลัง)</option>
+              <option value="Fenrir">Fenrir (ขี้เล่น มีชีวิตชีวา)</option>
+              <option value="Enceladus">Enceladus (นุ่ม อบอุ่น)</option>
+              <option value="Aoede">Aoede (หญิง · อบอุ่น ฟังสบาย)</option>
+            </select>
+          </div>
+          <div>
+            <label for="speedInput">ความเร็วเสียง (Speed): <output id="speedValue">1.10</output>x</label>
+            <input id="speedInput" type="range" min="0.8" max="1.5" step="0.05" value="1.10">
+          </div>
+        </div>
+
+        <label for="quickReelTtsStyle" style="margin-top:14px;">Style Prompt ของเสียง</label>
+        <textarea id="quickReelTtsStyle" rows="6">อ่านเฉพาะเนื้อหาภาษาไทยในช่อง text ให้ตรงตามต้นฉบับ เริ่มที่ประโยคแรกและหยุดทันทีหลังประโยคสุดท้าย ห้ามอ่านคำสั่งนี้ ห้ามเติมคำนำ คำส่งท้าย หรือคำชวนติดตาม ใช้น้ำเสียงผู้ชายไทยอบอุ่น มั่นใจ และเป็นธรรมชาติ เหมือนผู้เล่าเรื่องที่คุยกับผู้ฟังโดยตรง พูดเป็นวลีและประโยคที่เชื่อมต่อกันอย่างลื่นไหล ใช้จังหวะสนทนาตามธรรมชาติ ไม่ช้าและไม่รีบ ห้ามอ่านแยกทีละคำ ห้ามเว้นช่องระหว่างคำ ห้ามลากเสียง และห้ามหยุดโดยไม่มีเครื่องหมายวรรคตอน เว้นสั้น ๆ เฉพาะเมื่อจบประโยคหรือเปลี่ยนหัวข้อ รักษาความชัดเจนและน้ำหนักเสียงให้สม่ำเสมอ</textarea>
+        <div class="btn-group" style="margin-top:10px; align-items:center;">
+          <button id="btnSaveQuickReelVoice" type="button" class="btn-choice">บันทึก Voice / Speed / Style</button>
+          <button id="btnRestoreQuickReelVoice" type="button" class="btn-choice">คืนค่าระบบ</button>
+          <button id="btnPreviewQuickReelVoice" type="button" class="btn-choice">▶ ฟังเสียงตัวอย่าง</button>
+        </div>
+        <audio id="quickReelVoiceAudio" controls preload="none" hidden style="width:100%; margin-top:10px;"></audio>
+        <div id="quickReelVoiceStatus" class="muted" role="status" style="margin-top:6px;"></div>
+
+        <div style="margin-top: 14px;">
+          <label>การเคลื่อนไหวของภาพ (Visual Motion)</label>
+          <div class="btn-group">
+            <button type="button" id="btnMotionStatic" class="btn-choice active" data-motion="static">Static (ภาพนิ่ง คมชัดเต็มตา)</button>
+            <button type="button" id="btnMotionZoom" class="btn-choice" data-motion="slow_zoom">Slow Zoom (ซูมเข้าช้าๆ เนียนตา)</button>
+          </div>
+        </div>
+
+        <!-- Hook Overlay Toggle -->
+        <label class="toggle-row" for="chkHookOverlay">
+          <input id="chkHookOverlay" type="checkbox">
+          <span><strong>ใส่ข้อความ Hook Text บนภาพ</strong> (ตัวหนังสือพาดหัวใหญ่ สไตล์โซเชียล ไม่ถูกเสียงพูดอ่าน)</span>
+        </label>
+
+        <div id="hookSettingsGroup" style="margin-top: 10px;" hidden>
+          <label for="hookTextInput">ข้อความพาดหัว Hook (สั้น กระชับ ชวนหยุดดู)</label>
+          <input id="hookTextInput" type="text" maxlength="60" placeholder="เช่น หลุมดำไม่มีวันเต็มจริงหรือ?">
+
+          <label style="margin-top: 10px;">ตำแหน่งข้อความ Hook บนหน้าจอ</label>
+          <div class="btn-group">
+            <button type="button" class="btn-choice active btn-hook-pos" data-pos="top">ด้านบน (Top)</button>
+            <button type="button" class="btn-choice btn-hook-pos" data-pos="center">ตรงกลาง (Center)</button>
+            <button type="button" class="btn-choice btn-hook-pos" data-pos="bottom">ด้านล่าง (Bottom)</button>
+          </div>
+        </div>
+
+        <!-- Subtitles Toggle -->
+        <label class="toggle-row" for="chkSubtitles">
+          <input id="chkSubtitles" type="checkbox" checked>
+          <span><strong>เปิด Subtitles ซับไตเติลภาษาไทย</strong> (อ่านง่าย จัดวางกึ่งกลางล่าง)</span>
+        </label>
+      </section>
+
+      <!-- 4. ดนตรีประกอบ (BGM - Optional) -->
+      <section class="workspace-section">
+        <h2>4. ดนตรีประกอบ (BGM - Optional)</h2>
+        <p class="muted">ค่าเริ่มต้นจะปิด BGM เพื่อให้ได้เสียงบรรยายเพียวๆ ชัดเจน หากต้องการเปิด สามารถเลือกเพลงบรรยากาศได้</p>
+
+        <label class="toggle-row" for="chkBgm">
+          <input id="chkBgm" type="checkbox">
+          <span>เปิดดนตรีประกอบคลอเบาๆ (BGM)</span>
+        </label>
+
+        <div id="bgmSettingsGroup" style="margin-top: 14px;" hidden>
+          <label for="bgmTrackSelect">เลือกเพลงประกอบ (Preset Track)</label>
+          <select id="bgmTrackSelect">
+            <option value="cosmic_drift" selected>🌌 Cosmic Drift (ล่องลอยในความเงียบงัน)</option>
+            <option value="starlight_lullaby">✨ Starlight Lullaby (แสงดาวกล่อมนอน)</option>
+            <option value="mamase-podcast-bg.mp3">🎧 Mamase Ambient Tone</option>
+            <option value="space.mp3">🪐 Deep Space Ambient</option>
+          </select>
+
+          <label class="picker" for="customBgmFile" style="margin-top: 12px;">
+            หรืออัปโหลดไฟล์เพลงเอง (Custom BGM)
+            <input id="customBgmFile" type="file" accept="audio/mp3,audio/wav,audio/m4a,audio/aac">
+          </label>
+          <div id="customBgmInfo" class="muted">ยังไม่ได้เลือกเพลงของตัวเอง</div>
+
+          <label for="bgmVolume" style="margin-top: 12px;">ระดับเสียง BGM: <output id="bgmVolumeValue">0.10</output> (10%)</label>
+          <input id="bgmVolume" type="range" min="0.02" max="0.4" step="0.01" value="0.10">
+        </div>
+      </section>
+
+      <!-- 5. สร้างวิดีโอ -->
+      <section class="workspace-section">
+        <h2>5. พร้อมสร้าง Quick Reel</h2>
+        <button id="btnSubmit" type="submit" class="button generate-btn">
+          ⚡ สร้าง Quick Reel ทันที (Generate Reel)
+        </button>
+
+        <div id="progressBox" class="progress-box" hidden>
+          <h3 id="progressStatus">กำลังเตรียมข้อมูล...</h3>
+          <div class="progress-bar-wrap">
+            <div id="progressBarFill" class="progress-bar-fill"></div>
+          </div>
+          <p id="progressStep" class="muted" style="font-size: 0.85rem;">โปรดรอสักครู่ ระบบกำลังเรนเดอร์วิดีโอ</p>
+        </div>
+
+        <div id="errorBox" class="error" hidden></div>
+
+        <div id="resultBox" class="result-container" hidden>
+          <h3>🎉 Quick Reel ของคุณพร้อมแล้ว!</h3>
+          <video id="videoPlayer" class="video-preview-player" controls playsinline></video>
+          
+          <div id="resultMetaBox" style="margin: 16px 0; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid var(--line); border-radius: 8px; text-align: left;">
+             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                <h4 id="resultTitle" style="margin: 0; font-size: 14px; color: var(--cyan);"></h4>
+                <button type="button" id="btnCopyTitle" class="button small secondary">Copy Title</button>
+             </div>
+             <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <pre id="resultDesc" style="margin: 0; white-space: pre-wrap; font-size: 13px; color: var(--soft);"></pre>
+                <button type="button" id="btnCopyDesc" class="button small secondary">Copy Caption</button>
+             </div>
+          </div>
+          
+          <div class="actions">
+            <a id="btnDownload" class="button" download>⬇️ ดาวน์โหลด MP4 (1080×1920)</a>
+            <button type="button" id="btnReset" class="button secondary">🔄 สร้างคลิปใหม่อีกอัน</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </form>
+</main>
+
+<script src="/static/nav.js?v=4"></script><script src="/static/channels.js?v=1"></script>
+<script>
+(() => {
+  const form = document.querySelector('#quickReelForm');
+  const imageInput = document.querySelector('#imageFile');
+  const imageDropzone = document.querySelector('#imageDropzone');
+  const imageOrderList = document.querySelector('#imageOrderList');
+  const imageInfo = document.querySelector('#imageInfo');
+  const imgPreview = document.querySelector('#imgPreview');
+  const previewBox = document.querySelector('#previewBox');
+  const scriptInput = document.querySelector('#scriptText');
+  const statChars = document.querySelector('#statChars');
+  const statWords = document.querySelector('#statWords');
+  const statDuration = document.querySelector('#statDuration');
+  const voiceSelect = document.querySelector('#voiceSelect');
+  const speedInput = document.querySelector('#speedInput');
+  const speedValue = document.querySelector('#speedValue');
+  const quickReelTtsStyle = document.querySelector('#quickReelTtsStyle');
+  const btnSaveQuickReelVoice = document.querySelector('#btnSaveQuickReelVoice');
+  const btnRestoreQuickReelVoice = document.querySelector('#btnRestoreQuickReelVoice');
+  const btnPreviewQuickReelVoice = document.querySelector('#btnPreviewQuickReelVoice');
+  const quickReelVoiceAudio = document.querySelector('#quickReelVoiceAudio');
+  const quickReelVoiceStatus = document.querySelector('#quickReelVoiceStatus');
+  const chkHook = document.querySelector('#chkHookOverlay');
+  const hookGroup = document.querySelector('#hookSettingsGroup');
+  const hookTextInput = document.querySelector('#hookTextInput');
+  const hookPreview = document.querySelector('#hookPreview');
+  const chkSubtitles = document.querySelector('#chkSubtitles');
+  const chkBgm = document.querySelector('#chkBgm');
+  const bgmGroup = document.querySelector('#bgmSettingsGroup');
+  const bgmTrackSelect = document.querySelector('#bgmTrackSelect');
+  const customBgmFile = document.querySelector('#customBgmFile');
+  const customBgmInfo = document.querySelector('#customBgmInfo');
+  const bgmVolume = document.querySelector('#bgmVolume');
+  const bgmVolumeValue = document.querySelector('#bgmVolumeValue');
+  const btnSubmit = document.querySelector('#btnSubmit');
+  const progressBox = document.querySelector('#progressBox');
+  const progressStatus = document.querySelector('#progressStatus');
+  const progressBarFill = document.querySelector('#progressBarFill');
+  const progressStep = document.querySelector('#progressStep');
+  const errorBox = document.querySelector('#errorBox');
+  const resultBox = document.querySelector('#resultBox');
+  const videoPlayer = document.querySelector('#videoPlayer');
+  const btnDownload = document.querySelector('#btnDownload');
+  const btnReset = document.querySelector('#btnReset');
+  
+  const jsonImport = document.querySelector('#jsonImport');
+  const topicInput = document.querySelector('#topicInput');
+  const descInput = document.querySelector('#descInput');
+  let importedTtsSegments = null;
+  let importedTtsJoined = '';
+  let quickReelVoiceAudioUrl = null;
+  const QUICK_REEL_VOICE_PREFS = 'autoclip.quickReel.voice.v1';
+  const QUICK_REEL_TTS_STYLE_DEFAULT = quickReelTtsStyle.value.trim();
+
+  function applySavedVoicePreferences() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(QUICK_REEL_VOICE_PREFS) || 'null');
+      if (!saved) return;
+      if (saved.voice && [...voiceSelect.options].some(option => option.value === saved.voice)) voiceSelect.value = saved.voice;
+      if (Number.isFinite(Number(saved.speed))) speedInput.value = String(saved.speed);
+      if (typeof saved.style === 'string' && saved.style.trim()) quickReelTtsStyle.value = saved.style;
+      speedValue.textContent = Number(speedInput.value).toFixed(2);
+    } catch (_) {
+      localStorage.removeItem(QUICK_REEL_VOICE_PREFS);
+    }
+  }
+
+  btnSaveQuickReelVoice.addEventListener('click', () => {
+    localStorage.setItem(QUICK_REEL_VOICE_PREFS, JSON.stringify({
+      voice: voiceSelect.value,
+      speed: Number(speedInput.value),
+      style: quickReelTtsStyle.value.trim() || QUICK_REEL_TTS_STYLE_DEFAULT,
+    }));
+    quickReelVoiceStatus.textContent = 'บันทึก Voice, Speed และ Style เป็นค่าเริ่มต้นของ Quick Reel แล้ว';
+  });
+
+  btnRestoreQuickReelVoice.addEventListener('click', () => {
+    localStorage.removeItem(QUICK_REEL_VOICE_PREFS);
+    voiceSelect.value = 'Iapetus';
+    speedInput.value = '1.10';
+    speedValue.textContent = '1.10';
+    quickReelTtsStyle.value = QUICK_REEL_TTS_STYLE_DEFAULT;
+    quickReelVoiceStatus.textContent = 'คืนค่า Iapetus · 1.10 และ Style ระบบแล้ว';
+    updateStats();
+  });
+
+  btnPreviewQuickReelVoice.addEventListener('click', async () => {
+    btnPreviewQuickReelVoice.disabled = true;
+    quickReelVoiceStatus.textContent = 'กำลังสร้างเสียงตัวอย่าง…';
+    try {
+      const previewText = scriptInput.value.trim().slice(0, 240)
+        || 'แสงจากดาวที่เราเห็นคืนนี้ อาจเดินทางมาหาเรานานหลายปี และนี่คือหนึ่งในเรื่องน่าทึ่งของจักรวาล';
+      const body = new FormData();
+      body.append('text', previewText);
+      body.append('provider', 'google-gemini');
+      body.append('voice', voiceSelect.value);
+      body.append('speed', speedInput.value);
+      body.append('style_prompt', quickReelTtsStyle.value.trim() || QUICK_REEL_TTS_STYLE_DEFAULT);
+      const response = await fetch('/api/tts', { method: 'POST', body });
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw data.detail || data;
+      }
+      if (quickReelVoiceAudioUrl) URL.revokeObjectURL(quickReelVoiceAudioUrl);
+      quickReelVoiceAudioUrl = URL.createObjectURL(await response.blob());
+      quickReelVoiceAudio.src = quickReelVoiceAudioUrl;
+      quickReelVoiceAudio.hidden = false;
+      await quickReelVoiceAudio.play();
+      quickReelVoiceStatus.textContent = 'กำลังเล่นเสียงตัวอย่าง';
+    } catch (error) {
+      quickReelVoiceStatus.textContent = `${error?.code || 'TTS_GENERATION_FAILED'}: ${error?.message || 'สร้างเสียงตัวอย่างไม่สำเร็จ'}`;
+    } finally {
+      btnPreviewQuickReelVoice.disabled = false;
+    }
+  });
+  
+  function normalizeImportedTts(value) {
+    if (typeof value === 'string') return { text: value.trim(), segments: null };
+    if (!Array.isArray(value)) return null;
+    const segments = value
+      .filter(part => typeof part === 'string')
+      .map(part => part.trim())
+      .filter(Boolean);
+    return { text: segments.join('\n\n'), segments };
+  }
+
+  jsonImport.addEventListener('input', () => {
+    try {
+      const data = JSON.parse(jsonImport.value.trim());
+      if(data.topic) topicInput.value = data.topic;
+      if(data.description) descInput.value = data.description;
+      const importedTts = normalizeImportedTts(data.tts);
+      if(importedTts !== null) {
+        scriptInput.value = importedTts.text;
+        importedTtsSegments = importedTts.segments;
+        importedTtsJoined = importedTts.text;
+        updateStats();
+        renderImageOrder();
+      }
+      
+      // Flash the textarea green to show success
+      jsonImport.style.borderColor = '#4CAF50';
+      setTimeout(() => jsonImport.style.borderColor = 'rgba(140,115,255,0.4)', 1000);
+    } catch(e) {
+      // Not valid JSON yet, ignore
+      jsonImport.style.borderColor = 'rgba(140,115,255,0.4)';
+    }
+  });
+
+  let selectedFit = 'cover';
+  let selectedMotion = 'static';
+  let selectedHookPos = 'top';
+  let selectedImages = [];
+  let draggedImageIndex = null;
+
+  document.querySelector('#btnFitCover').onclick = () => {
+    selectedFit = 'cover';
+    document.querySelector('#btnFitCover').classList.add('active');
+    document.querySelector('#btnFitContain').classList.remove('active');
+    imgPreview.className = 'fit-cover';
+  };
+  document.querySelector('#btnFitContain').onclick = () => {
+    selectedFit = 'contain';
+    document.querySelector('#btnFitContain').classList.add('active');
+    document.querySelector('#btnFitCover').classList.remove('active');
+    imgPreview.className = 'fit-contain';
+  };
+
+  document.querySelector('#btnMotionStatic').onclick = () => {
+    selectedMotion = 'static';
+    document.querySelector('#btnMotionStatic').classList.add('active');
+    document.querySelector('#btnMotionZoom').classList.remove('active');
+  };
+  document.querySelector('#btnMotionZoom').onclick = () => {
+    selectedMotion = 'slow_zoom';
+    document.querySelector('#btnMotionZoom').classList.add('active');
+    document.querySelector('#btnMotionStatic').classList.remove('active');
+  };
+
+  document.querySelectorAll('.btn-hook-pos').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.btn-hook-pos').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedHookPos = btn.dataset.pos;
+      hookPreview.className = `hook-overlay-preview hook-pos-${selectedHookPos}`;
+    };
+  });
+
+  function renderImageOrder() {
+    imageOrderList.replaceChildren();
+    imageInfo.textContent = selectedImages.length
+      ? importedTtsSegments
+        ? `เลือกแล้ว ${selectedImages.length} รูป · มี TTS ${importedTtsSegments.length} ช่วง · แต่ละรูปยึดเวลาจากเสียงคู่กัน`
+        : `เลือกแล้ว ${selectedImages.length} รูป · ระบบจะกระจายเวลาให้เท่ากันตามความยาวเสียง`
+      : 'ยังไม่ได้เลือกรูปภาพ';
+    previewBox.hidden = selectedImages.length === 0;
+    if (selectedImages.length) {
+      const previewUrl = URL.createObjectURL(selectedImages[0]);
+      imgPreview.onload = () => URL.revokeObjectURL(previewUrl);
+      imgPreview.src = previewUrl;
+    }
+
+    selectedImages.forEach((file, index) => {
+      const card = document.createElement('article');
+      card.className = 'image-order-card';
+      card.draggable = true;
+      card.dataset.index = String(index);
+
+      const thumb = document.createElement('img');
+      const thumbUrl = URL.createObjectURL(file);
+      thumb.onload = () => URL.revokeObjectURL(thumbUrl);
+      thumb.src = thumbUrl;
+      thumb.alt = `ภาพลำดับ ${index + 1}: ${file.name}`;
+
+      const number = document.createElement('span');
+      number.className = 'image-order-number';
+      number.textContent = String(index + 1);
+
+      const name = document.createElement('div');
+      name.className = 'image-order-name';
+      name.title = file.name;
+      name.textContent = file.name;
+
+      const actions = document.createElement('div');
+      actions.className = 'image-order-actions';
+      const left = document.createElement('button');
+      left.type = 'button'; left.textContent = '←'; left.title = 'เลื่อนไปก่อนหน้า';
+      left.disabled = index === 0;
+      left.onclick = () => { [selectedImages[index - 1], selectedImages[index]] = [selectedImages[index], selectedImages[index - 1]]; renderImageOrder(); };
+      const right = document.createElement('button');
+      right.type = 'button'; right.textContent = '→'; right.title = 'เลื่อนไปถัดไป';
+      right.disabled = index === selectedImages.length - 1;
+      right.onclick = () => { [selectedImages[index], selectedImages[index + 1]] = [selectedImages[index + 1], selectedImages[index]]; renderImageOrder(); };
+      const remove = document.createElement('button');
+      remove.type = 'button'; remove.textContent = 'ลบ'; remove.title = 'นำรูปนี้ออก';
+      remove.onclick = () => { selectedImages.splice(index, 1); renderImageOrder(); };
+      actions.append(left, right, remove);
+
+      card.ondragstart = () => { draggedImageIndex = index; card.classList.add('dragging'); };
+      card.ondragend = () => { draggedImageIndex = null; card.classList.remove('dragging'); };
+      card.ondragover = event => event.preventDefault();
+      card.ondrop = event => {
+        event.preventDefault();
+        if (draggedImageIndex === null || draggedImageIndex === index) return;
+        const [moved] = selectedImages.splice(draggedImageIndex, 1);
+        selectedImages.splice(index, 0, moved);
+        draggedImageIndex = null;
+        renderImageOrder();
+      };
+      card.append(thumb, number, name, actions);
+      imageOrderList.append(card);
+    });
+  }
+
+  function addImages(files) {
+    const valid = Array.from(files).filter(file => ['image/png', 'image/jpeg', 'image/webp'].includes(file.type));
+    if (!valid.length) return;
+    const requestedTotal = selectedImages.length + valid.length;
+    const known = new Set(selectedImages.map(file => `${file.name}:${file.size}:${file.lastModified}`));
+    for (const file of valid) {
+      const key = `${file.name}:${file.size}:${file.lastModified}`;
+      if (!known.has(key) && selectedImages.length < 20) {
+        selectedImages.push(file);
+        known.add(key);
+      }
+    }
+    if (requestedTotal > 20) {
+      alert('Quick Reel รองรับได้สูงสุด 20 รูปต่อคลิป');
+    }
+    renderImageOrder();
+  }
+
+  imageInput.onchange = () => {
+    addImages(imageInput.files);
+    imageInput.value = '';
+  };
+  ['dragenter', 'dragover'].forEach(type => imageDropzone.addEventListener(type, event => {
+    event.preventDefault();
+    imageDropzone.classList.add('is-dragging');
+  }));
+  ['dragleave', 'drop'].forEach(type => imageDropzone.addEventListener(type, event => {
+    event.preventDefault();
+    imageDropzone.classList.remove('is-dragging');
+  }));
+  imageDropzone.addEventListener('drop', event => addImages(event.dataTransfer.files));
+
+  chkHook.onchange = () => {
+    hookGroup.hidden = !chkHook.checked;
+    hookPreview.hidden = !chkHook.checked || !hookTextInput.value.trim();
+  };
+  hookTextInput.oninput = () => {
+    hookPreview.textContent = hookTextInput.value;
+    hookPreview.hidden = !chkHook.checked || !hookTextInput.value.trim();
+  };
+
+  chkBgm.onchange = () => {
+    bgmGroup.hidden = !chkBgm.checked;
+  };
+  customBgmFile.onchange = () => {
+    const f = customBgmFile.files[0];
+    customBgmInfo.textContent = f ? `${f.name} (${(f.size / 1024 / 1024).toFixed(2)} MB)` : 'ยังไม่ได้เลือกเพลงของตัวเอง';
+  };
+
+  speedInput.oninput = () => { speedValue.textContent = Number(speedInput.value).toFixed(2); updateStats(); };
+  bgmVolume.oninput = () => { bgmVolumeValue.textContent = Number(bgmVolume.value).toFixed(2); };
+
+  function updateStats() {
+    const text = scriptInput.value || '';
+    const chars = text.length;
+    const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+    statChars.textContent = chars;
+    statWords.textContent = words;
+
+    const spd = parseFloat(speedInput.value) || 1.10;
+    const estSec = Math.round(chars / (4.2 * spd));
+    statDuration.textContent = estSec > 0 ? `~${estSec} วินาที` : '0 วินาที';
+  }
+  scriptInput.oninput = () => {
+    if (importedTtsSegments && scriptInput.value !== importedTtsJoined) {
+      importedTtsSegments = null;
+      importedTtsJoined = '';
+    }
+    updateStats();
+  };
+
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+    errorBox.hidden = true;
+    resultBox.hidden = true;
+
+    if (!selectedImages.length) {
+      alert('กรุณาเลือกไฟล์รูปภาพอย่างน้อย 1 รูป');
+      return;
+    }
+    if (!scriptInput.value.trim()) {
+      alert('กรุณาใส่บทพูด');
+      return;
+    }
+    if (importedTtsSegments && importedTtsSegments.length !== selectedImages.length) {
+      alert(`จำนวน TTS (${importedTtsSegments.length}) ต้องเท่ากับจำนวนรูป (${selectedImages.length})`);
+      return;
+    }
+
+    btnSubmit.disabled = true;
+    progressBox.hidden = false;
+    progressBarFill.style.width = '10%';
+    progressStatus.textContent = 'กำลังส่งข้อมูล...';
+    progressStep.textContent = 'อัปโหลดรูปภาพและประมวลผลคำขอ';
+
+    const formData = new FormData();
+    selectedImages.forEach(file => formData.append('images', file, file.name));
+    formData.append('script', scriptInput.value.trim());
+    if (importedTtsSegments) {
+      formData.append('tts_segments', JSON.stringify(importedTtsSegments));
+    }
+    formData.append('voice', voiceSelect.value);
+    formData.append('speed', speedInput.value);
+    formData.append('style_prompt', quickReelTtsStyle.value.trim() || QUICK_REEL_TTS_STYLE_DEFAULT);
+    formData.append('motion', selectedMotion);
+    formData.append('fit', selectedFit);
+    formData.append('hook_enabled', chkHook.checked);
+    formData.append('hook_text', hookTextInput.value.trim());
+    formData.append('hook_position', selectedHookPos);
+    formData.append('subtitles_enabled', chkSubtitles.checked);
+    formData.append('bgm_enabled', chkBgm.checked);
+    formData.append('bgm_track', bgmTrackSelect.value);
+    if (chkBgm.checked && customBgmFile.files[0]) {
+      formData.append('bgm_file', customBgmFile.files[0]);
+    }
+    formData.append('bgm_volume', bgmVolume.value);
+    
+    const tTitle = document.querySelector('#topicInput').value.trim();
+    const tDesc = document.querySelector('#descInput').value.trim();
+    formData.append('title', tTitle || hookTextInput.value.trim() || 'Quick Reel');
+    formData.append('description', tDesc);
+
+    try {
+      const resp = await fetch('/api/quick-reel', { method: 'POST', body: formData });
+      const data = await resp.json();
+      if (!resp.ok) {
+        throw new Error(data.detail?.message || 'ส่งงานสร้าง Quick Reel ไม่สำเร็จ');
+      }
+
+      const jobId = data.jobId;
+      pollJob(jobId);
+    } catch (err) {
+      btnSubmit.disabled = false;
+      progressBox.hidden = true;
+      errorBox.textContent = err.message;
+      errorBox.hidden = false;
+    }
+  };
+
+  async function pollJob(jobId) {
+    const interval = setInterval(async () => {
+      try {
+        const resp = await fetch(`/api/quick-reel/${jobId}`);
+        if (!resp.ok) return;
+        const job = await resp.json();
+
+        progressBarFill.style.width = `${Math.max(10, job.progress || 10)}%`;
+        progressStatus.textContent = `กำลังประมวลผล (${job.progress || 0}%)`;
+        progressStep.textContent = job.currentStep || 'กำลังสร้าง Quick Reel...';
+
+        if (job.status === 'COMPLETED') {
+          clearInterval(interval);
+          progressBarFill.style.width = '100%';
+          progressStatus.textContent = 'เสร็จสมบูรณ์!';
+          progressStep.textContent = 'วิดีโอพร้อมรับชม';
+          setTimeout(() => {
+            progressBox.hidden = true;
+            btnSubmit.disabled = false;
+            showResult(jobId);
+          }, 800);
+        } else if (job.status === 'FAILED') {
+          clearInterval(interval);
+          progressBox.hidden = true;
+          btnSubmit.disabled = false;
+          errorBox.textContent = job.error?.message || 'การเรนเดอร์ล้มเหลว';
+          errorBox.hidden = false;
+        }
+      } catch (e) {
+        console.error('Polling error', e);
+      }
+    }, 1500);
+  }
+
+  function showResult(jobId) {
+    videoPlayer.src = `/api/quick-reel/${jobId}/video?t=${Date.now()}`;
+    btnDownload.href = `/api/quick-reel/${jobId}/video`;
+    
+    document.querySelector('#resultTitle').textContent = topicInput.value.trim() || '-';
+    document.querySelector('#resultDesc').textContent = descInput.value.trim() || '-';
+    
+    document.querySelector('#btnCopyTitle').onclick = () => {
+      navigator.clipboard.writeText(topicInput.value.trim() || '');
+      document.querySelector('#btnCopyTitle').textContent = 'Copied!';
+      setTimeout(() => document.querySelector('#btnCopyTitle').textContent = 'Copy Title', 2000);
+    };
+    
+    document.querySelector('#btnCopyDesc').onclick = () => {
+      navigator.clipboard.writeText(descInput.value.trim() || '');
+      document.querySelector('#btnCopyDesc').textContent = 'Copied!';
+      setTimeout(() => document.querySelector('#btnCopyDesc').textContent = 'Copy Caption', 2000);
+    };
+
+    resultBox.hidden = false;
+    resultBox.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  btnReset.onclick = () => {
+    resultBox.hidden = true;
+    form.reset();
+    selectedImages = [];
+    importedTtsSegments = null;
+    importedTtsJoined = '';
+    imageOrderList.replaceChildren();
+    imageInfo.textContent = 'ยังไม่ได้เลือกรูปภาพ';
+    previewBox.hidden = true;
+    hookGroup.hidden = true;
+    bgmGroup.hidden = true;
+    applySavedVoicePreferences();
+    updateStats();
+  };
+
+  AutoClipChannels.mount('#channelPicker');
+  applySavedVoicePreferences();
+  updateStats();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "title": "Java ทำไมยังไม่ตาย? ทำไมองค์กรใหญ่ยังใช้ Java กันเต็มไปหมด",
+  "description": "Java ทำไมยังไม่ตาย? ทำไมระบบธนาคาร ตลาดหุ้น Netflix และองค์กรระดับ Fortune 500 ถึงยังใช้ Java เป็นหัวใจหลัก?\n\nคลิปนี้พาไปเจาะลึก 3 เหตุผลแท้จริงของ Senior Backend Engineer:\n1. Ecosystem & Frameworks (Spring Boot ที่ครบวงจรที่สุด)\n2. High Performance JVM & Virtual Threads (Project Loom รองรับล้าน Request)\n3. Enterprise Scale & Strongly Typed Maintainability (Refactor โค้ดล้านบรรทัดได้มั่นใจ)\n\n#Java #Backend #SoftwareEngineer #Springboot #Programming #ThaiJavaZone #DevLife",
+  "tags": [
+    "Java",
+    "Thai Java Zone",
+    "Backend Development",
+    "Spring Boot",
+    "JVM",
+    "Virtual Threads",
+    "Software Architecture",
+    "Enterprise Architecture",
+    "Coding",
+    "Programming"
+  ],
+  "category": "Science & Technology",
+  "language": "th-TH"
+}

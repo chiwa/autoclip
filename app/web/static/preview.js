@@ -17,6 +17,59 @@ const formatBytes = value => value < 1024 ? `${value} B` : `${(value / 1024).toF
     document.querySelector('#download').href = `/api/jobs/${jobId}/video`;
     document.querySelector('#projectTitle').textContent = metadata.projectTitle || '-';
     const summary = document.querySelector('#metadata'); summary.textContent = `Duration: ${Number(metadata.durationSeconds || 0).toFixed(1)}s · Resolution: ${metadata.resolution || '-'} · Scenes: ${metadata.sceneCount || '-'}`; summary.style.display = 'block'; summary.style.textAlign = 'center'; summary.style.padding = '12px 16px'; summary.style.margin = '14px auto 20px';
+    const channelStatus = document.querySelector('#channelStatus');
+    const channelResponse = await fetch(`/api/jobs/${jobId}/channel`);
+    if (channelResponse.ok) {
+      const currentChannel = await channelResponse.json();
+      const channelSelect = await AutoClipChannels.mount('#previewChannelPicker', {id: 'contentChannel', selected: currentChannel.channelId});
+      const saveChannel = document.querySelector('#saveChannel');
+      channelStatus.textContent = `ปัจจุบัน: ${currentChannel.channelName}`;
+      saveChannel.onclick = async () => {
+        saveChannel.disabled = true;
+        channelStatus.textContent = 'กำลังบันทึก Channel…';
+        const response = await fetch(`/api/jobs/${jobId}/channel`, {method:'PATCH', headers:{'Content-Type':'application/json'}, body:JSON.stringify({channelId:channelSelect.value})});
+        const result = await response.json().catch(() => ({}));
+        channelStatus.textContent = response.ok ? `บันทึกแล้ว: ${result.channelName}` : (result.detail?.message || 'บันทึก Channel ไม่สำเร็จ');
+        saveChannel.disabled = false;
+      };
+    } else {
+      document.querySelector('#channelCard').hidden = true;
+    }
+    const publicationCard = document.querySelector('#publicationCard');
+    const publicationStatus = document.querySelector('#publicationStatus');
+    const publicationToggle = document.querySelector('#publicationToggle');
+    let published = false;
+    const renderPublication = () => {
+      publicationStatus.textContent = published ? 'เผยแพร่แล้ว' : 'ยังไม่เผยแพร่';
+      publicationStatus.className = `publish-state${published ? ' published' : ''}`;
+      publicationToggle.textContent = published ? 'เปลี่ยนเป็นยังไม่เผยแพร่' : 'มาร์กว่า Publish แล้ว';
+      publicationToggle.disabled = false;
+    };
+    const publicationResponse = await fetch(`/api/jobs/${jobId}/publication`);
+    if (publicationResponse.ok) {
+      const publication = await publicationResponse.json();
+      published = Boolean(publication.published);
+      renderPublication();
+      publicationToggle.onclick = async () => {
+        publicationToggle.disabled = true;
+        publicationStatus.textContent = 'กำลังบันทึกสถานะ…';
+        const updateResponse = await fetch(`/api/jobs/${jobId}/publication`, {
+          method: 'PATCH',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({published: !published}),
+        });
+        const update = await updateResponse.json().catch(() => ({}));
+        if (!updateResponse.ok) {
+          publicationStatus.textContent = update.detail?.message || 'บันทึกสถานะไม่สำเร็จ';
+          publicationToggle.disabled = false;
+          return;
+        }
+        published = Boolean(update.published);
+        renderPublication();
+      };
+    } else {
+      publicationCard.hidden = true;
+    }
     const englishAudio = metadata.englishAudio || {};
     if (englishAudio.requested) {
       const englishCard = document.createElement('section'); englishCard.className = 'tool-card';

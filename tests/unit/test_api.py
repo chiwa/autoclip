@@ -64,6 +64,51 @@ def test_completed_snapshot_exposes_metadata():
     assert response.json()["metadata"]["resolution"] == "1080x1920"
 
 
+def test_job_preview_can_read_and_change_publish_status():
+    project_id = "preview-publication-project"
+    job_id = "preview-publication-job"
+    app.state.persistence.ensure_project(project_id, "Preview publication", 1, project_type="reel")
+    record = app.state.job_service.registry.create(job_id)
+    app.state.job_service.registry.set_project(record.job_id, project_id)
+
+    initial = client.get(f"/api/jobs/{job_id}/publication")
+    assert initial.status_code == 200
+    assert initial.json()["projectId"] == project_id
+
+    changed = client.patch(f"/api/jobs/{job_id}/publication", json={"published": True})
+    assert changed.status_code == 200
+    assert changed.json()["published"] is True
+    assert app.state.persistence.get_published(project_id) is True
+
+    restored = client.patch(f"/api/jobs/{job_id}/publication", json={"published": False})
+    assert restored.status_code == 200
+    assert restored.json()["published"] is False
+    app.state.persistence.delete_project(project_id)
+
+
+def test_channels_can_be_created_renamed_and_assigned_from_preview():
+    created = client.post("/api/channels", json={"name": "API Channel"})
+    assert created.status_code == 201
+    channel_id = created.json()["id"]
+    project_id = "preview-channel-project"
+    try:
+        renamed = client.patch(f"/api/channels/{channel_id}", json={"name": "API Channel Renamed"})
+        assert renamed.status_code == 200
+        job_id = "preview-channel-job"
+        app.state.persistence.ensure_project(project_id, "Preview channel", 1)
+        record = app.state.job_service.registry.create(job_id)
+        app.state.job_service.registry.set_project(record.job_id, project_id)
+        changed = client.patch(f"/api/jobs/{job_id}/channel", json={"channelId": channel_id})
+        assert changed.status_code == 200
+        assert changed.json()["channelName"] == "API Channel Renamed"
+        current = client.get(f"/api/jobs/{job_id}/channel")
+        assert current.json()["channelId"] == channel_id
+    finally:
+        app.state.persistence.set_project_channel(project_id, "undefined")
+        app.state.persistence.delete_unused_channel(channel_id)
+        app.state.persistence.delete_project(project_id)
+
+
 def test_restore_replaces_stale_failed_memory_job_with_repaired_completed_record(tmp_path):
     from app.services.job_service import JobService
     from app.services.persistence import Persistence

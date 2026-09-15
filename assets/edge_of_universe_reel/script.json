@@ -1,0 +1,182 @@
+{
+  "project": {
+    "id": "edge-of-universe-reel",
+    "title": "ถ้าจักรวาลมีขอบ…ข้างนอกนั้นคืออะไร?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Clear, engaging, warm, authoritative Thai documentary presenter tone."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ถ้าเราบินตรงไปจนถึงขอบจักรวาล... เราจะเจออะไรครับ? กำแพง? ความว่างเปล่า? หรือจริง ๆ แล้ว... จักรวาลอาจไม่มีขอบเลย",
+      "tts_text": "ถ้าเราบินตรงไปจนถึงขอบจักรวาล... เราจะเจออะไรครับ? กำแพง? ความว่างเปล่า? หรือจริง ๆ แล้ว... จักรวาลอาจไม่มีขอบเลย",
+      "subtitle": "ถ้าบินไปถึงขอบจักรวาล...\nเราจะเจออะไรกันแน่?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Preserve the key art typography, Mamase logo, and presenter. Translucent glowing spherical boundary of the observable universe floating in deep cosmic web. Gentle twinkling galaxies, slow cinematic push.",
+        "negative_prompt": "text modification, title distortion, face distortion, flicker, jitter, sudden camera movement, watermark",
+        "seed": 7711,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-cosmic-horizon",
+      "image": "images/scene-02-cosmic-horizon.png",
+      "narration": "สิ่งที่นักวิทยาศาสตร์เรียกว่า 'ขอบจักรวาลที่สังเกตได้' แท้จริงแล้วไม่ใช่กำแพงทึบ แต่มันคือขีดจำกัดของระยะทางที่แสงมีเวลาเดินทางมาถึงเราได้ตั้งแต่เกิดบิกแบง",
+      "tts_text": "สิ่งที่นักวิทยาศาสตร์เรียกว่า ขอบจักรวาลที่สังเกตได้ แท้จริงแล้วไม่ใช่กำแพงทึบ แต่มันคือขีดจำกัดของระยะทางที่แสงมีเวลาเดินทางมาถึงเราได้ตั้งแต่เกิดบิกแบง",
+      "subtitle": "ขอบจักรวาลที่สังเกตได้\nคือระยะทางสูงสุดที่แสงเดินทางมาถึงเรา",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Luminous spherical horizon shell glowing in iridescent cyan and gold around central spiral galaxy. Delicate filaments of distant star clusters, smooth hypnotic zoom.",
+        "negative_prompt": "text, watermark, logo, HUD, cartoon, blur, low quality",
+        "seed": 7712,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-46-billion-ly",
+      "image": "images/scene-03-46-billion-ly.png",
+      "narration": "นั่นคือระยะรัศมีราว 46,500 ล้านปีแสง ทุกสิ่งที่อยู่นอกเหนือจากนี้ แสงของมันยังเดินทางมาไม่ถึงโลกของเราครับ",
+      "tts_text": "นั่นคือระยะรัศมีราว สี่หมื่นหกพันห้าร้อยล้านปีแสง ทุกสิ่งที่อยู่นอกเหนือจากนี้ แสงของมันยังเดินทางมาไม่ถึงโลกของเราครับ",
+      "subtitle": "รัศมี 46,500 ล้านปีแสง\nสิ่งที่อยู่พ้นไป แสงยังมาไม่ถึงเรา",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Cosmic web connecting billions of galaxies across 46 billion light years towards the warm orange glow of the Big Bang afterglow horizon. Flowing energy filaments, slow cinematic push.",
+        "negative_prompt": "text, numbers, labels, watermark, logo, wobble",
+        "seed": 7713,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-infinite-universe",
+      "image": "images/scene-04-infinite-universe.png",
+      "narration": "ดังนั้น จักรวาลทั้งหมดจริง ๆ จึงอาจมีขนาดใหญ่กว่าฟองสบู่ที่เรามองเห็นหลายร้อยหลายพันเท่า หรืออาจแผ่ขยายออกไปอย่างเป็นอนันต์อย่างไร้ที่สิ้นสุด",
+      "tts_text": "ดังนั้น จักรวาลทั้งหมดจริง ๆ จึงอาจมีขนาดใหญ่กว่าฟองสบู่ที่เรามองเห็นหลายร้อยหลายพันเท่า หรืออาจแผ่ขยายออกไปอย่างเป็นอนันต์อย่างไร้ที่สิ้นสุด",
+      "subtitle": "จักรวาลจริง ๆ อาจใหญ่กว่านี้มหาศาล\nหรืออาจแผ่ขยายเป็นอนันต์ไร้ขอบเขต",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Camera pulling back from a tiny glowing spherical bubble of the observable universe into an immense infinite ocean of swirling spiral and elliptical galaxies, grand cosmic perspective.",
+        "negative_prompt": "text, watermark, logo, blur, flicker, sudden movement",
+        "seed": 7714,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-flying-across-edge",
+      "image": "images/scene-05-flying-across-edge.png",
+      "narration": "ถ้าคุณสามารถวาร์ปไปยืนตรงขอบจักรวาลที่สังเกตได้ของเราในวินาทีนี้ คุณจะไม่เจอกำแพงอะไรเลย แต่จะเห็นกาแล็กซี ดวงดาว และอวกาศที่ทอดยาวต่อไปตามปกติ",
+      "tts_text": "ถ้าคุณสามารถวาร์ปไปยืนตรงขอบจักรวาลที่สังเกตได้ของเราในวินาทีนี้ คุณจะไม่เจอกำแพงอะไรเลย แต่จะเห็นกาแล็กซี ดวงดาว และอวกาศที่ทอดยาวต่อไปตามปกติ",
+      "subtitle": "ถ้าไปยืนตรงขอบนั้นจริง ๆ\nจะไม่เจอกำแพง แต่มีดวงดาวต่อไปตามปกติ",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Exploration spacecraft crossing a subtle translucent energetic boundary veil into a vast starry realm of brilliant galaxies and nebulae, graceful documentary pan.",
+        "negative_prompt": "text, watermark, logo, cockpit HUD, cartoon",
+        "seed": 7715,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-observer-centers",
+      "image": "images/scene-06-observer-centers.png",
+      "narration": "และที่แปลกกว่านั้นคือ... ไม่ว่าคุณจะอยู่ที่กาแล็กซีไหน คุณก็สามารถมี 'จักรวาลที่สังเกตได้' ล้อมรอบตัวคุณเองเสมอ โดยมีตัวคุณเป็นศูนย์กลางของฟองนั้น!",
+      "tts_text": "และที่แปลกกว่านั้นคือ... ไม่ว่าคุณจะอยู่ที่กาแล็กซีไหน คุณก็สามารถมี จักรวาลที่สังเกตได้ ล้อมรอบตัวคุณเองเสมอ โดยมีตัวคุณเป็นศูนย์กลางของฟองนั้น!",
+      "subtitle": "ไม่ว่าคุณจะอยู่ที่กาแล็กซีไหน\nคุณคือศูนย์กลางของฟองจักรวาลตัวเองเสมอ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Multiple glowing overlapping spherical bubble universes centered on different galaxies across deep space web. Shimmering iridescent soap bubble horizons, slow smooth zoom.",
+        "negative_prompt": "text, labels, numbers, watermark, logo, jitter",
+        "seed": 7716,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-expanding-spacetime",
+      "image": "images/scene-07-expanding-spacetime.png",
+      "narration": "อวกาศกำลังขยายตัวเร็วขึ้นเรื่อย ๆ จนแสงจากดินแดนที่ไกลเกินไป จะไม่มีวันเดินทางมาถึงเราได้ตลอดกาล",
+      "tts_text": "อวกาศกำลังขยายตัวเร็วขึ้นเรื่อย ๆ จนแสงจากดินแดนที่ไกลเกินไป จะไม่มีวันเดินทางมาถึงเราได้ตลอดกาล",
+      "subtitle": "อวกาศกำลังขยายตัว\nจนแสงที่ไกลเกินไปจะไม่มีวันมาถึงเรา",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Curved spacetime coordinate grid stretching across deep space, glowing red Doppler-shifted light beams expanding outward into the infinite cosmic void, slow majestic push.",
+        "negative_prompt": "text, watermark, logo, glitch, pixelation",
+        "seed": 7717,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-08-philosophical-climax",
+      "image": "images/scene-08-philosophical-climax.png",
+      "narration": "บางทีคำถามที่ว่า 'นอกจักรวาลมีอะไร' อาจเริ่มต้นจากความเข้าใจผิดเล็ก ๆ เพราะสิ่งที่มีขอบ... อาจไม่ใช่จักรวาล แต่คือสิ่งที่เราสามารถมองเห็นต่างหาก",
+      "tts_text": "บางทีคำถามที่ว่า นอกจักรวาลมีอะไร อาจเริ่มต้นจากความเข้าใจผิดเล็ก ๆ เพราะสิ่งที่มีขอบ... อาจไม่ใช่จักรวาล แต่คือสิ่งที่เราสามารถมองเห็นต่างหาก",
+      "subtitle": "สิ่งที่มีขอบ... อาจไม่ใช่จักรวาล\nแต่คือสิ่งที่เรามองเห็นต่างหาก",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Contemplative stargazer silhouette on a dark cliff looking into an endless, magnificent cosmic ocean of starlight and vibrant nebulae, emotional inspiring slow zoom.",
+        "negative_prompt": "text, tourists, buildings, watermark, logo, jitter",
+        "seed": 7718,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": false,
+      "show_subtitle": false,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.05,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

@@ -564,12 +564,11 @@ visual benchmark ของ Parker แบบสั้น จึงไม่ต้
 - ใช้แสงและบรรยากาศระดับสารคดี: direction ของแสงสมเหตุผล, reflected ice,
   volumetric particle/dust, contrast ที่ลุ่มลึก และ scale ที่สัมผัสได้; หลีกเลี่ยง
   cut-out asset บนพื้นหลังดาวธรรมดา
-- Scene 2 เป็นต้นไปห้ามมีตัวหนังสือ, callout, แผนภาพ, numbered list, HUD,
-  NASA/ESA logo, watermark, หรือ subtitle ฝังในภาพ. ให้เล่ากลไกด้วย narration
-  และ AutoClip subtitle แทน
-- Scene 1 เป็น **Narrative Key Art** ชิ้นเดียว: Mamase, subject, title, hook
-  ต้องอยู่ในโลกเดียวกันด้วยแสง เงา ระยะชัด และองค์ประกอบที่สัมพันธ์กัน; ห้าม
-  cut/paste ตัวละครทับ background และห้ามปล่อย blank area ขนาดใหญ่
+- Scene 2 เป็นต้นไปห้ามมี generated text, callout, แผนภาพ, numbered list,
+  HUD, NASA/ESA logo, watermark, หรือ subtitle ฝังในภาพ. สำหรับ Mamase Reel
+  ให้ composite เฉพาะโลโก้จริงจาก `assets/branding/mamase/logo.png` หลังสร้าง
+  artwork ตาม skill `mamase-reels`; ห้ามให้โมเดลวาดโลโก้เอง
+- Scene 1 เป็น **Permanent Standard Key Art**: ต้องยึดมาตรฐาน ISS (`assets/iss_why_not_fall_reel/images/scene-01-hook.png`) และ Voyager 1 (`assets/voyager1_reel/images/scene-01-hook.png`) เป็นโปสเตอร์สารคดีพรีเมียมที่หยุดฟีดทันที (1–2 วิ) สื่อปริศนาในภาพเดียว และอ่าน Topic + Thai Hook ชัดบนมือถือ ห้ามทำเป็น infographic, presentation slide หรือวัตถุขนาดใหญ่แปะบนพื้นหลัง ลำดับสายตาต้องเป็น Brand → Topic → Thai Hook → Hero Subject → Human and Dog; Hero subject ต้องเห็นรูปทรงและบริบทครบ ไม่ซูมจนเป็น texture และไม่เล็กจนเป็น sticker; คนและสุนัขใน foreground ต้องหันมอง hero subject และอยู่ในโลกที่มีแสงเงาทิศทางเดียวกัน; สร้าง raw artwork ไร้ตัวหนังสือก่อน แล้ว composite โลโก้จริงและ typography deterministic; ตรวจผ่าน 12-point QA gate แล้ว**ส่งให้ผู้ใช้อนุมัติและหยุดรอ** ห้ามสร้างซีนถัดไปหรือ ZIP ก่อน Scene 01 ได้รับการอนุมัติ
 - หากต้องอธิบายกลไก ใช้ cinematic cutaway ที่ไม่มี label และยังสวยแบบภาพยนตร์
   ไม่ใช้ภาพตัดขวางแบบตำรา/slide
 
@@ -581,11 +580,11 @@ scene ที่ไม่ผ่านก่อนสร้าง ZIP และเ
 
 ### Autonomous master-image workflow (มาตรฐาน Tianwen-2)
 
-เมื่อผู้ใช้ขอคลิปทั้งชุด ให้ agent สร้าง master images จาก scene plan ที่ผ่าน review เองทั้งหมด **ห้ามโยนงานให้ผู้ใช้เขียน image prompt ทีละซีน**. แปลง narration เป็น visual brief: fact หลัก, subject, action, setting, scale cue และอารมณ์.
+เมื่อผู้ใช้ขอคลิปทั้งชุด ให้ agent สร้าง master images จาก scene plan ที่ผ่าน review เองทั้งหมด **ห้ามโยนงานให้ผู้ใช้เขียน image prompt ทีละซีน**. แปลง narration เป็น visual brief: fact หลัก, subject, action, setting, scale cue และอารมณ์. แต่สำหรับ Scene 01 จะต้องปฏิบัติตาม **Scene 01 Permanent Workflow**: สร้าง raw artwork → composite deterministic typography/branding → ตรวจ QA → **ส่ง Scene 01 ให้ผู้ใช้อนุมัติและหยุดรอ** ก่อนเริ่มผลิตภาพซีนอื่นเสมอ
 
 ทุก scene เป็น heroic factual frame: foreground subject เด่น + midground action + background ที่ให้ scale/atmosphere; ใช้ detail วิทยาศาสตร์/วิศวกรรมที่น่าเชื่อ, แสงมีทิศทาง, cinematic navy/cyan ตัด gold/orange, subtitle-safe band ด้านล่างพอดี. สร้าง native aspect ratio, ตรวจบนมือถือ, regenerate เฉพาะ scene อ่อน และห้ามใช้ black-starfield filler เพื่อให้จบงาน.
 
-Scene 1 เท่านั้นที่มี Thai topic title + short hook; Scene 2 เป็นต้นไปไม่มี text, label, HUD, watermark หรือ logo. ชุด `assets/tianwen-2-quasi-satellite-reel/images/` เป็นตัวอย่าง workflow ที่ผ่าน: key art แบบ integrated แล้วตามด้วยภาพตรง narration สำหรับ quasi-satellite, journey, close approach, surface study, sampling, return และ next mission leg. ใช้วิธีคิดนี้กับเรื่องใหม่โดยห้ามคัดลอก subject matter.
+Scene 1 เท่านั้นที่มี Thai topic title + short hook; Scene 2 เป็นต้นไปไม่มี generated text, label, HUD, watermark หรือ agency logo. สำหรับ Mamase Reel ให้ใส่เฉพาะโลโก้จริงตาม skill `mamase-reels` หลังสร้าง artwork. ชุด `assets/tianwen-2-quasi-satellite-reel/images/` เป็นตัวอย่าง workflow ที่ผ่าน: key art แบบ integrated แล้วตามด้วยภาพตรง narration สำหรับ quasi-satellite, journey, close approach, surface study, sampling, return และ next mission leg. ใช้วิธีคิดนี้กับเรื่องใหม่โดยห้ามคัดลอก subject matter.
 
 ### Delivery formats and framing
 
@@ -600,12 +599,82 @@ horizontal output or the reverse.
 
 ### Reel / Shorts production default
 
-For an ordinary **45–60 second** Mamase Reel, Shorts, or TikTok, use **9–12
-scenes** as the normal pacing range: one new, meaningful visual every roughly
-4–6 seconds, with readable Thai subtitles. Use **12–15 scenes** only for a
-fast story with several genuine reveals or short cutaways. Do not use 20 scenes
-for a 45–60 second clip; reserve 20 scenes for a roughly 75–90 second edit or
-an intentionally rapid format where every shot remains readable.
+Mamase Reels must prioritize a very strong opening hook. The first 1–3 seconds are critical because viewers can swipe away immediately. Default to **45–60 seconds** of dense, curiosity-driven storytelling without forcing an exact duration. If the story genuinely needs longer and retention can support it, **60–120 seconds** is acceptable. Content density and curiosity are more important than fixed duration. Do not add filler to hit a runtime; every few seconds must add new information, payoff, reversal, consequence, or a larger question.
+
+#### Mandatory Reels Hook Rules
+
+1. **The first 1–3 seconds MUST stop the viewer's thumb.**
+2. **Never begin with**:
+   - greetings (สวัสดีครับ, ยินดีต้อนรับ)
+   - channel introductions (สู่ Mamase จักรวาลของใจ)
+   - "วันนี้เราจะมาพูดถึง...", "ในคลิปนี้เราจะ..."
+   - background/history
+   - definitions
+   - slow setup
+3. **Start immediately with one of**:
+   - a surprising fact
+   - a contradiction
+   - a strong curiosity question
+   - an unexpected consequence
+   - a scientifically accurate “เฮ้ย เป็นแบบนี้ได้ยังไง?” moment
+4. **The hook must be truthful and scientifically defensible.** Do NOT use misleading clickbait.
+5. **Prefer simple questions that a non-scientist can understand instantly.**
+6. **The hook must create an open loop that makes the viewer want the next sentence.** The second sentence must immediately continue the promise of the hook.
+
+#### Recommended Mamase Reel Structure
+
+- **0–3 sec: HOOK** — A fact/question/contradiction strong enough to stop scrolling.
+- **3–10 sec: MINIMAL CONTEXT** — Only the information required to understand the mystery. No unnecessary background.
+- **10–30 sec: PAYOFF + WOW** — Deliver real information quickly. Introduce at least one surprising fact or reversal.
+- **30–45 sec: TWIST / BIGGER QUESTION / FINAL PAYOFF** — End the content with another interesting implication, twist, or question. Follow it only with the separate mandatory Mamase outro and its approved one-sentence CTA.
+
+#### Examples of Good vs Bad Hooks
+
+- **GOOD Hooks**:
+  - “บนดาวศุกร์ 1 วันยาวกว่า 1 ปี”
+  - “ของหนักกว่า 400 ตันลอยอยู่เหนือหัวเรา แล้วทำไม ISS ไม่ตก?”
+  - “เรารู้ได้ยังไงว่าไม่มีอะไรเร็วกว่าแสง?”
+  - “ดวงอาทิตย์ร้อนหลายพันองศา แล้วทำไมอวกาศถึงหนาว?”
+  - “ดาวทุกดวงที่เราเห็นด้วยตาเปล่า อยู่ใน Milky Way จริงไหม?”
+- **BAD Hooks (Never use)**:
+  - “สวัสดีครับ วันนี้เราจะมาพูดถึงดาวศุกร์”
+  - “ดาวศุกร์เป็นดาวเคราะห์ดวงที่สองจากดวงอาทิตย์”
+  - “ในคลิปนี้เราจะมาเรียนรู้เรื่องความเร็วแสง”
+
+#### Mamase Storytelling Principle
+
+Do not add filler just to reach duration. Every few seconds should give the viewer one of these feelings:
+- “เฮ้ย จริงเหรอ?”
+- “แล้วต่อไปล่ะ?”
+- “ทำไมเป็นแบบนั้น?”
+- “มีอะไรอีก?”
+- “อยากฟังต่อ”
+The viewer should feel continuous forward movement.
+
+#### Production Rules (TTS, Visuals, CTA, Duration)
+
+- **TTS Rule**: Google Gemini TTS voice `Fenrir`, language `th-TH`, default speed `1.05` (updated from 1.0 for energetic, crisp short-form pacing). The spoken script must begin directly with the hook, exactly matching the `hook` metadata field. Do not insert Mamase branding, greetings ("สวัสดีครับ"), "วันนี้เราจะมา...", "รู้หรือไม่...", episode labels, or intro music before the hook.
+- **Visual Rule**: The first visual scene must reinforce the hook immediately. Do not begin with generic stars, slow logo animation, or unrelated establishing shots. The first frame should visually communicate the mystery. The hero astronomical/scientific subject must dominate the frame (never a tiny pasted subject or an empty landscape that overpowers the hero subject).
+- **Duration & Pacing**: Target 45–60 seconds (acceptable maximum: 60–75 seconds). If estimated duration exceeds 75 seconds, revise and compress the script before returning. Deliver a mini-wow, reveal, or twist every 10–15 seconds to sustain retention without lecture format.
+- **Topic-Specific CTA Rule**: End the Reel with one short question naturally inviting discussion (opinion, prediction, or philosophical reaction) matching the topic. Strictly forbid generic CTAs ("อย่าลืมกดไลก์", "กดติดตาม", "คอมเมนต์คุยกันหน่อย", "ขอบคุณที่รับชม", or legacy canned outros). The CTA is the final spoken sentence with zero spoken text after it.
+- **Branding Rule**: Use "Mamase" or "Mamase REELS" only. Strictly NO "MAMASE PODCAST" on Reel assets, and strictly NO bilingual badges ("AVAILABLE IN THAI & ENGLISH") or flags.
+
+#### Mamase Reel Hook Gate (Blocking QA Gate)
+
+For Antigravity and any producing agent, treat the Reel Hook Gate as a **blocking QA gate**. Do not proceed to image generation, TTS, or rendering until the hook passes all 10 checks:
+
+1. Hook within first 1–3 sec
+2. No greeting/setup before hook
+3. Simple enough for general audience
+4. Creates curiosity gap
+5. Scientifically accurate
+6. First visual reinforces hook (hero subject dominates frame)
+7. No filler
+8. New information/payoff every few seconds
+9. Ending leaves a strong final idea/twist
+10. TTS starts directly with hook
+
+If the answer to any major item is NO, rewrite the opening before generating TTS or visuals.
 
 Prefer **FFmpeg Motion** for the main body of short-form clips because it is
 fast, stable, and inexpensive. A Reel normally needs **0–2 Wan shots** only:
@@ -646,27 +715,33 @@ in-image text to presenter or scene art unless the user explicitly asks.
 
 ### Mandatory Mamase branding outro
 
-Every Mamase clip must end with the established brand outro from
-`dist/planet-nine-extended.zip`; it is not optional unless the user explicitly
-asks to omit or replace it. Reuse its visual asset and scene treatment as the
-canonical closing scene:
+For vertical Mamase Reels, follow `.codex/skills/mamase-reels/SKILL.md`:
 
-- narration: `ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ`
-- `tts_text`: `ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ`
-- subtitle: `กดไลก์ · แชร์ · ติดตาม\\nMamase จักรวาลของใจ`
-- `motion: "slow_zoom_in"`, speed `slow`, intensity `0.1`, focus `center`,
-  transition `none`
-- Wan plan: `Mamase brand outro, glowing cyan orbiting planet in dark navy
-  space, peaceful and contemplative.` with `seed: 98`, `frames: 81`, and
-  `lip_sync: false`.
+- composite `assets/branding/mamase/logo.png` onto every 1080x1920 content
+  scene at about 19% frame width (approximately 205x205), top-right with a
+  36-pixel margin by default; inspect at mobile size;
+- never ask an image model to redraw the logo;
+- use `assets/branding/mamase/reels-end-scene.png` as the immutable outro
+  artwork master; never crop, regenerate, recolor, retouch, change its text, or
+  add another logo. A package copy may be proportionally resized to 1080x1920
+  without altering the master or its composition.
+
+The locked image is mandatory as the final branding scene of every Reel. End
+the preceding content scene on a memorable scientific idea, twist, or implication.
+Then conclude the narration with the approved topic-specific discussion CTA question
+(matching the topic and naturally inviting audience thoughts or predictions):
+
+- narration: Exact topic-specific discussion question (e.g. `ถ้ามีโอกาส คุณกล้าเป็นมนุษย์รุ่นแรกที่ไปอยู่ดาวอังคารไหม?`)
+- `tts_text`: Phonetic equivalent when foreign terms or numbers are present
+- subtitle: Clean subtitle matching the discussion question
+- `motion: "slow_zoom_in"`, speed `slow`, intensity `0.1`, focus `center`, transition `none`
+- The generic legacy CTA (`ถ้าชอบเรื่องราวอวกาศ... กดไลก์ กดแชร์...`) is retired and forbidden.
+- Zero spoken words after the discussion CTA question.
 
 Place this scene last in `script.json`, retain the prescribed scene order, and
-copy the canonical image into the package under that last scene's relative
-`images/` path.
-
-The CTA must sound warm and conversational, not like an advertisement. Keep it
-in this final branding scene rather than interrupting the editorial content
-with repeated like/share/follow requests.
+copy a visually unchanged package derivative into the last scene's relative
+`images/` path. Resize proportionally to 1080x1920 when required by the Reel
+package; never modify the source master.
 
 
 ### Required creative approval order
@@ -778,18 +853,18 @@ Imaginable hook → everyday scale comparison → surprising reveal
   {
     "voice": "Fenrir",
     "pitch": 0,
-    "speakingRate": 1.0
+    "speakingRate": 1.05
   }
   ```
 
   The intended feeling is **natural, playful, relaxed, confident, and naturally
   conversational**—like a thoughtful friend sharing an interesting story.
-  Keep volume even and pacing relaxed; do not repeatedly punch or stress words.
+  Keep volume even and pacing energetic and crisp; do not repeatedly punch or stress words.
 
 - Google Gemini TTS is the default provider for Native AutoClip. The UI must
   expose an editable narration-style prompt and speaking rate, with a visible
   **คืนค่า Mamase default** action that always restores the approved prompt,
-  Fenrir, and `speakingRate: 1.0`. Google voices must be grouped as **ชาย** and
+  Fenrir, and `speakingRate: 1.05`. Google voices must be grouped as **ชาย** and
   **หญิง**, with Fenrir first in the male group. It uses
   silence trimming disabled by default because trimming generated narration can
   clip the first Thai syllable and make scene joins sound unnatural. Keep the
@@ -836,7 +911,7 @@ Imaginable hook → everyday scale comparison → surprising reveal
   - English alternate audio: `podcast-en.wav` uses the same selected BGM,
     volume, fade, sidechain ducking, and loudness normalization as the Thai
     video audio. Keep `english_narration_raw.wav` for targeted retry/repair.
-  - Existing Reel defaults (`Fenrir`, 1.0, 9:16, ZIP packages) remain 100% isolated
+  - Existing Reel defaults (`Fenrir`, 1.05, 9:16, ZIP packages) remain 100% isolated
     and intact.
 
 - Hook must create curiosity in the first 2-3 seconds without misleading.
@@ -991,3 +1066,32 @@ ffmpeg -v error -i /workspace/ComfyUI/output/video/OUTPUT.mp4 -f null -
      - **แหล่งภาพจริง**: คัดเลือกและใช้ภาพถ่ายจริงความละเอียดสูงจาก **NASA, James Webb Space Telescope (JWST), ESO (European Southern Observatory), Hubble, และ Caltech/IPAC** เป็นลำดับแรก
      - **ความอลังการระดับ BBC / National Geographic ไร้ตัวหนังสือบังภาพ**: เน้นภาพอวกาศ ดวงดาว กาแล็กซี เนบิวลา หลุมดำ และเทคโนโลยีกล้องโทรทรรศน์ที่สวยงาม ยิ่งใหญ่อลังการ ดื่มด่ำ (Immersive) แบบเต็มจอ
      - **การใส่ Title บนภาพ**: **มี Title ในภาพได้บ้างเพื่อ hook คนดูให้หยุดดูคลิป** (เช่น ชื่อหัวข้อสไตล์สารคดีตัวหนาคมกริบ หรือ Telemetry HUD ขนาดเล็ก) **แต่ไม่จำเป็นต้องมีทุกซีน** และต้องไม่บดบังองค์ประกอบภาพหลักเด็ดขาด ปล่อยให้เนื้อหาหลักขับเคลื่อนด้วยเสียงบรรยายและ Subtitle
+# คนเหนือดวง — ดวง 12 ราศีประจำสัปดาห์
+
+- หน้าใช้งานถาวรคือ `/zodiac-weekly` และเป็น workflow/brand แยกจาก Mamase,
+  Podcast และ Reels
+- อินพุตหลักคือ `weekly-zodiac-batch.json` หนึ่งชุด ระบุช่วงสัปดาห์และใส่
+  เนื้อหาครบ 12 ราศีได้; ถ้า `zodiacs` ว่าง ระบบใช้ข้อความมาตรฐานที่ปลอดภัย
+- ภาพ master อยู่ที่ `assets/12ราศี` จำนวน 12 ไฟล์ เปลี่ยนเฉพาะป้ายวันที่
+  รายสัปดาห์ ห้ามสร้างหรือแก้ title, range และ artwork ที่ฝังอยู่ในภาพ
+- ผลลัพธ์บังคับต่อ batch: MP4 12 ไฟล์, ZIP งาน 12 ไฟล์, metadata JSON 12
+  ไฟล์ และ UTF-8 `youtube-upload.csv` 12 แถว
+- metadata แต่ละราศีต้องมี title ที่อิง hook จริง, description แบบ teaser,
+  disclaimer `การดูดวงเป็นความเชื่อส่วนบุคคล โปรดใช้วิจารณญาณในการรับชม`,
+  hashtag เฉพาะราศี, search tags, week, visibility และชื่อ MP4 ที่ตรงกัน
+- Video rendering กับ publishing metadata เป็นคนละ layer: การแก้หรือ
+  regenerate Title/Description/Hashtags/Tags ห้าม submit job, เรียก TTS หรือ
+  encode scene ใหม่เด็ดขาด การ sync metadata ลง MP4 ใช้ FFmpeg stream-copy
+  remux เท่านั้นและทำเมื่อ hash เปลี่ยน
+- ค่าเสียงถาวร: Google Gemini voice `Iapetus`, ภาษา `th-TH`, speed `1.10`,
+  mood อบอุ่น สงบ มั่นใจ ลึกลับเล็กน้อยแต่ไม่ขลังเกินจริง ห้ามอ่านแบบข่าว,
+  โฆษณา, ละคร, กระซิบเวอร์ หรือเว้นช่วงประดิษฐ์ จังหวะต้องเป็นธรรมชาติ ลื่นไหล
+  และกระชับขึ้นเล็กน้อย ห้ามลากเสียงหรือหยุดแบบ dramatic นาน ใช้ style prompt ที่ประกาศใน
+  `app/services/zodiac_service.py` เป็น source of truth
+- โครงบทถาวร: Hook ภายใน 1–3 วินาที → การงาน → การเงิน → ความรัก →
+  คำแนะนำ → ปิดให้รู้สึกดีและอยากกลับมาฟังสัปดาห์หน้า
+- รองรับ `visual` ใน batch JSON: ใช้ template เป็นภาพหลัก, ไม่สร้างภาพใหม่,
+  overlay ข้อความจาก `week.display_th` โดยไม่เขียนทับ master และเมื่อ
+  `motion.enabled=false`/`preset=none` ต้องเขียน `motion: none` ทุกซีน
+- History ต้องจำแนก `zodiac`/`zodiac_batch`, เปิด batch เดิมได้หลัง restart,
+  ดาวน์โหลดรายราศีหรือรวมชุดได้ และ retry เฉพาะงานที่ failed

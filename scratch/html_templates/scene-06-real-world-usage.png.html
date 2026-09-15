@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1080px; height: 1920px; background: #06080e; overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    position: relative;
+  }
+  .noc-bg {
+    position: absolute; top: 0; left: 0; width: 1080px; height: 1920px;
+    background: radial-gradient(circle at 50% 35%, #10192a 0%, #080c14 55%, #040508 100%);
+  }
+  .ambient-glow {
+    position: absolute; top: 220px; left: 50%; transform: translateX(-50%);
+    width: 950px; height: 900px;
+    background: radial-gradient(circle at center, rgba(56, 189, 248, 0.14) 0%, rgba(37, 99, 235, 0.08) 45%, transparent 70%);
+    filter: blur(60px);
+  }
+  .noc-wall {
+    position: absolute; top: 70px; left: 50%; transform: translateX(-50%);
+    width: 980px; display: flex; flex-direction: column; gap: 20px; z-index: 10;
+  }
+  /* Global Topology Display */
+  .main-display {
+    width: 100%; height: 560px; background: linear-gradient(180deg, #131c2b 0%, #0d131f 100%);
+    border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.09);
+    box-shadow: 0 35px 80px rgba(0,0,0,0.9), 0 0 50px rgba(56, 189, 248, 0.08);
+    padding: 24px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden;
+  }
+  .disp-header { display: flex; justify-content: space-between; align-items: center; }
+  .disp-title { width: 140px; height: 10px; background: #64748b; border-radius: 5px; }
+  .sla-badge {
+    height: 24px; padding: 0 12px; background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981;
+    border-radius: 12px; display: flex; align-items: center; gap: 6px;
+  }
+  .sla-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; box-shadow: 0 0 6px #10b981; }
+  .world-map-svg {
+    position: absolute; top: 70px; left: 50%; transform: translateX(-50%);
+    width: 900px; height: 420px;
+  }
+
+  /* Operations Console Cards (4 Cards) */
+  .console-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .ops-card {
+    height: 230px; background: linear-gradient(180deg, #111824 0%, #0c111a 100%);
+    border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.75); padding: 18px; display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .ops-card-header { display: flex; justify-content: space-between; align-items: center; }
+  .ops-title { width: 90px; height: 8px; background: #475569; border-radius: 4px; }
+  .ops-chart-area {
+    height: 120px; background: #080c13; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 10px; display: flex; flex-direction: column; justify-content: flex-end; position: relative; overflow: hidden;
+  }
+  .wave-svg { width: 100%; height: 100%; position: absolute; bottom: 0; left: 0; }
+
+  /* Command Console Desk Surface */
+  .console-desk {
+    position: absolute; top: 1140px; left: 0; width: 1080px; height: 780px;
+    background: linear-gradient(180deg, #111622 0%, #0b0f17 40%, #06080e 100%);
+    border-top: 2px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 30px 60px rgba(56, 189, 248, 0.04), 0 -20px 40px rgba(0,0,0,0.9);
+    display: flex; flex-direction: column; align-items: center; padding: 25px 40px 0 40px;
+  }
+  .desk-console-pad {
+    width: 980px; height: 500px; background: #080c13; border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+    padding: 25px; display: flex; flex-direction: column; gap: 16px;
+  }
+  .telemetry-row { display: flex; gap: 16px; width: 100%; }
+  .terminal-strip {
+    flex: 1; height: 110px; background: #0f1520; border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05); padding: 14px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .strip-line { height: 6px; background: #334155; border-radius: 3px; }
+
+  .safe-area-lower {
+    position: absolute; bottom: 0; left: 0; width: 1080px; height: 380px;
+    background: linear-gradient(180deg, transparent 0%, rgba(4, 6, 9, 0.5) 100%);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+  <div class="noc-bg"></div>
+  <div class="ambient-glow"></div>
+  <div class="noc-wall">
+    <!-- Main Topology Display -->
+    <div class="main-display">
+      <div class="disp-header"><div class="disp-title"></div><div class="sla-badge"><div class="sla-dot"></div></div></div>
+      <svg class="world-map-svg" viewBox="0 0 900 420">
+        <!-- Global Routing Arcs -->
+        <path d="M 220 200 Q 420 90 520 180" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="6,4" opacity="0.8"/>
+        <path d="M 520 180 Q 680 110 760 230" fill="none" stroke="#10b981" stroke-width="2.5" stroke-dasharray="6,4" opacity="0.8"/>
+        <path d="M 220 200 Q 500 300 760 230" fill="none" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="6,4" opacity="0.8"/>
+        <path d="M 220 200 Q 350 270 500 260" fill="none" stroke="#38bdf8" stroke-width="2" opacity="0.6"/>
+        <path d="M 500 260 Q 620 270 760 230" fill="none" stroke="#10b981" stroke-width="2" opacity="0.6"/>
+
+        <!-- Hub Nodes -->
+        <!-- New York -->
+        <circle cx="220" cy="200" r="16" fill="rgba(56, 189, 248, 0.2)" stroke="#38bdf8" stroke-width="2"/>
+        <circle cx="220" cy="200" r="7" fill="#38bdf8"/>
+        <!-- London / Frankfurt -->
+        <circle cx="520" cy="180" r="18" fill="rgba(16, 185, 129, 0.2)" stroke="#10b981" stroke-width="2"/>
+        <circle cx="520" cy="180" r="8" fill="#10b981"/>
+        <!-- Singapore / Tokyo -->
+        <circle cx="760" cy="230" r="16" fill="rgba(245, 158, 11, 0.2)" stroke="#f59e0b" stroke-width="2"/>
+        <circle cx="760" cy="230" r="7" fill="#f59e0b"/>
+        <!-- Mid Transit Hubs -->
+        <circle cx="500" cy="260" r="12" fill="rgba(99, 102, 241, 0.2)" stroke="#6366f1" stroke-width="1.5"/>
+        <circle cx="500" cy="260" r="5" fill="#6366f1"/>
+      </svg>
+      <div style="display:flex;justify-content:space-between;align-items:center;z-index:2">
+        <div style="display:flex;gap:12px"><div class="disp-title" style="width:70px"></div><div class="disp-title" style="width:90px;background:#38bdf8"></div></div>
+        <div class="disp-title" style="width:80px;background:#10b981"></div>
+      </div>
+    </div>
+
+    <!-- Operations Telemetry Grid (4 Cards) -->
+    <div class="console-grid">
+      <div class="ops-card">
+        <div class="ops-card-header"><div class="ops-title"></div><div class="sla-dot"></div></div>
+        <div class="ops-chart-area">
+          <svg class="wave-svg" viewBox="0 0 400 120" preserveAspectRatio="none">
+            <path d="M 0 100 Q 50 40 100 70 T 200 40 T 300 80 T 400 30 L 400 120 L 0 120 Z" fill="rgba(56, 189, 248, 0.15)"/>
+            <path d="M 0 100 Q 50 40 100 70 T 200 40 T 300 80 T 400 30" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
+          </svg>
+        </div>
+      </div>
+      <div class="ops-card">
+        <div class="ops-card-header"><div class="ops-title" style="width:110px"></div><div class="sla-dot" style="background:#38bdf8;box-shadow:0 0 6px #38bdf8"></div></div>
+        <div class="ops-chart-area">
+          <svg class="wave-svg" viewBox="0 0 400 120" preserveAspectRatio="none">
+            <path d="M 0 90 Q 60 110 120 60 T 240 70 T 320 30 T 400 45 L 400 120 L 0 120 Z" fill="rgba(16, 185, 129, 0.15)"/>
+            <path d="M 0 90 Q 60 110 120 60 T 240 70 T 320 30 T 400 45" fill="none" stroke="#10b981" stroke-width="2.5"/>
+          </svg>
+        </div>
+      </div>
+      <div class="ops-card">
+        <div class="ops-card-header"><div class="ops-title" style="width:85px"></div><div class="sla-dot" style="background:#f59e0b;box-shadow:0 0 6px #f59e0b"></div></div>
+        <div class="ops-chart-area">
+          <div style="display:flex;flex-direction:column;gap:8px;padding-top:10px">
+            <div style="height:8px;background:#1e293b;border-radius:4px;overflow:hidden"><div style="height:100%;width:88%;background:#f59e0b"></div></div>
+            <div style="height:8px;background:#1e293b;border-radius:4px;overflow:hidden"><div style="height:100%;width:64%;background:#10b981"></div></div>
+            <div style="height:8px;background:#1e293b;border-radius:4px;overflow:hidden"><div style="height:100%;width:92%;background:#38bdf8"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="ops-card">
+        <div class="ops-card-header"><div class="ops-title" style="width:100px"></div><div class="sla-dot" style="background:#c084fc;box-shadow:0 0 6px #c084fc"></div></div>
+        <div class="ops-chart-area">
+          <svg class="wave-svg" viewBox="0 0 400 120" preserveAspectRatio="none">
+            <path d="M 0 70 Q 70 30 140 80 T 280 40 T 400 60 L 400 120 L 0 120 Z" fill="rgba(192, 132, 252, 0.15)"/>
+            <path d="M 0 70 Q 70 30 140 80 T 280 40 T 400 60" fill="none" stroke="#c084fc" stroke-width="2.5"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lower Desk -->
+  <div class="console-desk">
+    <div class="desk-console-pad">
+      <div class="telemetry-row">
+        <div class="terminal-strip"><div class="strip-line" style="width:80px;background:#38bdf8"></div><div class="strip-line" style="width:180px"></div><div class="strip-line" style="width:140px"></div></div>
+        <div class="terminal-strip"><div class="strip-line" style="width:90px;background:#10b981"></div><div class="strip-line" style="width:160px"></div><div class="strip-line" style="width:130px"></div></div>
+      </div>
+      <div class="telemetry-row">
+        <div class="terminal-strip"><div class="strip-line" style="width:70px;background:#f59e0b"></div><div class="strip-line" style="width:190px"></div></div>
+        <div class="terminal-strip"><div class="strip-line" style="width:100px;background:#c084fc"></div><div class="strip-line" style="width:150px"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="safe-area-lower"></div>
+</body>
+</html>

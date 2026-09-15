@@ -7,6 +7,9 @@ app:
 server:
   host: 0.0.0.0
   port: 8000
+reel_hook_gate:
+  enabled: true
+  max_hook_characters: 120
 video:
   width: 1080
   height: 1920
@@ -20,7 +23,7 @@ tts:
   provider: google-gemini
   language: th-TH
   google_voice: Fenrir
-  google_speaking_rate: 1.0
+  google_speaking_rate: 1.05
   google_style_prompt: "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: \"เฮ้ย... จริงดิ?\" Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
   kokoro_enabled: true
   kokoro_model_dir: voices/wayu-kokoro-thai

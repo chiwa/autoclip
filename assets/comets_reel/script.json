@@ -1,0 +1,134 @@
+{
+  "project": {
+    "id": "mamase-comets-reel-v1",
+    "title": "Comets — ดาวหาง ผู้มาเยือนจากขอบระบบสุริยะ",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Warm, engaging, authoritative, inspiring Thai documentary storyteller tone."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "เวลาเราเห็นดาวหางบนท้องฟ้า หลายคนคิดว่าหางของมันต้องลากตามหลังทิศที่มันพุ่งไป... แต่รู้ไหมครับว่า ความจริงไม่ได้เป็นแบบนั้นเลย?",
+      "tts_text": "เวลาเราเห็นดาวหางบนท้องฟ้า หลายคนคิดว่าหางของมันต้องลากตามหลังทิศที่มันพุ่งไป... แต่รู้ไหมครับว่า ความจริงไม่ได้เป็นแบบนั้นเลย?",
+      "subtitle": "COMETS\nทำไมหาง ไม่ได้ลากตามหลังเสมอไป?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve the key art typography, Mamase logo, and presenter. The presenter gestures toward the brilliant glowing comet hurtling through space with natural lip sync. Starry cosmos background, smooth cinematic motion.",
+        "negative_prompt": "text modification, title distortion, face distortion, flicker, jitter, sudden camera movement, watermark",
+        "seed": 753,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-solar-wind-direction",
+      "image": "images/scene-02-solar-wind-direction.png",
+      "narration": "หางของดาวหาง ไม่ได้เกิดจากแรงเสียดทานของอากาศ แต่ถูก ลมสุริยะ และแรงดันแสงจากดวงอาทิตย์เป่าพัดออกไป ทำให้หางของมัน ชี้หนีดวงอาทิตย์เสมอ ไม่ว่ามันจะบินไปทางไหน",
+      "tts_text": "หางของดาวหาง ไม่ได้เกิดจากแรงเสียดทานของอากาศ แต่ถูก ลมสุริยะ และแรงดันแสงจากดวงอาทิตย์เป่าพัดออกไป ทำให้หางของมัน ชี้หนีดวงอาทิตย์เสมอ ไม่ว่ามันจะบินไปทางไหน",
+      "subtitle": "ไม่ได้เกิดจากแรงต้านอากาศ\nแต่ถูกลมสุริยะเป่าชี้หนีดวงอาทิตย์",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-tail-first-flight",
+      "image": "images/scene-03-tail-first-flight.png",
+      "narration": "นั่นหมายความว่า ตอนที่ดาวหางกำลังบินออกจากดวงอาทิตย์... มันกำลังบินโดย เอาหางพุ่งนำหน้าตัว ครับ!",
+      "tts_text": "นั่นหมายความว่า ตอนที่ดาวหางกำลังบินออกจากดวงอาทิตย์... มันกำลังบินโดย เอาหางพุ่งนำหน้าตัว ครับ!",
+      "subtitle": "ขากลับออกจากดวงอาทิตย์\nดาวหางบิน 'เอาหางพุ่งนำหน้า'",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-04-two-tails-anatomy",
+      "image": "images/scene-04-two-tails-anatomy.png",
+      "narration": "และถ้าสังเกตให้ดี ดาวหางมีถึงสองหางครับ หางไอออนสีน้ำเงินตรงแน่วที่ถูกลมสุริยะซัด กับหางฝุ่นสีขาวนวลที่โค้งตามวงโคจรเพราะแรงดันแสง",
+      "tts_text": "และถ้าสังเกตให้ดี ดาวหางมีถึงสองหางครับ หางไอออนสีน้ำเงินตรงแน่วที่ถูกลมสุริยะซัด กับหางฝุ่นสีขาวนวลที่โค้งตามวงโคจรเพราะแรงดันแสง",
+      "subtitle": "มี 2 หางที่ต่างกัน\nหางไอออนสีน้ำเงิน & หางฝุ่นสีขาว",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-05-nucleus-jets",
+      "image": "images/scene-05-nucleus-jets.png",
+      "narration": "ใจกลางของมันคือ ก้อนน้ำแข็งสกปรก ขนาดยักษ์ ที่เก็บกักน้ำแข็ง ก๊าซคาร์บอน และฝุ่นดึกดำบรรพ์มาตั้งแต่ยุคกำเนิดระบบสุริยะ เมื่อเข้าใกล้แดด น้ำแข็งจึงระเหิดพวยพุ่งออกมา",
+      "tts_text": "ใจกลางของมันคือ ก้อนน้ำแข็งสกปรก ขนาดยักษ์ ที่เก็บกักน้ำแข็ง ก๊าซคาร์บอน และฝุ่นดึกดำบรรพ์มาตั้งแต่ยุคกำเนิดระบบสุริยะ เมื่อเข้าใกล้แดด น้ำแข็งจึงระเหิดพวยพุ่งออกมา",
+      "subtitle": "นิวเคลียส: ก้อนน้ำแข็งสกปรก\nพ่นลำแก๊สเมื่อถูกความร้อนแสงอาทิตย์",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-06-origin-from-edge",
+      "image": "images/scene-06-origin-from-edge.png",
+      "narration": "พวกมันคือผู้มาเยือนจากพรมแดนสุดขอบระบบสุริยะ ทั้งแถบไคเปอร์และเมฆออร์ตที่อยู่ไกลนับปีแสง บางดวงใช้เวลานับแสนปี กว่าจะเดินทางมาถึงเราหนึ่งครั้ง",
+      "tts_text": "พวกมันคือผู้มาเยือนจากพรมแดนสุดขอบระบบสุริยะ ทั้งแถบไคเปอร์และเมฆออร์ตที่อยู่ไกลนับปีแสง บางดวงใช้เวลานับแสนปี กว่าจะเดินทางมาถึงเราหนึ่งครั้ง",
+      "subtitle": "ผู้มาเยือนจากขอบระบบสุริยะ\nใช้เวลาเดินทางนับแสนปี",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "smooth_right"
+    },
+    {
+      "id": "scene-07-seeders-of-life",
+      "image": "images/scene-07-seeders-of-life.png",
+      "narration": "นักวิทยาศาสตร์ยังพบว่า ดาวหางอาจเป็นผู้ส่งมอบ น้ำ และ กรดอะมิโน ต้นกำเนิดของชีวิตมายังโลก เมื่อสี่พันล้านปีก่อนอีกด้วย",
+      "tts_text": "นักวิทยาศาสตร์ยังพบว่า ดาวหางอาจเป็นผู้ส่งมอบ น้ำ และ กรดอะมิโน ต้นกำเนิดของชีวิตมายังโลก เมื่อสี่พันล้านปีก่อนอีกด้วย",
+      "subtitle": "ผู้ส่งมอบ 'น้ำ' สู่โลกโบราณ\nและโมเลกุลต้นกำเนิดสิ่งมีชีวิต",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-08-cosmic-connection",
+      "image": "images/scene-08-cosmic-connection.png",
+      "narration": "ทุกครั้งที่เราเงยหน้ามองดาวหาง... เราจึงไม่ได้มองแค่ก้อนน้ำแข็งในอวกาศ แต่กำลังมองดูผู้ส่งสาร ที่อาจเป็นต้นกำเนิดของชีวิตบนโลกครับ",
+      "tts_text": "ทุกครั้งที่เราเงยหน้ามองดาวหาง... เราจึงไม่ได้มองแค่ก้อนน้ำแข็งในอวกาศ แต่กำลังมองดูผู้ส่งสาร ที่อาจเป็นต้นกำเนิดของชีวิตบนโลกครับ",
+      "subtitle": "ไม่ใช่แค่ก้อนน้ำแข็งบนฟ้า\nแต่มันคือผู้ส่งสารแห่งจุดเริ่มต้นชีวิต",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.05,
+      "focus": "center",
+      "transition": "none",
+      "show_subtitle": false
+    }
+  ]
+}

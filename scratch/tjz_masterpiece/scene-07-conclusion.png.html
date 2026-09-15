@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><style>
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1080px; height: 1920px; background: #070a12;
+    overflow: hidden; font-family: "JetBrains Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+    color: #f1f5f9; position: relative;
+  }
+  .bg-glow {
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(circle at 540px 320px, rgba(30, 58, 138, 0.28) 0%, transparent 65%),
+      radial-gradient(circle at 180px 850px, rgba(14, 165, 233, 0.16) 0%, transparent 55%),
+      radial-gradient(circle at 900px 1050px, rgba(16, 185, 129, 0.12) 0%, transparent 55%),
+      radial-gradient(circle at 540px 1450px, rgba(30, 58, 138, 0.22) 0%, transparent 60%),
+      linear-gradient(180deg, #050811 0%, #0c1322 50%, #04060b 100%);
+    z-index: 1;
+  }
+  .grid-pattern {
+    position: absolute; inset: 0;
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+    background-size: 36px 36px; z-index: 2;
+  }
+  .subtitle-vignette {
+    position: absolute; bottom: 0; left: 0; width: 1080px; height: 320px;
+    background: linear-gradient(180deg, transparent 0%, rgba(5, 8, 15, 0.75) 45%, rgba(3, 5, 10, 0.98) 100%);
+    pointer-events: none; z-index: 30;
+  }
+
+  .cockpit-frame {
+    position: absolute; top: 35px; left: 35px; width: 1010px; height: 1220px;
+    display: flex; gap: 18px; z-index: 10;
+  }
+  .screen {
+    flex: 1; background: #0f172a; border-radius: 16px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.08), 0 0 40px rgba(16, 185, 129, 0.12);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .screen-header {
+    height: 44px; background: #0b1120; border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; padding: 0 16px; justify-content: space-between;
+  }
+  .screen-title { font-size: 12px; font-weight: 700; color: #38bdf8; }
+  .screen-status { font-size: 11px; color: #10b981; font-weight: 700; }
+
+  .screen-body { flex: 1; background: #0a0f1d; padding: 14px; display: flex; flex-direction: column; gap: 10px; font-size: 12px; line-height: 1.6; overflow: hidden; }
+  
+  .desk-surface { position: absolute; top: 1280px; left: 0; width: 1080px; height: 640px; background: linear-gradient(180deg, #090d16 0%, #060911 50%, #020306 100%); border-top: 1px solid rgba(255,255,255,0.05); z-index: 4; }
+  .desk-mat { position: absolute; top: 1330px; left: 30px; width: 1020px; height: 500px; background: #0d1322; border-radius: 16px; border: 1px solid rgba(255,255,255,0.04); box-shadow: inset 0 2px 10px rgba(0,0,0,0.6), 0 20px 50px rgba(0,0,0,0.8); z-index: 7; }
+  
+  .keyboard-frame { position: absolute; top: 1370px; left: 100px; width: 640px; height: 210px; background: #111827; border-radius: 12px; padding: 14px; box-shadow: 0 15px 35px rgba(0,0,0,0.8); z-index: 8; }
+  .wrist-rest { position: absolute; top: 1595px; left: 100px; width: 640px; height: 48px; background: #0b101c; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); z-index: 8; }
+  .key-rows { display: flex; flex-direction: column; gap: 6px; }
+  .key-row { display: flex; gap: 6px; }
+  .key { height: 28px; background: #1e293b; border-radius: 4px; flex: 1; }
+  .key.space { flex: 6; background: #243247; } .key.accent { background: #10b981; } .key.mod { flex: 1.5; background: #162032; }
+  
+  .mouse { position: absolute; top: 1410px; left: 810px; width: 85px; height: 145px; background: radial-gradient(circle at 40px 40px, #1e293b 0%, #0f172a 100%); border-radius: 42px; z-index: 8; }
+  .mouse-wheel { position: absolute; top: 25px; left: 38px; width: 8px; height: 24px; background: #10b981; border-radius: 4px; }
+  .coffee-mug { position: absolute; top: 1370px; left: 920px; width: 70px; height: 70px; border-radius: 50%; background: radial-gradient(circle, #2d1810 40%, #522d1e 75%, #1e293b 100%); border: 3px solid #334155; z-index: 8; }
+</style></head>
+<body>
+  <div class="bg-glow"></div><div class="grid-pattern"></div>
+  <div class="cockpit-frame">
+    <!-- Left Screen: Build & Test Success (Fully Populated) -->
+    <div class="screen">
+      <div class="screen-header"><div class="screen-title">INTELLIJ IDEA — BUILD &amp; TEST SUITE</div><div class="screen-status">● 100% PASSED</div></div>
+      <div class="screen-body">
+        <div style="background:#052e16; border:1px solid #10b981; border-radius:8px; padding:10px 14px; color:#a7f3d0; font-weight:700; display:flex; justify-content:space-between; align-items:center;">
+          <span>✔ ALL 18,420 TESTS PASSED</span><span style="font-size:11px; color:#10b981;">Total Time: 14.2s</span>
+        </div>
+
+        <!-- Code Editor Slice -->
+        <div style="background:#060913; border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:12px 14px; font-size:11px; line-height:1.6; color:#94a3b8; height:430px; overflow:hidden;">
+          <div style="color:#64748b; font-size:10px; margin-bottom:6px; text-transform:uppercase;">CoreBankingIntegrationTest.java</div>
+          <div><span style="color:#f43f5e;">@SpringBootTest</span>(<span style="color:#38bdf8;">webEnvironment</span> = <span style="color:#eab308;">RANDOM_PORT</span>)</div>
+          <div><span style="color:#f43f5e;">@Testcontainers</span></div>
+          <div><span style="color:#f43f5e;">class</span> <span style="color:#38bdf8;">CoreBankingIntegrationTest</span> {</div>
+          <div>&nbsp;&nbsp;<span style="color:#f43f5e;">@Container</span> <span style="color:#f43f5e;">static</span> <span style="color:#38bdf8;">KafkaContainer</span> kafka = <span style="color:#f43f5e;">new</span> <span style="color:#38bdf8;">KafkaContainer</span>();</div>
+          <div>&nbsp;&nbsp;<span style="color:#f43f5e;">@Container</span> <span style="color:#f43f5e;">static</span> <span style="color:#38bdf8;">PostgreSQLContainer</span>&lt;?&gt; pg = <span style="color:#f43f5e;">new</span> <span style="color:#38bdf8;">PostgreSQLContainer</span>();</div>
+          <div></div>
+          <div>&nbsp;&nbsp;<span style="color:#f43f5e;">@Test</span></div>
+          <div>&nbsp;&nbsp;<span style="color:#f43f5e;">void</span> <span style="color:#60a5fa;">shouldExecuteHighVolumeSettlementUnderVirtualThreads</span>() {</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#f43f5e;">var</span> receipt = bankingEngine.<span style="color:#60a5fa;">processTransfer</span>(tx);</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#60a5fa;">assertThat</span>(receipt.<span style="color:#60a5fa;">isSettled</span>()).<span style="color:#60a5fa;">isTrue</span>();</div>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#60a5fa;">assertThat</span>(receipt.<span style="color:#60a5fa;">latencyMs</span>()).<span style="color:#60a5fa;">isLessThan</span>(<span style="color:#38bdf8;">2.0</span>);</div>
+          <div>&nbsp;&nbsp;}</div>
+          <div>}</div>
+          <div style="margin-top:8px; color:#10b981; font-weight:700;">✔ 18,420 tests passed in 14.2s (0 failures, 0 skipped)</div>
+        </div>
+
+        <!-- Terminal Logs Slice -->
+        <div style="background:#060913; border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:12px 14px; font-size:11px; line-height:1.65; color:#94a3b8; height:500px; display:flex; flex-direction:column; justify-content:space-between;">
+          <div>
+            <div style="color:#64748b; font-size:10px; margin-bottom:4px; text-transform:uppercase;">Maven Build &amp; Container Package</div>
+            <div>[INFO] --- maven-clean-plugin:3.2.0:clean ---</div>
+            <div>[INFO] --- maven-compiler-plugin:3.11.0:compile ---</div>
+            <div>[INFO] Compiling 420 source files to target/classes</div>
+            <div>[INFO] --- maven-surefire-plugin:3.2.0:test ---</div>
+            <div>[INFO] Tests run: 18,420, Failures: 0, Errors: 0, Skipped: 0</div>
+            <div>[INFO] --- spring-boot-maven-plugin:repackage ---</div>
+            <div>[INFO] Replacing target/core-banking-21.0.jar</div>
+            <div>[INFO] Container Image: ghcr.io/enterprise/banking:21.0 (Signed)</div>
+            <div>[INFO] SBOM generated: target/classes/META-INF/sbom/application.cdx.json</div>
+            <div><span style="color:#10b981; font-weight:700;">[INFO] BUILD SUCCESS (Total time: 14.218 s)</span></div>
+          </div>
+          <div style="background:#111a2e; padding:8px 10px; border-radius:6px; color:#38bdf8; font-size:10.5px;">
+            Git: main [origin/main] ✔ Working tree clean (commit #4f82a1b)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Screen: Production Dashboard (Fully Populated) -->
+    <div class="screen">
+      <div class="screen-header"><div class="screen-title">GRAFANA — PRODUCTION K8S CLUSTER</div><div class="screen-status">● 100% HEALTHY</div></div>
+      <div class="screen-body">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div style="background:#111a2e; padding:10px 14px; border-radius:8px;"><div style="font-size:10px; color:#64748b; font-weight:700;">ACTIVE PODS</div><div style="font-size:22px; font-weight:700; color:#10b981;">256/256</div></div>
+          <div style="background:#111a2e; padding:10px 14px; border-radius:8px;"><div style="font-size:10px; color:#64748b; font-weight:700;">SUCCESS RATE</div><div style="font-size:22px; font-weight:700; color:#38bdf8;">100.00%</div></div>
+        </div>
+
+        <div style="background:#111a2e; padding:12px 14px; border-radius:8px; display:flex; flex-direction:column; gap:6px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:10.5px; color:#64748b; font-weight:700;">P99 LATENCY UNDER 500K RPS</span>
+            <span style="font-size:11px; color:#10b981; font-weight:700;">1.84ms</span>
+          </div>
+          <svg style="width:100%; height:90px; background:#0a0f1d; border-radius:6px; padding:8px;">
+            <line x1="0" y1="20" x2="450" y2="20" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <line x1="0" y1="45" x2="450" y2="45" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <line x1="0" y1="70" x2="450" y2="70" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+            <path d="M0,60 Q100,56 200,60 T350,59 T450,60" fill="none" stroke="#10b981" stroke-width="2.5"/>
+            <path d="M0,60 Q100,56 200,60 T350,59 T450,60 L450,85 L0,85 Z" fill="rgba(16,185,129,0.12)"/>
+          </svg>
+          <div style="display:flex; justify-content:space-between; font-size:10px; color:#94a3b8;">
+            <span>p50: <strong>0.35ms</strong></span><span>p95: <strong>1.12ms</strong></span><span>p99: <strong>1.84ms</strong></span>
+          </div>
+        </div>
+
+        <div style="background:#111a2e; padding:12px 14px; border-radius:8px; display:flex; flex-direction:column; gap:6px; flex:1;">
+          <div style="font-size:10.5px; color:#64748b; font-weight:700; margin-bottom:2px;">SERVICE MESH TOPOLOGY</div>
+          <div style="display:flex; justify-content:space-between; font-size:11px; padding:3px 0; border-bottom:1px solid rgba(255,255,255,0.04);"><span>gateway-ingress (32 pods)</span><span style="color:#10b981; font-weight:700;">100% OK (0.4ms)</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:11px; padding:3px 0; border-bottom:1px solid rgba(255,255,255,0.04);"><span>banking-core (128 pods)</span><span style="color:#10b981; font-weight:700;">100% OK (1.2ms)</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:11px; padding:3px 0; border-bottom:1px solid rgba(255,255,255,0.04);"><span>payment-adapter (64 pods)</span><span style="color:#10b981; font-weight:700;">100% OK (0.8ms)</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:11px; padding:3px 0; border-bottom:1px solid rgba(255,255,255,0.04);"><span>fraud-engine (48 pods)</span><span style="color:#10b981; font-weight:700;">100% OK (1.1ms)</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:11px; padding:3px 0; border-bottom:1px solid rgba(255,255,255,0.04);"><span>kafka-brokers (12 nodes)</span><span style="color:#10b981; font-weight:700;">100% OK (0.2ms)</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:11px; padding:3px 0; border-bottom:1px solid rgba(255,255,255,0.04);"><span>postgres-cluster (3 nodes)</span><span style="color:#10b981; font-weight:700;">100% OK (0.9ms)</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:11px; padding:3px 0; border-bottom:1px solid rgba(255,255,255,0.04);"><span>redis-l2-cache (16 nodes)</span><span style="color:#10b981; font-weight:700;">100% OK (0.1ms)</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:11px; padding:3px 0;"><span>otel-collector (8 pods)</span><span style="color:#10b981; font-weight:700;">100% OK (0.3ms)</span></div>
+          <div style="margin-top:auto; background:#0a0f1d; padding:8px 10px; border-radius:6px; font-size:10.5px; color:#10b981;">
+            ● Production Cluster SLA: 99.9999% | Zero downtime in 365 days
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="desk-surface"></div><div class="desk-mat"></div>
+  <div class="keyboard-frame">
+    <div class="key-rows">
+      <div class="key-row"><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key mod"></div></div>
+      <div class="key-row"><div class="key mod"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key mod"></div></div>
+      <div class="key-row"><div class="key mod"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key accent"></div></div>
+      <div class="key-row"><div class="key mod"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key mod"></div></div>
+      <div class="key-row"><div class="key mod"></div><div class="key mod"></div><div class="key mod"></div><div class="key space"></div><div class="key mod"></div><div class="key mod"></div><div class="key mod"></div></div>
+    </div>
+  </div>
+  <div class="wrist-rest"></div>
+  <div class="mouse"><div class="mouse-wheel"></div></div><div class="coffee-mug"></div>
+  <div class="subtitle-vignette"></div>
+</body></html>

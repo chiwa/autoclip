@@ -101,6 +101,7 @@ def build_ffmpeg_metadata_args(
                 args.extend([
                     "-metadata", f"description={clean_desc}",
                     "-metadata", f"comment={clean_desc}",
+                    "-metadata", f"synopsis={clean_desc}",
                 ])
 
         if artist:

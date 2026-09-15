@@ -1,0 +1,159 @@
+{
+  "project": {
+    "id": "mamase-google-maps-universe-reel-v1",
+    "title": "Google Maps ของจักรวาล: แผนที่ 4 พันล้านวัตถุ",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: \"เฮ้ย... จริงดิ?\" Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ถ้าคุณคิดว่า Google Maps ละเอียดแล้ว มนุษย์เพิ่งสร้างแผนที่จักรวาลที่ใหญ่ที่สุดในประวัติศาสตร์ ด้วยข้อมูลวัตถุอวกาศกว่า 4 พันล้านชิ้นครับ!",
+      "tts_text": "ถ้าคุณคิดว่า กูเกิล แมปส์ ละเอียดแล้ว มนุษย์เพิ่งสร้างแผนที่จักรวาลที่ใหญ่ที่สุดในประวัติศาสตร์ ด้วยข้อมูลวัตถุอวกาศกว่า สี่ พันล้านชิ้นครับ",
+      "subtitle": "แผนที่จักรวาล 4 พันล้านวัตถุ!",
+      "motion": "cinematic_push_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.16,
+      "focus": "right",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve the supplied 2D anime Mamase presenter identity, face, rectangular black glasses, tousled black hair, Thai title and original composition. The presenter speaks naturally toward camera with delighted surprise, subtle head movement and an explanatory pointing gesture toward the enormous glowing 3D cosmic web map. Atmospheric starlight, glowing cyan and gold filaments, stable face-forward talking shot, premium cinematic science documentary lighting, smooth continuous motion.",
+        "negative_prompt": "new text, changed text, subtitles, watermark, logo, extra person, distorted face, covered mouth, warped glasses, distorted hands, duplicated fingers, flicker, jitter, sudden camera movement, rapid zoom",
+        "seed": 9042,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      },
+      "ltx": {
+        "prompt": "Preserve the supplied 2D anime Mamase presenter identity, face, rectangular black glasses, tousled black hair, Thai title and original composition. The presenter speaks naturally toward camera with delighted surprise, subtle head movement and an explanatory pointing gesture toward the enormous glowing 3D cosmic web map. Atmospheric starlight, glowing cyan and gold filaments, stable face-forward talking shot, premium cinematic science documentary lighting, smooth continuous motion.",
+        "negative_prompt": "new text, changed text, subtitles, watermark, logo, extra person, distorted face, covered mouth, warped glasses, distorted hands, duplicated fingers, flicker, jitter, sudden camera movement, rapid zoom",
+        "seed": 9042,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-scale-4-billion",
+      "image": "images/scene-02-scale-4-billion.png",
+      "narration": "นี่ไม่ใช่ภาพวาด แต่คือพิกัดจริงของกาแล็กซี ดาวฤกษ์ และหลุมดำมวลยิ่งยวด ที่กล้องโทรทรรศน์สำรวจบันทึกไว้ตลอดหลายปีที่ผ่านมา",
+      "tts_text": "นี่ไม่ใช่ภาพวาด แต่คือพิกัดจริงของกาแล็กซี ดาวฤกษ์ และหลุมดำมวลยิ่งยวด ที่กล้องโทรทรรศน์สำรวจบันทึกไว้ตลอดหลายปีที่ผ่านมา",
+      "subtitle": "พิกัดจริงของกาแล็กซีและหลุมดำ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-03-cosmic-web",
+      "image": "images/scene-03-cosmic-web.png",
+      "narration": "เมื่อซูมดูภาพรวม เราจะเห็นกาแล็กซีไม่ได้อยู่กระจัดกระจาย แต่มันเรียงตัวเป็น ใยแมงมุมยักษ์ ที่ถักทอข้ามความว่างเปล่าหลายพันล้านปีแสง",
+      "tts_text": "เมื่อซูมดูภาพรวม เราจะเห็นกาแล็กซีไม่ได้อยู่กระจัดกระจาย แต่มันเรียงตัวเป็น ใยแมงมุมยักษ์ ที่ถักทอข้ามความว่างเปล่าหลายพันล้านปีแสง",
+      "subtitle": "โครงสร้างใยแมงมุมยักษ์แห่งเอกภพ",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-04-empty-voids",
+      "image": "images/scene-04-empty-voids.png",
+      "narration": "และระหว่างเส้นใยเหล่านั้น คือความว่างเปล่ามหึมา พื้นที่โล่งกว้างที่แทบไม่มีอะไรอยู่เลย จนนักดาราศาสตร์ต้องตั้งคำถามว่า อะไรผลักพวกมันออกไป?",
+      "tts_text": "และระหว่างเส้นใยเหล่านั้น คือ ความว่างเปล่ามหึมา พื้นที่โล่งกว้างที่แทบไม่มีอะไรอยู่เลย จนนักดาราศาสตร์ต้องตั้งคำถามว่า อะไรผลักพวกมันออกไป",
+      "subtitle": "ความว่างเปล่าที่ซ่อนความลับ",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "top",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-05-dark-energy",
+      "image": "images/scene-05-dark-energy.png",
+      "narration": "คำตอบเชื่อมโยงไปถึงพลังงานมืด หรือ Dark Energy แรงลึกลับที่ครองสัดส่วนเกือบ 70% ของจักรวาล และกำลังเร่งให้เอกภพขยายตัวเร็วขึ้นเรื่อยๆ",
+      "tts_text": "คำตอบเชื่อมโยงไปถึง พลังงานมืด หรือ ดาร์ก เอนเนอร์จี แรงลึกลับที่ครองสัดส่วนเกือบ เจ็ดสิบ เปอร์เซ็นต์ ของจักรวาล และกำลังเร่งให้เอกภพขยายตัวเร็วขึ้นเรื่อยๆ",
+      "subtitle": "Dark Energy: 70% ของเอกภพ",
+      "motion": "cinematic_push_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-06-cosmic-time-machine",
+      "image": "images/scene-06-cosmic-time-machine.png",
+      "narration": "แผนที่นี้จึงเปรียบเสมือนไทม์แมชชีน เพราะยิ่งเรามองลึกออกไปในแผนที่ เรากำลังมองย้อนเวลากลับไปดูอดีตของเอกภพเมื่อหมื่นล้านปีก่อน",
+      "tts_text": "แผนที่นี้จึงเปรียบเสมือนไทม์แมชชีน เพราะยิ่งเรามองลึกออกไปในแผนที่ เรากำลังมองย้อนเวลากลับไปดูอดีตของเอกภพเมื่อหมื่นล้านปีก่อน",
+      "subtitle": "มองย้อนอดีตหมื่นล้านปี",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-07-future-physics",
+      "image": "images/scene-07-future-physics.png",
+      "narration": "ข้อมูล 4 พันล้านวัตถุนี้ จะเป็นกุญแจสำคัญที่อาจเปลี่ยนทฤษฎีฟิสิกส์ดั้งเดิม และบอกเราว่าจักรวาลนี้จะสิ้นสุดลงอย่างไร",
+      "tts_text": "ข้อมูล สี่ พันล้านวัตถุนี้ จะเป็นกุญแจสำคัญที่อาจเปลี่ยนทฤษฎีฟิสิกส์ดั้งเดิม และบอกเราว่าจักรวาลนี้จะสิ้นสุดลงอย่างไร",
+      "subtitle": "กุญแจไขจุดจบของจักรวาล",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "bottom",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-08-human-perspective",
+      "image": "images/scene-08-human-perspective.png",
+      "narration": "จากจุดเล็กๆ บนโลก วันนี้มนุษย์สามารถกางแผนที่ทั้งเอกภพได้แล้ว ความจริงของจักรวาล... ช่างน่าอัศจรรย์ใจจริงๆ ครับ",
+      "tts_text": "จากจุดเล็กๆ บนโลก วันนี้มนุษย์สามารถกางแผนที่ทั้งเอกภพได้แล้ว ความจริงของจักรวาล ช่างน่าอัศจรรย์ใจจริงๆ ครับ",
+      "subtitle": "มนุษย์กับการกางแผนที่เอกภพ",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "bottom",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Mamase brand outro, glowing cyan orbiting planet in dark navy space, peaceful and contemplative.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, extra planet, extra stars, flicker, jitter",
+        "seed": 98,
+        "frames": 81,
+        "steps": 22,
+        "lip_sync": false
+      },
+      "ltx": {
+        "prompt": "Mamase brand outro, glowing cyan orbiting planet in dark navy space, peaceful and contemplative.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, extra planet, extra stars, flicker, jitter",
+        "seed": 98,
+        "frames": 81,
+        "steps": 22,
+        "lip_sync": false
+      }
+    }
+  ]
+}

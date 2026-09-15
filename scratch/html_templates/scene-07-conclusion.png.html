@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1080px; height: 1920px; background: #06090e; overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    position: relative;
+  }
+  .cockpit-wall {
+    position: absolute; top: 0; left: 0; width: 1080px; height: 1150px;
+    background: radial-gradient(circle at 65% 28%, #162030 0%, #0c1119 55%, #070a0f 100%);
+  }
+  .acoustic-slats {
+    position: absolute; top: 0; left: 0; width: 1080px; height: 1150px;
+    background: repeating-linear-gradient(
+      90deg, rgba(255, 255, 255, 0.018) 0px, rgba(255, 255, 255, 0.018) 16px,
+      transparent 16px, transparent 32px
+    );
+    mask-image: radial-gradient(circle at 60% 35%, rgba(0,0,0,0.85) 0%, transparent 80%);
+  }
+  .warm-lamp {
+    position: absolute; top: 0; right: 0; width: 600px; height: 1400px;
+    background: radial-gradient(ellipse at 90% 12%, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.03) 45%, transparent 75%);
+    filter: blur(50px); pointer-events: none;
+  }
+  .dual-ambient-glow {
+    position: absolute; top: 70px; left: 50%; transform: translateX(-50%);
+    width: 1040px; height: 950px;
+    background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.16) 0%, rgba(16, 185, 129, 0.08) 50%, transparent 75%);
+    filter: blur(60px);
+  }
+
+  /* Dual Screen Cockpit Container */
+  .cockpit-screens {
+    position: absolute; top: 70px; left: 50%; transform: translateX(-50%);
+    width: 1020px; display: flex; gap: 16px; justify-content: center; z-index: 10;
+  }
+
+  /* Left Screen: Modern IDE with Success build */
+  .screen-card {
+    flex: 1; height: 900px; background: linear-gradient(180deg, #182232 0%, #0f1522 100%);
+    border-radius: 18px; padding: 10px; border: 1px solid rgba(255, 255, 255, 0.09);
+    box-shadow: 0 35px 80px rgba(0,0,0,0.9), 0 0 35px rgba(56, 189, 248, 0.06);
+    display: flex; flex-direction: column;
+  }
+  .screen-card.right-disp {
+    box-shadow: 0 35px 80px rgba(0,0,0,0.9), 0 0 35px rgba(16, 185, 129, 0.06);
+  }
+  .inner-display {
+    flex: 1; background: #090d14; border-radius: 10px; overflow: hidden; display: flex;
+    flex-direction: column; border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .title-bar-tabs {
+    height: 36px; background: #080b10; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex; align-items: center; padding: 0 12px; gap: 6px;
+  }
+  .tab-pill {
+    height: 24px; width: 100px; background: #111722; border-radius: 4px;
+    display: flex; align-items: center; padding: 0 8px; gap: 6px;
+  }
+
+  .left-code-body {
+    flex: 1; padding: 18px 16px; display: flex; flex-direction: column; gap: 7px;
+  }
+  .c-row { display: flex; gap: 6px; align-items: center; }
+  .c-num { width: 18px; height: 6px; background: #1e293b; border-radius: 3px; margin-right: 8px; }
+  .t-ann { height: 7px; background: #fbbf24; border-radius: 3px; }
+  .t-kw { height: 7px; background: #c084fc; border-radius: 3px; }
+  .t-type { height: 7px; background: #38bdf8; border-radius: 3px; }
+  .t-fn { height: 7px; background: #60a5fa; border-radius: 3px; }
+  .t-str { height: 7px; background: #34d399; border-radius: 3px; }
+  .t-var { height: 7px; background: #f472b6; border-radius: 3px; }
+
+  /* Success Build Banner at Bottom of IDE */
+  .build-success-banner {
+    height: 95px; background: #061512; border-top: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 12px 16px; display: flex; flex-direction: column; justify-content: center; gap: 6px;
+  }
+  .success-chip { display: flex; align-items: center; gap: 8px; }
+  .success-dot { width: 10px; height: 10px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px #10b981; }
+
+  /* Right Screen: Production Live Telemetry Dashboard */
+  .right-telemetry-body {
+    flex: 1; padding: 18px 16px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .kpi-card {
+    background: #111824; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 12px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .kpi-chart {
+    height: 70px; background: linear-gradient(180deg, rgba(16, 185, 129, 0.15) 0%, transparent 100%);
+    border-bottom: 2px solid #10b981; border-radius: 4px;
+  }
+
+  /* Dual Stand Assembly */
+  .cockpit-stands {
+    position: absolute; top: 970px; left: 50%; transform: translateX(-50%);
+    width: 800px; display: flex; justify-content: space-around; z-index: 8;
+  }
+  .c-stand {
+    width: 60px; height: 75px; background: linear-gradient(90deg, #182230 0%, #2b394d 50%, #182230 100%);
+  }
+
+  /* Full Lower Desk Assembly */
+  .desk-plane {
+    position: absolute; top: 1040px; left: 0; width: 1080px; height: 880px;
+    background: linear-gradient(180deg, #141b26 0%, #0f151f 35%, #0a0e16 100%);
+    border-top: 2px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 30px 60px rgba(56, 189, 248, 0.04), 0 -20px 40px rgba(0,0,0,0.9);
+    display: flex; flex-direction: column; align-items: center; padding: 25px 40px 0 40px;
+  }
+  .desk-mat {
+    width: 1000px; height: 720px; background: #080b11; border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.95), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+    display: flex; flex-direction: column; align-items: center; padding: 30px 50px; position: relative;
+  }
+  .desk-gear {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 45px; margin-top: 10px;
+  }
+  .keyboard-assembly {
+    display: flex; flex-direction: column; gap: 12px; align-items: center;
+  }
+  .keyboard {
+    width: 620px; height: 230px; background: #0e131d; border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.85), 0 0 25px rgba(16, 185, 129, 0.06);
+    padding: 18px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .wrist-rest {
+    width: 620px; height: 70px; background: linear-gradient(180deg, #141c28 0%, #0c121b 100%);
+    border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+  }
+  .kb-line { display: flex; gap: 7px; flex: 1; }
+  .k-cap { flex: 1; background: #182232; border-radius: 5px; box-shadow: 0 3px 0 #0d121c; }
+  .k-cap.mod { background: #222e42; }
+  .k-cap.accent { background: #164e3d; }
+  .k-cap.space { flex: 4.5; }
+  .mouse {
+    width: 90px; height: 155px; background: linear-gradient(180deg, #1d2638 0%, #111722 100%);
+    border-radius: 45px; box-shadow: 0 18px 35px rgba(0,0,0,0.75);
+    border: 1px solid rgba(255, 255, 255, 0.06); position: relative;
+  }
+  .mouse-roller {
+    position: absolute; top: 26px; left: 50%; transform: translateX(-50%);
+    width: 11px; height: 28px; background: #2d3b52; border-radius: 6px;
+  }
+  .coffee-station {
+    position: absolute; right: 50px; top: 50px; width: 95px; height: 95px;
+    background: radial-gradient(circle at 40% 40%, #1e2838 0%, #101622 100%);
+    border-radius: 50%; box-shadow: 0 18px 35px rgba(0,0,0,0.85), inset 0 0 0 9px #151d2a;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .coffee-fill {
+    width: 62px; height: 62px; background: #1a120b; border-radius: 50%;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.9);
+  }
+  .screen-desk-reflection {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 850px; height: 130px;
+    background: radial-gradient(ellipse at 50% 0%, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .safe-area-lower {
+    position: absolute; bottom: 0; left: 0; width: 1080px; height: 380px;
+    background: linear-gradient(180deg, transparent 0%, rgba(7, 10, 15, 0.5) 100%);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+  <div class="cockpit-wall"></div>
+  <div class="acoustic-slats"></div>
+  <div class="warm-lamp"></div>
+  <div class="dual-ambient-glow"></div>
+  <div class="cockpit-screens">
+    <!-- Left Screen: Modern IDE with Successful Build -->
+    <div class="screen-card">
+      <div class="inner-display">
+        <div class="title-bar-tabs">
+          <div class="tab-pill"><div style="width:8px;height:8px;border-radius:2px;background:#38bdf8"></div><div style="height:6px;width:60px;background:#64748b;border-radius:3px"></div></div>
+        </div>
+        <div class="left-code-body">
+          <div class="c-row"><div class="c-num"></div><div class="t-ann" style="width:90px"></div></div>
+          <div class="c-row"><div class="c-num"></div><div class="t-kw" style="width:40px"></div><div class="t-type" style="width:90px"></div></div>
+          <div class="c-row"><div class="c-num"></div></div>
+          <div class="c-row" style="margin-left:16px"><div class="c-num"></div><div class="t-ann" style="width:75px"></div></div>
+          <div class="c-row" style="margin-left:16px"><div class="c-num"></div><div class="t-kw" style="width:45px"></div><div class="t-type" style="width:60px"></div><div class="t-fn" style="width:100px"></div></div>
+          <div class="c-row" style="margin-left:32px"><div class="c-num"></div><div class="t-var" style="width:65px"></div><div class="t-fn" style="width:70px"></div><div class="t-str" style="width:85px"></div></div>
+          <div class="c-row" style="margin-left:16px"><div class="c-num"></div><div class="t-kw" style="width:25px"></div></div>
+          <div class="c-row"><div class="c-num"></div></div>
+          <div class="c-row" style="margin-left:16px"><div class="c-num"></div><div class="t-ann" style="width:80px"></div></div>
+          <div class="c-row" style="margin-left:16px"><div class="c-num"></div><div class="t-kw" style="width:45px"></div><div class="t-type" style="width:65px"></div><div class="t-fn" style="width:95px"></div></div>
+          <div class="c-row" style="margin-left:32px"><div class="c-num"></div><div class="t-kw" style="width:35px"></div><div class="t-fn" style="width:80px"></div></div>
+          <div class="c-row" style="margin-left:16px"><div class="c-num"></div><div class="t-kw" style="width:25px"></div></div>
+          <div class="c-row" style="margin-left:16px"><div class="c-num"></div><div class="t-ann" style="width:70px"></div></div>
+          <div class="c-row" style="margin-left:16px"><div class="c-num"></div><div class="t-kw" style="width:40px"></div><div class="t-type" style="width:85px"></div></div>
+          <div class="c-row" style="margin-left:32px"><div class="c-num"></div><div class="t-var" style="width:90px"></div><div class="t-fn" style="width:75px"></div></div>
+          <div class="c-row" style="margin-left:16px"><div class="c-num"></div><div class="t-kw" style="width:25px"></div></div>
+          <div class="c-row" style="margin-left:16px"><div class="c-num"></div><div class="t-ann" style="width:65px"></div></div>
+          <div class="c-row" style="margin-left:16px"><div class="c-num"></div><div class="t-kw" style="width:40px"></div><div class="t-fn" style="width:105px"></div></div>
+          <div class="c-row" style="margin-left:16px"><div class="c-num"></div><div class="t-kw" style="width:25px"></div></div>
+        </div>
+        <div class="build-success-banner">
+          <div class="success-chip"><div class="success-dot"></div><div style="height:8px;width:120px;background:#10b981;border-radius:4px"></div></div>
+          <div style="height:6px;width:180px;background:#334155;border-radius:3px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Screen: Production Live Dashboard -->
+    <div class="screen-card right-disp">
+      <div class="inner-display">
+        <div class="title-bar-tabs">
+          <div class="tab-pill" style="border:1px solid rgba(16,185,129,0.3)"><div style="width:8px;height:8px;border-radius:2px;background:#10b981"></div><div style="height:6px;width:70px;background:#64748b;border-radius:3px"></div></div>
+        </div>
+        <div class="right-telemetry-body">
+          <div class="kpi-card">
+            <div style="display:flex;justify-content:space-between"><div style="height:7px;width:80px;background:#64748b;border-radius:3px"></div><div class="success-dot"></div></div>
+            <div class="kpi-chart"></div>
+          </div>
+          <div class="kpi-card">
+            <div style="display:flex;justify-content:space-between"><div style="height:7px;width:95px;background:#64748b;border-radius:3px"></div><div class="success-dot" style="background:#38bdf8;box-shadow:0 0 10px #38bdf8"></div></div>
+            <div class="kpi-chart" style="border-color:#38bdf8;background:linear-gradient(180deg, rgba(56,189,248,0.15) 0%, transparent 100%)"></div>
+          </div>
+          <div class="kpi-card" style="padding:12px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="height:6px;background:#1e293b;border-radius:3px;overflow:hidden"><div style="height:100%;width:88%;background:#10b981"></div></div>
+              <div style="height:6px;background:#1e293b;border-radius:3px;overflow:hidden"><div style="height:100%;width:72%;background:#38bdf8"></div></div>
+            </div>
+          </div>
+          <div class="kpi-card" style="padding:10px">
+            <div style="display:flex;gap:6px">
+              <div style="flex:1;height:24px;background:rgba(16,185,129,0.15);border:1px solid #10b981;border-radius:4px"></div>
+              <div style="flex:1;height:24px;background:rgba(56,189,248,0.15);border:1px solid #38bdf8;border-radius:4px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cockpit-stands"><div class="c-stand"></div><div class="c-stand"></div></div>
+
+  <!-- Lower Desk -->
+  <div class="desk-plane">
+    <div class="desk-mat">
+      <div class="screen-desk-reflection"></div>
+      <div class="desk-gear">
+        <div class="keyboard-assembly">
+          <div class="keyboard">
+            <div class="kb-line"><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div></div>
+            <div class="kb-line"><div class="k-cap mod"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap mod"></div></div>
+            <div class="kb-line"><div class="k-cap mod"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap mod"></div><div class="k-cap mod"></div></div>
+            <div class="kb-line"><div class="k-cap mod"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap space"></div><div class="k-cap"></div><div class="k-cap accent"></div><div class="k-cap mod"></div></div>
+          </div>
+          <div class="wrist-rest"></div>
+        </div>
+        <div class="mouse"><div class="mouse-roller"></div></div>
+      </div>
+      <div class="coffee-station"><div class="coffee-fill"></div></div>
+    </div>
+  </div>
+  <div class="safe-area-lower"></div>
+</body>
+</html>

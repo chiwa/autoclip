@@ -17,13 +17,26 @@
    ให้อ่าน
    `/Users/zengcode/projects/autoclip/.codex/skills/autoclip-content/SKILL.md`
 4. ถ้าเป็นช่อง **Mamase** ให้อ่านเพิ่ม
-   `/Users/zengcode/projects/autoclip/.codex/skills/mamase-autoclip-package/SKILL.md`
+   `/Users/zengcode/projects/autoclip/.agents/skills/mamase-autoclip-package/SKILL.md`
+   และถ้าเป็น Reel, Shorts หรือ TikTok ให้อ่านเพิ่ม
+   `/Users/zengcode/projects/autoclip/.agents/skills/mamase-reels/SKILL.md`
+   และสำหรับการสร้างภาพปก Scene 01 / Key Art ของ Reels อย่างรวดเร็ว ให้ใช้
+   `/Users/zengcode/projects/autoclip/.agents/skills/mamase-reels-cover/SKILL.md`
+   ไฟล์ใต้ `.agents/skills/` เป็น source of truth สำหรับ Antigravity; mirror ใต้
+   `.codex/skills/` มีไว้ให้ Codex เรียกใช้และห้ามตีความกฎเก่ามาทับ source of truth
    และสำหรับงานภาพวิทยาศาสตร์/อวกาศให้อ่าน
    `/Users/zengcode/projects/autoclip/assets/parker_solar_probe_reel/visual-reference.md`
 5. ถ้าเป็นช่อง **Thai Java Zone** ให้ใช้หัวข้อ
    `Thai Java Zone — shared visual style bible` ในไฟล์นี้และใน `agent.md`
    รวมถึงหัวข้อชื่อเดียวกันใน `autoclip-content/SKILL.md` ห้ามนำ visual
    direction, presenter หรือ branding ของ Mamase มาใช้
+6. ถ้าเป็นงาน **คนเหนือดวง / ดวง 12 ราศี** ให้ใช้ flow แยกที่
+   `/zodiac-weekly`: รับ weekly batch JSON หนึ่งไฟล์ แล้วสร้าง 12 MP4, 12
+   metadata JSON และ `youtube-upload.csv` จากภาพต้นแบบคงที่ใน `assets/12ราศี`
+   โดยเปลี่ยนเฉพาะวันที่ ห้ามนำ branding หรือ History ของ Mamase มาปน และ
+   ห้าม rerender/TTS เมื่อแก้เฉพาะ publishing metadata
+   และอ่าน skill ถาวรที่
+   `/Users/zengcode/projects/autoclip/.codex/skills/khon-nuea-duang-zodiac/SKILL.md`
 
 เฉพาะงานภาพ Mamase ให้ดูชุด
 `/Users/zengcode/projects/autoclip/assets/tianwen-2-quasi-satellite-reel/images/`
@@ -42,10 +55,96 @@
 ใกล้เคียง baseline เหล่านี้ ห้ามลดเหลือ generic AI illustration, stock-like
 space wallpaper, ภาพแบน ฉากโล่ง หรือวัตถุเล็กที่ไม่สื่อใจความของซีน
 
+ภาพ **Eris Master Reference** ที่
+`/Users/zengcode/projects/autoclip/assets/branding/mamase/reference/eris-master-reels-visual-reference.jpg`
+ใช้เป็นเพียง baseline ด้านความคม แสง depth และ cinematic finish ไม่ใช่ template
+สำหรับ pose, เสื้อผ้า, ตำแหน่งคน–หมา หรือตำแหน่งข้อความ กฎที่เป็น source of truth คือ
+`.agents/skills/mamase-reels-cover/SKILL.md`: ต้องเปลี่ยน composition ตามเรื่อง ใช้โลโก้จริง
+เพียงหนึ่งชุด มีข้อความเพียง Topic + Thai Hook และใช้ protected zones กันข้อความทับวัตถุสำคัญ
+
 ## Mamase Visual Production Contract
 
 กฎส่วนนี้เป็น workflow บังคับเมื่อ Agent สร้างภาพ Mamase เอง ไม่ว่าผู้ใช้จะ
 ส่ง prompt ยาวหรือให้เพียงชื่อเรื่อง:
+
+### Topic-Only Autonomous Contract
+
+พี่พีส่งเพียงชื่อเรื่อง หัวข้อ หรือแนวคิดหนึ่งประโยคถือว่า input ครบแล้ว Agent
+ต้องคิด Hook, ตรวจข้อเท็จจริง, เขียนบท, วาง Scene, เลือก hero subject, action
+ของคน–หมา, มุมกล้อง, แสง, wardrobe, layout, protected zones และ prompt เอง
+ห้ามผลักภาระให้ผู้ใช้เขียน prompt รายภาพ จุดรอผู้ใช้ตามปกติมีเพียงการอนุมัติ
+Scene 01 จากนั้นจึงทำซีนที่เหลือและ ZIP ให้จบ
+
+Scene 01 ให้สร้าง native candidate ครั้งละหนึ่งภาพ ห้ามไล่ค้น assets ที่ไม่เกี่ยวข้อง,
+ทำ thumbnail/contact sheet, สุ่มหลาย seed, ใช้ `rembg`, ตัดแปะ cutout หรือ inpainting
+เอง เว้นแต่ผู้ใช้สั่งโดยตรง หาก native generation ล้มเหลวให้รายงานตรง ๆ ห้ามใช้
+fallback คุณภาพต่ำเพื่อให้ดูเหมือนว่างานเสร็จ
+
+### Permanent Mamase Scene 01 Master Reference
+
+ทุก Mamase Reel ต้องเปิดตรวจภาพ
+`/Users/zengcode/projects/autoclip/assets/branding/mamase/reference/mamase-reels-editorial-poster-master.png`
+ก่อนออกแบบ Scene 01 และใช้เป็นมาตรฐานถาวรด้าน Premium Editorial Science Poster:
+ภาพเดียวต้องมี scientific tableau ที่เล่าเรื่องครบ, Topic และ Thai Hook ที่มี hierarchy
+สง่างาม, รายละเอียดเชิงบรรณาธิการที่เป็นระเบียบ, depth/แสงระดับภาพยนตร์ และคนกับหมา
+ที่เชื่อมอารมณ์กับเรื่อง ห้ามลดเหลือข้อความก้อนใหญ่ทับภาพหรือปกมินิมอลโล่ง ๆ
+
+ให้ยึดภาษาและคุณภาพของงาน ไม่ใช่คัดลอก layout หรือท่านั่งเดิมทุกครั้ง วัตถุ
+สถานที่ action มุมกล้อง และ props ต้องเปลี่ยนตามหัวข้อ ข้อความทั้งหมดต้อง composite
+ภายหลังและ protected zones ยังเป็น Blocking Gate เสมอ
+
+### Mamase Reel Hook Gate (Blocking QA Gate)
+
+ก่อนอนุมัติบท Reel/Short/TikTok และก่อนสร้าง TTS หรือภาพ **ต้องตรวจครบทุก 10 ข้อ (Blocking Gate)**:
+หากข้อสำคัญข้อใดไม่ผ่าน ให้เขียนช่วงเปิดใหม่ก่อนเดินหน้าต่อเด็ดขาด ห้ามฝ่าฝืนไปสร้าง TTS หรือภาพ
+
+#### กฎเปิดคลิป 1–3 วินาทีแรก (Mandatory Reels Hook Rules)
+1. **1–3 วินาทีแรกต้องหยุดนิ้วโป้งผู้ชมทันที (Stop the viewer's thumb)**: ผู้ชมปัดทิ้งได้ในเสี้ยววินาที
+2. **ห้ามเด็ดขาด (Never begin with)**:
+   - คำทักทาย (สวัสดีครับ, ยินดีต้อนรับสู่...)
+   - แนะนำช่องหรือตัวเอง (สู่ Mamase จักรวาลของใจ, ผมพี จาก Mamase)
+   - “วันนี้เราจะมาพูดถึง...”, “วันนี้ Mamase จะพาไป...”, “ในคลิปนี้...”
+   - “ก่อนอื่น...”, “มาเริ่มกันที่...”
+   - “รู้หรือไม่...”, “คุณเคยสงสัยไหม...” (ยกเว้นต่อด้วยประเด็นความขัดแย้งที่น่าทึ่งทันที)
+   - เกริ่นประวัติความเป็นมา (History/Background)
+   - การเปิดด้วยนิยามเชิงวิชาการ (Definitions)
+   - บทนำหรือเกริ่นเรื่องแบบช้า (Slow setup)
+3. **เปิดทันทีด้วยหนึ่งใน 5 หมวดนี้**:
+   - ข้อเท็จจริงที่น่าตกใจ (Surprising fact)
+   - ความขัดแย้งที่ชวนสงสัย (Contradiction)
+   - คำถามกระตุ้นความอยากรู้อย่างแรง (Strong curiosity question)
+   - ผลลัพธ์คาดไม่ถึง (Unexpected consequence)
+   - จังหวะวิทยาศาสตร์แท้จริงที่ทำให้รู้สึก “เฮ้ย เป็นแบบนี้ได้ยังไง?”
+4. **ถูกต้องทางวิทยาศาสตร์และปกป้องได้ (Truthful & Scientifically Defensible)**: ห้ามใช้ clickbait หลอกหรือสร้างข้อเท็จจริงเท็จ
+5. **เข้าใจง่ายสำหรับคนทั่วไป (General Audience Clarity)**: ใช้คำถาม/ข้อความง่ายๆ ที่คนไม่ใช่นักวิทยาศาสตร์เข้าใจได้ทันที
+6. **สร้าง Open Loop & สานต่อทันที**: เปิดปมที่ทำให้ผู้ชมอยากฟังประโยคถัดไปทันที และประโยคที่สองต้องสานต่อคำสัญญาของ Hook ทันที ห้ามวกกลับไปปูพื้นหลังทั่วไป
+7. **Hook Matching**: ข้อความในฟิลด์ `hook` ต้องตรงกับประโยคพูดประโยคแรกใน `tts` แบบคำต่อคำ 100%
+
+#### โครงสร้างเวลาและการเดินเรื่อง (Pacing & Duration Standard)
+- **0–3 วินาที**: **HOOK** — ประโยคแรกเปิดด้วยจุดที่น่าทึ่งที่สุด หยุดการเลื่อนฟีดทันที
+- **3–10 วินาที**: **MINIMAL CONTEXT** — ให้ข้อมูลเฉพาะที่จำเป็นต่อการเข้าใจปริศนาเท่านั้น
+- **10–30 วินาที**: **PAYOFF + WOW** — ส่งมอบคำตอบหรือข้อมูลจริงอย่างรวดเร็ว พร้อมเปิดเผย Mini-wow หรือจุดหักมุมทุก 10–15 วินาที
+- **30–45 วินาที**: **TWIST / BIGGER QUESTION / FINAL PAYOFF** — จบด้วยนัยสำคัญที่ใหญ่ขึ้นหรือการหักมุมทางวิทยาศาสตร์
+- **45–60 วินาที**: **TOPIC-SPECIFIC DISCUSSION CTA** — จบด้วยคำถามชวนคิดหรือคาดการณ์เฉพาะเรื่อง 1 ประโยคสั้น
+- **เป้าหมายความยาว**: เป้าหมายหลัก **45–60 วินาที** (ยอมรับได้สูงสุด **60–75 วินาที**; หากเกิน 75 วินาที ต้องตัดทอนบทย่อเนื้อหาก่อนส่งมอบ ห้ามปล่อยให้ยาวเกินแล้วถือว่าผ่าน) เน้นบีบอัดบทก่อนปรับความเร็วเสียง
+
+#### กฎ TTS, ภาพ, CTA และ Branding
+- **TTS Rule**: ใช้ Google Gemini TTS เสียง `Fenrir`, ภาษา `th-TH`, ความเร็วเริ่มต้น `1.05` (กระชับ คมชัด เป็นธรรมชาติ) เสียงพากย์ต้องเริ่มต้นด้วย Hook ทันที ห้ามใส่ชื่อช่อง คำทักทาย เลขตอน หรือเพลงเปิดนำหน้า Hook
+- **Visual Rule**: ภาพแรกต้องเสริมพลังและสื่อสารปริศนาของ Hook โดยตรงทันที **Hero Subject ทางดาราศาสตร์/วิทยาศาสตร์ต้องใหญ่ ยิ่งใหญ่ ครองเฟรม (Dominate the frame)** ห้ามเปิดด้วยดาวเคราะห์ดวงเล็กแปะบนพื้นหลังโล่ง ห้ามเป็นวิวพื้นดิน/หลุมอุกกาบาตโล่งที่เด่นกว่าวัตถุหลัก
+- **Topic-Specific CTA Rule**: ประโยคจบต้องเป็นคำถามสั้นๆ ที่ชวนคุยเฉพาะประเด็นของเรื่องนั้น (เช่น "ถ้ามีโอกาส คุณกล้าเป็นมนุษย์รุ่นแรกที่ไปอยู่ดาวอังคารไหม?" หรือ "คุณคิดว่ามนุษย์จะไปถึงอารยธรรมระดับหนึ่งก่อน หรือเราจะหยุดตัวเองเสียก่อน?") **ห้ามเด็ดขาด**: คำลงท้ายทั่วไป ("อย่าลืมกดไลก์ กดติดตาม", "คอมเมนต์คุยกันหน่อยนะครับ", "ขอบคุณที่รับชม", หรือ outro สำเร็จรูปเดิม) และห้ามมีเสียงพูดใดๆ ต่อท้าย CTA อีก
+- **Branding Rule**: ใช้คำว่า "Mamase" หรือ "Mamase REELS" เท่านั้น **ห้ามใส่คำว่า "MAMASE PODCAST"** บน Reel assets เด็ดขาด และ **ห้ามใส่ badge สองภาษา ("AVAILABLE IN THAI & ENGLISH")** หรือรูปธงภาษาใดๆ บน Reel assets
+
+#### เช็กลิสต์บังคับ: Mamase Reel Hook Gate (10 ข้อ)
+1. Hook อยู่ภายใน 1–3 วินาทีแรก
+2. ไม่มีคำทักทาย แนะนำช่อง หรือ setup ก่อน Hook
+3. คนทั่วไปที่ไม่รู้เรื่องนี้เข้าใจได้ทันที
+4. สร้าง Curiosity Gap / Open Loop ชัดเจน
+5. ถูกต้องทางวิทยาศาสตร์และปกป้องได้ด้วยหลักฐาน
+6. ภาพแรกเสริมพลัง Hook ทันที และวัตถุหลักครองเฟรม
+7. ไม่มี filler หรือประโยคยืดเยื้อ
+8. มีข้อมูล payoff หรือมุมมองใหม่ทุกไม่กี่วินาที
+9. ตอนจบทิ้งแนวคิดใหญ่ twist หรือคำถามที่น่าจดจำ
+10. TTS เริ่มด้วย Hook โดยตรง 100%
 
 1. ตรวจข้อเท็จจริงและวางลำดับเรื่องก่อนสร้างภาพ
 2. เขียน narration, `tts_text`, subtitle และ shot plan ให้แต่ละซีนมีแนวคิด
@@ -61,8 +160,9 @@ space wallpaper, ภาพแบน ฉากโล่ง หรือวัต�
 7. ภาพที่ไม่ตรงบท, generic, โล่ง, แบน, แสงไม่ต่อเนื่อง, มีโลโก้/ลายน้ำ,
    ข้อความผิด, anatomy/hardware ผิด หรือคุณภาพต่ำกว่า baseline ต้องสร้างใหม่
    เฉพาะซีนทันที ห้ามเก็บไว้เพียงเพื่อให้จำนวนครบ
-8. Scene 02 เป็นต้นไปต้องไม่มี presenter, text, subtitle, watermark, logo,
-   ธงหรือตราหน่วยงาน เว้นแต่ผู้ใช้ระบุเป็นกรณีพิเศษ
+8. Scene 02 เป็นต้นไปต้องไม่มี presenter, generated text, subtitle, watermark,
+   ธงหรือตราหน่วยงาน สำหรับ Mamase Reel ให้ composite โลโก้จริงจาก
+   `assets/branding/mamase/logo.png` หลังสร้างภาพตาม skill `mamase-reels`
 9. เมื่อทุกภาพผ่านแล้วจึงสร้าง `script.json`, `video-metadata.json` และ ZIP;
    ห้ามประกาศว่างานเสร็จก่อนตรวจ package ด้วย AutoClip `PackageService`
 10. รายงานชื่อและตำแหน่ง ZIP, จำนวนซีน, จำนวน Wan scenes, resolution,
@@ -78,7 +178,9 @@ generate ด้วยวิธีต่อไปนี้:
   เนื้อหาไม่สามารถเล่าชัดด้วยจำนวนนี้
 - แตก shot เพิ่มจาก master ที่เหมาะสมด้วย crop focus, close/medium/wide,
   pan, zoom และ motion โดยห้ามใช้ภาพซ้ำติดกันจนผู้ชมจับได้
-- ใช้ branding outro เดิม ไม่สร้างใหม่ทุกคลิป
+- ใช้ `assets/branding/mamase/reels-end-scene.png` เป็น master branding outro
+  ห้ามสร้างใหม่ ครอป รีทัช เปลี่ยนสีหรือข้อความ อนุญาตให้ย่อสำเนาแบบรักษา
+  aspect ratio เป็น `1080×1920` สำหรับ ZIP โดยห้ามแก้ artwork ต้นฉบับ
 - ใส่ Wan plan เฉพาะ 1–2 ซีนที่ motion เพิ่มคุณค่าชัดเจน ที่เหลือใช้ FFmpeg
 - ห้ามลดความละเอียด องค์ประกอบ ความถูกต้อง หรือ Visual QA เพื่อประหยัดเครดิต
 - หากภาพหนึ่งสามารถรองรับหลายซีน ต้องเลือก crop/focus ที่เล่าใจความของแต่ละ
@@ -177,23 +279,21 @@ narration ของซีนเป็นความสัมพันธ์ท�
   หลอมผิดธรรมชาติ รวมถึงมือ ใบหน้า ยาน และสถาปัตยกรรมผิดรูป
 - รูปจากเว็บที่มีลายน้ำ เครดิตช่างภาพ โลโก้ หรือสิทธิ์ใช้งานไม่ชัดเจน
 
-### Scene 01 — Narrative Key Art
+### Scene 01 — Permanent Standard (Premium Science Documentary Key Art)
 
-Scene 01 ต้องทำหน้าที่พร้อมกันเป็น opening frame, thumbnail และโปสเตอร์ของ
-เรื่อง ไม่ใช่แค่ presenter ยืนข้างพื้นหลังสวย ๆ ภาพเดียวต้องสรุปหัวข้อ
-คำถาม และเดิมพันของเรื่องได้ทันที
+Scene 01 ของ Mamase Reel ต้องทำหน้าที่พร้อมกัน 3 อย่าง:
+1. หยุดการเลื่อนฟีดทันที (1–2 วินาทีแรก)
+2. สื่อปริศนาหรือเรื่องราวหลักของคลิปภายในภาพเดียว
+3. อ่านชื่อเรื่องและ Hook ได้ชัดเจนบนหน้าจอมือถือ
 
-- ใช้ presenter `mamase-presenter-v1` คนเดิม รักษาใบหน้า แว่น ทรงผม และ
-  identity; เสื้อผ้า สีหน้า และ gesture ปรับให้เข้ากับเรื่องได้
-- Presenter, hero subject และฉากหลังต้องได้รับแสงจากแหล่งเดียวกัน มี rim
-  light/reflection/shadow และ depth ที่ทำให้รู้สึกว่าถ่ายอยู่ในฉากเดียวกัน
-- ให้ hero subject ของเรื่องเด่นพอ ๆ กับ presenter หรือเด่นกว่า ห้ามให้คนบัง
-  เรื่อง และห้ามใช้ทางช้างเผือกหรืออวกาศทั่วไปเป็นฉากหลังแทนเนื้อหา
-- มีข้อความเพียงสองระดับ: topic title ที่บอกว่าเรื่องอะไร และ hook สั้น
-  2–5 คำที่ทำให้อยากรู้คำตอบ ตัวใหญ่ อ่านได้บนมือถือ contrast สูง และไม่ทับ
-  ใบหน้า hero subject หรือพื้นที่ subtitle
-- Typography ต้องดูเป็นโปสเตอร์สารคดีพรีเมียม: หนา ชัด ลำดับชั้นดี ระยะห่าง
-  เป็นระเบียบ ห้ามใช้ตัวบางยาวหลายบรรทัดแบบเอกสาร
+ห้ามสร้างเป็น infographic, presentation slide, generic space wallpaper หรือภาพวัตถุขนาดใหญ่แปะอยู่บนฉากหลังเด็ดขาด
+
+- **Mandatory Visual Hierarchy**: Hook Mystery → Hero Subject → Topic + Thai Hook → Mamase Brand ทุกองค์ประกอบต้องช่วยเล่าเรื่องเดียวกัน ห้ามกระจายข้อความและ callout ไปทั่วภาพ
+- **Hero Subject Rules**: เด่น มีสเกล แต่ต้องเห็นรูปทรงและบริบทครบ ห้ามขยายจนเหลือเพียงพื้นผิว/texture เต็มจอ และห้ามปล่อยให้ subject เล็กจนดูเหมือนวัตถุแปะบนพื้นหลัง ต้องสัมพันธ์โดยตรงกับ Hook สร้างความลึกด้วย foreground, midground, background มี directional light, rim light, atmosphere และ scale cues ร่วมกันอย่างกลมกลืน อย่าบังคับขนาดเป็นจำนวนพิกเซลหรือเปอร์เซ็นต์ตายตัว ให้เลือกขนาดตาม composition และ readability
+- **Human + Dog Story Anchor**: รักษาตัวตนคู่หูเดิม แต่ห้ามใช้ท่านั่งบนก้อนหินหันหลังมองฟ้าเป็น template ถาวร ห้ามใช้ pose, camera angle, เสื้อผ้า หรือ location เดิมติดกันสองปก ต้องเลือก action, expression และ framing ตามเรื่องจริง โดยตรวจเทียบปกที่อนุมัติล่าสุดก่อนสร้าง
+- **Typography & Branding (Deterministic Post-Composite)**: สร้าง raw artwork ที่ไม่มีข้อความ/โลโก้ก่อน ใช้โลโก้ header จริงเพียงหนึ่งชุด และมีข้อความเพียง Topic + Thai Hook ห้าม English filler, kicker, footer, badge, slogan, leader line, fact box, callout และโลโก้ซ้ำ ต้องส่ง protected zones แบบมีหมวดครบ `hero`, `celestial`, `characters` โดยแยกคนและหมาคนละกรอบ; ห้ามกันเฉพาะตัวละครแล้วปล่อยข้อความทับกล้อง ยาน ดาว หรือดาวเคราะห์ หากไม่มีพื้นที่ปลอดภัยให้จัด raw artwork ใหม่
+- **Multi-Ratio (9:16 vs 1:1)**: ห้ามสร้าง Square 1:1 ด้วยการ crop กึ่งกลางจาก 9:16 หากทำให้องค์ประกอบเสียรูป ให้สร้าง 1:1 เฉพาะเมื่อร้องขอและออกแบบ layout แยก
+- **Mandatory Workflow**: วาง Hook + layout ที่ไม่ซ้ำปกก่อน → สร้าง raw artwork ไร้ข้อความ → ตรวจ raw artworkและทำ protected-zone map → composite ด้วย `.agents/skills/mamase-reels-cover/scripts/generate_mamase_reels_cover.py` → ตรวจเต็มภาพและขนาดมือถือ → **ส่ง Scene 01 ให้ผู้ใช้อนุมัติและหยุดรอ** → หลังอนุมัติจึงเริ่มสร้างภาพซีนอื่น
 
 ### Scene 02 เป็นต้นไป — Visual storytelling
 
@@ -211,6 +311,10 @@ hero subject พร้อมความต่างของความร้�
 
 - Reel/Shorts/TikTok ใช้สัดส่วน 9:16 ไฟล์พร้อม AutoClip ขั้นต่ำ
   `1080×1920` PNG
+- Mamase Reel/Shorts/TikTok ใช้ความยาวรวมมาตรฐาน **45–60 วินาที** เว้นแต่
+  ผู้ใช้ระบุความยาวอื่นเป็นรายคลิป
+- ใช้อย่างน้อย **8 ซีนรวม Mamase outro บังคับ** เพิ่มเกิน 8 ได้เมื่อแต่ละซีน
+  มีข้อเท็จจริง reveal คำอธิบาย หรืออารมณ์ใหม่ ห้ามเติมซีนเพื่อยืดเวลา
 - Master แนะนำ `2160×3840` (vertical 4K) เมื่อระบบสร้างภาพรองรับโดยตรงและ
   ต้องการเผื่อ zoom/crop; AutoClip ยังสามารถย่อเป็น `1080×1920` ตอน render
 - YouTube แนวนอนใช้ขั้นต่ำ `1920×1080`; Master แนะนำ `3840×2160` เมื่อสร้าง
@@ -245,8 +349,9 @@ watermark/logo และความคม ห้ามใช้เพียง�
   short hook และภาพรวมที่เล่าเรื่องทั้งคลิปได้ตั้งแต่แรกเห็น
 - เสื้อผ้าและสีหน้าพิธีกรปรับตามเนื้อหาได้ แต่ต้องรักษาใบหน้า แว่น ทรงผม และ
   identity ของ `mamase-presenter-v1`
-- Scene 2 เป็นต้นไปไม่มีข้อความ, label, HUD, subtitle ฝังภาพ, โลโก้ หรือ
-  watermark เว้นแต่ผู้ใช้สั่งเป็นกรณีพิเศษ
+- Scene 2 เป็นต้นไปไม่มี generated text, label, HUD, subtitle ฝังภาพ,
+  agency logo หรือ watermark แต่ต้อง composite โลโก้ Mamase ของจริงตาม skill
+  `mamase-reels` หลังสร้าง artwork ห้ามให้ image model วาดโลโก้เอง
 - ตรวจภาพทุกซีนบนขนาดจอมือถือก่อนประกอบ ZIP แล้ว regenerate เฉพาะภาพที่
   ไม่ผ่าน โดยรักษาภาพที่ดีไว้
 - เก็บ master assets ไว้ใต้ `assets/`; ห้ามใช้ `dist/` เป็น reference ถาวร
@@ -269,10 +374,11 @@ watermark/logo และความคม ห้ามใช้เพียง�
   เฉพาะซีนที่ต้องการ AI motion เมื่อเลือก Wan ในหน้า Generate ระบบใช้ Wan
   เฉพาะซีนเหล่านั้นและใช้ FFmpeg กับซีนที่ไม่มี `wan`; หากเลือก FFmpeg ให้
   ทุกซีนใช้ FFmpeg และไม่สนใจ `wan` โดยไม่ต้องแก้ `script.json`
-- ใช้ Mamase branding outro เป็นซีนสุดท้ายทุกคลิป โดยชวนผู้ชมกดไลก์ แชร์
-  และติดตามอย่างเป็นธรรมชาติก่อนปิดด้วยคำประจำช่อง
-- ใช้ CTA มาตรฐานว่า
-  `ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ`
+- ทุก Reel จบด้วยคำถามชวนคุยเฉพาะเรื่อง (Topic-Specific Discussion CTA)
+  1 ประโยคสั้นๆ เพื่อชวนแลกเปลี่ยนความเห็น/คาดการณ์ตามประเด็นของเรื่องนั้น โดย
+  ไม่มีเสียงพูดใดๆ ต่อท้าย CTA อีก
+- ห้ามใช้ CTA ทั่วไป เช่น "อย่าลืมกดไลก์ กดติดตาม", "คอมเมนต์คุยกันหน่อยนะครับ",
+  "ขอบคุณที่รับชม" หรือประโยคยาวแบบเดิม (ประโยค "ถ้าชอบเรื่องราวอวกาศ... กดไลก์ กดแชร์..." ยกเลิกการใช้งานแล้ว)
 - ตรวจ JSON, image paths, dimensions และความสมบูรณ์ของ ZIP ก่อนส่งมอบ
 - รายงานชื่อ ZIP, ตำแหน่งไฟล์, จำนวนซีน, รูปแบบภาพ และผลการตรวจสอบให้ผู้ใช้
 
@@ -289,6 +395,26 @@ AutoClip รองรับการสร้าง YouTube Visual Podcast แ�
 - **BGM เริ่มต้น**: ใช้ `assets/sounds/mamase-podcast-bg.mp3` เป็นเพลง Podcast ค่าเริ่มต้น ส่วน `space.mp3` เดิมยังเก็บไว้ให้เลือก งานเก่ารักษาเพลงที่บันทึกไว้ใน job settings เดิม
 - **การแสดงผล**: เชื่อมต่อเข้ากับระบบ Persistence, History (`/history`) และ Preview (`/jobs/{id}/preview`) โดยตรง
 - **ความเข้ากันได้**: แยกการทำงานเป็นอิสระ ไม่กระทบค่าเริ่มต้นหรือพฤติกรรมของหน้าสร้างวิดีโอเดิม (Reel / Shorts) และ ZIP contract
+
+## Quick Reel ("หลายภาพ • เสียงเดียว • พร้อมโพสต์")
+
+AutoClip รองรับวิดีโอแนวตั้ง 9:16 จากภาพเรียงลำดับ 1–20 รูป และบทพูดหนึ่งชุดผ่านหน้า `/quick-reel` โดยงานภาพเดียวเดิมยังใช้ได้เหมือนเดิม:
+
+- **ความละเอียด**: 1080×1920 Vertical Full HD (9:16), 30 FPS, H.264 / AAC
+- **Image Fit Modes**:
+  - `Cover` (ค่าเริ่มต้น): Center crop พอดีจอ 9:16 โดยไม่บิดเบี้ยว
+  - `Contain`: เก็บภาพครบทั้งสัดส่วน พร้อมพื้นหลังสีมืด (#12141a)
+- **เสียงและสไตล์**: Google Gemini TTS เสียง `Iapetus` ความเร็ว `1.10` เป็นค่าเริ่มต้น พร้อมสไตล์เสียงธรรมชาติ คมชัด มีพลัง ไหลลื่น
+- **Voice Preview & Saved Style**: หน้า Quick Reel ต้องแสดง Style Prompt ให้แก้ไขได้ มีปุ่มฟังตัวอย่างด้วย Voice/Speed/Style ปัจจุบัน และบันทึกหรือคืนค่าเริ่มต้นเฉพาะ Quick Reel ได้ทันที
+- **การเคลื่อนไหว**: `Static` (ภาพนิ่ง คมชัดเต็มจอ เป็นค่าเริ่มต้น) หรือ `Slow Zoom` (ซูมเข้าช้าๆ นุ่มนวล)
+- **ลำดับและเวลา**: รักษาลำดับ Browse/Drop และรองรับลากการ์ดจัดใหม่ กระจายเวลาภาพเท่ากันตาม duration เสียงจริง พร้อม Crossfade ภาพ 0.4 วินาทีโดยชดเชยเวลา overlap ให้คลิปจบตรงเสียง
+- **Audio Integrity**: สร้าง narration เพียงครั้งเดียวและห้าม split, crossfade หรือตัดเสียงตามรอยต่อภาพ
+- **TTS JSON Input**: รองรับทั้ง `"tts": "บทพูด"` และ `"tts": ["ช่วงแรก", "ช่วงถัดไป"]` โดย `tts[0]` เป็นเสียงของภาพที่ 1, `tts[1]` เป็นเสียงของภาพที่ 2 ตามลำดับ จำนวนข้อความต้องเท่าจำนวนภาพ และแต่ละภาพยึด duration ของเสียงคู่กัน
+- **Hook Text Overlay (ตัวเลือก)**: พาดหัวตัวหนังสือใหญ่ชัดเจนบนภาพ (Top, Center, Bottom) ด้วยฟอนต์ Kanit-Bold สีขาวขอบดำหนา ไม่ถูกเสียงพูดอ่าน
+- **Subtitles**: เปิดใช้งานเป็นค่าเริ่มต้น วางกึ่งกลางล่างอ่านสบายตา
+- **BGM**: ปิดเป็นค่าเริ่มต้น (เสียงบรรยายเพียวๆ) หากเปิดจะใช้เพลงบรรยากาศคลอเบาๆ ระดับเสียง 0.10 พร้อมรองรับการอัปโหลดเพลงเอง
+- **History & Routing**: มีหน้าประวัติแยก `/quick-reel-history` และแท็บตัวกรองใน `/history` (project_type=`quick-reel`)
+- **ความเข้ากันได้**: แยกเป็นอิสระ ไม่กระทบ Generate Reels, Podcast, หรือดวง 12 ราศี
 
 ## ความปลอดภัยและ repository
 

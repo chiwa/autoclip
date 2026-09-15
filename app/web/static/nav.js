@@ -11,13 +11,35 @@
     brand.prepend(img);
   }
 
-  if (header.querySelector('.app-nav')) return;
-  const nav = document.createElement('nav'); nav.className = 'app-nav';
-  for (const [label, href] of [['สร้างวิดีโอ','/'],['สร้างด้วย AI','/ai'],['สร้าง Podcast','/podcast'],['คำสั่งสร้างภาพ','/antigravity'],['History','/history'],['Thai TTS','/tts']]) {
+  const oldNav = header.querySelector('.app-nav');
+  if (oldNav) oldNav.remove();
+  const nav = document.createElement('nav'); nav.className = 'app-nav canonical-nav';
+  const primary = document.createElement('div'); primary.className = 'app-nav-row app-nav-primary';
+  const histories = document.createElement('div'); histories.className = 'app-nav-row app-nav-history';
+  for (const [label, href] of [
+    ['สร้างวิดีโอ','/'],
+    ['Quick Reel','/quick-reel'],
+    ['สร้างด้วย AI','/ai'],
+    ['สร้าง Podcast','/podcast'],
+    ['🔮 ดวง 12 ราศี','/zodiac-weekly'],
+    ['Channels','/channels'],
+  ]) {
     const link = document.createElement('a'); link.href = href; link.textContent = label;
     const path = window.location.pathname;
     if ((href === '/' && (path === '/' || path.startsWith('/jobs/'))) || path === href) link.className = 'active';
-    nav.append(link);
+    primary.append(link);
   }
+  for (const [label, href] of [
+    ['Reels History','/reels-history'],
+    ['Quick Reel History','/quick-reel-history'],
+    ['Podcast History','/podcast-history'],
+    ['ดวง History','/zodiac-history'],
+  ]) {
+    const link = document.createElement('a'); link.href = href; link.textContent = label;
+    const path = window.location.pathname;
+    if ((href === '/' && (path === '/' || path.startsWith('/jobs/'))) || path === href) link.className = 'active';
+    histories.append(link);
+  }
+  nav.append(primary, histories);
   header.append(nav);
 })();

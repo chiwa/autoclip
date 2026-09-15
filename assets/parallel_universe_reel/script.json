@@ -1,0 +1,153 @@
+{
+  "project": {
+    "id": "mamase-parallel-universe-reel-v1",
+    "title": "โลกคู่ขนานมีจริงไหม? อาจมีคุณอีกคนอยู่จริงหรือเปล่า",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless. Never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Keep pauses brief and rare, and keep the delivery smooth and connected across scenes."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ตอนนี้ อาจมีคุณอีกคนอยู่ในโลกคู่ขนานจริงหรือเปล่าครับ?",
+      "tts_text": "ตอนนี้ อาจมีคุณอีกคนอยู่ในโลกคู่ขนานจริงหรือเปล่าครับ?",
+      "subtitle": "โลกคู่ขนาน\nมีคุณอีกคนจริงไหม?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.2,
+      "focus": "right",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve the supplied 2D anime presenter image, exact character identity, rectangular glasses, tousled black hair, professional midnight-blue explorer jacket, Thai title, hook text and original composition. Subtle natural head movement, gentle open-hand gesture toward two diverging realities, slight cloth movement, slow cinematic camera push-in, stable face and hands, coherent cyan and amber lighting.",
+        "negative_prompt": "changed identity, changed face, changed clothing, altered text, extra text, subtitles, watermark, logo, flicker, jitter, distorted hands, duplicated fingers, warped face, sudden camera movement, portal travel",
+        "seed": 4201,
+        "frames": 81,
+        "lip_sync": true,
+        "steps": 25,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-relative-state",
+      "image": "images/scene-02-relative-state.png",
+      "narration": "แนวคิดที่ถูกพูดถึงมากที่สุดเรียกว่า Many-Worlds Interpretation เริ่มต้นจากงานของนักฟิสิกส์ชื่อ ฮิวจ์ เอเวอเร็ตต์ ในปี 1957",
+      "tts_text": "แนวคิดที่ถูกพูดถึงมากที่สุดเรียกว่า เมนี เวิลด์ส อินเทอร์พรีเทชัน เริ่มต้นจากงานของนักฟิสิกส์ชื่อ ฮิวจ์ เอเวอเร็ตต์ ในปี หนึ่งพันเก้าร้อยห้าสิบเจ็ด",
+      "subtitle": "แนวคิด Many-Worlds\nเริ่มต้นในปี 1957",
+      "motion": "pan_up",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-superposition",
+      "image": "images/scene-03-superposition.png",
+      "narration": "ในโลกควอนตัม อนุภาคหนึ่งสามารถอยู่ในหลายความเป็นไปได้พร้อมกันได้ จนกระทั่งเราเข้าไปวัดมัน เราจึงเห็นผลลัพธ์เพียงคำตอบเดียว",
+      "tts_text": "ในโลกควอนตัม อนุภาคหนึ่งสามารถอยู่ในหลายความเป็นไปได้พร้อมกันได้ จนกระทั่งเราเข้าไปวัดมัน เราจึงเห็นผลลัพธ์เพียงคำตอบเดียว",
+      "subtitle": "ก่อนการวัด\nมีหลายความเป็นไปได้",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-04-branching-outcomes",
+      "image": "images/scene-04-branching-outcomes.png",
+      "narration": "แต่เอเวอเร็ตต์เสนอว่า ผลลัพธ์อื่นอาจไม่ได้หายไป ทุกความเป็นไปได้ยังคงเกิดขึ้น เพียงแต่แยกออกไปอยู่ในแขนงของความจริงที่ต่างกัน",
+      "tts_text": "แต่เอเวอเร็ตต์เสนอว่า ผลลัพธ์อื่นอาจไม่ได้หายไป ทุกความเป็นไปได้ยังคงเกิดขึ้น เพียงแต่แยกออกไปอยู่ในแขนงของความจริงที่ต่างกัน",
+      "subtitle": "ผลลัพธ์อื่นอาจไม่ได้หายไป",
+      "motion": "slow_zoom_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.18,
+      "focus": "center",
+      "transition": "zoom_in"
+    },
+    {
+      "id": "scene-05-decoherence",
+      "image": "images/scene-05-decoherence.png",
+      "narration": "แต่เดี๋ยวก่อน ไม่ได้แปลว่าแค่คุณเลือกกาแฟแทนชา แล้วจักรวาลใหม่จะเด้งขึ้นมาทันทีนะครับ การแยกแขนงเกี่ยวข้องกับปฏิสัมพันธ์ระดับควอนตัมและดีโคฮีเรนซ์",
+      "tts_text": "แต่เดี๋ยวก่อน ไม่ได้แปลว่าแค่คุณเลือกกาแฟแทนชา แล้วจักรวาลใหม่จะเด้งขึ้นมาทันทีนะครับ การแยกแขนงเกี่ยวข้องกับปฏิสัมพันธ์ระดับควอนตัมและดีโคฮีเรนซ์",
+      "subtitle": "ไม่ใช่แค่เลือกกาแฟหรือชา",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "bottom",
+      "transition": "smooth_right"
+    },
+    {
+      "id": "scene-06-alternate-lives",
+      "image": "images/scene-06-alternate-lives.png",
+      "narration": "ถ้าแนวคิดนี้ถูกต้อง อาจมีแขนงที่ประวัติศาสตร์เหมือนโลกของเราเกือบทุกอย่าง ก่อนเหตุการณ์เล็กมากจะทำให้แต่ละเส้นทางค่อย ๆ แตกต่างกัน",
+      "tts_text": "ถ้าแนวคิดนี้ถูกต้อง อาจมีแขนงที่ประวัติศาสตร์เหมือนโลกของเราเกือบทุกอย่าง ก่อนเหตุการณ์เล็กมากจะทำให้แต่ละเส้นทางค่อย ๆ แตกต่างกัน",
+      "subtitle": "จุดเริ่มเดียวกัน\nชีวิตอาจต่างกัน",
+      "motion": "pan_up",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-07-unreachable-branches",
+      "image": "images/scene-07-unreachable-branches.png",
+      "narration": "ฟังแล้วอยากไปทักตัวเองอีกโลกหนึ่งใช่ไหมครับ ปัญหาคือ เรายังไม่มีวิธีเดินทาง ส่งข้อความ หรือแอบถามเลขเด็ดข้ามโลกได้เลย",
+      "tts_text": "ฟังแล้วอยากไปทักตัวเองอีกโลกหนึ่งใช่ไหมครับ ปัญหาคือ เรายังไม่มีวิธีเดินทาง ส่งข้อความ หรือแอบถามเลขเด็ดข้ามโลกได้เลย",
+      "subtitle": "ยังติดต่อโลกอีกแขนงไม่ได้",
+      "motion": "pan_right_to_left",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-08-interpretations",
+      "image": "images/scene-08-interpretations.png",
+      "narration": "และต้องย้ำว่า Many-Worlds เป็นการตีความกลศาสตร์ควอนตัม ไม่ใช่หลักฐานว่าเราค้นพบโลกอีกใบแล้ว ปัจจุบันยังไม่มีการทดลองที่ยืนยันว่าแนวคิดนี้ถูกต้องเหนือคำอธิบายอื่น",
+      "tts_text": "และต้องย้ำว่า เมนี เวิลด์ส เป็นการตีความกลศาสตร์ควอนตัม ไม่ใช่หลักฐานว่าเราค้นพบโลกอีกใบแล้ว ปัจจุบันยังไม่มีการทดลองที่ยืนยันว่าแนวคิดนี้ถูกต้องเหนือคำอธิบายอื่น",
+      "subtitle": "ยังไม่ใช่การค้นพบโลกอีกใบ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-09-question",
+      "image": "images/scene-09-question.png",
+      "narration": "แต่ถ้าความเป็นไปได้ทุกอย่างยังคงเกิดขึ้นจริง ในโลกอีกใบหนึ่ง ตัวคุณกำลังมีชีวิตแบบไหน และเขาจะสงสัยถึงการมีอยู่ของคุณเหมือนกันหรือเปล่า?",
+      "tts_text": "แต่ถ้าความเป็นไปได้ทุกอย่างยังคงเกิดขึ้นจริง ในโลกอีกใบหนึ่ง ตัวคุณกำลังมีชีวิตแบบไหน และเขาจะสงสัยถึงการมีอยู่ของคุณเหมือนกันหรือเปล่า?",
+      "subtitle": "คุณอีกคนกำลังใช้ชีวิตแบบไหน?",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "bottom",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-10-brand-outro",
+      "image": "images/scene-10-brand-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Mamase brand outro, glowing cyan orbiting planet in dark navy space, peaceful and contemplative.",
+        "negative_prompt": "watermark, blur, jitter",
+        "seed": 98,
+        "frames": 81,
+        "lip_sync": false
+      }
+    }
+  ]
+}

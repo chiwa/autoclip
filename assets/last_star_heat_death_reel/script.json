@@ -1,0 +1,122 @@
+{
+  "project": {
+    "id": "mamase-last-star-heat-death-reel-v1",
+    "title": "หลังดาวดวงสุดท้ายดับลง จักรวาลจะเหลืออะไร?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: \"เฮ้ย... จริงดิ?\" Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "อีกหนึ่งร้อยล้านล้านปีข้างหน้า... เมื่อ 'ดาวดวงสุดท้าย' ดับแสงลง จักรวาลอันเวิ้งว้างจะเหลืออะไร?!",
+      "tts_text": "อีกหนึ่งร้อยล้านล้านปีข้างหน้า... เมื่อ ดาวดวงสุดท้าย ดับแสงลง จักรวาลอันเวิ้งว้างจะเหลืออะไร?!",
+      "subtitle": "อีก 100 ล้านล้านปีข้างหน้า...\nเมื่อ 'ดาวดวงสุดท้าย' ดับลง จักรวาลจะเหลืออะไร?",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic vertical master shot of cozy room with fireplace, young man and dog looking out window at majestic cosmic spiral galaxy and dark celestial void, gentle ambient light push-in",
+        "negative_prompt": "text distortion, face distortion, flicker, sudden movement, watermark, logo",
+        "seed": 2026,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-red-to-black-dwarf",
+      "image": "images/scene-02-red-to-black-dwarf.png",
+      "narration": "ดวงดาวกลุ่มสุดท้ายที่จะยังส่องแสง อาจเป็นดาวแคระแดงขนาดเล็กที่ใช้เชื้อเพลิงอย่างประหยัด และอยู่ได้นานหลายล้านล้านปี เมื่อเชื้อเพลิงหมดลง ยุคแห่งแสงดาวก็จะค่อย ๆ สิ้นสุดลง",
+      "tts_text": "ดวงดาวกลุ่มสุดท้ายที่จะยังส่องแสง อาจเป็นดาวแคระแดงขนาดเล็กที่ใช้เชื้อเพลิงอย่างประหยัด และอยู่ได้นานหลายล้านล้านปี เมื่อเชื้อเพลิงหมดลง ยุคแห่งแสงดาวก็จะค่อยๆ สิ้นสุดลง",
+      "subtitle": "ดาวกลุ่มสุดท้ายคือ 'ดาวแคระแดง'\nเมื่อเชื้อเพลิงหมด ยุคแห่งแสงดาวจะสิ้นสุดลง",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-degenerate-era-graveyard",
+      "image": "images/scene-03-degenerate-era-graveyard.png",
+      "narration": "จักรวาลจะเข้าสู่ 'ยุคเสื่อมสลาย' ท้องฟ้ามืดมิดไร้แสงสว่าง ไม่มีดาวเกิดใหม่อีกต่อไป เหลือเพียงซากศพดาวอย่าง ดาวแคระขาว ดาวนิวตรอน และหลุมดำ ลอยเคว้งคว้างในความว่างเปล่า",
+      "tts_text": "จักรวาลจะเข้าสู่ ยุคเสื่อมสลาย ท้องฟ้ามืดมิดไร้แสงสว่าง ไม่มีดาวเกิดใหม่อีกต่อไป เหลือเพียงซากศพดาวอย่าง ดาวแคระขาว ดาวนิวตรอน และหลุมดำ ลอยเคว้งคว้างในความว่างเปล่า",
+      "subtitle": "เข้าสู่ 'ยุคเสื่อมสลาย'\nเหลือเพียงซากดาวแคระขาวและดาวนิวตรอน",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-04-proton-decay-dissolution",
+      "image": "images/scene-04-proton-decay-dissolution.png",
+      "narration": "ถ้าโปรตอนสามารถสลายตัวได้ตามแบบจำลองฟิสิกส์บางชนิด สสารธรรมดา ดาวเคราะห์ และซากดาวต่าง ๆ ก็อาจค่อย ๆ แตกสลายไป แต่จนถึงวันนี้ เรายังไม่เคยตรวจพบการสลายตัวของโปรตอนจริง ๆ",
+      "tts_text": "ถ้าโปรตอนสามารถสลายตัวได้ตามแบบจำลองฟิสิกส์บางชนิด สสารธรรมดา ดาวเคราะห์ และซากดาวต่างๆ ก็อาจค่อยๆ แตกสลายไป แต่จนถึงวันนี้ เรายังไม่เคยตรวจพบการสลายตัวของโปรตอนจริงๆ",
+      "subtitle": "ถ้าโปรตอนสลายตัวได้ตามแบบจำลองฟิสิกส์\nสสารและดาวเคราะห์ อาจค่อยๆ แตกสลายไป",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-05-black-hole-era-monolith",
+      "image": "images/scene-05-black-hole-era-monolith.png",
+      "narration": "จากนั้นจะมีเพียง 'หลุมดำ' ที่เป็นเจ้าแห่งความมืดมิด มันจะครอบครองจักรวาลอันกว้างใหญ่เพียงลำพัง ยาวนานจนตัวเลขปีแทบไร้ความหมาย",
+      "tts_text": "จากนั้นจะมีเพียง หลุมดำ ที่เป็นเจ้าแห่งความมืดมิด มันจะครอบครองจักรวาลอันกว้างใหญ่เพียงลำพัง ยาวนานจนตัวเลขปีแทบไร้ความหมาย",
+      "subtitle": "เข้าสู่ 'ยุคหลุมดำ'\nผู้ครอบครองจักรวาลอันเวิ้งว้างเพียงลำพัง",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-06-hawking-radiation-flash",
+      "image": "images/scene-06-hawking-radiation-flash.png",
+      "narration": "แต่แม้แต่หลุมดำก็อาจไม่เป็นอมตะครับ ตามทฤษฎีรังสีฮอว์กิง มันจะค่อย ๆ สูญเสียมวลและระเหยไปเรื่อย ๆ ก่อนเข้าสู่ช่วงสุดท้ายที่รุนแรงขึ้น จนในที่สุดหลุมดำดวงสุดท้ายอาจหายไปจากจักรวาล",
+      "tts_text": "แต่แม้แต่หลุมดำก็อาจไม่เป็นอมตะครับ ตามทฤษฎีรังสีฮอว์กิง มันจะค่อยๆ สูญเสียมวลและระเหยไปเรื่อยๆ ก่อนเข้าสู่ช่วงสุดท้ายที่รุนแรงขึ้น จนในที่สุดหลุมดำดวงสุดท้ายอาจหายไปจากจักรวาล",
+      "subtitle": "ตามทฤษฎีรังสีฮอว์กิง\nหลุมดำอาจระเหย จนดวงสุดท้ายหายไปจากจักรวาล",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-07-dark-era-eternal-warmth",
+      "image": "images/scene-07-dark-era-eternal-warmth.png",
+      "narration": "จักรวาลจะเหลือเพียงความเยียบเย็นใกล้ศูนย์สัมบูรณ์... แต่อนาคตอันไกลโพ้นนี้ ยิ่งเตือนใจเราว่า วินาทีนี้ที่เรายังมีแสงสว่าง มีความอบอุ่น และมีชีวิตใต้ท้องฟ้า คือช่วงเวลาที่มหัศจรรย์และงดงามที่สุดครับ",
+      "tts_text": "จักรวาลจะเหลือเพียงความเยียบเย็นใกล้ศูนย์สัมบูรณ์... แต่อนาคตอันไกลโพ้นนี้ ยิ่งเตือนใจเราว่า วินาทีนี้ที่เรายังมีแสงสว่าง มีความอบอุ่น และมีชีวิตใต้ท้องฟ้า คือช่วงเวลาที่มหัศจรรย์และงดงามที่สุดครับ",
+      "subtitle": "จักรวาลสู่ความเยียบเย็นชั่วนิรันดร์\nแต่ทำให้ 'วินาทีนี้' ที่เรายังมีชีวิต ล้ำค่าที่สุด",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-08-brand-outro",
+      "image": "images/scene-08-brand-outro.png",
+      "narration": "ถ้าชอบเรื่องราวดาราศาสตร์แบบนี้ กดติดตาม แล้วมาร่วมค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวดาราศาสตร์แบบนี้ กดติดตาม แล้วมาร่วมค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "show_subtitle": true,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

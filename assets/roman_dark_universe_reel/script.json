@@ -1,0 +1,153 @@
+{
+  "project": {
+    "id": "mamase-roman-dark-universe-reel-v3",
+    "title": "Roman Space Telescope: ทำแผนที่สิ่งที่มองไม่เห็น",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: 'เฮ้ย... จริงดิ?' Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "สวัสดีครับ ยินดีต้อนรับสู่ Mamase จักรวาลของใจ เรามองไม่เห็นจักรวาลส่วนใหญ่ นาซาเลยส่งกล้องตัวใหม่ขึ้นไปทำแผนที่สิ่งที่มองไม่เห็นครับ ฟังแล้วเหมือนส่งนักสำรวจเข้าไปในห้องมืด โดยให้กล้องเป็นคนเปิดไฟเลยนะ!",
+      "tts_text": "สวัสดีครับ ยินดีต้อนรับสู่ มามาเซ่ จักรวาลของใจ เรามองไม่เห็นจักรวาลส่วนใหญ่ นาซาเลยส่งกล้องตัวใหม่ขึ้นไปทำแผนที่สิ่งที่มองไม่เห็นครับ ฟังแล้วเหมือนส่งนักสำรวจเข้าไปในห้องมืด โดยให้กล้องเป็นคนเปิดไฟเลยนะ!",
+      "subtitle": "เรามองไม่เห็นจักรวาลส่วนใหญ่\nRoman จึงไปทำแผนที่สิ่งที่มองไม่เห็น",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "top",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Preserve the supplied canonical Mamase anime presenter identity and existing title. The presenter speaks excitedly while pointing toward the Nancy Grace Roman Space Telescope leaving Earth and entering a vast violet-blue cosmic web. Subtle natural head movement, gentle pointing gesture, slow cinematic push-in, stable face, hands, telescope geometry and typography, premium science documentary lighting.",
+        "negative_prompt": "new text, changed text, subtitles, watermark, logo, extra person, JWST, hexagonal gold mirror, distorted face, distorted hands, duplicated fingers, flicker, jitter, camera shake",
+        "seed": 326,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-launch",
+      "image": "images/scene-02-launch.png",
+      "narration": "นี่คือกล้องโทรทรรศน์อวกาศแนนซี เกรซ โรมัน ซึ่งออกเดินทางเมื่อวันที่สามสิบ สิงหาคม สองพันยี่สิบหก บนจรวดฟอลคอน เฮฟวี และตอนนี้กำลังมุ่งหน้าออกจากโลก",
+      "tts_text": "นี่คือกล้องโทรทรรศน์อวกาศ แนนซี เกรซ โรมัน ซึ่งออกเดินทางเมื่อวันที่ สามสิบ สิงหาคม สองพันยี่สิบหก บนจรวด ฟัลคอน เฮฟวี และตอนนี้กำลังมุ่งหน้าออกจากโลก",
+      "subtitle": "30 สิงหาคม 2026\nRoman ออกเดินทางด้วย Falcon Heavy",
+      "motion": "pan_up",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-03-l2",
+      "image": "images/scene-03-l2.png",
+      "narration": "จุดหมายของโรมันคือบริเวณที่เรียกว่า แอลทู อยู่ห่างจากโลกประมาณหนึ่งล้านไมล์ และต้องใช้เวลาเดินทางกับตรวจสอบระบบรวมราวสามเดือน",
+      "tts_text": "จุดหมายของ โรมัน คือบริเวณที่เรียกว่า แอล ทู อยู่ห่างจากโลกประมาณ หนึ่งล้านไมล์ และต้องใช้เวลาเดินทางกับตรวจสอบระบบรวมราว สามเดือน",
+      "subtitle": "มุ่งหน้าสู่ L2\nห่างโลกประมาณ 1 ล้านไมล์",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-04-dark-universe",
+      "image": "images/scene-04-dark-universe.png",
+      "narration": "คำว่า จักรวาลมืด ไม่ได้หมายความว่าที่นั่นปิดไฟนะครับ แต่มันหมายถึงสสารมืดและพลังงานมืด สองสิ่งลึกลับที่เราไม่เห็นโดยตรง แต่กลับมีอิทธิพลต่อโครงสร้างและการขยายตัวของจักรวาล",
+      "tts_text": "คำว่า จักรวาลมืด ไม่ได้หมายความว่าที่นั่นปิดไฟนะครับ แต่มันหมายถึง สสารมืด และ พลังงานมืด สองสิ่งลึกลับที่เราไม่เห็นโดยตรง แต่กลับมีอิทธิพลต่อโครงสร้างและการขยายตัวของจักรวาล",
+      "subtitle": "จักรวาลมืด ≠ ปิดไฟ\nแต่มันคือ Dark Matter และ Dark Energy",
+      "motion": "gentle_float",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-05-cosmic-map",
+      "image": "images/scene-05-cosmic-map.png",
+      "narration": "โรมันจะสำรวจกาแล็กซีจำนวนมหาศาล ดูว่าพวกมันกระจายตัวอย่างไร และสังเกตว่าแรงโน้มถ่วงบิดเบือนแสงจากวัตถุที่อยู่ไกลออกไปมากแค่ไหน",
+      "tts_text": "โรมัน จะสำรวจกาแล็กซีจำนวนมหาศาล ดูว่าพวกมันกระจายตัวอย่างไร และสังเกตว่าแรงโน้มถ่วงบิดเบือนแสงจากวัตถุที่อยู่ไกลออกไปมากแค่ไหน",
+      "subtitle": "สำรวจกาแล็กซีจำนวนมหาศาล\nเพื่อทำแผนที่โครงสร้างจักรวาล",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.11,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Animate the supplied vast deep-space panorama with smooth subtle parallax across thousands of galaxies and glowing cosmic-web filaments. Gentle forward camera drift reveals gravitational lensing arcs and immense depth, elegant slow-moving particles, scientifically inspired dark-universe atlas, stable continuous motion, no new objects and no text.",
+        "negative_prompt": "text, subtitles, watermark, logo, fast motion, warped galaxies, explosions, flicker, jitter, camera shake",
+        "seed": 329,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-wide-survey",
+      "image": "images/scene-06-wide-survey.png",
+      "narration": "จุดเด่นของโรมันคือมองเห็นภาพได้คมชัด แต่ครอบคลุมท้องฟ้ากว้างมาก ทำให้สำรวจจักรวาลได้เร็วกว่าฮับเบิลประมาณหนึ่งพันเท่า ฮับเบิลเหมือนซูมดูเพชรทีละเม็ด ส่วนโรมันกางแผนที่ดูได้ทั้งเหมืองครับ!",
+      "tts_text": "จุดเด่นของ โรมัน คือมองเห็นภาพได้คมชัด แต่ครอบคลุมท้องฟ้ากว้างมาก ทำให้สำรวจจักรวาลได้เร็วกว่ากล้อง ฮับเบิล ประมาณ หนึ่งพันเท่า ฮับเบิล เหมือนซูมดูเพชรทีละเม็ด ส่วน โรมัน กางแผนที่ดูได้ทั้งเหมืองครับ!",
+      "subtitle": "สำรวจจักรวาลเร็วกว่า Hubble\nประมาณ 1,000 เท่า",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.11,
+      "focus": "top",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-07-wide-field-camera",
+      "image": "images/scene-07-wide-field-camera.png",
+      "narration": "หัวใจของมันคือกล้องอินฟราเรดสามร้อยล้านพิกเซล ประกอบด้วยตัวตรวจจับระดับโฟร์เคถึงสิบแปดชุด และจะส่งข้อมูลกลับโลกประมาณหนึ่งจุดสี่เทราไบต์ทุกวัน",
+      "tts_text": "หัวใจของมันคือกล้องอินฟราเรด สามร้อยล้านพิกเซล ประกอบด้วยตัวตรวจจับระดับ โฟร์เค ถึง สิบแปดชุด และจะส่งข้อมูลกลับโลกประมาณ หนึ่งจุดสี่ เทราไบต์ ทุกวัน",
+      "subtitle": "300 ล้านพิกเซล · ตัวตรวจจับ 18 ชุด\nข้อมูลวันละ 1.4 TB",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-08-exoplanets",
+      "image": "images/scene-08-exoplanets.png",
+      "narration": "นอกจากทำแผนที่จักรวาล โรมันยังตามหาดาวเคราะห์นอกระบบ และทดสอบเทคโนโลยีบังแสงดาว เพื่อถ่ายภาพดาวเคราะห์ที่ปกติถูกแสงจากดาวฤกษ์กลบจนมองไม่เห็น",
+      "tts_text": "นอกจากทำแผนที่จักรวาล โรมัน ยังตามหาดาวเคราะห์นอกระบบ และทดสอบเทคโนโลยีบังแสงดาว เพื่อถ่ายภาพดาวเคราะห์ที่ปกติถูกแสงจากดาวฤกษ์กลบจนมองไม่เห็น",
+      "subtitle": "บังแสงดาว\nเพื่อเผยดาวเคราะห์ที่ซ่อนอยู่",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "top",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-09-first-light",
+      "image": "images/scene-09-first-light.png",
+      "narration": "ภาพชุดแรกคาดว่าจะเผยแพร่ในช่วงต้นปีสองพันยี่สิบเจ็ด และเรื่องน่าตื่นเต้นที่สุด อาจไม่ใช่สิ่งที่นักวิทยาศาสตร์ตั้งใจค้นหา แต่อาจเป็นบางสิ่งที่เราไม่เคยรู้มาก่อนว่าควรจะมองหาด้วยซ้ำ",
+      "tts_text": "ภาพชุดแรกคาดว่าจะเผยแพร่ในช่วงต้นปี สองพันยี่สิบเจ็ด และเรื่องน่าตื่นเต้นที่สุด อาจไม่ใช่สิ่งที่นักวิทยาศาสตร์ตั้งใจค้นหา แต่อาจเป็นบางสิ่งที่เราไม่เคยรู้มาก่อนว่าควรจะมองหาด้วยซ้ำ",
+      "subtitle": "ภาพแรกคาดว่ามาต้นปี 2027\nและสิ่งสำคัญอาจเป็นสิ่งที่เราไม่เคยคาดคิด",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-10-mamase-outro",
+      "image": "images/scene-10-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

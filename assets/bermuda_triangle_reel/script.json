@@ -1,0 +1,209 @@
+{
+  "project": {
+    "id": "mamase-bermuda-triangle-reel-v1",
+    "title": "สามเหลี่ยมเบอร์มิวดา มันกลืนเรือจริงไหม?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, curious, and slightly cheeky, like a charismatic Thai creator casually sharing a fascinating mystery with a close friend. Keep the delivery flowing and connected, with a medium-fast pace and clear pronunciation. Build intrigue without sounding frightening or sensational. Use brief natural pauses only when they help comprehension. Never sound like a news presenter, announcer, advertisement, or formal narrator."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "เรือและเครื่องบินเคยหายไปในบริเวณนี้จริงครับ แต่สามเหลี่ยมเบอร์มิวดา มันกลืนทุกอย่างได้จริง หรือเราแค่จำเรื่องลึกลับได้ดีกว่าเรื่องธรรมดา?",
+      "tts_text": "เรือและเครื่องบินเคยหายไปในบริเวณนี้จริงครับ แต่สามเหลี่ยมเบอร์มิวดา มันกลืนทุกอย่างได้จริง หรือเราแค่จำเรื่องลึกลับได้ดีกว่าเรื่องธรรมดา?",
+      "subtitle": "สามเหลี่ยมเบอร์มิวดา\nมันกลืนเรือจริงไหม?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "right",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Preserve the canonical Mamase anime male presenter identity, rectangular glasses, tousled black hair, maritime jacket, Thai title and composition. He speaks naturally with subtle blinking, a small concerned expression and gentle pointing gesture. Behind him, an intact cargo ship moves through rough Atlantic waves while a propeller aircraft enters a rain squall. Rain and sea spray move naturally, slow stable cinematic push-in.",
+        "negative_prompt": "changed text, extra text, watermark, logo, distorted face, distorted hands, duplicated fingers, ship sinking, aircraft crash, aliens, portal, monster, flicker, jitter, sudden camera movement",
+        "seed": 7301,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-location",
+      "image": "images/scene-02-location.png",
+      "narration": "ชื่อของมันใช้เรียกพื้นที่กว้างในมหาสมุทรแอตแลนติก ระหว่างฟลอริดา เบอร์มิวดา และเปอร์โตริโก แต่ไม่ได้มีเส้นเขตแดนอย่างเป็นทางการครับ",
+      "tts_text": "ชื่อของมันใช้เรียกพื้นที่กว้างในมหาสมุทรแอตแลนติก ระหว่างฟลอริดา เบอร์มิวดา และเปอร์โตริโก แต่ไม่ได้มีเส้นเขตแดนอย่างเป็นทางการครับ",
+      "subtitle": "พื้นที่กว้างในแอตแลนติก\nไม่มีเขตแดนทางการ",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "High aerial glide above the western Atlantic from Florida and the Bahamas toward open ocean and Bermuda, layered clouds drift slowly, sunlight moves across ocean currents, subtle parallax and immense geographic scale, no drawn triangle or map graphics.",
+        "negative_prompt": "text, labels, map lines, glowing triangle, logo, watermark, portal, aliens, warped coast, flicker, jitter, fast camera",
+        "seed": 7302,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-flight-19",
+      "image": "images/scene-03-flight-19.png",
+      "narration": "คดีที่ดังที่สุดคือ Flight 19 ในปี 1945 เครื่องบินทหารห้าลำหลงทางระหว่างฝึกบิน แล้วหายไปพร้อมลูกเรือสิบสี่คน",
+      "tts_text": "คดีที่ดังที่สุดคือ ไฟลต์ ไนน์ทีน ในปี หนึ่งพันเก้าร้อยสี่สิบห้า เครื่องบินทหารห้าลำหลงทางระหว่างฝึกบิน แล้วหายไปพร้อมลูกเรือสิบสี่คน",
+      "subtitle": "Flight 19 · ปี 1945\nเครื่องบิน 5 ลำหายไป",
+      "motion": "pan_left_to_right_zoom_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.14,
+      "focus": "top",
+      "transition": "fade_black",
+      "wan": {
+        "prompt": "Five historically credible TBM Avenger aircraft fly in formation toward a heavy Atlantic rain squall, propellers spin smoothly, rain curtains and cloud layers move naturally, subtle stable tracking camera, no crash or explosion.",
+        "negative_prompt": "text, logo, watermark, extra aircraft, malformed wings, crash, explosion, portal, ghosts, flicker, jitter, sudden camera movement",
+        "seed": 7303,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-cyclops",
+      "image": "images/scene-04-cyclops.png",
+      "narration": "ก่อนหน้านั้น เรือ USS Cyclops พร้อมคนกว่าสามร้อยก็หายไปโดยไม่ส่งสัญญาณขอความช่วยเหลือ เหตุการณ์จริงเหล่านี้ทำให้ตำนานยิ่งแข็งแรง",
+      "tts_text": "ก่อนหน้านั้น เรือ ยูเอสเอส ไซคลอปส์ พร้อมคนกว่าสามร้อยก็หายไปโดยไม่ส่งสัญญาณขอความช่วยเหลือ เหตุการณ์จริงเหล่านี้ทำให้ตำนานยิ่งแข็งแรง",
+      "subtitle": "USS Cyclops\nหายไปพร้อมคนกว่า 300 คน",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "An intact early twentieth-century naval collier pushes through large Atlantic swells beneath a darkening storm. Slow low-angle camera pull-back, realistic rolling waves, sea spray and smoke movement, restrained historical documentary mood.",
+        "negative_prompt": "text, readable ship name, logo, watermark, sinking, broken ship, explosion, sea monster, portal, flicker, jitter",
+        "seed": 7304,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-legend",
+      "image": "images/scene-05-legend.png",
+      "narration": "เมื่อหนังสือพิมพ์และนักเขียนนำคดีจากหลายยุคมารวมกัน พื้นที่ธรรมดาบนแผนที่ จึงค่อยๆ กลายเป็นเขตอาถรรพ์ในความทรงจำของผู้คน",
+      "tts_text": "เมื่อหนังสือพิมพ์และนักเขียนนำคดีจากหลายยุคมารวมกัน พื้นที่ธรรมดาบนแผนที่ จึงค่อยค่อยกลายเป็นเขตอาถรรพ์ในความทรงจำของผู้คน",
+      "subtitle": "หลายคดีถูกรวมกัน\nจนกลายเป็นตำนาน",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.11,
+      "focus": "left",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "A warm desk lamp illuminates old maritime maps, blurred newspaper clippings and ship photographs while rain moves across the window and loose paper edges shift gently. Slow investigative camera drift, cinematic archive atmosphere, all text remains unreadable.",
+        "negative_prompt": "readable text, new text, logo, watermark, supernatural symbols, glowing triangle, hands, flicker, jitter, fast camera",
+        "seed": 7305,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-weather",
+      "image": "images/scene-06-weather.png",
+      "narration": "แต่บริเวณนี้มีทั้งพายุที่เปลี่ยนเร็ว คลื่นสูง และการจราจรทางเรือกับเครื่องบินหนาแน่น ความเสี่ยงจึงมีจริง โดยไม่ต้องพึ่งเรื่องเหนือธรรมชาติ",
+      "tts_text": "แต่บริเวณนี้มีทั้งพายุที่เปลี่ยนเร็ว คลื่นสูง และการจราจรทางเรือกับเครื่องบินหนาแน่น ความเสี่ยงจึงมีจริง โดยไม่ต้องพึ่งเรื่องเหนือธรรมชาติ",
+      "subtitle": "พายุเร็ว · คลื่นสูง\nความเสี่ยงมีจริง",
+      "motion": "cinematic_push_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "smooth_left",
+      "wan": {
+        "prompt": "A modern research vessel approaches the boundary between sunlight and a sudden violent Atlantic squall. Waves roll continuously, rain curtain advances, sea spray crosses the bow, slow stable forward tracking, vessel remains intact.",
+        "negative_prompt": "text, logo, watermark, sinking, explosion, portal, monster, malformed ship, flicker, jitter, sudden camera movement",
+        "seed": 7306,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-gulf-stream",
+      "image": "images/scene-07-gulf-stream.png",
+      "narration": "แถม Gulf Stream ยังเป็นกระแสน้ำที่ไหลแรง เศษซากจึงอาจถูกพัดออกจากจุดเกิดเหตุอย่างรวดเร็ว จนการค้นหายิ่งยากขึ้นอีกครับ",
+      "tts_text": "แถม กัลฟ์ สตรีม ยังเป็นกระแสน้ำที่ไหลแรง เศษซากจึงอาจถูกพัดออกจากจุดเกิดเหตุอย่างรวดเร็ว จนการค้นหายิ่งยากขึ้นอีกครับ",
+      "subtitle": "Gulf Stream ไหลแรง\nพัดหลักฐานไปได้ไกล",
+      "motion": "pan_up_zoom_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.14,
+      "focus": "bottom",
+      "transition": "smooth_right",
+      "wan": {
+        "prompt": "Powerful turquoise Gulf Stream ribbons sweep naturally through dark Atlantic water, carrying driftwood and an empty life ring while a distant search vessel scans the horizon. Smooth aerial tracking along the current, realistic foam and fluid motion.",
+        "negative_prompt": "people, bodies, text, arrows, labels, logo, watermark, glowing magic water, portal, flicker, jitter",
+        "seed": 7307,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-08-navigation",
+      "image": "images/scene-08-navigation.png",
+      "narration": "ส่วนเข็มทิศรวนลึกลับนั้น ไม่มีหลักฐานว่าที่นี่ผิดปกติเป็นพิเศษ ปัญหาการนำทาง อากาศแย่ และการตัดสินใจผิดพลาด อธิบายหลายเหตุการณ์ได้มากกว่า",
+      "tts_text": "ส่วนเข็มทิศรวนลึกลับนั้น ไม่มีหลักฐานว่าที่นี่ผิดปกติเป็นพิเศษ ปัญหาการนำทาง อากาศแย่ และการตัดสินใจผิดพลาด อธิบายหลายเหตุการณ์ได้มากกว่า",
+      "subtitle": "ไม่พบความผิดปกติพิเศษ\nของเข็มทิศ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "bottom",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Inside a mid-century patrol aircraft cockpit in heavy rain, analog compass and instruments move subtly with normal aircraft vibration, rain runs over the windshield, pilot carefully checks a paper chart, stable aircraft and restrained camera drift.",
+        "negative_prompt": "readable text, HUD, supernatural compass, spinning compass needle, logo, watermark, crash, lightning strike, flicker, jitter",
+        "seed": 7308,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-09-conclusion",
+      "image": "images/scene-09-conclusion.png",
+      "narration": "สรุปคือ ความสูญเสียบางคดียังไม่มีคำตอบครบถ้วน แต่ยังไม่มีหลักฐานว่าทะเลผืนนี้อันตรายผิดธรรมชาติ ความลึกลับอาจอยู่ในวิธีที่มนุษย์เล่าเรื่องมากกว่าครับ",
+      "tts_text": "สรุปคือ ความสูญเสียบางคดียังไม่มีคำตอบครบถ้วน แต่ยังไม่มีหลักฐานว่าทะเลผืนนี้อันตรายผิดธรรมชาติ ความลึกลับอาจอยู่ในวิธีที่มนุษย์เล่าเรื่องมากกว่าครับ",
+      "subtitle": "บางคดียังไร้คำตอบ\nแต่ไม่พบสิ่งเหนือธรรมชาติ",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.11,
+      "focus": "center",
+      "transition": "fade_black",
+      "wan": {
+        "prompt": "Sunrise breaks through retreating Atlantic storm clouds as a cargo ship, passenger aircraft and search vessel travel safely through separate depth layers. Very slow cinematic pull-back, gentle waves and cloud movement, calm evidence-based resolution.",
+        "negative_prompt": "text, logo, watermark, glowing triangle, portal, aliens, shipwreck, crash, disaster, flicker, jitter, fast camera",
+        "seed": 7309,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-10-outro",
+      "image": "images/scene-10-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Mamase brand outro, preserve the supplied glowing cyan orbiting planet and dark navy space composition, peaceful gentle orbital glow, subtle star shimmer and very slow cinematic push-in.",
+        "negative_prompt": "new text, changed text, watermark, blur, flicker, jitter, logo distortion, sudden camera movement",
+        "seed": 98,
+        "frames": 81,
+        "lip_sync": false
+      }
+    }
+  ]
+}

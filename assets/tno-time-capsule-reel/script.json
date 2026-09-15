@@ -1,0 +1,188 @@
+{
+  "project": {
+    "id": "tno-time-capsule-reel",
+    "title": "Hubble + Webb พบ ‘Time Capsule’ ระบบสุริยะ 4.5 พันล้านปี",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Clear, engaging, warm, authoritative Thai documentary presenter tone."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "กล้องโทรทรรศน์อวกาศ ฮับเบิล และ เจมส์ เว็บบ์ ร่วมมือกันครั้งแรก จนค้นพบ ‘ไทม์แคปซูล’ ที่จำความลับของระบบสุริยะเมื่อ 4.5 พันล้านปีก่อนได้!",
+      "tts_text": "กล้องโทรทรรศน์อวกาศ ฮับเบิล และ เจมส์ เว็บบ์ ร่วมมือกันครั้งแรก จนค้นพบ ไทม์แคปซูล ที่จำความลับของระบบสุริยะเมื่อ สี่จุดห้า พันล้านปีก่อนได้!",
+      "subtitle": "Hubble + Webb พบ Time Capsule\nจำระบบสุริยะ 4.5 พันล้านปีก่อน",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Preserve the key art typography and presenter. Hubble and James Webb Space Telescopes in deep cosmic space observing icy Trans-Neptunian objects. Subtle starfield twinkle, gentle warm lens flare breathing, slow cinematic camera push.",
+        "negative_prompt": "text modification, title distortion, face distortion, flicker, jitter, sudden camera movement, watermark",
+        "seed": 4501,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-frozen-frontier",
+      "image": "images/scene-02-frozen-frontier.png",
+      "narration": "ดินแดนลึกลับนี้คือกลุ่มวัตถุ ทรานส์-เนปจูเนียน หรือ TNOs ก้อนน้ำแข็งและหินนับไม่ถ้วนที่โคจรอยู่นอกวงโคจรของดาวเนปจูนอันไกลโพ้น",
+      "tts_text": "ดินแดนลึกลับนี้คือกลุ่มวัตถุ ทรานส์ เนปจูเนียน หรือ ที เอ็น โอ ก้อนน้ำแข็งและหินนับไม่ถ้วนที่โคจรอยู่นอกวงโคจรของดาวเนปจูนอันไกลโพ้น",
+      "subtitle": "วัตถุ Trans-Neptunian (TNOs)\nก้อนน้ำแข็งและหินพ้นดาวเนปจูน",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Deep Kuiper Belt frozen frontier. Realistic icy asteroid Trans-Neptunian object cluster drifting slowly in dark deep space with faint distant blue Neptune and pinprick Sun. Slow elegant parallax camera push, gentle micro-dust glints.",
+        "negative_prompt": "text, watermark, logo, HUD, explosion, aliens, spaceships, fast spin, cartoon, blurry, low resolution",
+        "seed": 4502,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-absolute-zero",
+      "image": "images/scene-03-absolute-zero.png",
+      "narration": "ด้วยความหนาวเหน็บใกล้ศูนย์สัมบูรณ์ ทำให้สภาพทางเคมีบนพื้นผิวของพวกมันแทบไม่เคยเปลี่ยนแปลงเลยตลอด 4,500 ล้านปีที่ผ่านมา",
+      "tts_text": "ด้วยความหนาวเหน็บใกล้ศูนย์สัมบูรณ์ ทำให้สภาพทางเคมีบนพื้นผิวของพวกมันแทบไม่เคยเปลี่ยนแปลงเลยตลอด สี่พันห้าร้อยล้านปี ที่ผ่านมา",
+      "subtitle": "หนาวเหน็บใกล้ศูนย์สัมบูรณ์\nสภาพเคมีไม่เปลี่ยน 4.5 พันล้านปี",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Extreme macro close-up of a primordial icy cratered surface on a TNO body. Nitrogen frost, reddish tholins, and frozen methane crystals preserved in pristine state. Slow gliding camera motion revealing subtle specular highlights across ice ridges.",
+        "negative_prompt": "text, labels, melting ice, fire, lava, steam, watermark, logo, jitter, flicker, low quality",
+        "seed": 4503,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-hubble-webb-collaboration",
+      "image": "images/scene-04-hubble-webb-collaboration.png",
+      "narration": "NASA จึงผสานพลังสายตาคมชัดของฮับเบิล เข้ากับเซนเซอร์อินฟราเรดยุคใหม่ของเจมส์ เว็บบ์ สำรวจวัตถุเหล่านี้อย่างเป็นระบบเป็นครั้งแรกในประวัติศาสตร์",
+      "tts_text": "นาซ่า จึงผสานพลังสายตาคมชัดของฮับเบิล เข้ากับเซนเซอร์อินฟราเรดยุคใหม่ของ เจมส์ เว็บบ์ สำรวจวัตถุเหล่านี้อย่างเป็นระบบเป็นครั้งแรกในประวัติศาสตร์",
+      "subtitle": "ผสานพลัง Hubble + Webb\nสำรวจอย่างเป็นระบบครั้งแรก",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Hubble Space Telescope and James Webb Space Telescope working in tandem across deep cosmic void, precise golden hexagonal mirrors and optical solar panels. Smooth camera drift, subtle starlight glimmer, realistic astronomical documentary aesthetic.",
+        "negative_prompt": "text, HUD, fake laser beams, sci-fi weapons, distorted telescope parts, watermark, logo, wobble",
+        "seed": 4504,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-75-spectra-analysis",
+      "image": "images/scene-05-75-spectra-analysis.png",
+      "narration": "เจมส์ เว็บบ์ สามารถเก็บสเปกตรัมอินฟราเรดคุณภาพสูงของ TNOs ได้มากกว่า 75 ดวง เผยให้เห็นร่องรอยของสารอินทรีย์ น้ำแข็งน้ำ คาร์บอนไดออกไซด์ และโมเลกุลตั้งต้นโบราณ",
+      "tts_text": "เจมส์ เว็บบ์ สามารถเก็บสเปกตรัมอินฟราเรดคุณภาพสูงของ ที เอ็น โอ ได้มากกว่า เจ็ดสิบห้า ดวง เผยให้เห็นร่องรอยของสารอินทรีย์ น้ำแข็งน้ำ คาร์บอนไดออกไซด์ และโมเลกุลตั้งต้นโบราณ",
+      "subtitle": "Webb เก็บสเปกตรัมกว่า 75 ดวง\nพบสารอินทรีย์และน้ำแข็งโบราณ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Deep space scientific infrared observation of distant Trans-Neptunian objects. Subtle spectral diffraction glows in infrared wavelengths, faint golden and cyan light refractions from multiple small icy worlds. Slow controlled cinematic push.",
+        "negative_prompt": "text, numbers, charts, graphs, fake HUD overlays, watermark, logo, low contrast, blur",
+        "seed": 4505,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-solar-system-birth",
+      "image": "images/scene-06-solar-system-birth.png",
+      "narration": "สารเคมีเหล่านี้คือวัตถุดิบตั้งต้นชุดเดียวกับที่เคยหมุนวนรอบดวงอาทิตย์ยุคแรกเริ่ม ก่อนที่จะรวมตัวกันเป็นโลกและดาวเคราะห์ดวงอื่น ๆ",
+      "tts_text": "สารเคมีเหล่านี้คือวัตถุดิบตั้งต้นชุดเดียวกับที่เคยหมุนวนรอบดวงอาทิตย์ยุคแรกเริ่ม ก่อนที่จะรวมตัวกันเป็นโลกและดาวเคราะห์ดวงอื่น ๆ",
+      "subtitle": "วัตถุดิบตั้งต้นชุดแรก\nก่อนก่อตัวเป็นดาวเคราะห์",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.18,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Primordial solar nebula accretion disk 4.5 billion years ago. Glowing newborn proto-Sun at center surrounded by swirling dense dust grains, gas eddies, and embryonic planetesimals. Majestic swirling cosmic motion, volumetric dust illumination.",
+        "negative_prompt": "text, cartoon, supernova explosion, modern Earth, modern planets, watermark, logo, jitter",
+        "seed": 4506,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-planetary-migration",
+      "image": "images/scene-07-planetary-migration.png",
+      "narration": "ข้อมูลใหม่นี้ช่วยให้นักดาราศาสตร์จำลองการเคลื่อนย้ายของดาวเคราะห์ยักษ์อย่างพฤหัสบดีและเนปจูน ที่เคยผลักวัตถุโบราณเหล่านี้ออกไปอยู่ชายขอบระบบสุริยะ",
+      "tts_text": "ข้อมูลใหม่นี้ช่วยให้นักดาราศาสตร์จำลองการเคลื่อนย้ายของดาวเคราะห์ยักษ์อย่างดาวพฤหัสบดีและดาวเนปจูน ที่เคยผลักวัตถุโบราณเหล่านี้ออกไปอยู่ชายขอบระบบสุริยะ",
+      "subtitle": "ไขปริศนาการเคลื่อนย้ายดาวเคราะห์ยักษ์\nที่ผลักวัตถุโบราณสู่ขอบสุริยะ",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Giant planets orbital migration era. Massive Jupiter and azure Neptune interacting gravitationally with swirling belts of icy planetesimals, scattering them into outer eccentric orbits. Dynamic cinematic orbital pull-out.",
+        "negative_prompt": "text, collision explosions, destroyed planets, cartoon, watermark, logo, jitter, strobe",
+        "seed": 4507,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-08-understanding-our-roots",
+      "image": "images/scene-08-understanding-our-roots.png",
+      "narration": "การสำรวจขอบนอกอันมืดมิด จึงไม่ใช่แค่การมองออกไปไกลโพ้น แต่คือการมองย้อนกลับมาทำความเข้าใจจุดเริ่มต้นของพวกเราเอง",
+      "tts_text": "การสำรวจขอบนอกอันมืดมิด จึงไม่ใช่แค่การมองออกไปไกลโพ้น แต่คือการมองย้อนกลับมาทำความเข้าใจจุดเริ่มต้นของพวกเราเอง",
+      "subtitle": "มองขอบนอกอันมืดมิด\nเพื่อเข้าใจจุดเริ่มต้นของพวกเรา",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Contemplative horizon of a distant icy Kuiper Belt world looking inward toward the distant warm glowing Sun and inner solar system. Pristine crystalline surface, deep starry cosmos, slow inspiring drift.",
+        "negative_prompt": "text, astronaut, buildings, alien creatures, sci-fi cities, watermark, logo, wobble",
+        "seed": 4508,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Mamase brand outro, glowing cyan orbiting planet in dark navy space, peaceful and contemplative.",
+        "negative_prompt": "watermark, blur, jitter",
+        "seed": 98,
+        "frames": 81,
+        "lip_sync": false
+      }
+    }
+  ]
+}

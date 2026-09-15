@@ -1,0 +1,101 @@
+{
+  "project": {
+    "id": "thai-java-zone-why-java-alive",
+    "title": "Java ทำไมยังไม่ตาย? ทำไมองค์กรใหญ่ยังใช้ Java กันเต็มไปหมด",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, friendly, confident senior software engineer tone in Thai. Conversational, easy to understand, slightly playful yet professional. Keep common technical terms in English natural. Never sound robotic or like a news anchor."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "รู้มั้ยครับว่า ทุกครั้งที่เราโอนเงิน จองตั๋วเครื่องบิน หรือช้อปปิ้งออนไลน์ เบื้องหลังแทบทั้งหมด... ยังเป็น Java!",
+      "tts_text": "รู้มั้ยครับว่า ทุกครั้งที่เราโอนเงิน จองตั๋วเครื่องบิน หรือช้อปปิ้งออนไลน์ เบื้องหลังแทบทั้งหมด... ยังเป็น จาวา!",
+      "subtitle": "รู้มั้ยครับว่า ระบบเบื้องหลังที่เราใช้ทุกวัน... ยังเป็น Java แทบทั้งหมด!",
+      "show_subtitle": true,
+      "motion": "cinematic_push_in",
+      "transition": "fade",
+      "motion_speed": "slow",
+      "estimated_duration": 6.5
+    },
+    {
+      "id": "scene-02-stability",
+      "image": "images/scene-02-stability.png",
+      "narration": "หลายคนบอกว่า Java มันเก่า เชย เขียนยาว... แต่ทำไมธนาคารและองค์กรระดับ Fortune 500 ถึงไม่ยอมเปลี่ยน?",
+      "tts_text": "หลายคนบอกว่า จาวา มันเก่า เชย เขียนยาว... แต่ทำไมธนาคารและองค์กรระดับ ฟอร์จูน ไฟฟ์ฮันเดรด ถึงไม่ยอมเปลี่ยน?",
+      "subtitle": "หลายคนบอกว่า Java เก่าและเชย... แต่ทำไมธนาคารระดับโลกยังใช้อยู่?",
+      "show_subtitle": true,
+      "motion": "documentary_pan",
+      "transition": "fade",
+      "motion_speed": "slow",
+      "estimated_duration": 6.5
+    },
+    {
+      "id": "scene-03-enterprise-ecosystem",
+      "image": "images/scene-03-enterprise-ecosystem.png",
+      "narration": "คำตอบแรกคือ Ecosystem ครับ! กว่า 25 ปีที่ผ่านมา Java มี Library, Framework อย่าง Spring Boot และเครื่องมือระดับ Enterprise ครบวงจรที่สุดในโลก อยากทำระบบอะไร... มีคนแก้ปัญหาและทดสอบมาให้หมดแล้ว",
+      "tts_text": "คำตอบแรกคือ อีโคซิสเต็ม ครับ! กว่า ยี่สิบห้า ปีที่ผ่านมา จาวา มี ไลบรารี เฟรมเวิร์ก อย่าง สปริง บูท และเครื่องมือระดับ เอ็นเตอร์ไพรส์ ครบวงจรที่สุดในโลก",
+      "subtitle": "คำตอบแรกคือ Ecosystem และ Spring Boot ที่มีเครื่องมือ Enterprise ครบที่สุดในโลก",
+      "show_subtitle": true,
+      "motion": "slow_zoom_in",
+      "transition": "fade",
+      "motion_speed": "slow",
+      "estimated_duration": 8.5
+    },
+    {
+      "id": "scene-04-modern-performance",
+      "image": "images/scene-04-modern-performance.png",
+      "narration": "สองคือ Performance ที่โหดขึ้นเรื่อยๆ JVM ยุคใหม่มี JIT Compiler ปรับแต่งโค้ดระดับ Machine Code แบบเรียลไทม์ แถมยังมี Virtual Threads ที่รองรับ Request ได้นับล้านพร้อมกันโดยไม่กินแรม",
+      "tts_text": "สองคือ เพอร์ฟอร์มานซ์ ที่โหดขึ้นเรื่อยๆ เจวีเอ็ม ยุคใหม่มี เจไอที คอมไพเลอร์ ปรับแต่งโค้ดระดับ แมชชีน โค้ด แบบเรียลไทม์ แถมยังมี เวอร์ชวล เธรดส์ ที่รองรับ รีเควสต์ ได้นับล้านพร้อมกัน",
+      "subtitle": "JVM ยุคใหม่มี JIT Compiler แรงระดับ Machine Code พร้อม Virtual Threads รับล้าน Request!",
+      "show_subtitle": true,
+      "motion": "drift_top_right",
+      "transition": "fade",
+      "motion_speed": "slow",
+      "estimated_duration": 8.5
+    },
+    {
+      "id": "scene-05-scale-and-maintainability",
+      "image": "images/scene-05-scale-and-maintainability.png",
+      "narration": "สามคือเรื่อง Scale และคน ระบบที่โค้ดเป็นล้านๆ บรรทัด คนเขียนเป็นร้อยคน ความเป็น Strongly Typed ของ Java ทำให้แก้โค้ดได้อย่างปลอดภัย Refactor ใหญ่แค่ไหนก็ไม่พังง่ายๆ",
+      "tts_text": "สามคือเรื่อง สเกล และคน ระบบที่โค้ดเป็นล้านๆ บรรทัด คนเขียนเป็นร้อยคน ความเป็น สตรองลี ไทป์ ของ จาวา ทำให้แก้โค้ดได้อย่างปลอดภัย รีแฟกเตอร์ ใหญ่แค่ไหนก็ไม่พังง่ายๆ",
+      "subtitle": "โค้ดนับล้านบรรทัด ทีมงานนับร้อยคน... Strongly Typed ทำให้ Refactor ปลอดภัยที่สุด",
+      "show_subtitle": true,
+      "motion": "pan_left_to_right_zoom_in",
+      "transition": "fade",
+      "motion_speed": "slow",
+      "estimated_duration": 8.0
+    },
+    {
+      "id": "scene-06-real-world-usage",
+      "image": "images/scene-06-real-world-usage.png",
+      "narration": "ระบบการเงินทั่วโลก ตลาดหุ้น Netflix หรือแม้แต่ Android ก็ขับเคลื่อนด้วย Java ทั้งนั้น มันไม่ใช่แค่ภาษาเขียนโปรแกรม... แต่มันคือโครงสร้างพื้นฐานของเศรษฐกิจดิจิทัล",
+      "tts_text": "ระบบการเงินทั่วโลก ตลาดหุ้น เน็ตฟลิกซ์ หรือแม้แต่ แอนดรอยด์ ก็ขับเคลื่อนด้วย จาวา ทั้งนั้น มันไม่ใช่แค่ภาษาเขียนโปรแกรม... แต่มันคือโครงสร้างพื้นฐานของเศรษฐกิจดิจิทัล",
+      "subtitle": "ระบบการเงิน ตลาดหุ้น Netflix และ Android... ล้วนขับเคลื่อนด้วย Java",
+      "show_subtitle": true,
+      "motion": "gentle_float",
+      "transition": "fade",
+      "motion_speed": "slow",
+      "estimated_duration": 8.0
+    },
+    {
+      "id": "scene-07-conclusion",
+      "image": "images/scene-07-conclusion.png",
+      "narration": "ดังนั้น ถ้าใครบอกคุณว่า Java กำลังจะตาย... บอกเค้าเลยครับว่า Java ไม่ได้กำลังจะตาย แต่มันกำลังรันโลกอยู่เบื้องหลังต่างหาก! แล้วคุณล่ะครับ ทุกวันนี้ยังใช้ Java ทำระบบอะไรกันอยู่บ้าง? คอมเมนต์คุยกันหน่อยครับ",
+      "tts_text": "ดังนั้น ถ้าใครบอกคุณว่า จาวา กำลังจะตาย... บอกเค้าเลยครับว่า จาวา ไม่ได้กำลังจะตาย แต่มันกำลังรันโลกอยู่เบื้องหลังต่างหาก! แล้วคุณล่ะครับ ทุกวันนี้ยังใช้ จาวา ทำระบบอะไรกันอยู่บ้าง? คอมเมนต์คุยกันหน่อยครับ",
+      "subtitle": "Java ไม่ได้กำลังจะตาย... แต่มันกำลังรันโลกอยู่เบื้องหลังต่างหาก!",
+      "show_subtitle": true,
+      "motion": "cinematic_push_in",
+      "transition": "fade",
+      "motion_speed": "slow",
+      "estimated_duration": 8.5
+    }
+  ]
+}

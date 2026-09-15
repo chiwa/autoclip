@@ -1,0 +1,122 @@
+{
+  "project": {
+    "id": "mamase-wormholes-reel-v1",
+    "title": "Wormholes — เวิร์มโฮล: ประตูลัดข้ามจักรวาลมีอยู่จริงไหม?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: \"เฮ้ย... จริงดิ?\" Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ถ้าเราอยากเดินทางข้ามไปอีกฟากของจักรวาล... รู้ไหมครับว่าในทางฟิสิกส์ เราอาจไม่ต้องบินผ่านอวกาศแม้แต่กิโลเมตรเดียว!",
+      "tts_text": "ถ้าเราอยากเดินทางข้ามไปอีกฟากของจักรวาล... รู้ไหมครับว่าในทางฟิสิกส์ เราอาจไม่ต้องบินผ่านอวกาศแม้แต่กิโลเมตรเดียว!",
+      "subtitle": "ถ้าอยากข้ามไปอีกฟากของจักรวาล\nเราอาจไม่ต้องเดินทางผ่านอวกาศเลย!",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic vertical master shot of dual universe spacetime wormhole portal with glowing photon rings, explorer and golden retriever dog looking up, slow cinematic push-in",
+        "negative_prompt": "text distortion, face distortion, flicker, sudden movement, watermark, logo",
+        "seed": 2026,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-concept-folded-spacetime",
+      "image": "images/scene-02-concept-folded-spacetime.png",
+      "narration": "แนวคิดนี้เรียกว่า 'Wormhole' หรือรูหนอน ลองจินตนาการว่าจักรวาลคือแผ่นกระดาษ แทนที่จะลากเส้นตรงไกลนับล้านปีแสง... เราแค่พับกระดาษเข้าหากัน แล้วเจาะรูทะลุตรงกลาง!",
+      "tts_text": "แนวคิดนี้เรียกว่า เวิร์มโฮล หรือรูหนอน ลองจินตนาการว่าจักรวาลคือแผ่นกระดาษ แทนที่จะลากเส้นตรงไกลนับล้านปีแสง... เราแค่พับกระดาษเข้าหากัน แล้วเจาะรูทะลุตรงกลาง!",
+      "subtitle": "แทนที่จะบินตรงนับล้านปีแสง...\nเราแค่พับกาล-อวกาศ แล้วเจาะรูทะลุข้ามไป!",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-einstein-rosen-bridge",
+      "image": "images/scene-03-einstein-rosen-bridge.png",
+      "narration": "ไม่ใช่แค่จินตนาการนะครับ! เพราะในปี 1935 อัลเบิร์ต ไอน์สไตน์ และ นาธาน โรเซน คำนวณพบว่า สมการสัมพัทธภาพทั่วไป อนุญาตให้มีสะพานเชื่อมทางลัดนี้ได้จริงในทางคณิตศาสตร์!",
+      "tts_text": "ไม่ใช่แค่จินตนาการนะครับ! เพราะในปี หนึ่งเก้าสามห้า อัลเบิร์ต ไอน์สไตน์ และ นาธาน โรเซน คำนวณพบว่า สมการสัมพัทธภาพทั่วไป อนุญาตให้มีสะพานเชื่อมทางลัดนี้ได้จริงในทางคณิตศาสตร์!",
+      "subtitle": "ไอน์สไตน์และโรเซนพบว่า\nสมการฟิสิกส์อนุญาตให้มีทางลัดนี้ได้จริง!",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-04-instant-collapse",
+      "image": "images/scene-04-instant-collapse.png",
+      "narration": "แต่ความเป็นจริงโหดร้ายกว่านั้นครับ... รูหนอนตามธรรมชาติจะไม่มีความเสถียร มันจะบีบตัวและพังทลายลงในเสี้ยวพริบตา เร็วกว่าที่แสงจะเดินทางผ่านได้เสียอีก!",
+      "tts_text": "แต่ความเป็นจริงโหดร้ายกว่านั้นครับ... รูหนอนตามธรรมชาติจะไม่มีความเสถียร มันจะบีบตัวและพังทลายลงในเสี้ยวพริบตา เร็วกว่าที่แสงจะเดินทางผ่านได้เสียอีก!",
+      "subtitle": "รูหนอนธรรมชาติจะพังทลายในเสี้ยววินาที\nเร็วกว่าที่แสงจะบินผ่านได้!",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-05-exotic-negative-matter",
+      "image": "images/scene-05-exotic-negative-matter.png",
+      "narration": "ถ้าอยากให้มนุษย์บินผ่านได้ นักฟิสิกส์บอกว่า เราต้องใช้ 'สสารแปลกประหลาด' ที่มีพลังงานเป็นลบ มาคอยผลักดันผนังของรูหนอนเอาไว้ไม่ให้มันยุบตัว!",
+      "tts_text": "ถ้าอยากให้มนุษย์บินผ่านได้ นักฟิสิกส์บอกว่า เราต้องใช้ สสารแปลกประหลาด ที่มีพลังงานเป็นลบ มาคอยผลักดันผนังของรูหนอนเอาไว้ไม่ให้มันยุบตัว!",
+      "subtitle": "ต้องใช้ 'สสารพลังงานลบ' (Exotic Matter)\nค้ำยันปากรูหนอนเอาไว้ไม่ให้ปิดลง!",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-06-never-observed-reality",
+      "image": "images/scene-06-never-observed-reality.png",
+      "narration": "ทว่าจนถึงวันนี้... เรายังไม่เคยพบทั้งสสารพลังงานลบ และยังไม่เคยพบหลักฐานของเวิร์มโฮลจริงแม้แต่แห่งเดียว ทุกอย่างยังเป็นเพียงทฤษฎีบนกระดาษทดเลข",
+      "tts_text": "ทว่าจนถึงวันนี้... เรายังไม่เคยพบทั้งสสารพลังงานลบ และยังไม่เคยพบหลักฐานของเวิร์มโฮลจริงแม้แต่แห่งเดียว ทุกอย่างยังเป็นเพียงทฤษฎีบนกระดาษทดเลข",
+      "subtitle": "จนถึงปัจจุบัน ยังไม่เคยมีใครพบเวิร์มโฮลจริง\nมันยังเป็นเพียงทฤษฎีบนกระดาษ!",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-07-future-cosmic-frontier",
+      "image": "images/scene-07-future-cosmic-frontier.png",
+      "narration": "แต่มันเตือนให้เรารู้ว่า... กฎฟิสิกส์ของจักรวาลอาจกว้างใหญ่เกินกว่าที่เราคิด และในอนาคต มนุษยชาติอาจค้นพบวิธีพิชิตระยะทางอันไร้ที่สิ้นสุดนี้ก็ได้ครับ",
+      "tts_text": "แต่มันเตือนให้เรารู้ว่า... กฎฟิสิกส์ของจักรวาลอาจกว้างใหญ่เกินกว่าที่เราคิด และในอนาคต มนุษยชาติอาจค้นพบวิธีพิชิตระยะทางอันไร้ที่สิ้นสุดนี้ก็ได้ครับ",
+      "subtitle": "กฎฟิสิกส์อาจกว้างใหญ่เกินจินตนาการ\nและรอให้เราค้นพบวิธีพิชิตระยะทางในอนาคต",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-08-brand-outro",
+      "image": "images/scene-08-brand-outro.png",
+      "narration": "ถ้าชอบเรื่องราวดาราศาสตร์แบบนี้ กดติดตาม แล้วมาร่วมค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวดาราศาสตร์แบบนี้ กดติดตาม แล้วมาร่วมค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "show_subtitle": true,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

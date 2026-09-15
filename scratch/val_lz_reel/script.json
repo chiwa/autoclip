@@ -1,0 +1,209 @@
+{
+  "project": {
+    "id": "mamase-lz-dark-matter-hint-reel-v1",
+    "title": "เราอาจเพิ่งเห็นสสารมืดเป็นครั้งแรกหรือไม่? เบาะแสประวัติศาสตร์จากเครื่องตรวจจับ LZ ใต้โลก 1 ไมล์",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: 'เฮ้ย... จริงดิ?' Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "เราอาจเพิ่งเห็นสิ่งที่มองไม่เห็น แต่คิดเป็นประมาณ 85% ของสสารในจักรวาลหรือเปล่า? นี่คือเบาะแสสำคัญจากใต้พิภพครับ!",
+      "tts_text": "เราอาจเพิ่งเห็นสิ่งที่มองไม่เห็น แต่คิดเป็นประมาณ แปดสิบห้า เปอร์เซ็นต์ ของสสารในจักรวาลหรือเปล่า? นี่คือเบาะแสสำคัญจากใต้พิภพครับ!",
+      "subtitle": "เราอาจเพิ่งเห็น 'สสารมืด'\nที่เป็น 85% ของสสารในจักรวาล?",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "right",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Use the canonical Mamase anime presenter identity, friendly Thai male with tousled black hair, thin rectangular glasses and navy blazer, talking enthusiastically on the right side of the frame. In the background is an ethereal cosmic dark matter filament network and glowing deep underground particle detector. Subtle natural head movement, expressive speaking gestures, stable composition.",
+        "negative_prompt": "extra person, extra text, watermark, logo, distorted face, distorted hands, duplicated fingers, blurry, flicker, jitter, sudden camera movement",
+        "seed": 701,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-invisible-matter",
+      "image": "images/scene-02-invisible-matter.png",
+      "narration": "ในเอกภพ สสารมืดคิดเป็นประมาณ 85% ของสสารทั้งหมด มีแรงโน้มถ่วงมหาศาลที่คอยโอบอุ้มดาราจักรไว้ แต่มนุษย์ไม่เคยเห็นตัวตนของมันเลย",
+      "tts_text": "ในเอกภพ สสารมืดคิดเป็นประมาณ แปดสิบห้า เปอร์เซ็นต์ ของสสารทั้งหมด มีแรงโน้มถ่วงมหาศาลที่คอยโอบอุ้มดาราจักรไว้ แต่มนุษย์ไม่เคยเห็นตัวตนของมันเลย",
+      "subtitle": "สสารมืด: สสารล่องหน 85% ที่โอบอุ้มกาแล็กซี",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic cosmic zoom through a massive galaxy cluster with ethereal blue gravitational lensing arcs bending background starlight, revealing the invisible dark matter halo, smooth drift, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 702,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-underground-shield",
+      "image": "images/scene-03-underground-shield.png",
+      "narration": "เพื่อตามล่าสิ่งที่ล่องหน นักวิทยาศาสตร์ต้องลงไปลึกเกือบหนึ่งไมล์ ใต้เหมืองทองเก่าในรัฐเซาท์ดาโคตา เพื่อให้ชั้นหินหนาทึบช่วยกั้นรังสีคอสมิกจากอวกาศ",
+      "tts_text": "เพื่อตามล่าสิ่งที่ล่องหน นักวิทยาศาสตร์ต้องลงไปลึกเกือบ หนึ่งไมล์ ใต้เหมืองทองเก่าในรัฐ เซาท์ดาโคตา เพื่อให้ชั้นหินหนาทึบช่วยกั้นรังสีคอสมิกจากอวกาศ",
+      "subtitle": "ลงลึกเกือบ 1 ไมล์ใต้ดิน เพื่อหลบรังสีคอสมิก",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic documentary shot inside a massive deep underground research laboratory cavern, 4850 feet below surface, rugged rock cavern walls illuminated by work lights leading toward a gleaming cleanroom research facility, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 703,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-lz-detector",
+      "image": "images/scene-04-lz-detector.png",
+      "narration": "ที่นั่นคือที่ตั้งของเครื่องตรวจจับ ลักซ์ เซพพลิน หรือ แอลแซด ถังไทเทเนียมขนาดยักษ์ที่บรรจุซีนอนเหลวบริสุทธิ์ถึงสิบตันในสภาพเย็นจัด",
+      "tts_text": "ที่นั่นคือที่ตั้งของเครื่องตรวจจับ ลักซ์ เซพพลิน หรือ แอลแซด ถังไทเทเนียมขนาดยักษ์ที่บรรจุซีนอนเหลวบริสุทธิ์ถึง สิบตัน ในสภาพเย็นจัด",
+      "subtitle": "LUX-ZEPLIN (LZ): ถังไทเทเนียมบรรจุซีนอนเหลว 10 ตัน",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Heroic shot of the LUX-ZEPLIN cryogenic particle detector, gleaming cylindrical titanium vessel surrounded by hexagonal photomultiplier tube arrays, illuminated with cool cyan and white laboratory lights, ultra-clean physics facility, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 704,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-xenon-collision-mechanism",
+      "image": "images/scene-05-xenon-collision-mechanism.png",
+      "narration": "กลไกคือ เมื่ออนุภาคชนกับนิวเคลียสของซีนอน อะตอมจะปลดปล่อยแสงวาบออกมา พร้อมกับดีดอิเล็กตรอนให้ลอยขึ้นไปสู่เซนเซอร์ตรวจจับ",
+      "tts_text": "กลไกคือ เมื่ออนุภาคชนกับนิวเคลียสของซีนอน อะตอมจะปลดปล่อยแสงวาบออกมา พร้อมกับดีดอิเล็กตรอนให้ลอยขึ้นไปสู่เซนเซอร์ตรวจจับ",
+      "subtitle": "เมื่ออนุภาคชนซีนอน: ปลดปล่อยแสงวาบและอิเล็กตรอน",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic quantum physics visualization, a high-energy particle striking a xenon atomic nucleus, causing an intense brilliant flash of blue-white light and emitting glowing ionization electrons drifting upward through translucent liquid, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 705,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-unexplained-signal",
+      "image": "images/scene-06-unexplained-signal.png",
+      "narration": "และล่าสุด แอลแซด ได้ตรวจพบเหตุการณ์ปฏิสัมพันธ์ของอนุภาคหนึ่งครั้ง ที่กระบวนการพื้นหลังที่เรารู้จัก ยังไม่สามารถอธิบายได้!",
+      "tts_text": "และล่าสุด แอลแซด ได้ตรวจพบเหตุการณ์ปฏิสัมพันธ์ของอนุภาคหนึ่งครั้ง ที่กระบวนการพื้นหลังที่เรารู้จัก ยังไม่สามารถอธิบายได้!",
+      "subtitle": "ตรวจพบ 1 เหตุการณ์ ที่ background ยังอธิบายไม่ได้!",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Subtle pulse of light sensors on a circular detector array registering a solitary anomalous particle interaction event in the center of a high-tech chamber, glowing sensor nodes, deep blue and amber tones, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 706,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-wimp-candidate",
+      "image": "images/scene-07-wimp-candidate.png",
+      "narration": "หากเหตุการณ์นี้คือสสารมืดจริง อาจเป็นไปได้ว่าตรงกับอนุภาค วิมป์ ที่มีมวลอย่างน้อยประมาณ สองร้อย จีอีวี หรือมากกว่าโปรตอนกว่าสองร้อยเท่า!",
+      "tts_text": "หากเหตุการณ์นี้คือสสารมืดจริง อาจเป็นไปได้ว่าตรงกับอนุภาค วิมป์ ที่มีมวลอย่างน้อยประมาณ สองร้อย กิกะอิเล็กตรอนโวลต์ หรือมากกว่าโปรตอนกว่า สองร้อย เท่า!",
+      "subtitle": "อาจเป็นอนุภาค WIMP หนักกว่าโปรตอนกว่า 200 เท่า!",
+      "motion": "gentle_float",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic conceptual visualization of a massive hypothetical WIMP dark matter particle, dense and powerful with shimmering gravitational ripples, contrasting against small glowing atomic protons, mysterious and majestic, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 707,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-08-not-a-discovery-yet",
+      "image": "images/scene-08-not-a-discovery-yet.png",
+      "narration": "แต่เดี๋ยวก่อนนะครับ ห้ามเรียกว่าค้นพบแล้วนะ! เพราะมีนัยสำคัญแค่ สองจุดหก ซิกมา หรือยังมีโอกาสประมาณ ศูนย์จุดห้า เปอร์เซ็นต์ ที่เกิดจากสัญญาณรบกวน",
+      "tts_text": "แต่เดี๋ยวก่อนนะครับ ห้ามเรียกว่าค้นพบแล้วนะ! เพราะมีนัยสำคัญแค่ สองจุดหก ซิกมา หรือยังมีโอกาสประมาณ ศูนย์จุดห้า เปอร์เซ็นต์ ที่เกิดจากสัญญาณรบกวน",
+      "subtitle": "นัยสำคัญ 2.6 ซิกมา: ยังมีโอกาส 0.5% ที่เป็นสัญญาณรบกวน",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic view of an advanced astrophysics control center with glowing multi-screen displays showing particle physics data curves and statistical analysis, cool atmospheric laboratory lighting, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 708,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-09-the-ongoing-quest",
+      "image": "images/scene-09-the-ongoing-quest.png",
+      "narration": "นี่จึงเป็นเพียงเบาะแสที่น่าสนใจ และยังต้องยืนยันด้วยข้อมูลชุดใหม่ ว่าสัญญาณนี้จะเด่นชัดขึ้น หรือจะค่อยๆ จางหายไปในความเงียบงันของใต้โลก",
+      "tts_text": "นี่จึงเป็นเพียงเบาะแสที่น่าสนใจ และยังต้องยืนยันด้วยข้อมูลชุดใหม่ ว่าสัญญาณนี้จะเด่นชัดขึ้น หรือจะค่อยๆ จางหายไปในความเงียบงันของใต้โลก",
+      "subtitle": "เป็นเพียงเบาะแส... ยังต้องยืนยันด้วยข้อมูลเพิ่ม",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "A lone scientist standing in awe in front of the colossal underground LZ particle detector vessel in the dark cavern, subtle blue and amber ambient light, contemplative and profound scientific journey, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 709,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-10-mamase-outro",
+      "image": "images/scene-10-mamase-outro.png",
+      "narration": "ค้นพบโลก ค้นพบใจ กับ Mamase จักรวาลของใจ",
+      "tts_text": "ค้นพบโลก ค้นพบใจ กับ มามาเซ่ จักรวาลของใจ",
+      "subtitle": "ค้นพบโลก ค้นพบใจ\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Mamase brand outro, glowing cyan orbiting planet in dark navy space, peaceful and contemplative.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, extra planet, extra stars, flicker, jitter",
+        "seed": 98,
+        "frames": 81,
+        "lip_sync": false
+      }
+    }
+  ]
+}

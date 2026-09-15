@@ -1,0 +1,190 @@
+{
+  "project": {
+    "id": "mamase-bepicolombo-mercury-reel-v1",
+    "title": "BepiColombo เริ่มเข้าสู่ดาวพุธ — การมาถึงอันซับซ้อนที่สุดในประวัติศาสตร์",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.3,
+    "style_prompt": "Read aloud like a charismatic science storyteller with a playful personality. Sound curious, friendly, slightly cheeky, and genuinely excited by surprising facts. Keep the delivery natural and conversational, with small pauses for comedic timing and emphasis. Never sound like a news anchor. Keep the delivery energetic, clear, playful, warm, and reassuring. Make the listener feel relaxed and curious, never rushed, tense, or overly dramatic."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "สวัสดีครับ ยินดีต้อนรับสู่ Mamase จักรวาลของใจ วันนี้เราจะมาไขปริศนาการเดินทางของ BepiColombo ที่ไปดาวพุธ... แต่ทำไมยากกว่าไปพลูโต?",
+      "tts_text": "สวัสดีครับ ยินดีต้อนรับสู่ มามาเซ่ จักรวาลของใจ วันนี้เราจะมาไขปริศนาการเดินทางของ เบปิโคลอมโบ ที่ไปดาวพุธ... แต่ทำไมยากกว่าไปพลูโต?",
+      "subtitle": "ไปดาวพุธ ยากกว่าพลูโต?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.2,
+      "focus": "right",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Use the canonical Mamase anime presenter identity, friendly Thai male with tousled black hair, thin rectangular glasses and navy blazer, face-forward on the right for a talking shot. Premium science-documentary book-cover composition: BepiColombo spacecraft approaching cratered Mercury with glowing Sun on the left. Preserve the elegant Thai hook text in upper left. Subtle natural head movement and gentle pointing gesture, stable composition.",
+        "negative_prompt": "extra person, extra text, watermark, logo, distorted face, distorted hands, duplicated fingers, blurry spacecraft, flicker, jitter, sudden camera movement",
+        "seed": 701,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-gravity-well-paradox",
+      "image": "images/scene-02-gravity-well-paradox.png",
+      "narration": "รู้ไหมครับ การไปดาวพุธที่ใกล้ดวงอาทิตย์ที่สุด ต้องใช้พลังงานในการเบรก มหาศาลกว่าการบินออกไปพลูโตเสียอีก เพราะดาวพุธซ่อนอยู่ก้นหลุมแรงโน้มถ่วงอันลึกสุดขั้วของดวงอาทิตย์ครับ",
+      "tts_text": "รู้ไหมครับ การไปดาวพุธที่ใกล้ดวงอาทิตย์ที่สุด ต้องใช้พลังงานในการเบรก มหาศาลกว่าการบินออกไปพลูโตเสียอีก เพราะดาวพุธซ่อนอยู่ก้นหลุมแรงโน้มถ่วงอันลึกสุดขั้วของดวงอาทิตย์ครับ",
+      "subtitle": "หลุมแรงโน้มถ่วงดวงอาทิตย์",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic scientific 3D spacetime curvature visualization of the Sun's deep gravitational potential well funnel, glowing cyan wireframe descending into blazing golden solar core, planets Mercury Earth and Pluto orbiting at different potential depths, smooth slow camera drift down into the well, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, aliens, flicker, jitter",
+        "seed": 702,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-celestial-billiards",
+      "image": "images/scene-03-celestial-billiards.png",
+      "narration": "แทนที่จะเร่งเครื่อง ยานต้องสลัดพลังงานทิ้ง ด้วยการทำฟลายบาย หรือเล่นบิลเลียดอวกาศถึง 9 ครั้ง! ผ่านโลก 1 ครั้ง ดาวศุกร์ 2 ครั้ง และดาวพุธ 6 ครั้ง เพื่อชะลอความเร็วลง",
+      "tts_text": "แทนที่จะเร่งเครื่อง ยานต้องสลัดพลังงานทิ้ง ด้วยการทำ ฟลายบาย หรือเล่นบิลเลียดอวกาศถึง เก้า ครั้ง! ผ่านโลก หนึ่ง ครั้ง ดาวศุกร์ สอง ครั้ง และดาวพุธ หก ครั้ง เพื่อชะลอความเร็วลง",
+      "subtitle": "บิลเลียดอวกาศ 9 ครั้ง",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic celestial mechanics view of inner solar system, BepiColombo spacecraft performing precision planetary gravity assists past glowing Earth, Venus and Mercury, orbital braking arcs in deep cosmos, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, aliens, explosions, flicker, jitter",
+        "seed": 703,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-ion-thrusters",
+      "image": "images/scene-04-ion-thrusters.png",
+      "narration": "พร้อมด้วยเครื่องยนต์ไอออนความเร็วสูง หรือ SEPS ที่พ่นอนุภาคซีนอนเรืองแสงสีฟ้า ทำงานมาราธอนสะสมนานนับหมื่นชั่วโมงตลอด 8 ปีของการเดินทาง",
+      "tts_text": "พร้อมด้วยเครื่องยนต์ไอออนความเร็วสูง หรือ เซปส์ ที่พ่นอนุภาค ซีนอน เรืองแสงสีฟ้า ทำงานมาราธอนสะสมนานนับหมื่นชั่วโมงตลอด แปด ปีของการเดินทาง",
+      "subtitle": "เครื่องยนต์ไอออน SEPS มาราธอน 8 ปี",
+      "motion": "gentle_float",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Close-up engineering view of high-tech solar electric propulsion ion thrusters firing continuous luminous electric-blue xenon plasma plumes into the dark vacuum of space, slow majestic camera orbit, scientifically accurate, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, flame, orange fire, smoke, flicker, jitter",
+        "seed": 704,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-mtm-separation",
+      "image": "images/scene-05-mtm-separation.png",
+      "narration": "และเมื่อ 3 กันยายนที่ผ่านมา ช่วงเวลาประวัติศาสตร์ก็เกิดขึ้น โมดูลขับเคลื่อน MTM ได้แยกตัวออกจากยานสำรวจทั้งสองลำเรียบร้อยแล้ว หลังเสร็จสิ้นภารกิจชะลอความเร็ว",
+      "tts_text": "และเมื่อ สาม กันยายนที่ผ่านมา ช่วงเวลาประวัติศาสตร์ก็เกิดขึ้น โมดูลขับเคลื่อน เอ็มทีเอ็ม ได้แยกตัวออกจากยานสำรวจทั้งสองลำเรียบร้อยแล้ว หลังเสร็จสิ้นภารกิจชะลอความเร็ว",
+      "subtitle": "MTM ปลดตัวแยกยานสำเร็จ",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Historic space milestone near Mercury: the Mercury Transfer Module MTM gently separates and drifts away from the stacked twin orbiters in orbital space, calm silent space physics, high-detail European space engineering, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, explosion, violent collision, flicker, jitter",
+        "seed": 705,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-twin-orbiters",
+      "image": "images/scene-06-twin-orbiters.png",
+      "narration": "ทำให้คู่หูยานสำรวจฝาแฝดอย่าง MPO ของยุโรป และ Mio ของญี่ปุ่น พร้อมแล้วที่จะแยกย้ายเข้าสู่วงโคจรขั้วดาวพุธ เพื่อเริ่มการสำรวจโครงสร้างและสนามแม่เหล็กพร้อมกัน",
+      "tts_text": "ทำให้คู่หูยานสำรวจฝาแฝดอย่าง เอ็มพีโอ ของยุโรป และ มิโอะ ของญี่ปุ่น พร้อมแล้วที่จะแยกย้ายเข้าสู่วงโคจรขั้วดาวพุธ เพื่อเริ่มการสำรวจโครงสร้างและสนามแม่เหล็กพร้อมกัน",
+      "subtitle": "คู่หูยานสำรวจ MPO & Mio",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Twin orbiters ESA Mercury Planetary Orbiter and JAXA Mio gracefully flying over Mercury's stark cratered horizon, solar arrays and magnetometer boom deployed, authentic science documentary lighting, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, aliens, flicker, jitter",
+        "seed": 706,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-extreme-mercury",
+      "image": "images/scene-07-extreme-mercury.png",
+      "narration": "ดาวพุธคือโลกสุดขั้ว กลางวันร้อน 430 องศา กลางคืนติดลบ 180 องศา แต่ในเงามืดนิรันดร์ของหลุมอุกกาบาตขั้วดาว กลับมีน้ำแข็งบริสุทธิ์ซ่อนอยู่จริง ๆ",
+      "tts_text": "ดาวพุธคือโลกสุดขั้ว กลางวันร้อน สี่ร้อยสามสิบ องศา กลางคืนติดลบ หนึ่งร้อยแปดสิบ องศา แต่ในเงามืดนิรันดร์ของหลุมอุกกาบาตขั้วดาว กลับมีน้ำแข็งบริสุทธิ์ซ่อนอยู่จริง ๆ",
+      "subtitle": "ดาวพุธ ดินแดนสุดขั้ว",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Dramatic high-contrast scientific view of Mercury's polar crater landscape, sharp blinding sunlight hitting crater rim while the deep crater interior remains in pitch-black permanent shadow with glints of buried water ice, documentary realism, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, green vegetation, water oceans, flicker, jitter",
+        "seed": 707,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-08-philosophical-climax",
+      "image": "images/scene-08-philosophical-climax.png",
+      "narration": "บางครั้งในชีวิต... การ 'ชะลอตัว' และผ่อนจังหวะให้พอดีกับเป้าหมาย อาจต้องใช้พลัง ความอดทน และความประณีต มากกว่าการเร่งความเร็วไปข้างหน้าเสมอครับ",
+      "tts_text": "บางครั้งในชีวิต... การ ชะลอตัว และผ่อนจังหวะให้พอดีกับเป้าหมาย อาจต้องใช้พลัง ความอดทน และความประณีต มากกว่าการเร่งความเร็วไปข้างหน้าเสมอครับ",
+      "subtitle": "ชะลอตัว เพื่อเข้าสู่วงโคจร",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Contemplative philosophical climax: BepiColombo orbiter peacefully orbiting glowing crescent Mercury against the grand quiet cosmos and distant warm solar glow, poetic astronomy documentary aesthetic, slow camera drift, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, flicker, jitter, violent action",
+        "seed": 708,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ค้นพบโลก ค้นพบใจ กับ Mamase จักรวาลของใจ",
+      "tts_text": "ค้นพบโลก ค้นพบใจ กับ มามาเซ่ จักรวาลของใจ",
+      "subtitle": "ค้นพบโลก ค้นพบใจ\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Mamase brand outro, glowing cyan orbiting planet in dark navy space, peaceful and contemplative.",
+        "negative_prompt": "watermark, blur, jitter",
+        "seed": 98,
+        "frames": 81,
+        "lip_sync": false
+      }
+    }
+  ]
+}

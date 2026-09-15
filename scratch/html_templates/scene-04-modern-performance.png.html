@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1080px; height: 1920px; background: #06090e; overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    position: relative;
+  }
+  .bg-grad {
+    position: absolute; top: 0; left: 0; width: 1080px; height: 1920px;
+    background: radial-gradient(circle at 50% 38%, #111a29 0%, #090d16 55%, #05070a 100%);
+  }
+  .grid-overlay {
+    position: absolute; top: 0; left: 0; width: 1080px; height: 1920px;
+    background-image:
+      linear-gradient(rgba(56, 189, 248, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56, 189, 248, 0.025) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(circle at 50% 45%, black 40%, transparent 85%);
+  }
+  .ambient-glow {
+    position: absolute; top: 250px; left: 50%; transform: translateX(-50%);
+    width: 950px; height: 950px;
+    background: radial-gradient(circle at center, rgba(16, 185, 129, 0.1) 0%, rgba(56, 189, 248, 0.08) 40%, transparent 70%);
+    filter: blur(60px);
+  }
+  .jvm-dashboard {
+    position: absolute; top: 70px; left: 50%; transform: translateX(-50%);
+    width: 960px; display: flex; flex-direction: column; gap: 18px; z-index: 10;
+  }
+  /* Top Telemetry Meters */
+  .meter-deck { display: flex; gap: 14px; }
+  .meter-card {
+    flex: 1; height: 120px; background: linear-gradient(180deg, #131c2a 0%, #0e141f 100%);
+    border-radius: 14px; border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.7); padding: 16px; display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .meter-header { display: flex; justify-content: space-between; align-items: center; }
+  .meter-label { width: 75px; height: 8px; background: #475569; border-radius: 4px; }
+  .meter-led { width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 8px #10b981; }
+  .meter-chart {
+    height: 44px; background: linear-gradient(180deg, rgba(16, 185, 129, 0.2) 0%, transparent 100%);
+    border-bottom: 2px solid #10b981; border-radius: 4px;
+  }
+  .meter-chart.blue {
+    background: linear-gradient(180deg, rgba(56, 189, 248, 0.2) 0%, transparent 100%);
+    border-color: #38bdf8;
+  }
+  .meter-chart.amber {
+    background: linear-gradient(180deg, rgba(245, 158, 11, 0.2) 0%, transparent 100%);
+    border-color: #f59e0b;
+  }
+
+  /* Virtual Threads Concurrency Matrix (Project Loom) */
+  .concurrency-matrix {
+    background: linear-gradient(180deg, #111824 0%, #0c121c 100%);
+    border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 30px 70px rgba(0,0,0,0.85), 0 0 40px rgba(56, 189, 248, 0.05);
+    padding: 22px 26px; display: flex; flex-direction: column; gap: 14px;
+  }
+  .sec-title-bar { display: flex; align-items: center; justify-content: space-between; }
+  .sec-title-bar .title-pill { width: 140px; height: 10px; background: #64748b; border-radius: 5px; }
+
+  /* Thread Lanes */
+  .thread-lanes { display: flex; flex-direction: column; gap: 8px; }
+  .lane-row {
+    height: 36px; background: #080c13; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.04);
+    display: flex; align-items: center; padding: 0 14px; gap: 10px; position: relative; overflow: hidden;
+  }
+  .carrier-tag { width: 34px; height: 16px; background: #1e293b; border-radius: 4px; }
+  .fiber-track { flex: 1; height: 100%; display: flex; align-items: center; gap: 8px; }
+  .fiber-pill { height: 12px; border-radius: 6px; }
+  .f-cyan { width: 80px; background: #06b6d4; box-shadow: 0 0 8px rgba(6,182,212,0.5); }
+  .f-emerald { width: 110px; background: #10b981; box-shadow: 0 0 8px rgba(16,185,129,0.5); }
+  .f-blue { width: 95px; background: #38bdf8; box-shadow: 0 0 8px rgba(56,189,248,0.5); }
+  .f-purple { width: 70px; background: #a855f7; box-shadow: 0 0 8px rgba(168,85,247,0.5); }
+  .f-amber { width: 85px; background: #f59e0b; box-shadow: 0 0 8px rgba(245,158,11,0.5); }
+
+  /* JIT Compilation Pipeline */
+  .jit-pipeline {
+    background: linear-gradient(180deg, #111824 0%, #0c121c 100%);
+    border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+    padding: 20px 26px; display: flex; flex-direction: column; gap: 14px;
+  }
+  .jit-stages { display: flex; gap: 12px; align-items: center; }
+  .stage-box {
+    flex: 1; height: 80px; background: #151f2e; border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.06); display: flex; flex-direction: column;
+    justify-content: space-between; padding: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+  }
+  .stage-box.active { border-color: #10b981; background: #162635; }
+  .stage-arrow { width: 18px; height: 2px; background: #475569; position: relative; }
+  .stage-arrow::after {
+    content: ''; position: absolute; right: 0; top: -3px;
+    width: 0; height: 0; border-top: 4px solid transparent; border-bottom: 4px solid transparent;
+    border-left: 6px solid #475569;
+  }
+
+  /* Memory Heap Allocations (Eden, Survivor, Tenured, Metaspace) */
+  .heap-section {
+    background: linear-gradient(180deg, #111824 0%, #0c121c 100%);
+    border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+    padding: 20px 26px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .heap-bar-group { display: flex; height: 42px; gap: 6px; border-radius: 8px; overflow: hidden; background: #080c13; padding: 4px; }
+  .heap-seg-eden { flex: 4; background: linear-gradient(90deg, #10b981 0%, #059669 100%); border-radius: 4px; }
+  .heap-seg-surv { flex: 2; background: linear-gradient(90deg, #38bdf8 0%, #0284c7 100%); border-radius: 4px; }
+  .heap-seg-tenured { flex: 6; background: linear-gradient(90deg, #6366f1 0%, #4338ca 100%); border-radius: 4px; }
+  .heap-seg-meta { flex: 2; background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%); border-radius: 4px; }
+
+  .safe-area-lower {
+    position: absolute; bottom: 0; left: 0; width: 1080px; height: 380px;
+    background: linear-gradient(180deg, transparent 0%, rgba(5, 7, 10, 0.5) 100%);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+  <div class="bg-grad"></div>
+  <div class="grid-overlay"></div>
+  <div class="ambient-glow"></div>
+  <div class="jvm-dashboard">
+    <!-- Top Telemetry Meters -->
+    <div class="meter-deck">
+      <div class="meter-card"><div class="meter-header"><div class="meter-label"></div><div class="meter-led"></div></div><div class="meter-chart"></div></div>
+      <div class="meter-card"><div class="meter-header"><div class="meter-label"></div><div class="meter-led" style="background:#38bdf8;box-shadow:0 0 8px #38bdf8"></div></div><div class="meter-chart blue"></div></div>
+      <div class="meter-card"><div class="meter-header"><div class="meter-label"></div><div class="meter-led" style="background:#f59e0b;box-shadow:0 0 8px #f59e0b"></div></div><div class="meter-chart amber"></div></div>
+    </div>
+    <!-- Virtual Threads Matrix (Project Loom) - 8 Lanes -->
+    <div class="concurrency-matrix">
+      <div class="sec-title-bar"><div class="title-pill"></div><div class="meter-led"></div></div>
+      <div class="thread-lanes">
+        <div class="lane-row"><div class="carrier-tag"></div><div class="fiber-track"><div class="fiber-pill f-emerald"></div><div class="fiber-pill f-cyan"></div><div class="fiber-pill f-blue"></div><div class="fiber-pill f-purple"></div><div class="fiber-pill f-emerald"></div><div class="fiber-pill f-cyan"></div></div></div>
+        <div class="lane-row"><div class="carrier-tag"></div><div class="fiber-track"><div class="fiber-pill f-blue"></div><div class="fiber-pill f-emerald"></div><div class="fiber-pill f-amber"></div><div class="fiber-pill f-cyan"></div><div class="fiber-pill f-purple"></div><div class="fiber-pill f-emerald"></div></div></div>
+        <div class="lane-row"><div class="carrier-tag"></div><div class="fiber-track"><div class="fiber-pill f-purple"></div><div class="fiber-pill f-blue"></div><div class="fiber-pill f-emerald"></div><div class="fiber-pill f-amber"></div><div class="fiber-pill f-cyan"></div><div class="fiber-pill f-blue"></div></div></div>
+        <div class="lane-row"><div class="carrier-tag"></div><div class="fiber-track"><div class="fiber-pill f-cyan"></div><div class="fiber-pill f-emerald"></div><div class="fiber-pill f-purple"></div><div class="fiber-pill f-blue"></div><div class="fiber-pill f-amber"></div><div class="fiber-pill f-emerald"></div></div></div>
+        <div class="lane-row"><div class="carrier-tag"></div><div class="fiber-track"><div class="fiber-pill f-emerald"></div><div class="fiber-pill f-blue"></div><div class="fiber-pill f-cyan"></div><div class="fiber-pill f-emerald"></div><div class="fiber-pill f-purple"></div><div class="fiber-pill f-cyan"></div></div></div>
+        <div class="lane-row"><div class="carrier-tag"></div><div class="fiber-track"><div class="fiber-pill f-amber"></div><div class="fiber-pill f-cyan"></div><div class="fiber-pill f-emerald"></div><div class="fiber-pill f-blue"></div><div class="fiber-pill f-emerald"></div><div class="fiber-pill f-amber"></div></div></div>
+        <div class="lane-row"><div class="carrier-tag"></div><div class="fiber-track"><div class="fiber-pill f-cyan"></div><div class="fiber-pill f-purple"></div><div class="fiber-pill f-blue"></div><div class="fiber-pill f-emerald"></div><div class="fiber-pill f-cyan"></div><div class="fiber-pill f-purple"></div></div></div>
+        <div class="lane-row"><div class="carrier-tag"></div><div class="fiber-track"><div class="fiber-pill f-emerald"></div><div class="fiber-pill f-amber"></div><div class="fiber-pill f-cyan"></div><div class="fiber-pill f-emerald"></div><div class="fiber-pill f-blue"></div><div class="fiber-pill f-emerald"></div></div></div>
+      </div>
+    </div>
+    <!-- JIT Compilation Pipeline -->
+    <div class="jit-pipeline">
+      <div class="sec-title-bar"><div class="title-pill" style="width:110px"></div><div class="meter-led" style="background:#38bdf8;box-shadow:0 0 8px #38bdf8"></div></div>
+      <div class="jit-stages">
+        <div class="stage-box"><div class="meter-label" style="width:50px"></div><div style="height:6px;width:70%;background:#475569;border-radius:3px"></div></div>
+        <div class="stage-arrow"></div>
+        <div class="stage-box"><div class="meter-label" style="width:40px;background:#38bdf8"></div><div style="height:6px;width:85%;background:#38bdf8;border-radius:3px"></div></div>
+        <div class="stage-arrow"></div>
+        <div class="stage-box active"><div class="meter-label" style="width:45px;background:#10b981"></div><div style="height:6px;width:95%;background:#10b981;border-radius:3px"></div></div>
+      </div>
+    </div>
+    <!-- Garbage Collection & Memory Management -->
+    <div class="heap-section">
+      <div class="sec-title-bar"><div class="title-pill" style="width:130px"></div><div class="meter-led" style="background:#f59e0b;box-shadow:0 0 8px #f59e0b"></div></div>
+      <div class="heap-bar-group"><div class="heap-seg-eden"></div><div class="heap-seg-surv"></div><div class="heap-seg-tenured"></div><div class="heap-seg-meta"></div></div>
+    </div>
+  </div>
+  <div class="safe-area-lower"></div>
+</body>
+</html>

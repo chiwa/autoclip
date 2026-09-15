@@ -1,0 +1,14 @@
+{
+  "title": "ทำไม ISS ไม่ตก ทั้งที่มันกำลังตกอยู่ตลอดเวลา?",
+  "description": "ISS ไม่ได้ลอยนิ่งและไม่ได้อยู่ในบริเวณไร้แรงโน้มถ่วง แต่มันกำลังตกไปรอบโลกด้วยความเร็วสูงจนพลาดพื้นโลกซ้ำ ๆ นี่คือคำอธิบายสั้น ๆ ของวงโคจร ภาวะไร้น้ำหนัก และการ reboost ของสถานีอวกาศนานาชาติ",
+  "hashtags": ["#ISS", "#อวกาศ", "#วิทยาศาสตร์", "#Mamase", "#จักรวาลของใจ"],
+  "sources": [
+    "https://www.nasa.gov/reference/international-space-station/",
+    "https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/International_Space_Station/Where_is_the_International_Space_Station"
+  ],
+  "hook_gate": {
+    "target_duration_seconds": "45-60",
+    "opening": "ไอเอสเอสไม่ได้ลอยนิ่งอยู่เหนือโลกนะครับ มันกำลังตกลงมาตลอดเวลา แต่ทำไมถึงไม่เคยตกถึงพื้น?",
+    "status": "approved"
+  }
+}

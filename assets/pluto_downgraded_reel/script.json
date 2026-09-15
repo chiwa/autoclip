@@ -1,0 +1,135 @@
+{
+  "project": {
+    "id": "pluto-downgraded-reel",
+    "title": "Pluto — จากดาวเคราะห์ดวงที่ 9 สู่ดาวเคราะห์แคระ",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Clear, engaging, warm, authoritative Thai documentary presenter tone."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ทำไม Pluto ถึงถูกลดชั้นครับ ทั้งที่เมื่อก่อนมันคือดาวเคราะห์ดวงที่ 9 ของระบบสุริยะ?",
+      "tts_text": "ทำไม พลูโต ถึงถูกลดชั้นครับ ทั้งที่เมื่อก่อนมันคือดาวเคราะห์ดวงที่เก้าของระบบสุริยะ?",
+      "subtitle": "PLUTO\nทำไมถูกลดชั้น?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve the key art typography, Mamase logo, and presenter. The presenter gestures naturally with lip sync. In the cosmic background, Pluto and distant planets drift slowly in deep space. Smooth cinematic motion.",
+        "negative_prompt": "text modification, title distortion, face distortion, flicker, jitter, sudden camera movement, watermark",
+        "seed": 1930,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-ninth-planet",
+      "image": "images/scene-02-ninth-planet.png",
+      "narration": "หลังถูกค้นพบในปี 1930 Pluto ครองตำแหน่งดาวเคราะห์ดวงที่ 9 มานานถึง 76 ปี",
+      "tts_text": "หลังถูกค้นพบในปีหนึ่งพันเก้าร้อยสามสิบ พลูโต ครองตำแหน่งดาวเคราะห์ดวงที่เก้า มานานถึงเจ็ดสิบหกปี",
+      "subtitle": "หลังถูกค้นพบในปี 1930\nPluto ครองตำแหน่งดาวเคราะห์ดวงที่ 9 นาน 76 ปี",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-discovery-eris",
+      "image": "images/scene-03-discovery-eris.png",
+      "narration": "แต่เมื่อนักดาราศาสตร์พบวัตถุคล้าย Pluto เพิ่มขึ้น โดยเฉพาะ Eris คำถามก็เกิดขึ้นว่า แล้วอะไรควรถูกเรียกว่าดาวเคราะห์?",
+      "tts_text": "แต่เมื่อนักดาราศาสตร์พบวัตถุคล้าย พลูโต เพิ่มขึ้น โดยเฉพาะ อีริส คำถามก็เกิดขึ้นว่า แล้วอะไรควรถูกเรียกว่าดาวเคราะห์?",
+      "subtitle": "เมื่อค้นพบวัตถุคล้าย Pluto โดยเฉพาะ Eris\nอะไรควรถูกเรียกว่าดาวเคราะห์?",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-04-uncleared-orbit",
+      "image": "images/scene-04-uncleared-orbit.png",
+      "narration": "ปี 2006 สหพันธ์ดาราศาสตร์สากลกำหนดว่า ดาวเคราะห์ต้องครองอิทธิพลเหนือบริเวณวงโคจรของตัวเอง แต่ Pluto ยังอยู่ร่วมกับวัตถุจำนวนมากใน Kuiper Belt",
+      "tts_text": "ปีสองพันหก สหพันธ์ดาราศาสตร์สากลกำหนดว่า ดาวเคราะห์ต้องครองอิทธิพลเหนือบริเวณวงโคจรของตัวเอง แต่ พลูโต ยังอยู่ร่วมกับวัตถุจำนวนมากในแถบไคเปอร์",
+      "subtitle": "ปี 2006 กฎใหม่ของ IAU\nดาวเคราะห์ต้องครองอิทธิพลเหนือวงโคจรตัวเอง",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-05-protest-2006",
+      "image": "images/scene-05-protest-2006.png",
+      "narration": "แล้วคนประท้วงจริงไหม? จริงครับ มีทั้งการรวมตัว คำร้อง และนักวิทยาศาสตร์ที่คัดค้าน เพราะหลายคนผูกพันกับดาวเคราะห์ดวงเล็กนี้มาก",
+      "tts_text": "แล้วคนประท้วงจริงไหม? จริงครับ มีทั้งการรวมตัว คำร้อง และนักวิทยาศาสตร์ที่คัดค้าน เพราะหลายคนผูกพันกับดาวเคราะห์ดวงเล็กนี้มาก",
+      "subtitle": "คนประท้วงจริงไหม? มีทั้งคำร้อง\nและนักวิทยาศาสตร์ที่ผูกพันคัดค้าน",
+      "motion": "gentle_float",
+      "motion_speed": "slow",
+      "motion_intensity": 0.10,
+      "focus": "center",
+      "transition": "smooth_right"
+    },
+    {
+      "id": "scene-06-pluto-unchanged",
+      "image": "images/scene-06-pluto-unchanged.png",
+      "narration": "แต่เดี๋ยวก่อน Pluto ไม่ได้เล็กลง ไม่ได้เปลี่ยนวงโคจร และไม่ได้สำคัญน้อยลง มนุษย์แค่เปลี่ยนวิธีจัดหมวดหมู่มันครับ",
+      "tts_text": "แต่เดี๋ยวก่อน พลูโต ไม่ได้เล็กลง ไม่ได้เปลี่ยนวงโคจร และไม่ได้สำคัญน้อยลง มนุษย์แค่เปลี่ยนวิธีจัดหมวดหมู่มันครับ",
+      "subtitle": "Pluto ไม่ได้เล็กลง หรือสำคัญน้อยลง\nมนุษย์แค่เปลี่ยนวิธีจัดหมวดหมู่",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-07-new-horizons-flyby",
+      "image": "images/scene-07-new-horizons-flyby.png",
+      "narration": "และเมื่อ New Horizons บินผ่านในปี 2015 เราก็พบภูเขาน้ำแข็ง หมอกบรรยากาศสีฟ้า และธารน้ำแข็งไนโตรเจนรูปหัวใจขนาดมหึมา",
+      "tts_text": "และเมื่อ นิว ฮอไรซันส์ บินผ่านในปีสองพันสิบห้า เราก็พบภูเขาน้ำแข็ง หมอกบรรยากาศสีฟ้า และธารน้ำแข็งไนโตรเจนรูปหัวใจขนาดมหึมา",
+      "subtitle": "New Horizons บินผ่านในปี 2015\nพบธารน้ำแข็งไนโตรเจนรูปหัวใจมหึมา",
+      "motion": "pan_right_to_left",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-08-pluto-charon-payoff",
+      "image": "images/scene-08-pluto-charon-payoff.png",
+      "narration": "เพราะฉะนั้น Pluto อาจเสียตำแหน่งดาวเคราะห์ดวงที่ 9 แต่สิ่งที่เราค้นพบกลับทำให้มันน่าสนใจกว่าเดิมเสียอีก",
+      "tts_text": "เพราะฉะนั้น พลูโต อาจเสียตำแหน่งดาวเคราะห์ดวงที่เก้า แต่สิ่งที่เราค้นพบกลับทำให้มันน่าสนใจกว่าเดิมเสียอีก",
+      "subtitle": "Pluto อาจเสียตำแหน่งดาวเคราะห์ดวงที่ 9\nแต่สิ่งที่ค้นพบทำให้มันน่าสนใจกว่าเดิม",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": false,
+      "show_subtitle": false,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.05,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

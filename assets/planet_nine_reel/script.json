@@ -1,0 +1,135 @@
+{
+  "project": {
+    "id": "mamase-planet-nine-reel-v1",
+    "title": "Planet Nine — มีดาวเคราะห์อีกดวงซ่อนอยู่จริงไหม?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Clear, engaging, warm, authoritative Thai documentary presenter tone."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ถ้าเรายังไม่เคยเห็นมันด้วยกล้องดูดาว แล้วนักดาราศาสตร์รู้ได้อย่างไร... ว่าอาจมีดาวเคราะห์ขนาดยักษ์อีกดวง ซ่อนอยู่ที่ขอบระบบสุริยะครับ?",
+      "tts_text": "ถ้าเรายังไม่เคยเห็นมันด้วยกล้องดูดาว แล้วนักดาราศาสตร์รู้ได้อย่างไร... ว่าอาจมีดาวเคราะห์ขนาดยักษ์อีกดวง ซ่อนอยู่ที่ขอบระบบสุริยะครับ?",
+      "subtitle": "PLANET NINE\nมีดาวเคราะห์ซ่อนอยู่จริงไหม?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve the key art typography, Mamase logo, and presenter. The presenter gestures toward the mysterious dark silhouette of Planet Nine in deep space with natural lip sync. Starry cosmos background, smooth cinematic motion.",
+        "negative_prompt": "text modification, title distortion, face distortion, flicker, jitter, sudden camera movement, watermark",
+        "seed": 919,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-strange-orbits",
+      "image": "images/scene-02-strange-orbits.png",
+      "narration": "คำตอบไม่ได้มาจากภาพถ่าย แต่มาจากแรงโน้มถ่วงครับ เมื่อนักดาราศาสตร์พบว่าวัตถุห่างไกลในแถบไคเปอร์ มีวงโคจรเอียงและเกาะกลุ่มชี้ไปทางเดียวกันอย่างผิดปกติ",
+      "tts_text": "คำตอบไม่ได้มาจากภาพถ่าย แต่มาจากแรงโน้มถ่วงครับ เมื่อนักดาราศาสตร์พบว่าวัตถุห่างไกลในแถบไคเปอร์ มีวงโคจรเอียงและเกาะกลุ่มชี้ไปทางเดียวกันอย่างผิดปกติ",
+      "subtitle": "หลักฐานทางคณิตศาสตร์\nวงโคจรวัตถุขอบนอกเอียงไปทางเดียวกัน",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-massive-sculptor",
+      "image": "images/scene-03-massive-sculptor.png",
+      "narration": "โอกาสที่พวกมันจะเรียงตัวแบบนี้โดยบังเอิญมีน้อยกว่าศูนย์จุดสองเปอร์เซ็นต์ เหมือนมีดาวเคราะห์มวลห้าถึงสิบเท่าของโลก คอยใช้แรงโน้มถ่วงต้อนพวกมันไว้",
+      "tts_text": "โอกาสที่พวกมันจะเรียงตัวแบบนี้โดยบังเอิญมีน้อยกว่าศูนย์จุดสองเปอร์เซ็นต์ เหมือนมีดาวเคราะห์มวลห้าถึงสิบเท่าของโลก คอยใช้แรงโน้มถ่วงต้อนพวกมันไว้",
+      "subtitle": "โอกาสบังเอิญน้อยกว่า 0.2%\nเหมือนมีดาวมวล 5–10 เท่าของโลกคุมอยู่",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-04-distance-scale",
+      "image": "images/scene-04-distance-scale.png",
+      "narration": "หากมีอยู่จริง Planet Nine จะอยู่ห่างจากดวงอาทิตย์ถึง 400 ถึง 800 เท่าของระยะทางโลก ไกลกว่าเนปจูนนับสิบเท่า และโคจรรอบละนับหมื่นปี",
+      "tts_text": "หากมีอยู่จริง แพลนเน็ต ไนน์ จะอยู่ห่างจากดวงอาทิตย์ถึงสี่ร้อยถึงแปดร้อยเท่าของระยะทางโลก ไกลกว่าเนปจูนนับสิบเท่า และโคจรรอบละนับหมื่นปี",
+      "subtitle": "ระยะทาง 400–800 เท่าจากโลกถึงอาทิตย์\nโคจรรอบละนับหมื่นปี",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-05-why-unseen",
+      "image": "images/scene-05-why-unseen.png",
+      "narration": "ทำไมกล้องระดับโลกถึงยังหาไม่เจอ? เพราะที่ระยะนั้น แสงสะท้อนจะจางลงเป็นล้านล้านเท่า มันจึงมืดสนิท เคลื่อนที่ช้ามาก และมีพื้นที่ค้นหากว้างใหญ่ระดับซีกฟ้า",
+      "tts_text": "ทำไมกล้องระดับโลกถึงยังหาไม่เจอ? เพราะที่ระยะนั้น แสงสะท้อนจะจางลงเป็นล้านล้านเท่า มันจึงมืดสนิท เคลื่อนที่ช้ามาก และมีพื้นที่ค้นหากว้างใหญ่ระดับซีกฟ้า",
+      "subtitle": "ทำไมยังตรวจจับไม่เจอ?\nมืดมาก เคลื่อนที่ช้า และฟ้ากว้างมหาศาล",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-06-evidence-vs-hypothesis",
+      "image": "images/scene-06-evidence-vs-hypothesis.png",
+      "narration": "ดังนั้น Planet Nine ในปัจจุบัน จึงยังเป็น 'สมมติฐาน' ที่มีทฤษฎีรองรับอย่างแน่นหนา แต่ยังไม่ถือเป็นการค้นพบ จนกว่าจะมีใครถ่ายภาพมันได้จริงครับ",
+      "tts_text": "ดังนั้น แพลนเน็ต ไนน์ ในปัจจุบัน จึงยังเป็น สมมติฐาน ที่มีทฤษฎีรองรับอย่างแน่นหนา แต่ยังไม่ถือเป็นการค้นพบ จนกว่าจะมีใครถ่ายภาพมันได้จริงครับ",
+      "subtitle": "ความจริง ณ ตอนนี้:\nคือ \"สมมติฐานที่มีน้ำหนัก\" ยังไม่ใช่การค้นพบ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_right"
+    },
+    {
+      "id": "scene-07-vera-rubin-hunt",
+      "image": "images/scene-07-vera-rubin-hunt.png",
+      "narration": "แต่การรอคอยใกล้สิ้นสุดลงแล้วครับ หอดูดาวแห่งใหม่อย่าง Vera C. Rubin กำลังจะเริ่มกวาดถ่ายท้องฟ้าทั้งหมด ซึ่งอาจยืนยันตัวตน หรือปิดตำนานดาวเคราะห์ดวงนี้ในไม่ช้า",
+      "tts_text": "แต่การรอคอยใกล้สิ้นสุดลงแล้วครับ หอดูดาวแห่งใหม่อย่าง เวรา ซี รูบิน กำลังจะเริ่มกวาดถ่ายท้องฟ้าทั้งหมด ซึ่งอาจยืนยันตัวตน หรือปิดตำนานดาวเคราะห์ดวงนี้ในไม่ช้า",
+      "subtitle": "ความหวังใหม่: หอดูดาว Vera C. Rubin\nเริ่มกวาดถ่ายท้องฟ้า คาดรู้ผลในไม่ช้า",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-08-cosmic-frontier",
+      "image": "images/scene-08-cosmic-frontier.png",
+      "narration": "ไม่ว่าคำตอบสุดท้ายจะมีหรือไม่มี ความลับที่ซ่อนอยู่ตรงขอบระบบสุริยะ ก็กำลังจะขยายขอบเขตความเข้าใจของมนุษยชาติไปอีกขั้นครับ",
+      "tts_text": "ไม่ว่าคำตอบสุดท้ายจะมีหรือไม่มี ความลับที่ซ่อนอยู่ตรงขอบระบบสุริยะ ก็กำลังจะขยายขอบเขตความเข้าใจของมนุษยชาติไปอีกขั้นครับ",
+      "subtitle": "ไม่ว่าคำตอบสุดท้ายจะมีหรือไม่\nความลับที่ขอบฟ้าย่อมขยายความรู้ของเรา",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": false,
+      "show_subtitle": false,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.05,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

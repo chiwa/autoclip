@@ -4,9 +4,9 @@ import json
 import zipfile
 from pathlib import Path
 
-from app.config.settings import AppSettings, Settings, load_settings
+from app.config.settings import AppSettings, ReelHookGateSettings, Settings, load_settings
 from app.domain.ai_models import AiProjectStatus, AiScene
-from app.services.ai_service import AiProjectService, GeminiAutoProvider
+from app.services.ai_service import AiProjectService, AntigravityAutoProvider, GeminiAutoProvider
 
 
 def test_gemini_key_is_loaded_from_dotenv_without_exposing_it(tmp_path, monkeypatch):
@@ -26,7 +26,10 @@ def test_gemini_key_accepts_legacy_compose_style_dotenv(tmp_path, monkeypatch):
 
 
 def test_automatic_package_builder_writes_metadata_tts_and_wan(tmp_path):
-    settings = Settings(app=AppSettings(workspace=tmp_path / "workspaces"))
+    settings = Settings(
+        app=AppSettings(workspace=tmp_path / "workspaces"),
+        reel_hook_gate=ReelHookGateSettings(enabled=False),
+    )
     service = AiProjectService(settings)
     project = service.create("เรื่องทดสอบ")
     image = service.root / project.project_id / "preview-images" / "scene-01.png"
@@ -53,7 +56,7 @@ def test_automatic_package_builder_writes_metadata_tts_and_wan(tmp_path):
         metadata = json.loads(archive.read("video-metadata.json"))
         assert script["voice"]["provider"] == "google-gemini"
         assert script["voice"]["voice"] == "Fenrir"
-        assert script["voice"]["speed"] == 1.0
+        assert script["voice"]["speed"] == 1.05
         assert script["scenes"][0]["tts_text"].startswith("เจมส์")
         assert script["scenes"][0]["wan"]["steps"] == 25
         assert metadata["title"] == "เรื่องทดสอบ"
@@ -140,7 +143,7 @@ def test_google_tts_uses_approved_mamase_defaults():
     settings = Settings()
 
     assert settings.tts.google_voice == "Fenrir"
-    assert settings.tts.google_speaking_rate == 1.0
+    assert settings.tts.google_speaking_rate == 1.05
     assert settings.tts.google_style_prompt.startswith("Read aloud in a natural, playful")
     assert settings.tts.silence_trim.enabled is False
 
@@ -166,3 +169,57 @@ def test_gemini_image_request_uses_image_config_not_legacy_response_format(tmp_p
     config = captured["json"]["generationConfig"]
     assert config["imageConfig"] == {"aspectRatio": "9:16", "imageSize": "1K"}
     assert "responseFormat" not in config
+
+
+def test_antigravity_is_the_default_automatic_provider(tmp_path):
+    cli = tmp_path / "agy"
+    cli.write_text("#!/bin/sh\n", encoding="utf-8")
+    cli.chmod(0o755)
+    settings = Settings(app=AppSettings(workspace=tmp_path / "workspaces"), antigravity_cli_path=cli)
+
+    service = AiProjectService(settings)
+
+    assert settings.ai_provider == "antigravity"
+    assert settings.antigravity_model == "gemini-3.8-flash-medium"
+    assert service.configured is True
+    assert isinstance(service._automatic_provider(), AntigravityAutoProvider)
+
+
+def test_antigravity_planner_normalises_json_without_gemini_key(tmp_path, monkeypatch):
+    cli = tmp_path / "agy"
+    cli.write_text("#!/bin/sh\n", encoding="utf-8")
+    cli.chmod(0o755)
+    provider = AntigravityAutoProvider(Settings(antigravity_cli_path=cli))
+    monkeypatch.setattr(provider, "_run", lambda *args, **kwargs: json.dumps({"scenes": [{"id": "hook", "narration": "ทดสอบ", "image_prompt": "test"}]}))
+
+    scenes, notes = provider.plan("เรื่องทดสอบ", "")
+
+    assert scenes[0].id == "hook"
+    assert scenes[0].wan["steps"] == 25
+    assert notes
+
+
+def test_antigravity_passes_prompt_as_print_flag_value(tmp_path, monkeypatch):
+    cli = tmp_path / "agy"
+    cli.write_text("#!/bin/sh\n", encoding="utf-8")
+    cli.chmod(0o755)
+    provider = AntigravityAutoProvider(Settings(antigravity_cli_path=cli))
+    captured: dict[str, list[str]] = {}
+
+    class Result:
+        returncode = 0
+        stdout = "ok"
+        stderr = ""
+
+    def fake_run(command, **_kwargs):
+        captured["command"] = command
+        return Result()
+
+    monkeypatch.setattr("app.services.ai_service.subprocess.run", fake_run)
+
+    assert provider._run("plan this", mode="plan") == "ok"
+    command = captured["command"]
+    assert "--output-format" in command
+    assert "text" in command
+    assert command[-1] == "--print=plan this"
+    assert "--print" not in command

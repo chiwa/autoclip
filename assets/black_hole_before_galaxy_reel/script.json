@@ -1,0 +1,221 @@
+{
+  "project": {
+    "id": "mamase-black-hole-before-galaxy-reel-v1",
+    "title": "หลุมดำเกิดก่อนกาแล็กซีจริงหรือ?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: \"เฮ้ย... จริงดิ?\" Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ถ้าหลุมดำไม่ได้เกิดอยู่ข้างในกาแล็กซีล่ะครับ แต่เป็นมันเองที่เกิดก่อน แล้วค่อยสร้างกาแล็กซีขึ้นมารอบตัว ฟังดูสลับขั้นตอนไปหน่อย แต่ James Webb อาจพบหลักฐานแบบนั้นแล้วครับ",
+      "tts_text": "ถ้าหลุมดำไม่ได้เกิดอยู่ข้างในกาแล็กซีล่ะครับ แต่เป็นมันเองที่เกิดก่อน แล้วค่อยสร้างกาแล็กซีขึ้นมารอบตัว ฟังดูสลับขั้นตอนไปหน่อย แต่ เจมส์ เว็บบ์ อาจพบหลักฐานแบบนั้นแล้วครับ",
+      "subtitle": "หลุมดำเกิดก่อนกาแล็กซี?",
+      "motion": "slow_zoom_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.18,
+      "focus": "right",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve the supplied 2D anime Mamase presenter identity, face, black rectangular glasses, tousled black hair, charcoal technical jacket, Thai hook text and original composition. The presenter speaks naturally toward camera with subtle head motion, small eyebrow movement and a gentle pointing gesture. Behind him, an immense early-universe black hole accretion disk flows slowly while primordial gas begins forming a galaxy. Stable face-forward talking shot, cinematic documentary lighting, smooth continuous motion.",
+        "negative_prompt": "new text, changed text, subtitles, watermark, logo, extra person, distorted face, covered mouth, warped glasses, distorted hands, duplicated fingers, flicker, jitter, sudden camera movement, rapid zoom",
+        "seed": 6101,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-classical-formation",
+      "image": "images/scene-02-classical-formation.png",
+      "narration": "เดิมทีเราเข้าใจว่า กาแล็กซีต้องก่อตัวขึ้นก่อน จากนั้นดาวฤกษ์มวลมากจึงตายลง กลายเป็นหลุมดำ และค่อย ๆ เติบโตขึ้นทีหลัง",
+      "subtitle": "ความเข้าใจเดิม: กาแล็กซีก่อน หลุมดำทีหลัง",
+      "motion": "pan_down",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "A coherent early galaxy forms from spiraling primordial gas while massive blue-white stars ignite and one foreground star collapses into a small black-hole seed. Slow downward cinematic camera drift follows the visual sequence from galaxy formation to stellar collapse, subtle flowing gas and particles, stable premium science-documentary composition.",
+        "negative_prompt": "text, subtitles, watermark, logo, arrows, infographic, split screen, multiple black holes, chaotic explosion, flicker, jitter, sudden camera movement",
+        "seed": 6102,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-early-monster",
+      "image": "images/scene-03-early-monster.png",
+      "narration": "แต่เดี๋ยวก่อน นักดาราศาสตร์กลับพบหลุมดำมวลมหาศาลในจักรวาลยุคแรก เร็วจนไม่น่ามีเวลาเพียงพอให้มันค่อย ๆ โตจากหลุมดำดวงเล็ก",
+      "subtitle": "ใหญ่เกินไป และเกิดเร็วเกินไป",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "A colossal mature supermassive black hole already dominates the primitive early universe. Its compact accretion disk rotates slowly while sparse embryonic galaxies and wispy hydrogen clouds remain young and unfinished behind it. Gentle cinematic push-in, immense scale, stable black-hole silhouette, physically credible continuous plasma motion.",
+        "negative_prompt": "text, subtitles, watermark, logo, fantasy portal, multiple black holes, warped disk, explosion, flicker, jitter, fast camera",
+        "seed": 6103,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-little-red-dot",
+      "image": "images/scene-04-little-red-dot.png",
+      "narration": "คำใบ้สำคัญมาจากวัตถุสีแดงดวงเล็กชื่อ QSO1 ซึ่งอยู่ในช่วงเวลาเพียงประมาณเจ็ดร้อยล้านปีหลังบิกแบง",
+      "tts_text": "คำใบ้สำคัญมาจากวัตถุสีแดงดวงเล็กชื่อ คิว เอส โอ วัน ซึ่งอยู่ในช่วงเวลาเพียงประมาณเจ็ดร้อยล้านปีหลังบิกแบง",
+      "subtitle": "QSO1 · 700 ล้านปีหลังบิกแบง",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "A deep early-universe galaxy field magnified by a massive foreground galaxy cluster, with several tiny red gravitationally lensed images of the same distant QSO1 source glimmering around curved arcs. Slow precise camera push toward the red source images, subtle lensing shimmer and drifting cosmic dust, stable scientific documentary realism.",
+        "negative_prompt": "text, subtitles, labels, boxes, arrows, watermark, logo, red planet, fantasy portal, flicker, jitter, sudden camera movement",
+        "seed": 6104,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-ancient-light-jwst",
+      "image": "images/scene-05-ancient-light-jwst.png",
+      "narration": "แสงของมันเดินทางมาหาเรานานกว่าหนึ่งหมื่นสามพันล้านปี เท่ากับว่า James Webb กำลังเปิดภาพวัยเด็กของจักรวาลให้เราดูอยู่ครับ",
+      "tts_text": "แสงของมันเดินทางมาหาเรานานกว่าหนึ่งหมื่นสามพันล้านปี เท่ากับว่า เจมส์ เว็บบ์ กำลังเปิดภาพวัยเด็กของจักรวาลให้เราดูอยู่ครับ",
+      "subtitle": "แสงโบราณกว่า 13,000 ล้านปี",
+      "motion": "pan_left_to_right",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "right",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve the accurate James Webb telescope geometry. A delicate ancient red-gold beam travels across layered deep space and reaches the golden 18-segment mirror. Slow cinematic camera drift along the beam toward Webb, gentle cosmic dust and distant galaxies, subtle reflections across the sunshield, stable premium documentary motion.",
+        "negative_prompt": "text, subtitles, watermark, logo, NASA logo, extra mirrors, warped telescope, laser weapon, flicker, jitter, sudden camera movement",
+        "seed": 6105,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-orbiting-gas",
+      "image": "images/scene-06-orbiting-gas.png",
+      "narration": "นักวิทยาศาสตร์วัดความเร็วของก๊าซที่หมุนรอบศูนย์กลาง แล้วพบว่ามันโคจรเหมือนดาวเคราะห์รอบดวงอาทิตย์ บอกว่ามวลส่วนใหญ่รวมอยู่ตรงกลาง",
+      "subtitle": "ก๊าซโคจรรอบมวลที่รวมอยู่ตรงกลาง",
+      "motion": "pan_right_to_left",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Ordered hydrogen gas streams rotate smoothly around one concentrated black-hole center. The near side glows controlled cyan-blue and the far side warm amber-red, suggesting opposite orbital velocities without graphics. Slow stable camera orbit, continuous elegant gas flow, physically credible accretion, no abrupt motion.",
+        "negative_prompt": "text, subtitles, graphs, arrows, HUD, watermark, logo, chaotic explosion, multiple black holes, flicker, jitter, warped center",
+        "seed": 6106,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-mass-imbalance",
+      "image": "images/scene-07-mass-imbalance.png",
+      "narration": "ผลที่ได้ค่อนข้างน่าตกใจ หลุมดำนี้มีมวลราวห้าสิบล้านเท่าของดวงอาทิตย์ และอาจครองอย่างน้อยสองในสามของมวลทั้งหมดในระบบ",
+      "subtitle": "หลุมดำมวลราว 50 ล้านดวงอาทิตย์",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "top",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "A gigantic supermassive black hole visually dominates a small fragile proto-galaxy wrapped beneath it. Slowly pull back to reveal the astonishing imbalance of scale while the accretion disk turns smoothly and sparse young stars shimmer. Stable physically credible cinematic documentary motion.",
+        "negative_prompt": "text, subtitles, numbers, pie chart, labels, watermark, logo, equal-sized galaxy and black hole, multiple black holes, flicker, jitter",
+        "seed": 6107,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-08-primordial-gas",
+      "image": "images/scene-08-primordial-gas.png",
+      "narration": "ที่แปลกกว่านั้นคือ บริเวณรอบมันยังแทบมีเพียงไฮโดรเจนกับฮีเลียม ธาตุหนักมีน้อยมาก ราวกับกาแล็กซียังสร้างดาวได้ไม่ทันเลยครับ",
+      "subtitle": "ก๊าซบริสุทธิ์ แต่มีดาวเพียงเล็กน้อย",
+      "motion": "pan_up",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Vast pristine hydrogen and helium filaments flow slowly around a compact black-hole glow, with only a sparse handful of newborn stars and a faint incomplete proto-galaxy. Gentle upward documentary camera drift, translucent cyan gas, restrained amber rim light and fine particles, coherent stable motion.",
+        "negative_prompt": "text, subtitles, element symbols, periodic table, infographic, watermark, logo, dense mature galaxy, fantasy smoke, flicker, jitter",
+        "seed": 6108,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-09-direct-collapse",
+      "image": "images/scene-09-direct-collapse.png",
+      "narration": "นี่ทำให้เกิดแนวคิดว่า หลุมดำบางดวงอาจไม่ได้เริ่มจากดาวที่ตาย แต่อาจถือกำเนิดมาใหญ่ จากการยุบตัวโดยตรงของเมฆก๊าซมหาศาล",
+      "subtitle": "อาจเกิดจากเมฆก๊าซยุบตัวโดยตรง",
+      "motion": "slow_zoom_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "One colossal primordial hydrogen cloud collapses directly inward from all sides toward a rapidly darkening central core, without forming a normal star first. Cyan filaments plunge smoothly into an amber compression zone, slow controlled cinematic push-in, immense scale, stable center and continuous gravitational infall.",
+        "negative_prompt": "text, subtitles, arrows, labels, normal star, supernova, multiple black holes, watermark, logo, fantasy portal, flicker, jitter, fast camera",
+        "seed": 6109,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-10-searching-evidence",
+      "image": "images/scene-10-searching-evidence.png",
+      "narration": "แต่ย้ำนะครับ นี่ยังไม่ใช่คำตอบสุดท้าย นักวิทยาศาสตร์กำลังตามหาวัตถุแบบเดียวกันเพิ่ม เพื่อดูว่าหลุมดำเกิดก่อนกาแล็กซีจริง หรือเราเพิ่งเจอกรณีพิเศษ",
+      "subtitle": "หลักฐานใหม่ แต่ยังไม่ใช่คำตอบสุดท้าย",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "bottom",
+      "transition": "fade_black",
+      "wan": {
+        "prompt": "Preserve the accurate James Webb telescope as it surveys a deep galaxy field containing several subtle tiny red gravitationally lensed sources. Slow contemplative pull-back reveals more candidate objects across the field, gentle mirror reflections and drifting dust, careful scientific search rather than a confirmed discovery, stable cinematic motion.",
+        "negative_prompt": "text, subtitles, labels, boxes, arrows, watermark, logo, NASA logo, fantasy spacecraft, warped telescope, rapid zoom, flicker, jitter",
+        "seed": 6110,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-11-mamase-outro",
+      "image": "images/scene-11-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Mamase brand outro, preserve the supplied glowing cyan orbiting planet and dark navy space composition, peaceful gentle orbital glow, subtle star shimmer and very slow cinematic push-in.",
+        "negative_prompt": "new text, changed text, watermark, blur, flicker, jitter, logo distortion, sudden camera movement",
+        "seed": 98,
+        "frames": 81,
+        "lip_sync": false
+      }
+    }
+  ]
+}

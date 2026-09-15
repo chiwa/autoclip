@@ -1,0 +1,153 @@
+{
+  "project": {
+    "id": "mamase-artemis-ii-far-side-reel-v1",
+    "title": "Artemis II: มนุษย์หายไปหลังดวงจันทร์",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: 'เฮ้ย... จริงดิ?' Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "สวัสดีครับ ยินดีต้อนรับสู่ Mamase จักรวาลของใจ ครั้งแรกในรอบกว่าห้าสิบปี มนุษย์หายไปหลังดวงจันทร์ และโลกติดต่อพวกเขาไม่ได้!",
+      "tts_text": "สวัสดีครับ ยินดีต้อนรับสู่ มามาเซ่ จักรวาลของใจ ครั้งแรกในรอบกว่า ห้าสิบปี มนุษย์หายไปหลังดวงจันทร์ และโลกติดต่อพวกเขาไม่ได้!",
+      "subtitle": "ครั้งแรกในรอบกว่า 50 ปี\nมนุษย์หายไปหลังดวงจันทร์!",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "right",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Preserve the supplied canonical Mamase anime presenter identity and original composition. Friendly Thai male presenter with tousled black hair, thin rectangular glasses and modern dark navy jacket speaks to camera with an amazed, inviting expression beside the Moon, Orion spacecraft and distant Earth. Subtle natural head movement, gentle pointing gesture, slow cinematic camera push-in, stable face and hands, premium space documentary lighting. Preserve the existing title area without generating any new text.",
+        "negative_prompt": "new text, changed text, subtitles, watermark, logo, extra person, distorted face, distorted hands, duplicated fingers, flicker, jitter, sudden camera movement, camera shake",
+        "seed": 4201,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-launch",
+      "image": "images/scene-02-launch.png",
+      "narration": "วันที่หนึ่ง เมษายน สองพันยี่สิบหก จรวด เอสแอลเอส ส่งยานโอไรออนออกจากโลก แต่งานนี้ไม่ได้พามนุษย์ลงจอดบนดวงจันทร์นะครับ",
+      "tts_text": "วันที่ หนึ่ง เมษายน สองพันยี่สิบหก จรวด เอส แอล เอส ส่งยาน โอไรออน ออกจากโลก แต่งานนี้ไม่ได้พามนุษย์ลงจอดบนดวงจันทร์นะครับ",
+      "subtitle": "1 เมษายน 2026\nOrion ออกเดินทาง แต่ไม่ได้ลงดวงจันทร์",
+      "motion": "pan_up",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-03-crew",
+      "image": "images/scene-03-crew.png",
+      "narration": "ลูกเรือทั้งสี่คือ รีด ไวส์แมน วิกเตอร์ โกลเวอร์ คริสตินา โคช และเจเรมี แฮนเซน นักบินอวกาศชาวแคนาดา",
+      "tts_text": "ลูกเรือทั้งสี่คือ รีด ไวส์แมน วิกเตอร์ โกลเวอร์ คริสตินา โคช และ เจเรมี แฮนเซน นักบินอวกาศชาวแคนาดา",
+      "subtitle": "4 นักบินอวกาศ\nมุ่งหน้าสู่บริเวณดวงจันทร์",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-04-outbound",
+      "image": "images/scene-04-outbound.png",
+      "narration": "โอไรออนใช้เวลาราวสี่วันเดินทางสู่ดวงจันทร์ นี่คือครั้งแรกนับจากยุคอะพอลโล ที่มนุษย์กลับออกไปไกลถึงห้วงอวกาศลึกอีกครั้ง",
+      "tts_text": "โอไรออน ใช้เวลาราว สี่วัน เดินทางสู่ดวงจันทร์ นี่คือครั้งแรกนับจากยุค อะพอลโล ที่มนุษย์กลับออกไปไกลถึงห้วงอวกาศลึกอีกครั้ง",
+      "subtitle": "ราว 4 วันสู่ดวงจันทร์\nไกลที่สุดนับจากยุค Apollo",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-05-far-side-blackout",
+      "image": "images/scene-05-far-side-blackout.png",
+      "narration": "วันที่หก เมษายน โอไรออนอ้อมไปหลังดวงจันทร์ ตัวดวงจันทร์บังสัญญาณทั้งหมด ทำให้ลูกเรือขาดการติดต่อกับโลกประมาณสามสิบถึงห้าสิบนาที",
+      "tts_text": "วันที่ หก เมษายน โอไรออน อ้อมไปหลังดวงจันทร์ ตัวดวงจันทร์บังสัญญาณทั้งหมด ทำให้ลูกเรือขาดการติดต่อกับโลกประมาณ สามสิบ ถึง ห้าสิบนาที",
+      "subtitle": "หลังดวงจันทร์\nโลกติดต่อพวกเขาไม่ได้ 30–50 นาที",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "center",
+      "transition": "fade_black",
+      "wan": {
+        "prompt": "Animate the supplied image of Orion gliding silently above the dark cratered far side of the Moon. Slow majestic orbital drift, subtle parallax across lunar craters, faint sunlight grazing the horizon, Earth remains hidden, mysterious radio-blackout atmosphere, stable spacecraft geometry, smooth cinematic science documentary motion, no new objects and no text.",
+        "negative_prompt": "Earth visible, text, subtitles, watermark, logo, extra spacecraft, warped spacecraft, explosions, fast motion, flicker, jitter, camera shake",
+        "seed": 4205,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-lunar-observation",
+      "image": "images/scene-06-lunar-observation.png",
+      "narration": "แต่พวกเขาไม่ได้หายไปเฉยๆ ลูกเรือใช้เวลาราวเจ็ดชั่วโมงศึกษาหลุมอุกกาบาต ร่องลาวา รอยแตก และสันพื้นผิวด้านไกลของดวงจันทร์",
+      "tts_text": "แต่พวกเขาไม่ได้หายไปเฉย ๆ ลูกเรือใช้เวลาราว เจ็ดชั่วโมง ศึกษาหลุมอุกกาบาต ร่องลาวา รอยแตก และสันพื้นผิวด้านไกลของดวงจันทร์",
+      "subtitle": "7 ชั่วโมงสำรวจ\nภูมิประเทศด้านไกลของดวงจันทร์",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "top",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-07-free-return",
+      "image": "images/scene-07-free-return.png",
+      "narration": "แล้วพวกเขากลับบ้านยังไง? เส้นทางฟรีรีเทิร์นใช้แรงโน้มถ่วงของโลกกับดวงจันทร์ช่วยเหวี่ยงโอไรออนกลับมา โดยไม่ต้องใช้เครื่องยนต์หลักหันยานกลับครับ",
+      "tts_text": "แล้วพวกเขากลับบ้านยังไง? เส้นทาง ฟรี รีเทิร์น ใช้แรงโน้มถ่วงของโลกกับดวงจันทร์ช่วยเหวี่ยง โอไรออน กลับมา โดยไม่ต้องใช้เครื่องยนต์หลักหันยานกลับครับ",
+      "subtitle": "Free-return trajectory\nแรงโน้มถ่วงช่วยพากลับโลก",
+      "motion": "pan_left_to_right",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-08-reentry",
+      "image": "images/scene-08-reentry.png",
+      "narration": "ขากลับคือบททดสอบของจริง ทั้งระบบพยุงชีพ การนำทาง การสื่อสาร และการฝ่าชั้นบรรยากาศด้วยความเร็วสูง เพื่อพิสูจน์ว่ามนุษย์อยู่รอดในดีปสเปซได้",
+      "tts_text": "ขากลับคือบททดสอบของจริง ทั้งระบบพยุงชีพ การนำทาง การสื่อสาร และการฝ่าชั้นบรรยากาศด้วยความเร็วสูง เพื่อพิสูจน์ว่ามนุษย์อยู่รอดใน ดีป สเปซ ได้",
+      "subtitle": "ทดสอบทุกระบบสำคัญ\nก่อนพามนุษย์กลับไปลงดวงจันทร์",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-09-splashdown",
+      "image": "images/scene-09-splashdown.png",
+      "narration": "วันที่สิบ เมษายน โอไรออนลงทะเลแปซิฟิก หลังเดินทางกว่าหนึ่งจุดสองล้านกิโลเมตร ในเก้าวันหนึ่งชั่วโมงสามสิบสองนาที ภารกิจนี้จึงเป็นสะพานสู่การกลับไปเหยียบดวงจันทร์อีกครั้ง",
+      "tts_text": "วันที่ สิบ เมษายน โอไรออน ลงทะเลแปซิฟิก หลังเดินทางกว่า หนึ่งจุดสองล้านกิโลเมตร ใน เก้าวัน หนึ่งชั่วโมง สามสิบสองนาที ภารกิจนี้จึงเป็นสะพานสู่การกลับไปเหยียบดวงจันทร์อีกครั้ง",
+      "subtitle": "1.2 ล้านกิโลเมตร · 9 วัน\nสะพานสู่การกลับไปเหยียบดวงจันทร์",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-10-mamase-outro",
+      "image": "images/scene-10-mamase-outro.png",
+      "narration": "ค้นพบโลก ค้นพบใจ กับ Mamase จักรวาลของใจ",
+      "tts_text": "ค้นพบโลก ค้นพบใจ กับ มามาเซ่ จักรวาลของใจ",
+      "subtitle": "ค้นพบโลก ค้นพบใจ\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

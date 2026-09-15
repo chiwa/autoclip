@@ -1,0 +1,420 @@
+import subprocess
+from pathlib import Path
+
+CHROME_PATH = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+
+html_scene2 = """<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1080px; height: 1920px; background: #070a12;
+    overflow: hidden; font-family: "JetBrains Mono", -apple-system, monospace;
+    color: #f1f5f9; position: relative;
+  }
+  .bg-glow {
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(circle at 540px 450px, rgba(14, 165, 233, 0.16) 0%, transparent 60%),
+      radial-gradient(circle at 100px 900px, rgba(30, 58, 138, 0.12) 0%, transparent 50%),
+      radial-gradient(circle at 980px 900px, rgba(30, 58, 138, 0.12) 0%, transparent 50%),
+      linear-gradient(180deg, #050811 0%, #0a1122 60%, #03050a 100%);
+    z-index: 1;
+  }
+  .grid-pattern {
+    position: absolute; inset: 0;
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    background-size: 40px 40px; z-index: 2;
+  }
+  .neighbor-rack-left {
+    position: absolute; top: 40px; left: -180px; width: 240px; height: 1650px;
+    background: linear-gradient(90deg, #0a0f1d 0%, #11192e 100%);
+    border-right: 2px solid rgba(255,255,255,0.06); opacity: 0.6; z-index: 5;
+  }
+  .neighbor-rack-right {
+    position: absolute; top: 40px; right: -180px; width: 240px; height: 1650px;
+    background: linear-gradient(270deg, #0a0f1d 0%, #11192e 100%);
+    border-left: 2px solid rgba(255,255,255,0.06); opacity: 0.6; z-index: 5;
+  }
+  .cable-tray {
+    position: absolute; top: 0; left: 0; width: 1080px; height: 45px;
+    background: #0d1527; border-bottom: 2px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; padding: 0 40px; gap: 30px; z-index: 15;
+  }
+  .tray-bundle { height: 12px; border-radius: 6px; box-shadow: 0 0 10px rgba(56, 189, 248, 0.3); }
+  .bundle-aqua { background: #06b6d4; width: 260px; }
+  .bundle-yellow { background: #eab308; width: 340px; }
+  .bundle-orange { background: #f97316; width: 220px; }
+
+  .rack-cabinet {
+    position: absolute; top: 45px; left: 60px; width: 960px; height: 1620px;
+    background: #0b1120; border: 3px solid #1e293b; border-radius: 12px;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.95), 0 0 0 1px rgba(255,255,255,0.06), 0 0 60px rgba(14, 165, 233, 0.12);
+    display: flex; overflow: hidden; z-index: 10;
+  }
+  .rack-rail {
+    width: 36px; background: #080c18; border-right: 1px solid rgba(255,255,255,0.05);
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 10px 0; font-size: 8px; color: #475569; text-align: center; user-select: none;
+  }
+  .rack-rail.right { border-right: none; border-left: 1px solid rgba(255,255,255,0.05); }
+
+  .rack-gear {
+    flex: 1; display: flex; flex-direction: column; justify-content: space-between;
+    padding: 8px 10px; background: #080d19; gap: 5px;
+  }
+  .chassis {
+    background: linear-gradient(180deg, #131b2e 0%, #0d1424 100%);
+    border: 1px solid rgba(255,255,255,0.07); border-radius: 4px;
+    display: flex; align-items: center; padding: 0 12px; position: relative;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 2px 5px rgba(0,0,0,0.5);
+    flex: 1; min-height: 55px;
+  }
+  .chassis-switch { min-height: 42px; background: #0f182b; }
+  .chassis-ups { min-height: 70px; background: #111a2d; }
+  
+  .chassis-badge {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.5px; color: #94a3b8;
+    display: flex; flex-direction: column; gap: 2px; width: 220px;
+  }
+  .badge-highlight { color: #38bdf8; }
+  .badge-sub { font-size: 9px; color: #64748b; }
+
+  .caddy-grid {
+    display: grid; grid-template-columns: repeat(12, 1fr); gap: 4px; flex: 1; margin: 0 14px;
+  }
+  .caddy {
+    height: 42px; background: #0f172a; border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 2px; display: flex; flex-direction: column; justify-content: space-between; padding: 4px;
+  }
+  .caddy-handle { width: 100%; height: 3px; background: #334155; border-radius: 1px; }
+  .caddy-leds { display: flex; gap: 3px; justify-content: flex-end; }
+  .led { width: 4px; height: 4px; border-radius: 50%; }
+  .led-green { background: #10b981; box-shadow: 0 0 4px #10b981; }
+  .led-amber { background: #f59e0b; box-shadow: 0 0 4px #f59e0b; }
+  .led-blue { background: #38bdf8; box-shadow: 0 0 4px #38bdf8; }
+
+  .ports-row { display: flex; gap: 5px; align-items: center; margin-left: auto; }
+  .fiber-port {
+    width: 10px; height: 10px; border-radius: 2px; background: #1e293b;
+    border: 1px solid rgba(255,255,255,0.1); position: relative;
+  }
+  .fiber-port.active::after {
+    content: ""; position: absolute; inset: 2px; border-radius: 1px;
+    background: #06b6d4; box-shadow: 0 0 6px #06b6d4;
+  }
+  .fiber-port.gold::after { background: #eab308; box-shadow: 0 0 6px #eab308; }
+
+  .side-cable-loom {
+    width: 28px; background: #0a0f1d; border-left: 1px solid rgba(255,255,255,0.04);
+    display: flex; flex-direction: column; justify-content: space-between; padding: 10px 4px;
+  }
+  .cable-clip {
+    width: 100%; height: 50px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px;
+    background: repeating-linear-gradient(90deg, #06b6d4 0px, #06b6d4 4px, #eab308 4px, #eab308 8px, #0f172a 8px, #0f172a 14px);
+  }
+
+  .raised-floor {
+    position: absolute; top: 1665px; left: 0; width: 1080px; height: 255px;
+    background: linear-gradient(180deg, #0c1322 0%, #050811 100%);
+    border-top: 2px solid rgba(56, 189, 248, 0.2);
+    display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr);
+    gap: 3px; padding: 6px; z-index: 8;
+  }
+  .floor-tile {
+    background: #080d19; border: 1px solid rgba(255,255,255,0.04); border-radius: 2px;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 8px 8px;
+  }
+  .subtitle-vignette {
+    position: absolute; bottom: 0; left: 0; width: 1080px; height: 380px;
+    background: linear-gradient(180deg, transparent 0%, rgba(5, 8, 15, 0.75) 50%, rgba(3, 5, 10, 0.98) 100%);
+    pointer-events: none; z-index: 30;
+  }
+</style>
+</head>
+<body>
+  <div class="bg-glow"></div>
+  <div class="grid-pattern"></div>
+  <div class="neighbor-rack-left"></div>
+  <div class="neighbor-rack-right"></div>
+
+  <div class="cable-tray">
+    <div class="tray-bundle bundle-aqua"></div>
+    <div class="tray-bundle bundle-yellow"></div>
+    <div class="tray-bundle bundle-orange"></div>
+  </div>
+
+  <div class="rack-cabinet">
+    <div class="rack-rail">
+      <div>42U</div><div>39U</div><div>36U</div><div>33U</div><div>30U</div><div>27U</div>
+      <div>24U</div><div>21U</div><div>18U</div><div>15U</div><div>12U</div><div>09U</div>
+      <div>06U</div><div>03U</div><div>01U</div>
+    </div>
+
+    <div class="rack-gear">
+      <!-- 1: 100G Switch -->
+      <div class="chassis chassis-switch">
+        <div class="chassis-badge"><span class="badge-highlight">100GbE SPINE 01</span><span class="badge-sub">ARISTA 7050SX-64</span></div>
+        <div class="ports-row">
+          <div class="fiber-port active"></div><div class="fiber-port active"></div><div class="fiber-port active"></div><div class="fiber-port active"></div>
+          <div class="fiber-port gold"></div><div class="fiber-port gold"></div><div class="fiber-port active"></div><div class="fiber-port active"></div>
+          <div class="fiber-port active"></div><div class="fiber-port active"></div><div class="fiber-port gold"></div><div class="fiber-port active"></div>
+          <div class="fiber-port active"></div><div class="fiber-port active"></div><div class="fiber-port active"></div><div class="fiber-port active"></div>
+        </div>
+      </div>
+
+      <!-- 2: 100G Switch 2 -->
+      <div class="chassis chassis-switch">
+        <div class="chassis-badge"><span class="badge-highlight">100GbE LEAF 02</span><span class="badge-sub">REDUNDANT FIBRIC B</span></div>
+        <div class="ports-row">
+          <div class="fiber-port active"></div><div class="fiber-port active"></div><div class="fiber-port gold"></div><div class="fiber-port active"></div>
+          <div class="fiber-port active"></div><div class="fiber-port active"></div><div class="fiber-port active"></div><div class="fiber-port active"></div>
+          <div class="fiber-port gold"></div><div class="fiber-port active"></div><div class="fiber-port active"></div><div class="fiber-port active"></div>
+          <div class="fiber-port active"></div><div class="fiber-port active"></div><div class="fiber-port active"></div><div class="fiber-port active"></div>
+        </div>
+      </div>
+
+      <!-- 3: Patch Panel -->
+      <div class="chassis chassis-switch" style="background:#0a101d;">
+        <div class="chassis-badge"><span class="badge-highlight">FIBER PATCH 01</span><span class="badge-sub">OM4 MPO/LC TRUNK</span></div>
+        <div class="ports-row">
+          <div class="fiber-port active"></div><div class="fiber-port active"></div><div class="fiber-port active"></div><div class="fiber-port active"></div>
+          <div class="fiber-port active"></div><div class="fiber-port active"></div><div class="fiber-port active"></div><div class="fiber-port active"></div>
+          <div class="fiber-port gold"></div><div class="fiber-port gold"></div><div class="fiber-port active"></div><div class="fiber-port active"></div>
+          <div class="fiber-port active"></div><div class="fiber-port active"></div><div class="fiber-port active"></div><div class="fiber-port active"></div>
+        </div>
+      </div>
+
+      <!-- 4: Core Banking App 01 -->
+      <div class="chassis">
+        <div class="chassis-badge"><span class="badge-highlight">PROD-JAVA-APP-01</span><span class="badge-sub">SPRING BOOT 3 / JDK 21</span></div>
+        <div class="caddy-grid">
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+        </div>
+      </div>
+
+      <!-- 5: Core Banking App 02 -->
+      <div class="chassis">
+        <div class="chassis-badge"><span class="badge-highlight">PROD-JAVA-APP-02</span><span class="badge-sub">HIGH-AVAILABILITY CLUSTER</span></div>
+        <div class="caddy-grid">
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+        </div>
+      </div>
+
+      <!-- 6: Core Banking App 03 -->
+      <div class="chassis">
+        <div class="chassis-badge"><span class="badge-highlight">PROD-JAVA-APP-03</span><span class="badge-sub">TRANSACTION EXECUTOR</span></div>
+        <div class="caddy-grid">
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+        </div>
+      </div>
+
+      <!-- 7: Kafka Broker 01 -->
+      <div class="chassis">
+        <div class="chassis-badge"><span class="badge-highlight">KAFKA-BROKER-01</span><span class="badge-sub">EVENT STREAM FABRIC</span></div>
+        <div class="caddy-grid">
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+        </div>
+      </div>
+
+      <!-- 8: Kafka Broker 02 -->
+      <div class="chassis">
+        <div class="chassis-badge"><span class="badge-highlight">KAFKA-BROKER-02</span><span class="badge-sub">REPLICATED PARTITIONS</span></div>
+        <div class="caddy-grid">
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+        </div>
+      </div>
+
+      <!-- 9: All-Flash SAN Storage 01 -->
+      <div class="chassis">
+        <div class="chassis-badge"><span class="badge-highlight">SAN-STORAGE-01</span><span class="badge-sub">NVMe TIER-0 ALL-FLASH</span></div>
+        <div class="caddy-grid">
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+        </div>
+      </div>
+
+      <!-- 10: All-Flash SAN Storage 02 -->
+      <div class="chassis">
+        <div class="chassis-badge"><span class="badge-highlight">SAN-STORAGE-02</span><span class="badge-sub">NVMe MIRROR ARRAY</span></div>
+        <div class="caddy-grid">
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+        </div>
+      </div>
+
+      <!-- 11: Enterprise Database Node 01 -->
+      <div class="chassis">
+        <div class="chassis-badge"><span class="badge-highlight">POSTGRES-PRIMARY</span><span class="badge-sub">ACID LEDGER PERSISTENCE</span></div>
+        <div class="caddy-grid">
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+        </div>
+      </div>
+
+      <!-- 12: Enterprise Database Node 02 -->
+      <div class="chassis">
+        <div class="chassis-badge"><span class="badge-highlight">POSTGRES-STANDBY</span><span class="badge-sub">SYNCHRONOUS REPLICATION</span></div>
+        <div class="caddy-grid">
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div><div class="led led-blue"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+          <div class="caddy"><div class="caddy-handle"></div><div class="caddy-leds"><div class="led led-green"></div></div></div>
+        </div>
+      </div>
+
+      <!-- 13: Redundant UPS A -->
+      <div class="chassis chassis-ups">
+        <div class="chassis-badge"><span class="badge-highlight">SMART-UPS TIER-A</span><span class="badge-sub">3000VA ONLINE DUAL-CONVERSION</span></div>
+        <div style="margin-left: auto; display: flex; gap: 12px; align-items: center;">
+          <span style="font-size: 11px; color: #10b981; font-weight: 700;">PWR: 100% (STABLE)</span>
+          <div class="led led-green"></div>
+        </div>
+      </div>
+
+      <!-- 14: Redundant UPS B -->
+      <div class="chassis chassis-ups">
+        <div class="chassis-badge"><span class="badge-highlight">SMART-UPS TIER-B</span><span class="badge-sub">REDUNDANT POWER BUS</span></div>
+        <div style="margin-left: auto; display: flex; gap: 12px; align-items: center;">
+          <span style="font-size: 11px; color: #10b981; font-weight: 700;">PWR: 100% (STABLE)</span>
+          <div class="led led-green"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-cable-loom">
+      <div class="cable-clip"></div><div class="cable-clip"></div><div class="cable-clip"></div>
+      <div class="cable-clip"></div><div class="cable-clip"></div><div class="cable-clip"></div>
+      <div class="cable-clip"></div><div class="cable-clip"></div><div class="cable-clip"></div>
+      <div class="cable-clip"></div><div class="cable-clip"></div><div class="cable-clip"></div>
+      <div class="cable-clip"></div><div class="cable-clip"></div>
+    </div>
+
+    <div class="rack-rail right">
+      <div>42U</div><div>39U</div><div>36U</div><div>33U</div><div>30U</div><div>27U</div>
+      <div>24U</div><div>21U</div><div>18U</div><div>15U</div><div>12U</div><div>09U</div>
+      <div>06U</div><div>03U</div><div>01U</div>
+    </div>
+  </div>
+
+  <div class="raised-floor">
+    <div class="floor-tile"></div><div class="floor-tile"></div><div class="floor-tile"></div><div class="floor-tile"></div>
+    <div class="floor-tile"></div><div class="floor-tile"></div><div class="floor-tile"></div><div class="floor-tile"></div>
+  </div>
+
+  <div class="subtitle-vignette"></div>
+</body>
+</html>
+"""
+
+temp_html = Path("scratch/test_full_rack.html")
+temp_html.write_text(html_scene2, encoding="utf-8")
+cmd = [
+    CHROME_PATH,
+    "--headless=new",
+    "--disable-gpu",
+    "--hide-scrollbars",
+    "--window-size=1080,1920",
+    "--screenshot=scratch/test_full_rack.png",
+    str(temp_html.resolve())
+]
+subprocess.run(cmd, check=True)
+print("Rendered scratch/test_full_rack.png")

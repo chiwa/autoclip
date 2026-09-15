@@ -1,0 +1,110 @@
+{
+  "project": {
+    "id": "mamase-light-year-distance-reel-v1",
+    "title": "ระยะทางปีแสง ไกลแค่ไหน?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Warm, engaging, authoritative, inspiring Thai documentary storyteller tone."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "1 ปีแสง... คุณคิดว่ามันไกลแค่ไหน? มันคือระยะทางที่ยิ่งใหญ่จนจินตนาการของมนุษย์แทบจะไปไม่ถึง แต่ในจักรวาลอันกว้างใหญ่ นี่คือมาตรวัดพื้นฐานที่สุด",
+      "tts_text": "หนึ่ง ปีแสง... คุณคิดว่ามันไกลแค่ไหน? มันคือระยะทางที่ยิ่งใหญ่จนจินตนาการของมนุษย์แทบจะไปไม่ถึง แต่ในจักรวาลอันกว้างใหญ่ นี่คือมาตรวัดพื้นฐานที่สุด",
+      "subtitle": "1 ปีแสง ไกลแค่ไหน?\nระยะทางที่ไกลเกินจินตนาการของมนุษย์",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve key art typography, characters, and branding layout. Cinematic view of lunar ridge overlooking crater with explorer and dog, Earth glowing in the starry sky. Subtle cinematic push-in.",
+        "negative_prompt": "text distortion, typography distortion, face distortion, flicker, sudden movement, watermark",
+        "seed": 2026,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-speed-of-light-earth",
+      "image": "images/scene-02-speed-of-light-earth.png",
+      "narration": "แสงคือสิ่งที่เคลื่อนที่เร็วที่สุดในเอกภพ ด้วยความเร็วเกือบ 300,000 กิโลเมตรต่อวินาที เพียงแค่ 1 วินาที แสงสามารถวิ่งวนรอบโลกของเราได้ถึง 7 รอบครึ่ง",
+      "tts_text": "แสงคือสิ่งที่เคลื่อนที่เร็วที่สุดในเอกภพ ด้วยความเร็วเกือบ สามแสน กิโลเมตรต่อวินาที เพียงแค่ หนึ่ง วินาที แสงสามารถวิ่งวนรอบโลกของเราได้ถึง เจ็ด รอบครึ่ง",
+      "subtitle": "ความเร็วแสง 300,000 กม./วินาที\nวิ่งวนรอบโลกได้ 7.5 รอบในพริบตาเดียว",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-03-one-light-year-scale",
+      "image": "images/scene-03-one-light-year-scale.png",
+      "narration": "และถ้าให้แสงเดินทางต่อเนื่องเป็นเวลา 1 ปีเต็ม ระยะทางนั้นคือ 9.46 ล้านล้านกิโลเมตร ตัวเลขมหาศาลที่ระบบสุริยะของเรากลายเป็นเพียงจุดเล็กๆ ในความว่างเปล่า",
+      "tts_text": "และถ้าให้แสงเดินทางต่อเนื่องเป็นเวลา หนึ่ง ปีเต็ม ระยะทางนั้นคือ เก้าจุดสี่หก ล้านล้านกิโลเมตร ตัวเลขมหาศาลที่ระบบสุริยะของเรากลายเป็นเพียงจุดเล็กๆ ในความว่างเปล่า",
+      "subtitle": "1 ปีเต็ม = 9.46 ล้านล้านกิโลเมตร\nระบบสุริยะกลายเป็นเพียงจุดเล็กๆ",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_right"
+    },
+    {
+      "id": "scene-04-voyager-human-speed",
+      "image": "images/scene-04-voyager-human-speed.png",
+      "narration": "ลองเทียบกับความเร็วของมนุษย์ ยาน Voyager 1 ที่บินเร็วถึง 60,000 กิโลเมตรต่อชั่วโมง หากจะเดินทางให้ครบระยะทางแค่ 1 ปีแสง ยานต้องใช้เวลาบินนานถึง 18,000 ปี",
+      "tts_text": "ลองเทียบกับความเร็วของมนุษย์ ยาน วอยเอเจอร์ วัน ที่บินเร็วถึง หกหมื่น กิโลเมตรต่อชั่วโมง หากจะเดินทางให้ครบระยะทางแค่ หนึ่ง ปีแสง ยานต้องใช้เวลาบินนานถึง หนึ่งหมื่นแปดพัน ปี",
+      "subtitle": "ยาน Voyager 1 เร็ว 60,000 กม./ชม.\nยังต้องใช้เวลาบินนานถึง 18,000 ปี",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-05-proxima-centauri",
+      "image": "images/scene-05-proxima-centauri.png",
+      "narration": "และดาวฤกษ์ที่อยู่ใกล้โลกเราที่สุดอย่าง Proxima Centauri อยู่ห่างออกไป 4.24 ปีแสง ยานอวกาศปัจจุบันของเราต้องใช้เวลาเดินทางเกือบ 80,000 ปี กว่าจะไปถึง",
+      "tts_text": "และดาวฤกษ์ที่อยู่ใกล้โลกเราที่สุดอย่าง พร็อกซิมา เซนทอรี อยู่ห่างออกไป สี่จุดสองสี่ ปีแสง ยานอวกาศปัจจุบันของเราต้องใช้เวลาเดินทางเกือบ แปดหมื่น ปี กว่าจะไปถึง",
+      "subtitle": "Proxima Centauri ห่าง 4.24 ปีแสง\nยานมนุษย์ต้องบินเกือบ 80,000 ปี",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-06-cosmic-time-machine",
+      "image": "images/scene-06-cosmic-time-machine.png",
+      "narration": "ปีแสงจึงไม่ใช่แค่การวัดระยะทาง แต่คือเครื่องย้อนเวลา แสงดาวทุกดวงที่เรามองเห็นในค่ำคืนนี้ คือภาพในอดีตเมื่อหลายปีก่อนที่เพิ่งเดินทางมาถึงดวงตาเรา",
+      "tts_text": "ปีแสงจึงไม่ใช่แค่การวัดระยะทาง แต่คือเครื่องย้อนเวลา แสงดาวทุกดวงที่เรามองเห็นในค่ำคืนนี้ คือภาพในอดีตเมื่อหลายปีก่อนที่เพิ่งเดินทางมาถึงดวงตาเรา",
+      "subtitle": "ปีแสงคือเครื่องย้อนเวลาแห่งเอกภพ\nแสงดาวที่เห็นคืนนี้ คือภาพจากอดีต",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-07-mamase-outro",
+      "image": "images/scene-07-mamase-outro.png",
+      "narration": "หากคุณหลงใหลในความยิ่งใหญ่ของเอกภพ กดไลก์ กดแชร์ และกดติดตาม Mamase แล้วออกเดินทางสู่อวกาศอันไร้ขอบเขตไปด้วยกัน",
+      "tts_text": "หากคุณหลงใหลในความยิ่งใหญ่ของเอกภพ กดไลก์ กดแชร์ และกดติดตาม มามาเสะ แล้วออกเดินทางสู่อวกาศอันไร้ขอบเขตไปด้วยกัน",
+      "subtitle": "เพราะในจักรวาลนี้ ยังมีเรื่องให้ค้นหาเสมอ\nกดติดตาม Mamase",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.05,
+      "focus": "center",
+      "transition": "none",
+      "show_subtitle": false
+    }
+  ]
+}

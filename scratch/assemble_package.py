@@ -1,0 +1,279 @@
+import json
+import shutil
+import zipfile
+from pathlib import Path
+
+BASE_DIR = Path(".")
+PREVIEW_DIR = Path("scratch/pale_blue_dot_preview")
+ASSET_DIR = Path("assets/pale_blue_dot_universe_reel")
+ASSET_DIR.mkdir(parents=True, exist_ok=True)
+
+DIST_DIR = Path("dist/mamase-pale-blue-dot-universe-reel-v1")
+DIST_IMAGES = DIST_DIR / "images"
+DIST_IMAGES.mkdir(parents=True, exist_ok=True)
+
+# 1. Copy to durable assets/ and dist/images/
+scenes = [
+    "scene-01-hook.png",
+    "scene-02-solar-system-zoom.png",
+    "scene-03-voyager-at-edge.png",
+    "scene-04-cagan-turn-camera.png",
+    "scene-05-pale-blue-dot.png",
+    "scene-06-earth-miracle-life.png",
+    "scene-07-supernova-stardust.png",
+    "scene-08-cosmos-knowing-itself.png",
+    "scene-09-stardust-within.png",
+    "scene-10-mamase-outro.png"
+]
+
+for sc in scenes:
+    src_p = PREVIEW_DIR / sc
+    assert src_p.exists(), f"Missing {src_p}"
+    shutil.copy2(src_p, ASSET_DIR / sc)
+    shutil.copy2(src_p, DIST_IMAGES / sc)
+
+print(f"Copied {len(scenes)} images to {ASSET_DIR} and {DIST_IMAGES}")
+
+# 2. Build video-metadata.json
+video_metadata = {
+    "title": "โลกอยู่ตรงไหนในเอกภพ? ความจริงจากภาพ Pale Blue Dot และความลับว่าเราคือ \"เศษละอองดาว\"",
+    "description": "ถ้ามีสิ่งมีชีวิตทรงปัญญาต่างดาวมาถามทาง... เราจะระบุพิกัดของโลกในจักรวาลอันกว้างใหญ่นี้อย่างไร?\n\nพาทุกคนร่วมเดินทางย้อนรอย 6 พันล้านกิโลเมตรไปกับยานวอยเอจเจอร์ 1 (Voyager 1) สู่วันที่ 14 กุมภาพันธ์ 1990 เมื่อ คาร์ล เซแกน (Carl Sagan) ขอให้หันกล้องกลับมาบันทึกภาพประวัติศาสตร์ \"Pale Blue Dot\" หรือจุดสีฟ้าจางๆ ขนาดเพียง 0.12 พิกเซล\n\nแม้ในสเกลของเอกภพ โลกเราจะเล็กจนแทบมองไม่เห็น แต่ทุกอะตอมในตัวเราล้วนถือกำเนิดขึ้นจาก \"ซูเปอร์โนวา\" หรือการระเบิดของดวงดาว และ \"เราคือวิถีทางที่จักรวาลใช้ในการทำความเข้าใจตนเอง\"\n\nเมื่อใดที่รู้สึกเหนื่อยล้าหรือไร้ความหมาย ลองมองขึ้นไปบนฟ้า... แล้วภูมิใจในปาฏิหาริย์ของการมีชีวิตอยู่ครับ\n\nค้นพบโลก ค้นพบใจ กับ Mamase จักรวาลของใจ\n\n#PaleBlueDot #CarlSagan #Voyager1 #จักรวาล #ดาราศาสตร์ #สารคดี #วิทยาศาสตร์ #กำเนิดชีวิต #เศษละอองดาว #Stardust #Mamase #จักรวาลของใจ"
+}
+
+with open(DIST_DIR / "video-metadata.json", "w", encoding="utf-8") as f:
+    json.dump(video_metadata, f, ensure_ascii=False, indent=2)
+
+with open(ASSET_DIR / "video-metadata.json", "w", encoding="utf-8") as f:
+    json.dump(video_metadata, f, ensure_ascii=False, indent=2)
+
+# 3. Build script.json
+script_data = {
+    "project": {
+        "id": "mamase-pale-blue-dot-universe-reel-v1",
+        "title": "โลกอยู่ตรงไหนในเอกภพ? ความจริงจากภาพ Pale Blue Dot และความลับว่าเราคือ \"เศษละอองดาว\"",
+        "language": "th-TH",
+        "resolution": "1080x1920",
+        "fps": 30
+    },
+    "voice": {
+        "provider": "google-gemini",
+        "voice": "Fenrir",
+        "speed": 1.0,
+        "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: 'เฮ้ย... จริงดิ?' Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+    },
+    "scenes": [
+        {
+            "id": "scene-01-hook",
+            "image": "images/scene-01-hook.png",
+            "narration": "ถ้ามีสิ่งมีชีวิตทรงปัญญาต่างดาวมาถามทาง... เราจะบอกพิกัดของโลกในจักรวาลอันกว้างใหญ่นี้อย่างไร?",
+            "tts_text": "ถ้ามีสิ่งมีชีวิตทรงปัญญาต่างดาวมาถามทาง... เราจะบอกพิกัดของโลกในจักรวาลอันกว้างใหญ่นี้อย่างไร?",
+            "subtitle": "ถ้าเอเลียนมาถามทาง... เราจะบอกพิกัดโลกยังไง?",
+            "motion": "slow_zoom_in",
+            "motion_speed": "slow",
+            "motion_intensity": 0.1,
+            "focus": "right",
+            "transition": "dissolve",
+            "wan": {
+                "prompt": "Use the canonical Mamase anime presenter identity, friendly Thai male with tousled black hair, thin rectangular glasses and navy blazer, talking enthusiastically on the right side of the frame. On the left is the glowing planet Earth floating in deep starry space with golden Thai typography in upper left. Subtle natural head movement, expressive speaking gestures, stable composition.",
+                "negative_prompt": "extra person, extra text, watermark, logo, distorted face, distorted hands, duplicated fingers, blurry stars, flicker, jitter, sudden camera movement",
+                "seed": 901,
+                "frames": 81,
+                "steps": 25,
+                "lip_sync": True,
+                "character_id": "mamase-presenter-v1"
+            }
+        },
+        {
+            "id": "scene-02-solar-system-zoom",
+            "image": "images/scene-02-solar-system-zoom.png",
+            "narration": "เราคือดาวเคราะห์ลำดับที่สาม โคจรรอบดวงอาทิตย์ ในระบบสุริยะที่ตั้งอยู่บนแขนโอไรออน ของดาราจักรทางช้างเผือก",
+            "tts_text": "เราคือดาวเคราะห์ลำดับที่สาม โคจรรอบดวงอาทิตย์ ในระบบสุริยะที่ตั้งอยู่บนแขนโอไรออน ของดาราจักรทางช้างเผือก",
+            "subtitle": "โลก: ดาวเคราะห์หินดวงที่ 3 แห่งระบบสุริยะ",
+            "motion": "slow_zoom_out",
+            "motion_speed": "slow",
+            "motion_intensity": 0.14,
+            "focus": "center",
+            "transition": "fade",
+            "wan": {
+                "prompt": "Cinematic cosmic zoom out from the blazing Sun, revealing glowing orbital ellipses of inner planets across a dense field of distant stars in deep space, smooth cinematic drift, no text.",
+                "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+                "seed": 902,
+                "frames": 81,
+                "lip_sync": False
+            }
+        },
+        {
+            "id": "scene-03-voyager-at-edge",
+            "image": "images/scene-03-voyager-at-edge.png",
+            "narration": "ในวันที่สิบสี่กุมภาพันธ์ ปีหนึ่งเก้าเก้าศูนย์ ยานวอยเอจเจอร์ วัน เดินทางไกลกว่าหกพันล้านกิโลเมตร จนถึงขอบระบบสุริยะ",
+            "tts_text": "ในวันที่สิบสี่กุมภาพันธ์ ปี หนึ่ง เก้า เก้า ศูนย์ ยาน วอยเอจเจอร์ วัน เดินทางไกลกว่าหกพันล้านกิโลเมตร จนถึงขอบระบบสุริยะ",
+            "subtitle": "14 ก.พ. 1990: วอยเอจเจอร์ 1 ห่างจากโลก 6 พันล้านกิโลเมตร",
+            "motion": "slow_zoom_in",
+            "motion_speed": "slow",
+            "motion_intensity": 0.12,
+            "focus": "center",
+            "transition": "dissolve",
+            "wan": {
+                "prompt": "Heroic documentary shot of NASA Voyager 1 robotic spacecraft floating in the cold void of the outer Solar System, large white high-gain antenna reflector dish, golden instrument trusses catching faint solar light against deep cosmic starfield, no text.",
+                "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+                "seed": 903,
+                "frames": 81,
+                "lip_sync": False
+            }
+        },
+        {
+            "id": "scene-04-cagan-turn-camera",
+            "image": "images/scene-04-cagan-turn-camera.png",
+            "narration": "ก่อนที่ภารกิจหลักจะสิ้นสุดลง นักดาราศาสตร์ คาร์ล เซแกน ได้ขอให้หันกล้องกลับมา เพื่อบันทึกภาพบ้านเกิดเป็นครั้งสุดท้าย",
+            "tts_text": "ก่อนที่ภารกิจหลักจะสิ้นสุดลง นักดาราศาสตร์ คาร์ล เซแกน ได้ขอให้หันกล้องกลับมา เพื่อบันทึกภาพบ้านเกิดเป็นครั้งสุดท้าย",
+            "subtitle": "คาร์ล เซแกน ขอหันกล้องกลับมาถ่ายภาพโลกเป็นครั้งสุดท้าย",
+            "motion": "pan_up",
+            "motion_speed": "slow",
+            "motion_intensity": 0.12,
+            "focus": "top",
+            "transition": "fade",
+            "wan": {
+                "prompt": "Close-up cinematic shot of the Voyager scan platform camera turret pivoting slightly in outer space, optics pointed across the vast expanse toward distant Earth, subtle reflection of faint sunlight on gold metallic truss and lenses, deep starfield background, no text.",
+                "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+                "seed": 904,
+                "frames": 81,
+                "lip_sync": False
+            }
+        },
+        {
+            "id": "scene-05-pale-blue-dot",
+            "image": "images/scene-05-pale-blue-dot.png",
+            "narration": "และนี่คือภาพนั้น จุดแสงสีฟ้าจางๆ ขนาดเพียงศูนย์จุดหนึ่งสองพิกเซล ลอยคว้างอยู่กลางลำแสงสุริยะอันเวิ้งว้าง",
+            "tts_text": "และนี่คือภาพนั้น จุดแสงสีฟ้าจางๆ ขนาดเพียงศูนย์จุดหนึ่งสองพิกเซล ลอยคว้างอยู่กลางลำแสงสุริยะอันเวิ้งว้าง",
+            "subtitle": "Pale Blue Dot: จุดสีฟ้าจางๆ ท่ามกลางลำแสงสุริยะ",
+            "motion": "slow_zoom_in",
+            "motion_speed": "slow",
+            "motion_intensity": 0.08,
+            "focus": "center",
+            "transition": "dissolve",
+            "wan": {
+                "prompt": "Authentic NASA Pale Blue Dot photograph, a solitary tiny pale blue dot suspended within a soft vertical sunbeam ray across deep dark cosmic space, majestic, solemn, contemplative, subtle light shimmer, no text.",
+                "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+                "seed": 905,
+                "frames": 81,
+                "lip_sync": False
+            }
+        },
+        {
+            "id": "scene-06-earth-miracle-life",
+            "image": "images/scene-06-earth-miracle-life.png",
+            "narration": "จุดเล็กจิ๋วนี้ คือที่อยู่ของประวัติศาสตร์มนุษย์ทุกคน ความรัก ความฝัน และปาฏิหาริย์แห่งชีวิต ภายใต้ชั้นบรรยากาศอันบางเบา",
+            "tts_text": "จุดเล็กจิ๋วนี้ คือที่อยู่ของประวัติศาสตร์มนุษย์ทุกคน ความรัก ความฝัน และปาฏิหาริย์แห่งชีวิต ภายใต้ชั้นบรรยากาศอันบางเบา",
+            "subtitle": "บ้านของความรัก ความฝัน และปาฏิหาริย์แห่งชีวิต",
+            "motion": "pan_left_to_right",
+            "motion_speed": "slow",
+            "motion_intensity": 0.12,
+            "focus": "center",
+            "transition": "fade",
+            "wan": {
+                "prompt": "Cinematic ISS view of Earth atmospheric horizon limb at orbital sunset, glowing layered ribbon of fiery orange, amber, and vibrant neon blue light against the black void of space, smooth atmospheric drift, no text.",
+                "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+                "seed": 906,
+                "frames": 81,
+                "lip_sync": False
+            }
+        },
+        {
+            "id": "scene-07-supernova-stardust",
+            "image": "images/scene-07-supernova-stardust.png",
+            "narration": "แม้เราจะเล็กกระจ้อยร่อย แต่อนุภาคทุกอะตอมในร่างกายเรา ธาตุเหล็กในเลือด แคลเซียมในกระดูก ล้วนถือกำเนิดขึ้นจากใจกลางของดวงดาวที่ระเบิดเป็นซูเปอร์โนวา",
+            "tts_text": "แม้เราจะเล็กกระจ้อยร่อย แต่อนุภาคทุกอะตอมในร่างกายเรา ธาตุเหล็กในเลือด แคลเซียมในกระดูก ล้วนถือกำเนิดขึ้นจากใจกลางของดวงดาวที่ระเบิดเป็น ซูเปอร์โนวา",
+            "subtitle": "เราทุกคนสร้างขึ้นจากเศษละอองดาว (Stardust)",
+            "motion": "slow_zoom_in",
+            "motion_speed": "slow",
+            "motion_intensity": 0.14,
+            "focus": "center",
+            "transition": "dissolve",
+            "wan": {
+                "prompt": "Spectacular Hubble Space Telescope view of Crab Nebula supernova remnant, glowing intricate web of glowing golden, orange and teal ionized gas filaments expanding outwards from a luminous pulsar core into deep space, no text.",
+                "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+                "seed": 907,
+                "frames": 81,
+                "lip_sync": False
+            }
+        },
+        {
+            "id": "scene-08-cosmos-knowing-itself",
+            "image": "images/scene-08-cosmos-knowing-itself.png",
+            "narration": "ดังที่คาร์ล เซแกน ได้กล่าวไว้ว่า พวกเราคือวิถีทางที่จักรวาลใช้ในการทำความเข้าใจตนเอง",
+            "tts_text": "ดังที่ คาร์ล เซแกน ได้กล่าวไว้ว่า พวกเราคือวิถีทางที่จักรวาลใช้ในการทำความเข้าใจตนเอง",
+            "subtitle": "\"เราคือวิถีทางที่จักรวาลใช้ เพื่อทำความเข้าใจตนเอง\" - คาร์ล เซแกน",
+            "motion": "pan_up",
+            "motion_speed": "slow",
+            "motion_intensity": 0.12,
+            "focus": "top",
+            "transition": "fade",
+            "wan": {
+                "prompt": "Cinematic documentary night shot of ESO Very Large Telescope observatory dome firing an intense yellow-orange laser guide star beam straight into the starry heavens and billowing Milky Way galactic core, breathtaking scientific exploration, no text.",
+                "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+                "seed": 908,
+                "frames": 81,
+                "lip_sync": False
+            }
+        },
+        {
+            "id": "scene-09-stardust-within",
+            "image": "images/scene-09-stardust-within.png",
+            "narration": "เมื่อใดที่รู้สึกไร้ความหมาย ลองมองขึ้นไปบนฟ้า... จงภูมิใจและรักตัวเอง เพราะในความเวิ้งว้างอันไร้ขอบเขต จักรวาลได้มอบชีวิตให้เราอยู่ที่นี่",
+            "tts_text": "เมื่อใดที่รู้สึกไร้ความหมาย ลองมองขึ้นไปบนฟ้า... จงภูมิใจและรักตัวเอง เพราะในความเวิ้งว้างอันไร้ขอบเขต จักรวาลได้มอบชีวิตให้เราอยู่ที่นี่",
+            "subtitle": "ในความเวิ้งว้างอันไร้ที่สิ้นสุด... จักรวาลได้มอบชีวิตให้เรา",
+            "motion": "slow_zoom_in",
+            "motion_speed": "slow",
+            "motion_intensity": 0.1,
+            "focus": "center",
+            "transition": "none",
+            "wan": {
+                "prompt": "A lone stargazer standing in contemplation beneath the sweeping panoramic luminous arch of the Milky Way galaxy over the desert horizon, awe-inspiring, emotionally uplifting, sparkling stellar dusting, no text.",
+                "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+                "seed": 909,
+                "frames": 81,
+                "lip_sync": False
+            }
+        },
+        {
+            "id": "scene-10-mamase-outro",
+            "image": "images/scene-10-mamase-outro.png",
+            "narration": "ค้นพบโลก ค้นพบใจ กับ Mamase จักรวาลของใจ",
+            "tts_text": "ค้นพบโลก ค้นพบใจ กับ มามาเซ่ จักรวาลของใจ",
+            "subtitle": "ค้นพบโลก ค้นพบใจ\nMamase จักรวาลของใจ",
+            "motion": "slow_zoom_in",
+            "motion_speed": "slow",
+            "motion_intensity": 0.1,
+            "focus": "center",
+            "transition": "none",
+            "wan": {
+                "prompt": "Mamase brand outro, glowing cyan orbiting planet in dark navy space, peaceful and contemplative.",
+                "negative_prompt": "text, subtitle, watermark, logo, cartoon, extra planet, extra stars, flicker, jitter",
+                "seed": 98,
+                "frames": 81,
+                "lip_sync": False
+            }
+        }
+    ]
+}
+
+with open(DIST_DIR / "script.json", "w", encoding="utf-8") as f:
+    json.dump(script_data, f, ensure_ascii=False, indent=2)
+
+with open(ASSET_DIR / "script.json", "w", encoding="utf-8") as f:
+    json.dump(script_data, f, ensure_ascii=False, indent=2)
+
+print("Saved script.json to dist and assets")
+
+# 4. Create ZIP package
+zip_path = Path("dist/mamase-pale-blue-dot-universe-reel-v1.zip")
+if zip_path.exists():
+    zip_path.unlink()
+
+with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
+    zf.write(DIST_DIR / "script.json", arcname="script.json")
+    zf.write(DIST_DIR / "video-metadata.json", arcname="video-metadata.json")
+    for sc in scenes:
+        zf.write(DIST_IMAGES / sc, arcname=f"images/{sc}")
+
+print(f"Created ZIP: {zip_path} (size: {zip_path.stat().st_size:,} bytes)")

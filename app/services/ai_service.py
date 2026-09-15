@@ -3,8 +3,11 @@ from __future__ import annotations
 import base64
 import json
 import logging
+import os
 import shutil
+import subprocess
 import threading
+import time
 import uuid
 import zipfile
 from pathlib import Path
@@ -19,6 +22,7 @@ from app.domain.errors import AppError
 from app.domain.models import Script
 from app.services.package_service import PackageService
 from app.services.persistence import Persistence
+from app.services.reel_hook_validator import MamaseReelHookGate
 
 logger = logging.getLogger("autoclip.ai")
 
@@ -29,15 +33,24 @@ TRANSITIONS = {"none", "fade", "dissolve", "fade_black", "fade_white", "wipe_lef
 
 AUTO_PACKAGE_INSTRUCTIONS = """You are Mamase จักรวาลของใจ's automatic package planner.
 Create a factual, engaging Thai short-form science, mystery, world, or trending-news video package.
-Return JSON only: {"scenes":[...]}. Create 8-11 scenes including the final brand outro.
+The first spoken words MUST be a simple, truthful hook that a general viewer understands in 1-3 seconds:
+a surprising fact, contradiction, curiosity question, unexpected consequence, or scientifically accurate
+"เฮ้ย เป็นแบบนี้ได้ยังไง?" moment. Never begin with greetings ("สวัสดีครับ"), channel branding, "วันนี้เราจะ...",
+"รู้หรือไม่...", "ในคลิปนี้...", background, history, definitions, episode labels, or slow setup. The second sentence must immediately
+continue the hook's promise. The first image_prompt must depict that exact mystery, not generic stars or a logo.
+Default to 45-60 seconds without filler (acceptable max: 75s). Deliver a mini-wow or reveal every 10-15 seconds.
+Conclude the content with one short topic-specific discussion question matching the topic (never generic CTAs like "กดไลก์", "กดติดตาม", "คอมเมนต์คุยกัน", "ขอบคุณที่รับชม").
+Return JSON only: {"scenes":[...]}. Create 4-7 content scenes; AutoClip adds the final brand outro.
 Every scene needs id, narration, tts_text when the narration has English or scientific names,
 subtitle, image_prompt, motion, transition, estimated_duration, and wan.
 Write tts_text as smooth connected speech. Ellipses (...) are allowed sparingly for a natural playful beat,
 for example "เฮ้ย... จริงดิ?", but never scatter them through every sentence.
-Scene 1 must be a premium 9:16 science-documentary key art: the recurring Mamase anime presenter,
-the same black tousled hair and rectangular glasses, an outfit appropriate to the topic, a natural
-expression, a readable Thai topic title and a separate short Thai hook. Reserve lower-center space
-for subtitles. Other scenes use narration-specific documentary b-roll with no text or watermark.
+Scene 1 image_prompt describes clean, textless, logoless premium 9:16 science-documentary artwork.
+Use the recurring Mamase male explorer and dog as contextual story participants, but never default to
+the repeated seated-on-a-rock rear-view pose. Vary action, camera angle, wardrobe, expression, and
+location according to the hook. Preserve intentional negative space for deterministic Topic + Thai Hook
+composition without covering the hero. Never ask the image model to render Thai text or a logo.
+Other scenes use narration-specific documentary b-roll with no text or watermark.
 Keep each scene visually distinct and about 4-6 seconds. Use only supported motions and transitions:
 motion one of slow_zoom_in, slow_zoom_out, cinematic_push_in, cinematic_pull_out, documentary_pan,
 gentle_float, pan_left_to_right, pan_right_to_left; transition one of fade, dissolve, smooth_left,
@@ -245,6 +258,150 @@ class GeminiAutoProvider:
         return output
 
 
+class AntigravityAutoProvider(GeminiAutoProvider):
+    """Use locally authenticated Antigravity without storing its credentials."""
+
+    def __init__(self, settings: Settings):
+        self.settings = settings
+        self.cli = settings.antigravity_cli_path.expanduser()
+        if not self.cli.is_file() or not os.access(self.cli, os.X_OK):
+            raise AppError("ANTIGRAVITY_NOT_CONFIGURED", "ไม่พบ Antigravity CLI กรุณาเปิด/ติดตั้ง Antigravity บนเครื่องนี้ก่อน")
+
+    @property
+    def label(self) -> str:
+        return "Antigravity"
+
+    def _run(
+        self,
+        prompt: str,
+        *,
+        mode: str,
+        writable_dir: Path | None = None,
+        completion_path: Path | None = None,
+    ) -> str:
+        command = [
+            str(self.cli), "--output-format", "text",
+            "--print-timeout", f"{self.settings.antigravity_timeout_seconds}s",
+            "--model", self.settings.antigravity_model, "--mode", mode, "--sandbox",
+        ]
+        if writable_dir:
+            command.extend(["--add-dir", str(writable_dir)])
+        # `agy --print` takes the prompt as its flag value.  Keeping it last
+        # also prevents the CLI from treating later flags as prompt text.
+        command.append(f"--print={prompt}")
+        # Keep unrelated environment secrets out of the child process.
+        env = {key: value for key, value in os.environ.items() if key in {"HOME", "PATH", "LANG", "LC_ALL", "TERM", "TMPDIR"}}
+        try:
+            if completion_path is None:
+                completed = subprocess.run(
+                    command, cwd=str(Path(__file__).parents[2]), env=env,
+                    capture_output=True, text=True,
+                    timeout=self.settings.antigravity_timeout_seconds + 30, check=False,
+                )
+            else:
+                completed = self._run_until_file_ready(command, env, completion_path)
+        except subprocess.TimeoutExpired as exc:
+            raise AppError("ANTIGRAVITY_TIMEOUT", "Antigravity ใช้เวลานานเกินกำหนด กรุณาลองใหม่") from exc
+        except OSError as exc:
+            raise AppError("ANTIGRAVITY_REQUEST_FAILED", "ไม่สามารถเริ่ม Antigravity CLI ได้") from exc
+        if completed.returncode != 0:
+            detail_lines = (completed.stderr or completed.stdout or "").strip().splitlines()
+            detail = " | ".join(line.strip() for line in detail_lines[-5:] if line.strip())
+            suffix = f" ({detail[:600]})" if detail else ""
+            raise AppError("ANTIGRAVITY_REQUEST_FAILED", f"Antigravity ทำงานไม่สำเร็จ{suffix}")
+        return completed.stdout.strip()
+
+    def _run_until_file_ready(self, command: list[str], env: dict[str, str], output: Path) -> subprocess.CompletedProcess[str]:
+        """Stop the agent after its requested image has been fully written.
+
+        Antigravity can keep a print-mode session open after its image tool has
+        completed.  AutoClip needs the artifact, not the trailing agent turn.
+        """
+        process = subprocess.Popen(
+            command,
+            cwd=str(Path(__file__).parents[2]),
+            env=env,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+        )
+        deadline = time.monotonic() + self.settings.antigravity_timeout_seconds
+        previous_size = -1
+        stable_since: float | None = None
+        while process.poll() is None:
+            if output.is_file() and output.stat().st_size >= 1024:
+                size = output.stat().st_size
+                if size != previous_size:
+                    previous_size = size
+                    stable_since = time.monotonic()
+                elif stable_since is not None and time.monotonic() - stable_since >= 2.0:
+                    process.terminate()
+                    try:
+                        stdout, stderr = process.communicate(timeout=5)
+                    except subprocess.TimeoutExpired:
+                        process.kill()
+                        stdout, stderr = process.communicate()
+                    return subprocess.CompletedProcess(command, 0, stdout, stderr)
+            if time.monotonic() >= deadline:
+                process.kill()
+                process.communicate()
+                raise subprocess.TimeoutExpired(command, self.settings.antigravity_timeout_seconds)
+            time.sleep(0.5)
+        stdout, stderr = process.communicate()
+        return subprocess.CompletedProcess(command, process.returncode or 0, stdout, stderr)
+
+    @staticmethod
+    def _json_from_text(text: str) -> dict:
+        cleaned = text.strip()
+        if cleaned.startswith("```"):
+            cleaned = re.sub(r"^```(?:json)?\\s*|\\s*```$", "", cleaned, flags=re.IGNORECASE)
+        try:
+            payload = json.loads(cleaned)
+        except json.JSONDecodeError as exc:
+            raise AppError("AI_OUTPUT_INVALID", "Antigravity ไม่ได้ส่ง JSON scene plan ที่ถูกต้อง") from exc
+        if not isinstance(payload, dict):
+            raise AppError("AI_OUTPUT_INVALID", "Antigravity ส่ง scene plan ผิดรูปแบบ")
+        return payload
+
+    def plan(self, topic: str, concept: str) -> tuple[list[AiScene], list[str]]:
+        prompt = f"""Read /Users/zengcode/projects/autoclip/start.md completely before working.
+
+{AUTO_PACKAGE_INSTRUCTIONS}
+
+Topic: {topic}
+User angle: {concept or '-'}
+
+Return only the requested JSON object. Do not edit or create any files."""
+        payload = self._json_from_text(self._run(prompt, mode="plan"))
+        raw_scenes = payload.get("scenes", [])
+        if not isinstance(raw_scenes, list):
+            raise AppError("AI_OUTPUT_INVALID", "Antigravity ส่ง scenes ผิดรูปแบบ")
+        notes: list[str] = []
+        try:
+            scenes = [self._normalise_scene(raw, index, notes) for index, raw in enumerate(raw_scenes, 1)]
+        except (TypeError, ValueError) as exc:
+            raise AppError("AI_OUTPUT_INVALID", "Antigravity วางข้อมูล scene ไม่ถูกต้อง") from exc
+        return scenes, notes
+
+    def image(self, prompt: str, output: Path, aspect_ratio: str = "9:16", reference: Path | None = None) -> Path:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        reference_line = f"Use this approved character reference when relevant: {reference}" if reference and reference.is_file() else ""
+        request = f"""Create one native {aspect_ratio} PNG for this AutoClip scene.
+The scene prompt below already follows the approved Mamase standards; do not reread project documentation.
+
+Scene image prompt:
+{prompt}
+
+{reference_line}
+
+Use the available image-generation capability. Write exactly one final PNG to: {output}
+You may work only inside {output.parent}. Do not modify source code, documentation, configuration, existing assets, or any path outside this output directory. Do not return a plan: create the image, then respond briefly with the final path."""
+        self._run(request, mode="accept-edits", writable_dir=output.parent, completion_path=output)
+        if not output.is_file() or output.stat().st_size < 1024:
+            raise AppError("ANTIGRAVITY_IMAGE_GENERATION_FAILED", "Antigravity ไม่ได้สร้างไฟล์ภาพ PNG ตามที่ขอ")
+        return output
+
+
 class AiProjectService:
     def __init__(self, settings: Settings, chat_provider: ChatProvider | None = None, image_provider: ImageProvider | None = None, persistence: Persistence | None = None):
         self.settings = settings
@@ -255,9 +412,44 @@ class AiProjectService:
         self._lock = threading.RLock()
         self.persistence = persistence
 
+    def _hook_gate_result(self, scenes: list[AiScene]) -> dict:
+        if not self.settings.reel_hook_gate.enabled:
+            return {"passed": True, "disabled": True, "checks": [], "issues": []}
+        return MamaseReelHookGate(
+            max_hook_characters=self.settings.reel_hook_gate.max_hook_characters
+        ).evaluate(scenes).as_dict()
+
+    def _refresh_hook_gate(self, project: AiProject) -> dict:
+        project.hook_gate = self._hook_gate_result(project.scenes)
+        return project.hook_gate
+
+    def _require_hook_gate(self, project: AiProject) -> None:
+        result = self._refresh_hook_gate(project)
+        self._save(project)
+        if not result["passed"]:
+            raise AppError(
+                "REEL_HOOK_GATE_FAILED",
+                "Hook ซีนแรกยังไม่ผ่าน กรุณาแก้บทหรือ Image prompt ก่อนสร้างภาพ",
+                {"issues": result["issues"], "checks": result["checks"]},
+            )
+
     @property
     def configured(self) -> bool:
+        if self.settings.ai_provider.strip().lower() == "antigravity":
+            cli = self.settings.antigravity_cli_path.expanduser()
+            return cli.is_file() and os.access(cli, os.X_OK)
         return bool(self.settings.gemini_api_key or self.settings.openai_api_key)
+
+    def _automatic_provider(self):
+        if self.settings.ai_provider.strip().lower() == "antigravity":
+            return AntigravityAutoProvider(self.settings)
+        return GeminiAutoProvider(self.settings)
+
+    def _automatic_image_provider(self):
+        provider = self.settings.ai_image_provider.strip().lower()
+        if provider == "gemini":
+            return GeminiAutoProvider(self.settings)
+        raise AppError("AI_IMAGE_PROVIDER_INVALID", f"ไม่รองรับ Image API provider: {provider}")
 
     def _log(self, project: AiProject, progress: int, step: str, message: str, level: str = "INFO") -> AiProject:
         project.progress = progress
@@ -311,16 +503,20 @@ class AiProjectService:
         project.messages.append(AiChatMessage(role="assistant", content="สวัสดีครับ เล่า topic หรือแนววิดีโอที่ต้องการได้เลย ผมจะช่วยจัดทำ Scene Preview ให้ตรวจสอบก่อนสร้าง ZIP"))
         return self._save(project)
 
-    def create_automatic(self, topic: str, concept: str = "") -> AiProject:
+    def create_automatic(self, topic: str, concept: str = "", channel_id: str = "undefined") -> AiProject:
         topic = topic.strip()
         concept = concept.strip()
         if not topic:
             raise AppError("AI_INPUT_INVALID", "กรุณาระบุหัวข้อ")
         if len(topic) > 500 or len(concept) > 4000:
             raise AppError("AI_INPUT_INVALID", "หัวข้อหรือแนวคิดยาวเกินไป")
-        if not self.settings.gemini_api_key:
+        if not self.configured:
+            if self.settings.ai_provider.strip().lower() == "antigravity":
+                raise AppError("ANTIGRAVITY_NOT_CONFIGURED", "ไม่พบ Antigravity CLI สำหรับสร้าง ZIP อัตโนมัติ")
             raise AppError("AI_NOT_CONFIGURED", "ยังไม่ได้ตั้งค่า GEMINI_API_KEY สำหรับสร้าง ZIP อัตโนมัติ")
-        project = AiProject(project_id=str(uuid.uuid4()), topic=topic, status=AiProjectStatus.SCRIPT_GENERATING)
+        if self.persistence:
+            channel_id = self.persistence.valid_channel_id(channel_id)
+        project = AiProject(project_id=str(uuid.uuid4()), topic=topic, channel_id=channel_id, status=AiProjectStatus.SCRIPT_GENERATING)
         project.messages = []
         self._log(project, 1, "กำลังเตรียมบท", "เริ่มวาง script และ shot plan จากหัวข้อและแนวคิด")
         thread = threading.Thread(target=self._automatic_worker, args=(project.project_id, concept), daemon=True, name=f"autoclip-ai-{project.project_id[:8]}")
@@ -330,19 +526,25 @@ class AiProjectService:
     def _automatic_worker(self, project_id: str, concept: str) -> None:
         try:
             project = self.get(project_id)
-            self._log(project, 8, "กำลังวางบทและ shot plan", "Gemini กำลังใช้มาตรฐาน Mamase เพื่อวางเรื่องและลำดับ scene")
-            provider = GeminiAutoProvider(self.settings)
+            provider = self._automatic_provider()
+            provider_label = provider.label if hasattr(provider, "label") else "Gemini"
+            self._log(project, 8, "กำลังวางบทและ shot plan", f"{provider_label} กำลังใช้มาตรฐาน Mamase เพื่อวางเรื่องและลำดับ scene")
             planned_scenes, fallback_notes = self._wait_with_heartbeat(
                 project_id,
                 "กำลังวางบทและ shot plan",
-                "กำลังรอผลจาก Gemini",
+                f"กำลังรอผลจาก {provider_label}",
                 lambda: provider.plan(project.topic, concept),
             )
             scenes = self._validate_scenes(planned_scenes)
             project.scenes = scenes
+            gate = self._refresh_hook_gate(project)
             project.revision += 1
             self._save(project)
             self._log(project, 18, "ตรวจโครงสร้าง scene", f"ได้ {len(scenes)} scenes ตามลำดับที่จะอยู่ใน script.json")
+            if gate["passed"]:
+                self._log(project, 20, "Mamase Reel Hook Gate", "Hook ผ่านทั้งโครงสร้างบท TTS และภาพเปิด")
+            else:
+                self._log(project, 20, "Mamase Reel Hook Gate", "Hook ต้องแก้ก่อนสร้างภาพ: " + " · ".join(gate["issues"]), "WARNING")
             for note in fallback_notes:
                 self._log(project, 18, "ใช้ค่า fallback", note, "WARNING")
             project = self.get(project_id)
@@ -368,6 +570,8 @@ class AiProjectService:
         # users should not need to create a new project or re-plan the story.
         if project.status not in {AiProjectStatus.SCRIPT_READY, AiProjectStatus.FAILED} or not project.scenes:
             raise AppError("SCRIPT_NOT_APPROVED", "กรุณาตรวจบทให้เสร็จก่อนสร้างภาพ")
+        self._require_hook_gate(project)
+        self._automatic_image_provider()
         project.status = AiProjectStatus.IMAGES_GENERATING
         project.error = None
         self._log(project, 28, "กำลังเริ่มสร้างภาพ", "บทได้รับการอนุมัติแล้ว กำลังสร้างภาพตามแต่ละ scene")
@@ -377,7 +581,7 @@ class AiProjectService:
 
     def _image_worker(self, project_id: str) -> None:
         try:
-            provider = GeminiAutoProvider(self.settings)
+            provider = self._automatic_image_provider()
             project = self.get(project_id)
             preview_dir = self.root / project_id / "preview-images"
             total = len(project.scenes)
@@ -394,13 +598,14 @@ class AiProjectService:
                     self._copy_brand_outro(target)
                 else:
                     progress = 28 + int(index / total * 55)
-                    self._log(project, progress, f"กำลังสร้างภาพ Scene {index}/{total}", f"Gemini กำลังสร้างภาพที่ตรงกับบทของ {current.id}")
+                    provider_label = "Gemini Image API"
+                    self._log(project, progress, f"กำลังสร้างภาพ Scene {index}/{total}", f"{provider_label} กำลังสร้างภาพที่ตรงกับบทของ {current.id}")
                     target = preview_dir / f"{current.id}.png"
                     reference = Path(__file__).parents[2] / "assets" / "characters" / "mamase-presenter-v1.png" if index == 1 else None
                     self._wait_with_heartbeat(
                         project_id,
                         f"กำลังสร้างภาพ Scene {index}/{total}",
-                        f"Gemini กำลังสร้างภาพ {current.id}",
+                        f"{provider_label} กำลังสร้างภาพ {current.id}",
                         lambda: provider.image(current.image_prompt, target, reference=reference),
                     )
                 project = self.get(project_id)
@@ -445,7 +650,7 @@ class AiProjectService:
 
     def duplicate(self, project_id: str) -> AiProject:
         source = self.get(project_id)
-        clone = AiProject(project_id=str(uuid.uuid4()), topic=source.topic, scenes=[s.model_copy(deep=True) for s in source.scenes])
+        clone = AiProject(project_id=str(uuid.uuid4()), topic=source.topic, channel_id=source.channel_id, scenes=[s.model_copy(deep=True) for s in source.scenes])
         clone.messages = [m.model_copy(deep=True) for m in source.messages]
         clone.invalidate_confirmation() if clone.scenes else None
         return self._save(clone)
@@ -460,6 +665,7 @@ class AiProjectService:
         project.messages.append(AiChatMessage(role="assistant", content=reply))
         if scenes:
             project.scenes = self._validate_scenes(scenes)
+            self._refresh_hook_gate(project)
             project.invalidate_confirmation()
         return self._save(project)
 
@@ -472,6 +678,7 @@ class AiProjectService:
                 raise AppError("AI_OUTPUT_INVALID", "ผู้ช่วย AI ยังไม่ได้ส่งโครงสร้างฉากที่ถูกต้อง")
             project.messages.append(AiChatMessage(role="assistant", content=reply))
             project.scenes = self._validate_scenes(scenes)
+        self._require_hook_gate(project)
         project.status = AiProjectStatus.PREVIEW_GENERATING
         project = self._save(project)
         image_provider = self.image_provider or OpenAIImageProvider(self.settings)
@@ -511,6 +718,7 @@ class AiProjectService:
         allowed = {"narration", "tts_text", "subtitle", "show_subtitle", "image_prompt", "motion", "transition", "estimated_duration", "wan"}
         scene = scene.model_copy(update={k: v for k, v in changes.items() if k in allowed})
         project.scenes[project.scenes.index(next(s for s in project.scenes if s.id == scene_id))] = scene
+        self._refresh_hook_gate(project)
         project.confirmed_revision = None
         project.revision += 1
         has_complete_images = bool(project.scenes) and all(
@@ -539,6 +747,7 @@ class AiProjectService:
 
     def confirm(self, project_id: str) -> AiProject:
         project = self.get(project_id)
+        self._require_hook_gate(project)
         if not project.scenes or any(not s.image_path or not (self.root / project_id / s.image_path).is_file() for s in project.scenes):
             raise AppError("PREVIEW_NOT_READY", "Scene Preview ยังมีภาพไม่ครบ")
         project.confirmed_revision = project.revision; project.status = AiProjectStatus.PREVIEW_CONFIRMED; return self._save(project)

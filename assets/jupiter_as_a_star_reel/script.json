@@ -1,0 +1,171 @@
+{
+  "project": {
+    "id": "mamase-jupiter-as-a-star-reel-v1",
+    "title": "ถ้าดาวพฤหัสกลายเป็นดาวฤกษ์ — โลกจะมีดวงอาทิตย์สองดวงไหม?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: 'เฮ้ย... จริงดิ?' Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ถ้าดาวพฤหัสบดีกลายเป็นดวงอาทิตย์อีกดวง โลกเราจะแปรปรวนจนสิ่งมีชีวิตสูญพันธุ์จริงไหม? คำตอบคือ... เราไม่ได้เฉียดใกล้ความจริงนั้นเลยสักนิด!",
+      "tts_text": "ถ้าดาวพฤหัสบดีกลายเป็นดวงอาทิตย์อีกดวง โลกเราจะแปรปรวนจนสิ่งมีชีวิตสูญพันธุ์จริงไหม? คำตอบคือ... เราไม่ได้เฉียดใกล้ความจริงนั้นเลยสักนิด!",
+      "subtitle": "ถ้าดาวพฤหัส กลายเป็นดาวฤกษ์?\nโลกเราจะมีดวงอาทิตย์ 2 ดวงจริงหรือ?",
+      "show_subtitle": true,
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic vertical 9:16 documentary key art poster, colossal glowing star Jupiter with fiery amber corona dominates upper frame above dramatic mountain summit where an explorer and dog sit watching twilight clouds, slow push in, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 1101,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-chemical-composition",
+      "image": "images/scene-02-chemical-composition.png",
+      "narration": "ดาวพฤหัสบดีเต็มไปด้วยไฮโดรเจนและฮีเลียม เหมือนดวงอาทิตย์เกือบเป๊ะ จนได้ฉายาว่า ดาวฤกษ์ที่ล้มเหลว",
+      "tts_text": "ดาวพฤหัสบดีเต็มไปด้วยไฮโดรเจนและฮีเลียม เหมือนดวงอาทิตย์เกือบเป๊ะ จนได้ฉายาว่า ดาวฤกษ์ที่ล้มเหลว",
+      "subtitle": "ไฮโดรเจนและฮีเลียมเหมือนดวงอาทิตย์\nจนได้ฉายาว่า \"ดาวฤกษ์ที่ล้มเหลว\"",
+      "show_subtitle": true,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Astrophysical close-up of Jupiter rotating slowly in deep space, turbulent swirling storm bands and Great Red Spot in exquisite Hubble detail, soft atmospheric amber rim glow, cinematic documentary, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 1102,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-mass-reality-check",
+      "image": "images/scene-03-mass-reality-check.png",
+      "narration": "แต่ความจริงคือ มันไม่ได้เกือบเลยครับ! เพราะมันมีมวลเพียงแค่ ศูนย์จุดหนึ่ง เปอร์เซ็นต์ของดวงอาทิตย์เท่านั้น",
+      "tts_text": "แต่ความจริงคือ มันไม่ได้เกือบเลยครับ! เพราะมันมีมวลเพียงแค่ ศูนย์จุดหนึ่ง เปอร์เซ็นต์ ของดวงอาทิตย์เท่านั้น",
+      "subtitle": "ความจริงคือไม่ได้ใกล้เคียงเลย\nมีมวลเพียง 0.1% ของดวงอาทิตย์เท่านั้น",
+      "show_subtitle": true,
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Epic cosmic scale view of our solar system bubble heliosphere in golden solar radiation, contrasting the colossal Sun against tiny planetary dots, slow majestic camera glide, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 1103,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-brown-dwarf-threshold",
+      "image": "images/scene-04-brown-dwarf-threshold.png",
+      "narration": "ถ้าอยากจุดฟิวชันดิวเทอเรียมให้กลายเป็น ดาวแคระน้ำตาล มันต้องมีมวลเพิ่มขึ้นถึง 13 เท่า",
+      "tts_text": "ถ้าอยากจุดฟิวชันดิวเทอเรียมให้กลายเป็น ดาวแคระน้ำตาล มันต้องมีมวลเพิ่มขึ้นถึง สิบสาม เท่า",
+      "subtitle": "ขั้นแรก: ดาวแคระน้ำตาล\nต้องมีมวลเพิ่มขึ้นอย่างน้อย 13 เท่า",
+      "show_subtitle": true,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Massive magenta-red glowing Brown Dwarf rotating in deep starry space, infrared heat glow emanating from core bands, NASA Spitzer realism, slow cinematic drift, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 1104,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-true-star-limit",
+      "image": "images/scene-05-true-star-limit.png",
+      "narration": "และถ้าจะจุดไฮโดรเจนฟิวชันเป็นดาวฤกษ์แท้จริง มันต้องหนักขึ้นมหาศาลถึง 75 ถึง 80 เท่า!",
+      "tts_text": "และถ้าจะจุดไฮโดรเจนฟิวชันเป็นดาวฤกษ์แท้จริง มันต้องหนักขึ้นมหาศาลถึง เจ็ดสิบห้า ถึง แปดสิบ เท่า!",
+      "subtitle": "จุดฟิวชันไฮโดรเจนเป็นดาวฤกษ์แท้จริง\nต้องมีมวลมหาศาลถึง 75-80 เท่า!",
+      "show_subtitle": true,
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Blazing Red Dwarf star surface with colossal swirling magnetic loop solar flares and plasma prominences bursting into space, intense amber orange heat, 8k cinematic realism, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 1105,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-earth-orbit-chaos",
+      "image": "images/scene-06-earth-orbit-chaos.png",
+      "narration": "และถ้ามันเกิดขึ้นจริง ท้องฟ้าเราก็ไม่ได้สว่างไสวเป็นดวงอาทิตย์คู่หรอกครับ แต่แรงดึงดูดมหาศาลจะเหวี่ยงวงโคจรโลกจนเละเทะ",
+      "tts_text": "และถ้ามันเกิดขึ้นจริง ท้องฟ้าเราก็ไม่ได้สว่างไสวเป็นดวงอาทิตย์คู่หรอกครับ แต่แรงดึงดูดมหาศาลจะเหวี่ยงวงโคจรโลกจนเละเทะ",
+      "subtitle": "โลกไม่ได้สว่างแบบมีดวงอาทิตย์คู่\nแต่วงโคจรจะถูกเหวี่ยงจนสภาพอากาศวิกฤต",
+      "show_subtitle": true,
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Abstract scientific visualization of warped 3D spacetime grid and extreme gravitational red laser field distorting planetary orbits, cosmic physics documentary, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 1106,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-guardian-shield-payoff",
+      "image": "images/scene-07-guardian-shield-payoff.png",
+      "narration": "ดาวพฤหัสบดีจึงเป็นดาวเคราะห์ก๊าซยักษ์ คอยเป็นเกราะพิทักษ์ดูดกลืนอุกกาบาตให้โลกแบบนี้... ปลอดภัยที่สุดแล้วครับ",
+      "tts_text": "ดาวพฤหัสบดีจึงเป็นดาวเคราะห์ก๊าซยักษ์ คอยเป็นเกราะพิทักษ์ดูดกลืนอุกกาบาตให้โลกแบบนี้... ปลอดภัยที่สุดแล้วครับ",
+      "subtitle": "เป็นดาวเคราะห์ยักษ์คอยดูดกลืนอุกกาบาต\nทำหน้าที่เกราะพิทักษ์โลกแบบนี้... ดีที่สุดแล้ว",
+      "show_subtitle": true,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Jupiter acting as a cosmic vacuum cleaner and gravitational shield, intercepting a torrent of glowing blue comets and asteroids falling toward the inner solar system, cinematic space documentary, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, distortion, flicker, jitter",
+        "seed": 1107,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-08-brand-outro",
+      "image": "images/scene-08-brand-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "show_subtitle": true,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

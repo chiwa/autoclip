@@ -1,0 +1,209 @@
+{
+  "project": {
+    "id": "mamase-3i-atlas-message-reel-v2-all-wan",
+    "title": "3I/ATLAS — ข้อความจากระบบดาวอื่น",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless. Never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Keep pauses brief and rare, and keep the delivery smooth and connected across scenes."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "วัตถุจากระบบดาวอื่น เพิ่งเดินทางเข้ามาหาเราพร้อมข้อความที่ซ่อนอยู่ในน้ำแข็ง แต่ไม่ต้องเตรียมแปลภาษาเอเลียนนะครับ เพราะข้อความนี้เขียนด้วยเคมี",
+      "tts_text": "วัตถุจากระบบดาวอื่น เพิ่งเดินทางเข้ามาหาเราพร้อมข้อความที่ซ่อนอยู่ในน้ำแข็ง แต่ไม่ต้องเตรียมแปลภาษาเอเลียนนะครับ เพราะข้อความนี้เขียนด้วยเคมี",
+      "subtitle": "3I/ATLAS\nข้อความจากดาวอื่น?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.2,
+      "focus": "right",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve the supplied 2D anime presenter image, exact character identity, rectangular glasses, tousled black hair, deep-navy astronomical field jacket, Thai title and hook, comet and original composition. Subtle natural head movement, gentle pointing gesture, slight cloth movement, comet particles drifting, slow cinematic camera push-in, stable face, hands and typography.",
+        "negative_prompt": "changed identity, changed face, changed clothing, altered text, extra text, subtitles, watermark, logo, alien spacecraft, aliens, flicker, jitter, distorted hands, duplicated fingers, warped face, sudden camera movement",
+        "seed": 3101,
+        "frames": 81,
+        "lip_sync": true,
+        "steps": 25,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-third-visitor",
+      "image": "images/scene-02-third-visitor.png",
+      "narration": "มันชื่อ 3I/ATLAS และเป็นวัตถุจากนอกระบบสุริยะดวงที่สามที่มนุษย์ค้นพบ ต่อจากโอมูอามูอาและดาวหางโบริซอฟ",
+      "tts_text": "มันชื่อ สามไอ แอตลาส และเป็นวัตถุจากนอกระบบสุริยะดวงที่สามที่มนุษย์ค้นพบ ต่อจาก โอมูอามูอา และดาวหาง โบริซอฟ",
+      "subtitle": "ผู้มาเยือนระหว่างดาว\nดวงที่สาม",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Preserve the supplied image and all three interstellar-object silhouettes. 3I/ATLAS moves steadily toward camera with a flowing icy coma and tail while the two earlier visitors drift more subtly in the background. Slow cinematic parallax, stable scale and composition, physically credible space-documentary motion.",
+        "negative_prompt": "text, labels, watermark, logo, HUD, aliens, spacecraft, flicker, jitter, duplicated objects, warped nucleus, sudden camera movement",
+        "seed": 3102,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-hyperbolic-path",
+      "image": "images/scene-03-hyperbolic-path.png",
+      "narration": "นักดาราศาสตร์รู้ว่ามันมาจากที่อื่น เพราะเส้นทางของมันเปิดกว้างและเร็วเกินกว่าจะถูกแรงโน้มถ่วงของดวงอาทิตย์จับไว้ มันเพียงแวะผ่าน แล้วก็เดินทางต่อ",
+      "tts_text": "นักดาราศาสตร์รู้ว่ามันมาจากที่อื่น เพราะเส้นทางของมันเปิดกว้างและเร็วเกินกว่าจะถูกแรงโน้มถ่วงของดวงอาทิตย์จับไว้ มันเพียงแวะผ่าน แล้วก็เดินทางต่อ",
+      "subtitle": "แวะผ่านระบบสุริยะ\nแล้วเดินทางต่อ",
+      "motion": "pan_up",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "smooth_left",
+      "wan": {
+        "prompt": "Preserve the supplied Solar System composition. 3I/ATLAS sweeps smoothly around the Sun on an open fly-through, dust and ice stream naturally along its curved path, planets move only with subtle parallax, and the camera performs a slow stable orbital reveal.",
+        "negative_prompt": "text, labels, arrows, orbit diagram, watermark, logo, HUD, impact, flicker, jitter, warped planets, duplicated comet, sudden camera movement",
+        "seed": 3103,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-safe-distance",
+      "image": "images/scene-04-safe-distance.png",
+      "narration": "ข่าวดีคือ มันไม่เคยเป็นภัยต่อโลก จุดที่เข้าใกล้โลกที่สุดยังห่างประมาณสองร้อยเจ็ดสิบล้านกิโลเมตร เกือบสองเท่าของระยะจากโลกถึงดวงอาทิตย์",
+      "tts_text": "ข่าวดีคือ มันไม่เคยเป็นภัยต่อโลก จุดที่เข้าใกล้โลกที่สุดยังห่างประมาณ สองร้อยเจ็ดสิบล้าน กิโลเมตร เกือบสองเท่าของระยะจากโลกถึงดวงอาทิตย์",
+      "subtitle": "ไม่เป็นอันตรายต่อโลก\nห่างราว 270 ล้านกิโลเมตร",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "bottom",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve the supplied safe-distance composition. Earth rotates almost imperceptibly in the foreground while the distant comet glides calmly across the upper background, with restrained atmospheric glow and slow cinematic camera pull-back emphasizing enormous separation.",
+        "negative_prompt": "text, labels, arrows, watermark, logo, HUD, collision, impact, explosion, flicker, jitter, distorted Earth, sudden camera movement",
+        "seed": 3104,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-observatory-network",
+      "image": "images/scene-05-observatory-network.png",
+      "narration": "เพราะผู้มาเยือนแบบนี้หายากมาก นักวิทยาศาสตร์จึงระดมทั้ง Hubble, James Webb และยานอวกาศหลายลำ ช่วยกันเก็บข้อมูลก่อนที่มันจะจากไปตลอดกาล",
+      "tts_text": "เพราะผู้มาเยือนแบบนี้หายากมาก นักวิทยาศาสตร์จึงระดมทั้ง ฮับเบิล เจมส์ เว็บบ์ และยานอวกาศหลายลำ ช่วยกันเก็บข้อมูลก่อนที่มันจะจากไปตลอดกาล",
+      "subtitle": "หลายภารกิจร่วมกันสังเกต",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade_black",
+      "wan": {
+        "prompt": "Preserve every telescope, probe, planet and the central comet from the supplied image. The comet releases subtle gas and dust while observatories make gentle coordinated tracking motions. Add slow layered parallax and a stable documentary camera drift without changing hardware design.",
+        "negative_prompt": "text, labels, watermark, logo, HUD, laser weapons, flicker, jitter, warped telescope mirrors, duplicated spacecraft, sudden camera movement",
+        "seed": 3105,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-infrared-chemistry",
+      "image": "images/scene-06-infrared-chemistry.png",
+      "narration": "แล้ว James Webb ก็เปิดอ่านข้อความนั้นด้วยแสงอินฟราเรด มันตรวจพบมีเทนโดยตรงเป็นครั้งแรกในวัตถุระหว่างดาว พร้อมยืนยันว่าดาวหางดวงนี้อุดมด้วยคาร์บอนไดออกไซด์อย่างผิดสังเกต",
+      "tts_text": "แล้ว เจมส์ เว็บบ์ ก็เปิดอ่านข้อความนั้นด้วยแสงอินฟราเรด มันตรวจพบก๊าซมีเทนโดยตรงเป็นครั้งแรกในวัตถุระหว่างดาว พร้อมยืนยันว่าดาวหางดวงนี้อุดมด้วยคาร์บอนไดออกไซด์อย่างผิดสังเกต",
+      "subtitle": "พบมีเทนโดยตรง\nและคาร์บอนไดออกไซด์สูง",
+      "motion": "cinematic_push_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.18,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve the supplied composition and James Webb-like gold telescope. The active interstellar comet releases layered carbon-dioxide-rich amber gas, methane violet gas and water-vapor cyan gas while faint infrared light reaches the telescope. Slow elegant camera drift and subtle parallax, smooth continuous coma flow, physically credible documentary motion.",
+        "negative_prompt": "text, chemical formulas, charts, HUD, watermark, logo, flicker, jitter, warped telescope, extra mirrors, sudden camera movement, explosion, aliens",
+        "seed": 3106,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-buried-methane",
+      "image": "images/scene-07-buried-methane.png",
+      "narration": "มีเทนอาจถูกซ่อนไว้ลึกใต้ผิว จนความร้อนจากการเฉียดดวงอาทิตย์เดินทางลงไปถึง น้ำแข็งโบราณจึงเริ่มระเหิดและปล่อยความลับที่เก็บไว้ออกมา",
+      "tts_text": "มีเทนอาจถูกซ่อนไว้ลึกใต้ผิว จนความร้อนจากการเฉียดดวงอาทิตย์เดินทางลงไปถึง น้ำแข็งโบราณจึงเริ่มระเหิดและปล่อยความลับที่เก็บไว้ออกมา",
+      "subtitle": "ความร้อนปลุกน้ำแข็งใต้ผิว",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "smooth_right",
+      "wan": {
+        "prompt": "Preserve the supplied comet cutaway composition. Solar heat slowly penetrates the upper crust, buried violet-blue methane-rich ice begins to sublimate, and fine gas jets and crystalline grains stream outward. Slow controlled push-in, physically credible material motion, no structural changes.",
+        "negative_prompt": "text, labels, arrows, chemical formulas, watermark, logo, HUD, explosion, melting lava, flicker, jitter, warped geology, sudden camera movement",
+        "seed": 3107,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-08-distant-origin",
+      "image": "images/scene-08-distant-origin.png",
+      "narration": "อัตราส่วนของก๊าซและองค์ประกอบใน 3I/ATLAS แตกต่างจากดาวหางส่วนใหญ่ในบ้านเรา มันจึงอาจก่อตัวในสภาพแวดล้อมของระบบดาวที่ไม่เหมือนระบบสุริยะเลย",
+      "tts_text": "อัตราส่วนของก๊าซและองค์ประกอบใน สามไอ แอตลาส แตกต่างจากดาวหางส่วนใหญ่ในบ้านเรา มันจึงอาจก่อตัวในสภาพแวดล้อมของระบบดาวที่ไม่เหมือนระบบสุริยะเลย",
+      "subtitle": "ก่อตัวในระบบดาวที่แตกต่าง",
+      "motion": "pan_right_to_left",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve the supplied alien protoplanetary system and foreground embryonic comet. Dust and gas orbit gently around the young star, tiny ice grains condense around the comet, and planets show subtle parallax during a slow majestic camera glide.",
+        "negative_prompt": "text, labels, watermark, logo, HUD, aliens, life, spacecraft, flicker, jitter, duplicated planets, warped comet, sudden camera movement",
+        "seed": 3108,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-09-farewell",
+      "image": "images/scene-09-farewell.png",
+      "narration": "ดังนั้น 3I/ATLAS จึงไม่ใช่ยานเอเลียน แต่มันพิเศษไม่แพ้กัน เพราะน้ำแข็งทุกก้อนคือบันทึกจากสถานที่ที่มนุษย์อาจไม่มีวันเดินทางไปถึง และตอนนี้ผู้ส่งกำลังจากเราไปตลอดกาล",
+      "tts_text": "ดังนั้น สามไอ แอตลาส จึงไม่ใช่ยานเอเลียน แต่มันพิเศษไม่แพ้กัน เพราะน้ำแข็งทุกก้อนคือบันทึกจากสถานที่ที่มนุษย์อาจไม่มีวันเดินทางไปถึง และตอนนี้ผู้ส่งกำลังจากเราไปตลอดกาล",
+      "subtitle": "บันทึกจากดาวอื่น\nกำลังจากเราไปตลอดกาล",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Preserve the supplied farewell composition. 3I/ATLAS travels steadily away into interstellar darkness as its coma and tail gradually weaken, the distant Sun and planets recede behind it, and the camera performs a slow contemplative pull-out with smooth parallax.",
+        "negative_prompt": "text, labels, watermark, logo, HUD, aliens, spacecraft, return trajectory, flicker, jitter, warped comet, sudden camera movement",
+        "seed": 3109,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-10-brand-outro",
+      "image": "images/scene-10-brand-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Mamase brand outro, glowing cyan orbiting planet in dark navy space, peaceful and contemplative.",
+        "negative_prompt": "watermark, blur, jitter",
+        "seed": 98,
+        "frames": 81,
+        "lip_sync": false
+      }
+    }
+  ]
+}

@@ -1,0 +1,122 @@
+{
+  "project": {
+    "id": "mamase-rogue-planets-reel-v1",
+    "title": "Rogue Planets — ดาวเคราะห์ที่ไม่มีดวงอาทิตย์",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: \"เฮ้ย... จริงดิ?\" Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "รู้ไหมครับว่า... ในความมืดมิดของอวกาศ มีดาวเคราะห์ขนาดมหึมา ที่ลอยเคว้งคว้างอยู่อย่างโดดเดี่ยว โดยไม่มีดวงอาทิตย์แม้แต่ดวงเดียว!",
+      "tts_text": "รู้ไหมครับว่า... ในความมืดมิดของอวกาศ มีดาวเคราะห์ขนาดมหึมา ที่ลอยเคว้งคว้างอยู่อย่างโดดเดี่ยว โดยไม่มีดวงอาทิตย์แม้แต่ดวงเดียว!",
+      "subtitle": "มีดาวเคราะห์ขนาดมหึมาในอวกาศ\nที่ลอยเคว้งคว้างโดยไม่มีดวงอาทิตย์!",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic vertical master shot of colossal dark rogue planet dominating the upper frame with vivid cyan auroras, golden glowing storm bands, icy mountain cliff foreground with explorer in navy yellow jacket and faithful dog, cinematic slow push-in",
+        "negative_prompt": "text distortion, face distortion, flicker, sudden movement, watermark, logo",
+        "seed": 2026,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-scale-galaxy-ocean",
+      "image": "images/scene-02-scale-galaxy-ocean.png",
+      "narration": "นักดาราศาสตร์เรียกพวกมันว่า 'Rogue Planets' หรือดาวเคราะห์พเนจร และคาดว่าในกาแล็กซีทางช้างเผือก อาจมีพวกมันมากกว่าดาวฤกษ์ทั้งหมดรวมกันเสียอีกครับ!",
+      "tts_text": "นักดาราศาสตร์เรียกพวกมันว่า โรก แพลนเน็ต หรือดาวเคราะห์พเนจร และคาดว่าในกาแล็กซีทางช้างเผือก อาจมีพวกมันมากกว่าดาวฤกษ์ทั้งหมดรวมกันเสียอีกครับ!",
+      "subtitle": "อาจมีดาวเคราะห์พเนจรนับล้านล้านดวง\nมากกว่าดาวฤกษ์ทั้งหมดในทางช้างเผือก!",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-gravitational-ejection",
+      "image": "images/scene-03-gravitational-ejection.png",
+      "narration": "แล้วพวกมันเกิดขึ้นได้ยังไง? คำตอบคือ พวกมันไม่ได้เกิดมาไร้บ้าน แต่ถูกแรงโน้มถ่วงมหาศาลของดาวเคราะห์ยักษ์ดวงอื่น เหวี่ยงเตะกระเด็นหลุดออกจากระบบสุริยะเดิม!",
+      "tts_text": "แล้วพวกมันเกิดขึ้นได้ยังไง? คำตอบคือ พวกมันไม่ได้เกิดมาไร้บ้าน แต่ถูกแรงโน้มถ่วงมหาศาลของดาวเคราะห์ยักษ์ดวงอื่น เหวี่ยงเตะกระเด็นหลุดออกจากระบบสุริยะเดิม!",
+      "subtitle": "ถูกแรงโน้มถ่วงดาวเคราะห์ยักษ์\nเหวี่ยงเตะกระเด็นออกจากระบบสุริยะ!",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-04-frozen-world-surface",
+      "image": "images/scene-04-frozen-world-surface.png",
+      "narration": "เมื่อไม่มีแสงแดดส่องถึง อุณหภูมิพื้นผิวจึงดิ่งลงสู่ความเย็นเยือกแข็งติดลบกว่า 200 องศาเซลเซียส มหาสมุทรและชั้นบรรยากาศกลายเป็นแผ่นน้ำแข็งหนาทึบ",
+      "tts_text": "เมื่อไม่มีแสงแดดส่องถึง อุณหภูมิพื้นผิวจึงดิ่งลงสู่ความเย็นเยือกแข็งติดลบกว่า สองร้อยองศาเซลเซียส มหาสมุทรและชั้นบรรยากาศกลายเป็นแผ่นน้ำแข็งหนาทึบ",
+      "subtitle": "อุณหภูมิติดลบกว่า 200 องศาเซลเซียส\nบรรยากาศกลายเป็นแผ่นน้ำแข็งหนาทึบ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-05-subsurface-ocean-life",
+      "image": "images/scene-05-subsurface-ocean-life.png",
+      "narration": "แต่น่าทึ่งมากครับ! เพราะใต้เปลือกน้ำแข็งหนานั้น ความร้อนจากแกนกลางดาวและปล่องภูเขาไฟใต้พิภพ อาจสร้างมหาสมุทรน้ำเหลวขนาดใหญ่ ที่หล่อเลี้ยงสิ่งมีชีวิตได้ในความมืดสนิท!",
+      "tts_text": "แต่น่าทึ่งมากครับ! เพราะใต้เปลือกน้ำแข็งหนานั้น ความร้อนจากแกนกลางดาวและปล่องภูเขาไฟใต้พิภพ อาจสร้างมหาสมุทรน้ำเหลวขนาดใหญ่ ที่หล่อเลี้ยงสิ่งมีชีวิตได้ในความมืดสนิท!",
+      "subtitle": "ใต้เปลือกน้ำแข็ง ความร้อนจากแกนดาว\nอาจสร้างมหาสมุทรที่หล่อเลี้ยงสิ่งมีชีวิต!",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-06-gravitational-microlensing",
+      "image": "images/scene-06-gravitational-microlensing.png",
+      "narration": "แล้วเรามองเห็นมันได้ยังไงในความมืด? นักดาราศาสตร์ตรวจจับพวกมันผ่าน 'ไมโครเลนส์โน้มถ่วง' เมื่อดาวเคราะห์ลอยผ่านหน้าดาวฤกษ์ไกลๆ แรงโน้มถ่วงของมันจะหักเหแสงให้สว่างวาบขึ้นมาแวบหนึ่ง!",
+      "tts_text": "แล้วเรามองเห็นมันได้ยังไงในความมืด? นักดาราศาสตร์ตรวจจับพวกมันผ่าน ไมโครเลนส์โน้มถ่วง เมื่อดาวเคราะห์ลอยผ่านหน้าดาวฤกษ์ไกลๆ แรงโน้มถ่วงของมันจะหักเหแสงให้สว่างวาบขึ้นมาแวบหนึ่ง!",
+      "subtitle": "ตรวจจับด้วย 'ไมโครเลนส์โน้มถ่วง'\nเมื่อแรงโน้มถ่วงบิดโค้งแสงดาวฤกษ์ด้านหลัง!",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-07-cosmic-drift-mystery",
+      "image": "images/scene-07-cosmic-drift-mystery.png",
+      "narration": "Rogue Planets เตือนให้เรารู้ว่า... แม้แต่ในที่ที่ไม่มีแสงแดด จักรวาลก็ไม่เคยว่างเปล่า แต่เต็มไปด้วยความลับที่รอให้เราไปค้นพบเสมอครับ",
+      "tts_text": "โรก แพลนเน็ต เตือนให้เรารู้ว่า... แม้แต่ในที่ที่ไม่มีแสงแดด จักรวาลก็ไม่เคยว่างเปล่า แต่เต็มไปด้วยความลับที่รอให้เราไปค้นพบเสมอครับ",
+      "subtitle": "แม้ไม่มีดวงอาทิตย์ จักรวาลก็ไม่เคยว่างเปล่า\nแต่เต็มไปด้วยโลกใหม่ที่รอการค้นพบ",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-08-brand-outro",
+      "image": "images/scene-08-brand-outro.png",
+      "narration": "ถ้าชอบเรื่องราวดาราศาสตร์แบบนี้ กดติดตาม แล้วมาร่วมค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวดาราศาสตร์แบบนี้ กดติดตาม แล้วมาร่วมค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "show_subtitle": true,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

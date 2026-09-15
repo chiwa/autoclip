@@ -1,0 +1,134 @@
+{
+  "project": {
+    "id": "mamase-oort-cloud-reel-v1",
+    "title": "Oort Cloud — ขอบจริงของระบบสุริยะอยู่ตรงไหน?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Warm, engaging, authoritative, inspiring Thai documentary storyteller tone."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "เรามักได้ยินว่ายานวอยเอเจอร์เดินทางออกนอกระบบสุริยะแล้ว... แต่รู้ไหมครับว่า ความจริงมันยังไปไม่ถึงขอบจริง ๆ เลยด้วยซ้ำ?",
+      "tts_text": "เรามักได้ยินว่ายานวอยเอเจอร์เดินทางออกนอกระบบสุริยะแล้ว... แต่รู้ไหมครับว่า ความจริงมันยังไปไม่ถึงขอบจริง ๆ เลยด้วยซ้ำ?",
+      "subtitle": "OORT CLOUD\nขอบจริงของระบบสุริยะ อยู่ตรงไหน?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve the key art typography, Mamase logo, and presenter. The presenter gestures toward the colossal spherical swarm of the Oort Cloud enveloping the solar system with natural lip sync. Starry cosmos background, smooth cinematic motion.",
+        "negative_prompt": "text modification, title distortion, face distortion, flicker, jitter, sudden camera movement, watermark",
+        "seed": 971,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-heliosphere-bubble",
+      "image": "images/scene-02-heliosphere-bubble.png",
+      "narration": "สิ่งที่วอยเอเจอร์ข้ามพ้น เป็นเพียง ฟองลมสุริยะ หรือเฮลิโอสเฟียร์ แต่ขอบเขตแรงโน้มถ่วงที่แท้จริงของดวงอาทิตย์ อยู่ไกลออกไปกว่านั้นมหาศาลครับ",
+      "tts_text": "สิ่งที่วอยเอเจอร์ข้ามพ้น เป็นเพียง ฟองลมสุริยะ หรือเฮลิโอสเฟียร์ แต่ขอบเขตแรงโน้มถ่วงที่แท้จริงของดวงอาทิตย์ อยู่ไกลออกไปกว่านั้นมหาศาลครับ",
+      "subtitle": "พ้นแค่ 'ฟองลมสุริยะ'\nยังไม่พ้นแรงโน้มถ่วงดวงอาทิตย์",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-spherical-swarm",
+      "image": "images/scene-03-spherical-swarm.png",
+      "narration": "นั่นคือ เมฆออร์ต กำแพงน้ำแข็งทรงกลมขนาดยักษ์ ที่โอบล้อมระบบสุริยะไว้ทั้งหมด ประกอบด้วยวัตถุน้ำแข็งและดาวหางนับล้านล้านดวง",
+      "tts_text": "นั่นคือ เมฆออร์ต กำแพงน้ำแข็งทรงกลมขนาดยักษ์ ที่โอบล้อมระบบสุริยะไว้ทั้งหมด ประกอบด้วยวัตถุน้ำแข็งและดาวหางนับล้านล้านดวง",
+      "subtitle": "เมฆออร์ต (Oort Cloud)\nทรงกลมน้ำแข็งยักษ์ล้อมระบบสุริยะ",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-04-distance-scale",
+      "image": "images/scene-04-distance-scale.png",
+      "narration": "ขอบด้านในของเมฆออร์ต เริ่มต้นที่สองพันเท่าของระยะทางโลก และแผ่ขยายออกไปไกลถึงหนึ่งแสนเท่า หรือเกือบสองปีแสง... ครึ่งทางไปยังดาวฤกษ์ดวงถัดไป",
+      "tts_text": "ขอบด้านในของเมฆออร์ต เริ่มต้นที่สองพันเท่าของระยะทางโลก และแผ่ขยายออกไปไกลถึงหนึ่งแสนเท่า หรือเกือบสองปีแสง... ครึ่งทางไปยังดาวฤกษ์ดวงถัดไป",
+      "subtitle": "กว้างใหญ่เกือบ 2 ปีแสง\nครึ่งทางสู่ดาวฤกษ์ดวงถัดไป",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-05-voyager-journey",
+      "image": "images/scene-05-voyager-journey.png",
+      "narration": "ด้วยความเร็วของยานวอยเอเจอร์ในปัจจุบัน มันต้องใช้เวลาอีกถึง 300 ปี กว่าจะไปแตะขอบในของเมฆออร์ต และต้องใช้เวลาอีกกว่า 30,000 ปี ถึงจะทะลุผ่านออกไปได้จริง",
+      "tts_text": "ด้วยความเร็วของยาน วอยเอเจอร์ ในปัจจุบัน มันต้องใช้เวลาอีกถึงสามร้อยปี กว่าจะไปแตะขอบในของเมฆออร์ต และต้องใช้เวลาอีกกว่าสามหมื่นปี ถึงจะทะลุผ่านออกไปได้จริง",
+      "subtitle": "วอยเอเจอร์ต้องใช้เวลาอีก 300 ปี\nและอีก 30,000 ปีจึงจะหลุดพ้น",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-06-cosmic-freezer",
+      "image": "images/scene-06-cosmic-freezer.png",
+      "narration": "ที่นี่คือตู้แช่แข็งโบราณที่เก็บสสารดึกดำบรรพ์ตั้งแต่กำเนิดระบบสุริยะ และเป็นต้นกำเนิดของดาวหางคาบยาว ที่นาน ๆ ครั้งจะหลุดเข้ามาเฉียดโลก",
+      "tts_text": "ที่นี่คือตู้แช่แข็งโบราณที่เก็บสสารดึกดำบรรพ์ตั้งแต่กำเนิดระบบสุริยะ และเป็นต้นกำเนิดของดาวหางคาบยาว ที่นาน ๆ ครั้งจะหลุดเข้ามาเฉียดโลก",
+      "subtitle": "ตู้แช่แข็งดึกดำบรรพ์ 4.6 พันล้านปี\nแหล่งกำเนิดดาวหางคาบยาว",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "center",
+      "transition": "smooth_right"
+    },
+    {
+      "id": "scene-07-gravity-boundary",
+      "image": "images/scene-07-gravity-boundary.png",
+      "narration": "ตรงสุดขอบของเมฆออร์ต คือจุดที่แรงโน้มถ่วงของดวงอาทิตย์ พ่ายแพ้ให้กับแรงดึงดูดของดาราจักร นี่ต่างหากคือ เส้นแบ่งเขตแดนที่แท้จริง ของระบบสุริยะ",
+      "tts_text": "ตรงสุดขอบของเมฆออร์ต คือจุดที่แรงโน้มถ่วงของดวงอาทิตย์ พ่ายแพ้ให้กับแรงดึงดูดของดาราจักร นี่ต่างหากคือ เส้นแบ่งเขตแดนที่แท้จริง ของระบบสุริยะ",
+      "subtitle": "สุดขอบแรงโน้มถ่วงดวงอาทิตย์\nเส้นแบ่งแดนที่แท้จริงของระบบสุริยะ",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-08-cosmic-home",
+      "image": "images/scene-08-cosmic-home.png",
+      "narration": "บ้านของเราไม่ได้สิ้นสุดแค่ดาวเคราะห์แปดดวงหรือพลูโต แต่ยิ่งใหญ่ไพศาลกว่าที่เราเคยจินตนาการไว้มากครับ",
+      "tts_text": "บ้านของเราไม่ได้สิ้นสุดแค่ดาวเคราะห์แปดดวงหรือพลูโต แต่ยิ่งใหญ่ไพศาลกว่าที่เราเคยจินตนาการไว้มากครับ",
+      "subtitle": "บ้านของเราไม่ได้จบแค่พลูโต\nแต่ยิ่งใหญ่กว่าที่คิดมหาศาล",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.05,
+      "focus": "center",
+      "transition": "none",
+      "show_subtitle": false
+    }
+  ]
+}

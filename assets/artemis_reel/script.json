@@ -1,0 +1,133 @@
+{
+  "project": {
+    "id": "mamase-artemis-missions-reel-v1",
+    "title": "Artemis I–V — แต่ละภารกิจทำอะไร? แผนกลับดวงจันทร์ของมนุษย์ทีละขั้น",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Warm, engaging, authoritative, inspiring Thai documentary storyteller tone."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "Apollo เคยถามว่ามนุษย์ไปถึงดวงจันทร์ได้ไหม แต่ Artemis กำลังถามคำถามที่ยากกว่า... เราจะกลับไปอย่างปลอดภัย ไปซ้ำได้ และใช้เป็นก้าวแรกสู่ดาวอังคารได้ไหม? และรู้ไหมครับว่าแผนเปลี่ยนแล้ว! ภารกิจที่มนุษย์จะกลับไปเหยียบดวงจันทร์จริง ๆ คือ Artemis 4 ไม่ใช่ Artemis 3 ครับ!",
+      "tts_text": "อะพอลโล เคยถามว่ามนุษย์ไปถึงดวงจันทร์ได้ไหม แต่ อาเทมิส กำลังถามคำถามที่ยากกว่า... เราจะกลับไปอย่างปลอดภัย ไปซ้ำได้ และใช้เป็นก้าวแรกสู่ดาวอังคารได้ไหม? และรู้ไหมครับว่าแผนเปลี่ยนแล้ว! ภารกิจที่มนุษย์จะกลับไปเหยียบดวงจันทร์จริง ๆ คือ อาเทมิส สี่ ไม่ใช่ อาเทมิส สาม ครับ!",
+      "subtitle": "Apollo ไปได้ไหม แต่ Artemis จะไปเพื่ออยู่ถาวร\nแผนเปลี่ยนแล้ว! คนจะเหยียบดวงจันทร์ใน Artemis IV",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve key art typography, characters, and branding layout. The glowing Moon hangs majestically in space while faint stars drift. Subtle cinematic push-in.",
+        "negative_prompt": "text distortion, typography distortion, face distortion, flicker, sudden movement, watermark",
+        "seed": 2028,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-artemis-1",
+      "image": "images/scene-02-artemis-1.png",
+      "narration": "เริ่มจาก Artemis 1 ในปี 2022 ภารกิจไร้คนขับเพื่อทดสอบมหายาน SLS และแคปซูล Orion บินอ้อมไกลไปหลังดวงจันทร์ เพื่อพิสูจน์ระบบนำร่องและเกราะกันความร้อนตอนพุ่งกลับโลก ว่าปลอดภัยพอสำหรับชีวิตคน",
+      "tts_text": "เริ่มจาก อาเทมิส หนึ่ง ในปี สองพันยี่สิบสอง ภารกิจไร้คนขับเพื่อทดสอบมหายาน เอสแอลเอส และแคปซูล โอไรออน บินอ้อมไกลไปหลังดวงจันทร์ เพื่อพิสูจน์ระบบนำร่องและเกราะกันความร้อนตอนพุ่งกลับโลก ว่าปลอดภัยพอสำหรับชีวิตคน",
+      "subtitle": "Artemis I (2022) — ทดสอบเครื่องจักร\nทดสอบ SLS และ Orion อ้อมหลังดวงจันทร์",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_right"
+    },
+    {
+      "id": "scene-03-artemis-2",
+      "image": "images/scene-03-artemis-2.png",
+      "narration": "ต่อด้วย Artemis 2 ในเดือนเมษายนปี 2026 ลูกเรือมนุษย์ 4 คนแรกจะขึ้นบินจริง เดินทางอ้อมรอบดวงจันทร์นานกว่า 9 วัน เพื่อทดสอบระบบพยุงชีพและการควบคุมยานในห้วงอวกาศลึก",
+      "tts_text": "ต่อด้วย อาเทมิส สอง ในเดือนเมษายนปี สองพันยี่สิบหก ลูกเรือมนุษย์ สี่ คนแรกจะขึ้นบินจริง เดินทางอ้อมรอบดวงจันทร์นานกว่า เก้า วัน เพื่อทดสอบระบบพยุงชีพและการควบคุมยานในห้วงอวกาศลึก",
+      "subtitle": "Artemis II (เมษายน 2026) — มนุษย์พร้อมบิน\nนักบิน 4 คน บินรอบดวงจันทร์ ทดสอบระบบพยุงชีพ",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-04-artemis-3",
+      "image": "images/scene-04-artemis-3.png",
+      "narration": "และนี่คือจุดที่แผนเปลี่ยนครับ! Artemis 3 ในปี 2027 จะยังไม่ลงดวงจันทร์ แต่จะทดสอบในวงโคจรต่ำของโลก โดยส่งนักบิน 4 คนไปซ้อมเชื่อมต่อยาน Orion เข้ากับยานลงจอดรุ่นทดสอบจาก SpaceX หรือ Blue Origin เพื่อตัดทุกความเสี่ยงก่อนลงจริง",
+      "tts_text": "และนี่คือจุดที่แผนเปลี่ยนครับ! อาเทมิส สาม ในปี สองพันยี่สิบเจ็ด จะยังไม่ลงดวงจันทร์ แต่จะทดสอบในวงโคจรต่ำของโลก โดยส่งนักบิน สี่ คนไปซ้อมเชื่อมต่อยาน โอไรออน เข้ากับยานลงจอดรุ่นทดสอบจาก สเปซเอ็กซ์ หรือ บลู ออริจิน เพื่อตัดทุกความเสี่ยงก่อนลงจริง",
+      "subtitle": "Artemis III (2027) — ซ้อมเชื่อมต่อในวงโคจรโลก\nOrion นัดพบยานลงจอด HLS ก่อนลงดวงจันทร์จริง",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-05-artemis-4",
+      "image": "images/scene-05-artemis-4.png",
+      "narration": "จนถึงต้นปี 2028 ในภารกิจ Artemis 4 ประวัติศาสตร์จะเกิดขึ้นจริง! ยานพาลูกเรือสู่วงโคจรดวงจันทร์ ก่อนที่นักบิน 2 คนจะย้ายเข้ารถลงจอด แตะพื้นผิวขั้วใต้ของดวงจันทร์ และใช้ชีวิตอยู่ที่นั่น 1 สัปดาห์เต็มเพื่อทำวิจัยและเก็บตัวอย่าง",
+      "tts_text": "จนถึงต้นปี สองพันยี่สิบแปด ในภารกิจ อาเทมิส สี่ ประวัติศาสตร์จะเกิดขึ้นจริง! ยานพาลูกเรือสู่วงโคจรดวงจันทร์ ก่อนที่นักบิน สอง คนจะย้ายเข้ารถลงจอด แตะพื้นผิวขั้วใต้ของดวงจันทร์ และใช้ชีวิตอยู่ที่นั่น หนึ่ง สัปดาห์เต็มเพื่อทำวิจัยและเก็บตัวอย่าง",
+      "subtitle": "Artemis IV (2028) — กลับไปเหยียบดวงจันทร์จริง!\n2 นักบินลงจอดขั้วใต้ดวงจันทร์ อยู่ปฏิบัติภารกิจ 1 สัปดาห์",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-06-artemis-5",
+      "image": "images/scene-06-artemis-5.png",
+      "narration": "และ Artemis 5 เป็นต้นไป NASA จะเปลี่ยนจากการไปเยือน เป็นการส่งมนุษย์ไปทำงานซ้ำ ๆ ปีละครั้ง พร้อมสร้างสถานีอวกาศ Lunar Gateway เพื่อตั้งถิ่นฐานระยะยาว",
+      "tts_text": "และ อาเทมิส ห้า เป็นต้นไป นาซา จะเปลี่ยนจากการไปเยือน เป็นการส่งมนุษย์ไปทำงานซ้ำ ๆ ปีละครั้ง พร้อมสร้างสถานีอวกาศ ลูนาร์ เกตเวย์ เพื่อตั้งถิ่นฐานระยะยาว",
+      "subtitle": "Artemis V (2028+) — สู่การไปทำงานซ้ำ ๆ\nสร้าง Lunar Gateway ตั้งถิ่นฐานระยะยาวบนดวงจันทร์",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-07-moon-to-mars",
+      "image": "images/scene-07-moon-to-mars.png",
+      "narration": "เพราะเป้าหมายสูงสุดของมนุษยชาติ ไม่ใช่แค่ดวงจันทร์... แต่นี่คือห้องทดลองขนาดยักษ์ เพื่อเรียนรู้วิธีการมีชีวิตรอด ก่อนที่เราจะก้าวต่อไปยังดาวอังคารครับ",
+      "tts_text": "เพราะเป้าหมายสูงสุดของมนุษยชาติ ไม่ใช่แค่ดวงจันทร์... แต่นี่คือห้องทดลองขนาดยักษ์ เพื่อเรียนรู้วิธีการมีชีวิตรอด ก่อนที่เราจะก้าวต่อไปยังดาวอังคารครับ",
+      "subtitle": "จากดวงจันทร์... สู่ก้าวแรกบนดาวอังคาร\nห้องทดลองเพื่อการตั้งถิ่นฐานในห้วงอวกาศลึก",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-08-new-era-climax",
+      "image": "images/scene-08-new-era-climax.png",
+      "narration": "จากยุค Apollo สู่ Artemis... การเดินทางครั้งใหม่เพื่อพาพวกเราทุกคนกลับสู่อวกาศ กำลังเกิดขึ้นจริงในยุคสมัยของเรา",
+      "tts_text": "จากยุค อะพอลโล สู่ อาเทมิส... การเดินทางครั้งใหม่เพื่อพาพวกเราทุกคนกลับสู่อวกาศ กำลังเกิดขึ้นจริงในยุคสมัยของเรา",
+      "subtitle": "จาก Apollo สู่ Artemis\nประวัติศาสตร์หน้าใหม่ กำลังเกิดขึ้นในยุคของเรา",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.05,
+      "focus": "center",
+      "transition": "none",
+      "show_subtitle": false
+    }
+  ]
+}

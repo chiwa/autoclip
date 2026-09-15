@@ -67,6 +67,9 @@ class Persistence:
               youtube_url TEXT, error_message TEXT, created_at TEXT NOT NULL, updated_at TEXT NOT NULL
             );
             CREATE INDEX IF NOT EXISTS idx_youtube_publish_project ON youtube_publishes(project_id);
+            CREATE TABLE IF NOT EXISTS content_channels(
+              id TEXT PRIMARY KEY, name TEXT NOT NULL UNIQUE, created_at TEXT NOT NULL, updated_at TEXT NOT NULL
+            );
             """)
             # Incremental, non-destructive migration for databases created by
             # the first MVP schema.
@@ -76,14 +79,39 @@ class Persistence:
             if "interrupted" not in cols: db.execute("ALTER TABLE jobs ADD COLUMN interrupted INTEGER NOT NULL DEFAULT 0")
             if "render_engine" not in cols: db.execute("ALTER TABLE jobs ADD COLUMN render_engine TEXT NOT NULL DEFAULT 'ffmpeg_motion'")
             if "output_format" not in cols: db.execute("ALTER TABLE jobs ADD COLUMN output_format TEXT NOT NULL DEFAULT 'use_json'")
+            project_cols = {r[1] for r in db.execute("PRAGMA table_info(projects)")}
+            if "published_flag" not in project_cols: db.execute("ALTER TABLE projects ADD COLUMN published_flag INTEGER NOT NULL DEFAULT 0")
+            if "published_at" not in project_cols: db.execute("ALTER TABLE projects ADD COLUMN published_at TEXT")
+            if "project_type" not in project_cols:
+                db.execute("ALTER TABLE projects ADD COLUMN project_type TEXT NOT NULL DEFAULT 'reel'")
+                db.execute("UPDATE projects SET project_type='podcast' WHERE id LIKE 'podcast-%'")
+            if "channel_id" not in project_cols:
+                db.execute("ALTER TABLE projects ADD COLUMN channel_id TEXT NOT NULL DEFAULT 'undefined'")
+            db.execute("UPDATE projects SET channel_id='undefined' WHERE channel_id IS NULL OR TRIM(channel_id)=''")
+            now = datetime.now().astimezone().isoformat()
+            db.execute(
+                "INSERT OR IGNORE INTO content_channels(id,name,created_at,updated_at) VALUES('undefined','Undefined',?,?)",
+                (now, now),
+            )
+            for channel_id, name in (
+                ("mamase-reel", "Mamase Reel"),
+                ("mamase-podcast", "Mamase Podcast"),
+                ("khon-nuea-duang", "คนเหนือดวง"),
+                ("thai-java-zone", "Thai Java Zone"),
+            ):
+                db.execute(
+                    "INSERT OR IGNORE INTO content_channels(id,name,created_at,updated_at) VALUES(?,?,?,?)",
+                    (channel_id, name, now, now),
+                )
 
     def upsert_project(self, project: Any) -> None:
         payload = project.model_dump(mode="json")
         now = payload["updated_at"]
         with self._lock, self._connect() as db:
-            db.execute("""INSERT INTO projects(id,title,topic,status,created_at,updated_at,current_revision,confirmed_revision,trashed_at,state_json)
-              VALUES(?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET title=excluded.title,topic=excluded.topic,status=excluded.status,updated_at=excluded.updated_at,current_revision=excluded.current_revision,confirmed_revision=excluded.confirmed_revision,trashed_at=excluded.trashed_at,state_json=excluded.state_json""",
-              (project.project_id, project.topic or "Mamase Project", project.topic, project.status.value, payload["created_at"], now, project.revision, project.confirmed_revision, None, json.dumps(payload, ensure_ascii=False)))
+            channel_id = self.valid_channel_id(getattr(project, "channel_id", "undefined"))
+            db.execute("""INSERT INTO projects(id,title,topic,status,created_at,updated_at,current_revision,confirmed_revision,trashed_at,state_json,channel_id)
+              VALUES(?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET title=excluded.title,topic=excluded.topic,status=excluded.status,updated_at=excluded.updated_at,current_revision=excluded.current_revision,confirmed_revision=excluded.confirmed_revision,trashed_at=excluded.trashed_at,state_json=excluded.state_json""",
+              (project.project_id, project.topic or "Mamase Project", project.topic, project.status.value, payload["created_at"], now, project.revision, project.confirmed_revision, None, json.dumps(payload, ensure_ascii=False), channel_id))
             db.execute("DELETE FROM chat_messages WHERE project_id=?", (project.project_id,))
             db.executemany("INSERT INTO chat_messages(project_id,role,content,timestamp) VALUES(?,?,?,?)", [(project.project_id,m.role,m.content,m.timestamp.isoformat()) for m in project.messages])
             db.execute("DELETE FROM scenes WHERE project_id=?", (project.project_id,))
@@ -148,11 +176,12 @@ class Persistence:
             cur = db.execute("UPDATE jobs SET status='FAILED',interrupted=1,error_json=? WHERE status IN ('RECEIVED','VALIDATING','GENERATING_AUDIO','RENDERING_SCENES','COMPOSING')", (json.dumps({"code":"JOB_INTERRUPTED","message":"งานหยุดลงเมื่อ server restart กรุณาสั่งสร้างใหม่"}, ensure_ascii=False),))
             return cur.rowcount
 
-    def ensure_project(self, project_id: str, title: str, scene_count: int, status: str = "RENDERING") -> None:
+    def ensure_project(self, project_id: str, title: str, scene_count: int, status: str = "RENDERING", project_type: str = "reel", channel_id: str = "undefined") -> None:
         now = datetime.now().astimezone().isoformat()
+        channel_id = self.valid_channel_id(channel_id)
         with self._lock, self._connect() as db:
-            db.execute("""INSERT INTO projects(id,title,topic,status,created_at,updated_at,state_json)
-              VALUES(?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET title=excluded.title,status=excluded.status,updated_at=excluded.updated_at""", (project_id,title,title,status,now,now,json.dumps({"project_id":project_id,"topic":title,"status":status,"scenes":scene_count})))
+            db.execute("""INSERT INTO projects(id,title,topic,status,created_at,updated_at,state_json,project_type,channel_id)
+              VALUES(?,?,?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET title=excluded.title,status=excluded.status,updated_at=excluded.updated_at,project_type=excluded.project_type""", (project_id,title,title,status,now,now,json.dumps({"project_id":project_id,"topic":title,"status":status,"scenes":scene_count}),project_type,channel_id))
 
     def update_project_status(self, project_id: str, status: str) -> None:
         with self._lock, self._connect() as db:
@@ -164,6 +193,81 @@ class Persistence:
             if cur.rowcount == 0: raise KeyError(project_id)
         return keep
 
+    def set_published(self, project_id: str, published: bool) -> dict:
+        published_at = datetime.now().astimezone().isoformat() if published else None
+        with self._lock, self._connect() as db:
+            cur = db.execute(
+                "UPDATE projects SET published_flag=?,published_at=? WHERE id=? AND trashed_at IS NULL",
+                (1 if published else 0, published_at, project_id),
+            )
+            if cur.rowcount == 0:
+                raise KeyError(project_id)
+        return {"projectId": project_id, "published": published, "publishedAt": published_at}
+
+    def get_published(self, project_id: str) -> bool:
+        with self._connect() as db:
+            row = db.execute("SELECT published_flag FROM projects WHERE id=?", (project_id,)).fetchone()
+            return bool(row[0]) if row else False
+
+    def channels(self) -> list[dict]:
+        with self._connect() as db:
+            rows = db.execute("SELECT id,name,created_at,updated_at FROM content_channels ORDER BY CASE WHEN id='undefined' THEN 0 ELSE 1 END,name COLLATE NOCASE").fetchall()
+            return [dict(row) for row in rows]
+
+    def valid_channel_id(self, channel_id: str | None) -> str:
+        value = (channel_id or "undefined").strip() or "undefined"
+        with self._connect() as db:
+            if db.execute("SELECT 1 FROM content_channels WHERE id=?", (value,)).fetchone() is None:
+                raise KeyError(value)
+        return value
+
+    def create_channel(self, name: str) -> dict:
+        clean = " ".join(name.split()).strip()
+        if not clean:
+            raise ValueError("empty channel name")
+        channel_id = f"channel-{__import__('uuid').uuid4().hex[:12]}"
+        now = datetime.now().astimezone().isoformat()
+        with self._lock, self._connect() as db:
+            db.execute("INSERT INTO content_channels(id,name,created_at,updated_at) VALUES(?,?,?,?)", (channel_id, clean, now, now))
+        return {"id": channel_id, "name": clean, "created_at": now, "updated_at": now}
+
+    def rename_channel(self, channel_id: str, name: str) -> dict:
+        if channel_id == "undefined":
+            raise ValueError("Undefined cannot be renamed")
+        clean = " ".join(name.split()).strip()
+        if not clean:
+            raise ValueError("empty channel name")
+        now = datetime.now().astimezone().isoformat()
+        with self._lock, self._connect() as db:
+            cur = db.execute("UPDATE content_channels SET name=?,updated_at=? WHERE id=?", (clean, now, channel_id))
+            if cur.rowcount == 0:
+                raise KeyError(channel_id)
+        return {"id": channel_id, "name": clean, "updated_at": now}
+
+    def delete_unused_channel(self, channel_id: str) -> None:
+        """Test/maintenance helper; never removes a channel referenced by content."""
+        if channel_id in {"undefined", "mamase-reel", "mamase-podcast", "khon-nuea-duang", "thai-java-zone"}:
+            raise ValueError("protected channel")
+        with self._lock, self._connect() as db:
+            if db.execute("SELECT 1 FROM projects WHERE channel_id=?", (channel_id,)).fetchone():
+                raise ValueError("channel is in use")
+            db.execute("DELETE FROM content_channels WHERE id=?", (channel_id,))
+
+    def set_project_channel(self, project_id: str, channel_id: str) -> dict:
+        channel_id = self.valid_channel_id(channel_id)
+        with self._lock, self._connect() as db:
+            cur = db.execute("UPDATE projects SET channel_id=?,updated_at=? WHERE id=? AND trashed_at IS NULL", (channel_id, datetime.now().astimezone().isoformat(), project_id))
+            if cur.rowcount == 0:
+                raise KeyError(project_id)
+            channel = db.execute("SELECT name FROM content_channels WHERE id=?", (channel_id,)).fetchone()
+        return {"projectId": project_id, "channelId": channel_id, "channelName": channel[0]}
+
+    def get_project_channel(self, project_id: str) -> dict | None:
+        with self._connect() as db:
+            row = db.execute("SELECT p.channel_id,c.name FROM projects p LEFT JOIN content_channels c ON c.id=p.channel_id WHERE p.id=?", (project_id,)).fetchone()
+            return {"channelId": row[0] or "undefined", "channelName": row[1] or "Undefined"} if row else None
+
+
     def history(self) -> list[dict]:
         with self._connect() as db:
             rows=db.execute("SELECT p.*, (SELECT COUNT(*) FROM scenes s WHERE s.project_id=p.id) scene_count FROM projects p WHERE p.trashed_at IS NULL ORDER BY p.updated_at DESC").fetchall()
@@ -171,6 +275,10 @@ class Persistence:
             for row in rows:
                 item = dict(row)
                 raw_state = item.pop("state_json", None)
+                item["published"] = bool(item.pop("published_flag", 0))
+                channel = db.execute("SELECT name FROM content_channels WHERE id=?", (item.get("channel_id") or "undefined",)).fetchone()
+                item["channelId"] = item.pop("channel_id", None) or "undefined"
+                item["channelName"] = channel[0] if channel else "Undefined"
                 state = json.loads(raw_state) if raw_state else {}
                 item["scene_count"] = item.get("scene_count") or (len(state.get("scenes", [])) if isinstance(state.get("scenes"), list) else int(state.get("scenes", 0) or 0))
                 latest = db.execute("SELECT * FROM jobs WHERE project_id=? ORDER BY created_at DESC LIMIT 1", (item["id"],)).fetchone()
@@ -184,7 +292,7 @@ class Persistence:
                         and english_audio.get("available")
                         and english_path.is_file()
                     )
-                    item["latestJob"]={"id":j["id"],"status":j["status"],"progress":j["progress"],"videoAvailable":video,"videoUrl":f"/api/jobs/{j['id']}/video" if video else None,"previewUrl":f"/jobs/{j['id']}/preview" if video else None,"englishAudioAvailable":english_available,"englishAudioUrl":f"/api/jobs/{j['id']}/english-audio" if english_available else None,"englishAudioStatus":english_audio.get("status") if isinstance(english_audio, dict) else None,"createdAt":j["created_at"],"completedAt":j.get("completed_at")}
+                    item["latestJob"]={"id":j["id"],"status":j["status"],"progress":j["progress"],"videoAvailable":video,"videoUrl":f"/api/jobs/{j['id']}/video" if video else None,"previewUrl":f"/jobs/{j['id']}/preview" if video else None,"englishAudioAvailable":english_available,"englishAudioUrl":f"/api/jobs/{j['id']}/english-audio" if english_available else None,"englishAudioStatus":english_audio.get("status") if isinstance(english_audio, dict) else None,"createdAt":j["created_at"],"completedAt":j.get("completed_at"),"metadata":metadata}
                     if j["status"] == "COMPLETED": item["status"] = "COMPLETED"
                 else: item["latestJob"] = None
                 result.append(item)

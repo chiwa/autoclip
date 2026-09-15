@@ -1,0 +1,188 @@
+{
+  "project": {
+    "id": "ton-618-ultramassive-black-hole-reel",
+    "title": "TON 618 — หลุมดำที่ใหญ่เกินกว่าสมองมนุษย์จะจินตนาการ!",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Clear, engaging, warm, authoritative Thai documentary presenter tone."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ถ้าเอาดวงอาทิตย์ของเรามาเรียงกัน 66,000 ล้านดวง... ก็ยังหนักไม่เท่าหลุมดำสัตว์ประหลาดแห่งนี้เพียงดวงเดียว!",
+      "tts_text": "ถ้าเอาดวงอาทิตย์ของเรามาเรียงกัน หกหมื่นหกพันล้านดวง... ก็ยังหนักไม่เท่าหลุมดำสัตว์ประหลาดแห่งนี้เพียงดวงเดียว!",
+      "subtitle": "หลุมดำที่ใหญ่ที่สุดในจักรวาล\nหนักเท่าดวงอาทิตย์ 6.6 หมื่นล้านดวง!",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Preserve the key art typography, Mamase logo, and presenter. Gargantuan ultramassive black hole TON 618 in deep space with blazing golden accretion disk and warped gravitational lensing. Subtle cosmic dust drift, slow cinematic push.",
+        "negative_prompt": "text modification, title distortion, face distortion, flicker, jitter, sudden camera movement, watermark",
+        "seed": 6181,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-familiar-scale",
+      "image": "images/scene-02-familiar-scale.png",
+      "narration": "ดวงอาทิตย์ของเรามีมวลมากกว่าโลกถึง 330,000 เท่า และหลุมดำทั่วไปที่เราเคยรู้จัก ก็หนักเพียงสิบเท่าของดวงอาทิตย์เท่านั้น",
+      "tts_text": "ดวงอาทิตย์ของเรามีมวลมากกว่าโลกถึง สามแสนสามหมื่นเท่า และหลุมดำทั่วไปที่เราเคยรู้จัก ก็หนักเพียงสิบเท่าของดวงอาทิตย์เท่านั้น",
+      "subtitle": "ดวงอาทิตย์หนักกว่าโลก 3.3 แสนเท่า\nและหลุมดำทั่วไปหนักสิบเท่าของดวงอาทิตย์",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Cosmic spiral galaxy and vibrant star clusters surrounding an active stellar-mass black hole. Swirling cosmic dust filaments, delicate blue and amber starlight, slow elegant camera glide.",
+        "negative_prompt": "text, watermark, logo, HUD, cartoon, blur, low quality",
+        "seed": 6182,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-sagittarius-a",
+      "image": "images/scene-03-sagittarius-a.png",
+      "narration": "แม้แต่ ซาจิททาเรียส เอ สตาร์ หลุมดำมวลยิ่งยวดใจกลางกาแล็กซีทางช้างเผือกของเรา ก็มีมวลเพียง 4 ล้านเท่าของดวงอาทิตย์",
+      "tts_text": "แม้แต่ ซาจิททาเรียส เอ สตาร์ หลุมดำมวลยิ่งยวดใจกลางกาแล็กซีทางช้างเผือกของเรา ก็มีมวลเพียง สี่ล้านเท่า ของดวงอาทิตย์",
+      "subtitle": "หลุมดำใจกลางทางช้างเผือก\nหนัก 4 ล้านเท่าของดวงอาทิตย์",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Supermassive black hole gravitational lensing in dense galactic core. Einstein ring bending distant starlight into brilliant golden arcs around a dark event horizon. Slow hypnotic volumetric drift.",
+        "negative_prompt": "text, labels, numbers, charts, watermark, logo, jitter",
+        "seed": 6183,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-monster-ton618",
+      "image": "images/scene-04-monster-ton618.png",
+      "narration": "แต่นั่นเทียบไม่ได้เลยกับ ‘ทีโอเอ็น 618’ อภิมหาหลุมดำประเภท Ultramassive ที่มีมวลมหาศาลถึง 66,000 ล้านเท่าของดวงอาทิตย์!",
+      "tts_text": "แต่นั่นเทียบไม่ได้เลยกับ ที โอ เอ็น หกหนึ่งแปด อภิมหาหลุมดำประเภท อัลตราแมสซีฟ ที่มีมวลมหาศาลถึง หกหมื่นหกพันล้านเท่า ของดวงอาทิตย์!",
+      "subtitle": "TON 618 อภิมหาหลุมดำ\nหนัก 66,000 ล้านเท่าของดวงอาทิตย์!",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Immense accretion vortex of TON 618 glowing in fierce fiery orange and azure light. Relativistic plasma spirals into the colossal abyss with staggering speed and energy. Dynamic orbital push.",
+        "negative_prompt": "text, spaceship, sci-fi weapons, lasers, watermark, logo, strobe",
+        "seed": 6184,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-swallowing-solar-system",
+      "image": "images/scene-05-swallowing-solar-system.png",
+      "narration": "ขอบฟ้าเหตุการณ์ของมันกว้างเกือบ 400,000 ล้านกิโลเมตร กว้างจนสามารถกลืนระบบสุริยะของเราลงไปได้ทั้งระบบอย่างไร้ร่องรอย",
+      "tts_text": "ขอบฟ้าเหตุการณ์ของมันกว้างเกือบ สี่แสนล้านกิโลเมตร กว้างจนสามารถกลืนระบบสุริยะของเราลงไปได้ทั้งระบบอย่างไร้ร่องรอย",
+      "subtitle": "ขอบฟ้าเหตุการณ์กว้าง 4 แสนล้านกิโลเมตร\nกลืนระบบสุริยะทั้งหมดลงไปได้สบายๆ",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Scale comparison of astronomical proportions. A colossal black hole event horizon dominates the frame, curving spacetime so severely that an entire spiral galaxy appears miniature beneath its gravitational shadow. Slow majestic pull-out.",
+        "negative_prompt": "text, diagrams, infographic arrows, watermark, logo, wobble",
+        "seed": 6185,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-blinding-quasar",
+      "image": "images/scene-06-blinding-quasar.png",
+      "narration": "มวลสารที่หมุนวนรอบตัวมันด้วยความเร็วใกล้แสง เสียดสีกันจนกลายเป็น ‘เควซาร์’ ที่ส่องสว่างกว่าดาวฤกษ์ทุกดวงในทางช้างเผือกรวมกันถึงร้อยเท่า",
+      "tts_text": "มวลสารที่หมุนวนรอบตัวมันด้วยความเร็วใกล้แสง เสียดสีกันจนกลายเป็น เควซาร์ ที่ส่องสว่างกว่าดาวฤกษ์ทุกดวงในทางช้างเผือกรวมกันถึงร้อยเท่า",
+      "subtitle": "จานสะสมมวลสารร้อนจัดเป็นเควซาร์\nสว่างกว่าทางช้างเผือกทั้งกาแล็กซีร้อยเท่า",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.18,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Ultra-luminous quasar core unleashing blinding radiant energy and relativistic plasma jets across deep cosmic clouds. Intense fiery amber and electric cyan illumination, physically credible astrophysics motion.",
+        "negative_prompt": "text, explosion debris, lasers, sci-fi weapons, watermark, logo, jitter",
+        "seed": 6186,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-cosmic-time-machine",
+      "image": "images/scene-07-cosmic-time-machine.png",
+      "narration": "แสงที่เราเห็นในวันนี้ ใช้เวลาเดินทางข้ามอวกาศมานานกว่า 10,000 ล้านปี ย้อนกลับไปตั้งแต่ยุคที่จักรวาลยังเพิ่งเริ่มต้น",
+      "tts_text": "แสงที่เราเห็นในวันนี้ ใช้เวลาเดินทางข้ามอวกาศมานานกว่า หนึ่งหมื่นล้านปี ย้อนกลับไปตั้งแต่ยุคที่จักรวาลยังเพิ่งเริ่มต้น",
+      "subtitle": "แสงเดินทางข้ามอวกาศ 1 หมื่นล้านปี\nจากยุคที่จักรวาลยังเพิ่งเริ่มต้น",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "James Webb Space Telescope in deep cosmos, its iconic 18 golden hexagonal mirrors catching distant photon beams originating from the early universe 10 billion years ago. Subtle starlight glimmer, realistic space documentary aesthetic.",
+        "negative_prompt": "text, warped mirrors, extra thrusters, broken satellite, watermark, logo",
+        "seed": 6187,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-08-philosophical-insight",
+      "image": "images/scene-08-philosophical-insight.png",
+      "narration": "ยิ่งจักรวาลทำให้เรารู้สึกตัวเล็กเท่าไหร่ เรายิ่งตระหนักว่า จิตใจและความอยากรู้อยากเห็นของมนุษย์ช่างยิ่งใหญ่ ที่ก้าวข้ามความว่างเปล่าไปเข้าใจมันได้",
+      "tts_text": "ยิ่งจักรวาลทำให้เรารู้สึกตัวเล็กเท่าไหร่ เรายิ่งตระหนักว่า จิตใจและความอยากรู้อยากเห็นของมนุษย์ช่างยิ่งใหญ่ ที่ก้าวข้ามความว่างเปล่าไปเข้าใจมันได้",
+      "subtitle": "ยิ่งจักรวาลกว้างใหญ่\nยิ่งตระหนักถึงความมหัศจรรย์ของใจมนุษย์",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Deep starry night at Paranal Observatory. Giant telescope dome firing a golden laser guide star directly into the heart of the Milky Way galaxy. Slow inspiring camera pull-out.",
+        "negative_prompt": "text, tourists, cars, streetlights, watermark, logo, wobble",
+        "seed": 6188,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Mamase brand outro, glowing cyan orbiting planet in dark navy space, peaceful and contemplative.",
+        "negative_prompt": "watermark, blur, jitter",
+        "seed": 98,
+        "frames": 81,
+        "lip_sync": false
+      }
+    }
+  ]
+}

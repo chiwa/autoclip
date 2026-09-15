@@ -1,0 +1,190 @@
+{
+  "project": {
+    "id": "mamase-bepicolombo-extreme-mercury-reel-v1",
+    "title": "ทำไมไปดาวพุธ... ถึงยากกว่าที่หลายคนคิด?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.3,
+    "style_prompt": "Read aloud like a charismatic science storyteller with a playful personality. Sound curious, friendly, slightly cheeky, and genuinely excited by surprising facts. Keep the delivery natural and conversational, with small pauses for comedic timing and emphasis. Never sound like a news anchor. Keep the delivery energetic, clear, playful, warm, and reassuring. Make the listener feel relaxed and curious, never rushed, tense, or overly dramatic."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "สวัสดีครับ ยินดีต้อนรับสู่ Mamase จักรวาลของใจ รู้ไหมครับว่า... ทั้งที่ดาวพุธอยู่ใกล้โลกมากกว่าดาวพฤหัสบดี แต่การส่งยานไปที่นั่น กลับยากกว่าการไปสุดขอบระบบสุริยะเสียอีก!",
+      "tts_text": "สวัสดีครับ ยินดีต้อนรับสู่ มามาเซ่ จักรวาลของใจ รู้ไหมครับว่า... ทั้งที่ดาวพุธอยู่ใกล้โลกมากกว่าดาวพฤหัสบดี แต่การส่งยานไปที่นั่น กลับยากกว่าการไปสุดขอบระบบสุริยะเสียอีก!",
+      "subtitle": "ไปดาวพุธ... ยากกว่าสุดขอบระบบสุริยะ?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.2,
+      "focus": "right",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Use the canonical Mamase anime presenter identity, friendly Thai male with tousled black hair, thin rectangular glasses and navy blazer, face-forward on the right for a talking shot. BepiColombo spacecraft clad in white ceramic thermal shields approaching scorched cratered Mercury under the blazing radiant Sun, elegant Thai hook text in upper left. Subtle natural head movement and gentle pointing gesture, stable composition.",
+        "negative_prompt": "extra person, extra text, watermark, logo, distorted face, distorted hands, duplicated fingers, blurry spacecraft, flicker, jitter, sudden camera movement",
+        "seed": 901,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-only-three-missions",
+      "image": "images/scene-02-only-three-missions.png",
+      "narration": "ในประวัติศาสตร์มนุษยชาติ เราส่งยานไปดาวอังคารหลายสิบลำ แต่กลับมียานที่เดินทางไปถึงดาวพุธเพียงแค่ 3 ลำเท่านั้นครับ!",
+      "tts_text": "ในประวัติศาสตร์มนุษยชาติ เราส่งยานไปดาวอังคารหลายสิบลำ แต่กลับมียานที่เดินทางไปถึงดาวพุธเพียงแค่ สาม ลำเท่านั้นครับ!",
+      "subtitle": "มนุษย์ส่งยานไปดาวพุธ แค่ 3 ลำในประวัติศาสตร์",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic space documentary photography of deep solar system exploration, spacecraft traversing the deep cosmic void toward the inner solar system, authentic ESA space science aesthetics, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, flicker, jitter",
+        "seed": 902,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-solar-furnace",
+      "image": "images/scene-03-solar-furnace.png",
+      "narration": "เพราะดาวพุธเปรียบเหมือน 'เตาอบสุริยะ' แสงแดดที่นี่แผดเผาแรงกว่าบนโลกถึง 10 เท่า กลางวันร้อนทะลุ 430 องศาเซลเซียส ร้อนจนตะกั่วละลายได้ทันที",
+      "tts_text": "เพราะดาวพุธเปรียบเหมือน เตาอบสุริยะ แสงแดดที่นี่แผดเผาแรงกว่าบนโลกถึง สิบ เท่า กลางวันร้อนทะลุ สี่ร้อยสามสิบ องศาเซลเซียส ร้อนจนตะกั่วละลายได้ทันที",
+      "subtitle": "เตาอบสุริยะ ร้อนกว่าโลก 10 เท่า (430°C)",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic space documentary shot of planet Mercury orbiting in extreme proximity to the colossal roaring Sun, blistering solar flare and golden coronal plasma blasting across the cratered planetary surface, extreme contrast between burning sunlit side and dark night side, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, explosion, flicker, jitter",
+        "seed": 903,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-ceramic-heat-shield",
+      "image": "images/scene-04-ceramic-heat-shield.png",
+      "narration": "BepiColombo จึงต้องสวมเสื้อเกราะฉนวนกันความร้อนสีขาวพิเศษ ทำจากเซรามิกและไททาเนียม พร้อมแผงระบายความร้อนขนาดยักษ์ที่ต้องหันหลบแดดตลอดเวลา",
+      "tts_text": "เบปิโคลอมโบ จึงต้องสวมเสื้อเกราะฉนวนกันความร้อนสีขาวพิเศษ ทำจากเซรามิกและไททาเนียม พร้อมแผงระบายความร้อนขนาดยักษ์ที่ต้องหันหลบแดดตลอดเวลา",
+      "subtitle": "เกราะเซรามิกกันความร้อนพิเศษ",
+      "motion": "gentle_float",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Macro engineering aerospace documentary view of BepiColombo Mercury Transfer Module, pristine white multi-layer ceramic insulation blankets, gleaming titanium structure, and heat-rejection radiator panels in cosmic space, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, damage, flicker, jitter",
+        "seed": 904,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-tilted-solar-arrays",
+      "image": "images/scene-05-tilted-solar-arrays.png",
+      "narration": "แม้แต่แผงโซลาร์เซลล์ก็หันรับแดดตรง ๆ ไม่ได้นะครับ! วิศวกรต้องสั่งให้แผงเอียงทำมุมแคบ เพื่อรับแสงแค่นิดเดียว ไม่อย่างนั้นแผงจะไหม้เกรียมทันที",
+      "tts_text": "แม้แต่แผงโซลาร์เซลล์ก็หันรับแดดตรง ๆ ไม่ได้นะครับ! วิศวกรต้องสั่งให้แผงเอียงทำมุมแคบ เพื่อรับแสงแค่นิดเดียว ไม่อย่างนั้นแผงจะไหม้เกรียมทันที",
+      "subtitle": "แผงโซลาร์ต้องเอียงหลบแดด",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic space documentary view of BepiColombo large solar array wing tilted at an acute grazing angle relative to blinding directional sunlight, specular golden sun reflections along the panel edge, cool shadow behind, authentic spacecraft engineering, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, fire, explosion, flicker, jitter",
+        "seed": 905,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-no-atmosphere-airbrakes",
+      "image": "images/scene-06-no-atmosphere-airbrakes.png",
+      "narration": "ที่สำคัญ ดาวพุธแทบไม่มีชั้นบรรยากาศ ยานจึงไม่สามารถใช้ 'แอร์เบรก' หรือกางร่มชูชีพช่วยลดความเร็วเหมือนตอนลงดาวอังคารได้เลย ต้องพึ่งพาการคำนวณวงโคจรล้วน ๆ",
+      "tts_text": "ที่สำคัญ ดาวพุธแทบไม่มีชั้นบรรยากาศ ยานจึงไม่สามารถใช้ แอร์เบรก หรือกางร่มชูชีพช่วยลดความเร็วเหมือนตอนลงดาวอังคารได้เลย ต้องพึ่งพาการคำนวณวงโคจรล้วน ๆ",
+      "subtitle": "ไร้บรรยากาศ ไร้ร่มชูชีพเบรก",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Authentic space documentary camera view of Mercury airless cratered surface, stark lunar-like jagged craters and ridges under a pitch-black vacuum sky, zero atmospheric haze, stark scientific realism, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, clouds, blue sky, atmosphere, flicker, jitter",
+        "seed": 906,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-planetary-arrival",
+      "image": "images/scene-07-planetary-arrival.png",
+      "narration": "และตอนนี้ ESA ยืนยันว่า ยานกำลังเข้าสู่ขั้นตอน Planetary Arrival ที่ซับซ้อนที่สุด เพื่อส่งคู่หู MPO และ Mio แยกย้ายสำรวจดาวพุธในแบบที่ไม่เคยมีใครทำได้",
+      "tts_text": "และตอนนี้ อีเอสเอ ยืนยันว่า ยานกำลังเข้าสู่ขั้นตอน แพลเน็ตทารี อะไรวัล ที่ซับซ้อนที่สุด เพื่อส่งคู่หู เอ็มพีโอ และ มิโอะ แยกย้ายสำรวจดาวพุธในแบบที่ไม่เคยมีใครทำได้",
+      "subtitle": "ขั้นตอนเข้าวงโคจรที่ซับซ้อนที่สุด",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Cinematic space documentary view of BepiColombo planetary arrival sequence, dual science orbiters ESA MPO and JAXA Mio operating in separate orbital paths around cratered Mercury, orbital trajectories in deep space, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, explosion, flicker, jitter",
+        "seed": 907,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-08-philosophical-climax",
+      "image": "images/scene-08-philosophical-climax.png",
+      "narration": "การพิชิตดินแดนที่ร้อนจัดและอยู่ใกล้เปลวไฟที่สุด พิสูจน์ว่าความฉลาดและความเพียรของมนุษย์ สามารถเอาชนะขีดจำกัดที่โหดร้ายที่สุดของธรรมชาติได้เสมอครับ",
+      "tts_text": "การพิชิตดินแดนที่ร้อนจัดและอยู่ใกล้เปลวไฟที่สุด พิสูจน์ว่าความฉลาดและความเพียรของมนุษย์ สามารถเอาชนะขีดจำกัดที่โหดร้ายที่สุดของธรรมชาติได้เสมอครับ",
+      "subtitle": "ความเพียรที่เอาชนะขีดจำกัด",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Sublime and inspiring space documentary finale, BepiColombo spacecraft soaring gracefully above the curved horizon of cratered Mercury, radiant golden solar rim light illuminating the spacecraft in deep cosmos, poetic and heroic human achievement, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, flicker, jitter",
+        "seed": 908,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ค้นพบโลก ค้นพบใจ กับ Mamase จักรวาลของใจ",
+      "tts_text": "ค้นพบโลก ค้นพบใจ กับ มามาเซ่ จักรวาลของใจ",
+      "subtitle": "ค้นพบโลก ค้นพบใจ\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Mamase brand outro, glowing cyan orbiting planet in dark navy space, peaceful and contemplative.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, extra planet, extra stars, flicker, jitter",
+        "seed": 98,
+        "frames": 81,
+        "lip_sync": false
+      }
+    }
+  ]
+}

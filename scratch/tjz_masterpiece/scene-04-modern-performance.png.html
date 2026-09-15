@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><style>
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1080px; height: 1920px; background: #070a12;
+    overflow: hidden; font-family: "JetBrains Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+    color: #f1f5f9; position: relative;
+  }
+  .bg-glow {
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(circle at 540px 320px, rgba(30, 58, 138, 0.28) 0%, transparent 65%),
+      radial-gradient(circle at 180px 850px, rgba(14, 165, 233, 0.16) 0%, transparent 55%),
+      radial-gradient(circle at 900px 1050px, rgba(16, 185, 129, 0.12) 0%, transparent 55%),
+      radial-gradient(circle at 540px 1450px, rgba(30, 58, 138, 0.22) 0%, transparent 60%),
+      linear-gradient(180deg, #050811 0%, #0c1322 50%, #04060b 100%);
+    z-index: 1;
+  }
+  .grid-pattern {
+    position: absolute; inset: 0;
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+    background-size: 36px 36px; z-index: 2;
+  }
+  .subtitle-vignette {
+    position: absolute; bottom: 0; left: 0; width: 1080px; height: 320px;
+    background: linear-gradient(180deg, transparent 0%, rgba(5, 8, 15, 0.75) 45%, rgba(3, 5, 10, 0.98) 100%);
+    pointer-events: none; z-index: 30;
+  }
+
+  .perf-canvas {
+    position: absolute; top: 35px; left: 35px; width: 1010px; height: 1580px;
+    display: flex; flex-direction: column; justify-content: space-between; z-index: 10;
+  }
+  .perf-card {
+    background: #0d1527; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+    padding: 18px 22px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); display: flex; flex-direction: column; justify-content: space-between;
+    height: 360px;
+  }
+  .perf-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px; }
+  .perf-title { font-size: 13px; font-weight: 700; color: #38bdf8; letter-spacing: 0.5px; text-transform: uppercase; }
+  .perf-badge { font-size: 11px; color: #f59e0b; font-weight: 600; background: rgba(245,158,11,0.12); border: 1px solid rgba(245,158,11,0.25); padding: 3px 10px; border-radius: 6px; }
+
+  .thread-lanes { display: flex; flex-direction: column; gap: 6px; }
+  .thread-lane {
+    background: #0a0f1d; border: 1px solid rgba(255,255,255,0.05); border-radius: 6px;
+    height: 26px; display: flex; align-items: center; padding: 0 10px; gap: 10px;
+  }
+  .lane-label { font-size: 10.5px; font-weight: 700; color: #64748b; width: 125px; }
+  .lane-track { flex: 1; height: 12px; background: #131c30; border-radius: 6px; display: flex; gap: 3px; overflow: hidden; padding: 2px; }
+  .segment { height: 100%; border-radius: 2px; }
+  .seg-blue { background: #38bdf8; flex: 3; }
+  .seg-green { background: #10b981; flex: 4; }
+  .seg-amber { background: #f59e0b; flex: 2; }
+  .seg-purple { background: #a855f7; flex: 3; }
+
+  .pipeline-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .pipe-step {
+    background: #111a2e; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;
+    padding: 12px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .pipe-num { font-size: 9.5px; color: #38bdf8; font-weight: 700; }
+  .pipe-name { font-size: 12.5px; font-weight: 700; color: #f8fafc; }
+  .pipe-desc { font-size: 10.5px; color: #94a3b8; }
+
+  .heap-vis { display: flex; height: 48px; border-radius: 8px; overflow: hidden; gap: 2px; }
+  .heap-young { background: #10b981; flex: 2.5; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #052e16; }
+  .heap-old { background: #0284c7; flex: 4.5; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #082f49; }
+  .heap-free { background: #1e293b; flex: 3; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #64748b; }
+</style></head>
+<body>
+  <div class="bg-glow"></div><div class="grid-pattern"></div>
+  <div class="perf-canvas">
+    <!-- Concurrency: Loom -->
+    <div class="perf-card">
+      <div class="perf-header"><div class="perf-title">CONCURRENCY: PROJECT LOOM &amp; VIRTUAL THREADS</div><div class="perf-badge">1,000,000+ LIGHTWEIGHT THREADS</div></div>
+      <div class="thread-lanes">
+        <div class="thread-lane"><div class="lane-label">Carrier Worker 01</div><div class="lane-track"><div class="seg-blue"></div><div class="seg-green"></div><div class="seg-amber"></div><div class="seg-purple"></div><div class="seg-blue"></div></div></div>
+        <div class="thread-lane"><div class="lane-label">Carrier Worker 02</div><div class="lane-track"><div class="seg-green"></div><div class="seg-purple"></div><div class="seg-blue"></div><div class="seg-amber"></div><div class="seg-green"></div></div></div>
+        <div class="thread-lane"><div class="lane-label">Carrier Worker 03</div><div class="lane-track"><div class="seg-amber"></div><div class="seg-blue"></div><div class="seg-green"></div><div class="seg-purple"></div><div class="seg-blue"></div></div></div>
+        <div class="thread-lane"><div class="lane-label">Carrier Worker 04</div><div class="lane-track"><div class="seg-purple"></div><div class="seg-amber"></div><div class="seg-blue"></div><div class="seg-green"></div><div class="seg-amber"></div></div></div>
+        <div class="thread-lane"><div class="lane-label">Carrier Worker 05</div><div class="lane-track"><div class="seg-blue"></div><div class="seg-purple"></div><div class="seg-amber"></div><div class="seg-green"></div><div class="seg-blue"></div></div></div>
+        <div class="thread-lane"><div class="lane-label">Carrier Worker 06</div><div class="lane-track"><div class="seg-green"></div><div class="seg-amber"></div><div class="seg-blue"></div><div class="seg-purple"></div><div class="seg-green"></div></div></div>
+        <div class="thread-lane"><div class="lane-label">Carrier Worker 07</div><div class="lane-track"><div class="seg-amber"></div><div class="seg-green"></div><div class="seg-purple"></div><div class="seg-blue"></div><div class="seg-amber"></div></div></div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px;">
+        <div style="background:#0a0f1d; padding:8px 12px; border-radius:6px; font-size:11px; border:1px solid rgba(255,255,255,0.04);">
+          <div style="color:#64748b;">ACTIVE VIRTUAL THREADS</div>
+          <div style="font-size:18px; font-weight:700; color:#38bdf8;">1,240,000</div>
+        </div>
+        <div style="background:#0a0f1d; padding:8px 12px; border-radius:6px; font-size:11px; border:1px solid rgba(255,255,255,0.04);">
+          <div style="color:#64748b;">MEMORY FOOTPRINT</div>
+          <div style="font-size:18px; font-weight:700; color:#10b981;">&lt; 1 KB / Thread</div>
+        </div>
+        <div style="background:#0a0f1d; padding:8px 12px; border-radius:6px; font-size:11px; border:1px solid rgba(255,255,255,0.04);">
+          <div style="color:#64748b;">SCHEDULER CPU LOAD</div>
+          <div style="font-size:18px; font-weight:700; color:#f59e0b;">0.04% Overhead</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JIT Compilation Pipeline -->
+    <div class="perf-card">
+      <div class="perf-header"><div class="perf-title">EXECUTION ENGINE: TIERED JIT &amp; GRAALVM COMPILER</div><div class="perf-badge">DYNAMIC ADAPTIVE OPTIMIZATION</div></div>
+      <div class="pipeline-steps">
+        <div class="pipe-step"><div class="pipe-num">STAGE 01</div><div class="pipe-name">Bytecode</div><div class="pipe-desc">Portable .class representation</div></div>
+        <div class="pipe-step"><div class="pipe-num">STAGE 02</div><div class="pipe-name">C1 Client JIT</div><div class="pipe-desc">Fast baseline machine code</div></div>
+        <div class="pipe-step"><div class="pipe-num">STAGE 03</div><div class="pipe-name">PGO Profiling</div><div class="pipe-desc">Branch counters &amp; type feedback</div></div>
+        <div class="pipe-step" style="border-color:rgba(56,189,248,0.5);"><div class="pipe-num">STAGE 04</div><div class="pipe-name">C2 / GraalVM</div><div class="pipe-desc">AVX-512 SIMD Vectorization</div></div>
+      </div>
+      <div style="background:#0a0f1d; border:1px solid rgba(255,255,255,0.06); border-radius:6px; padding:10px 14px; font-size:11px; color:#38bdf8; font-family:monospace; line-height:1.5;">
+        <div>vmovups ymm0, [rdi+rax*4] ; Vectorized inner loop AVX-512 SIMD</div>
+        <div style="color:#94a3b8;">vaddps  ymm0, ymm0, [rsi+rax*4] ; 8 parallel single-precision floats / cycle</div>
+        <div style="color:#10b981;">● Inlining Depth: 9 levels | Escape Analysis: 100% Scalar Replaced</div>
+      </div>
+    </div>
+
+    <!-- Memory: Generational ZGC -->
+    <div class="perf-card">
+      <div class="perf-header"><div class="perf-title">MEMORY MANAGEMENT: GENERATIONAL ZGC</div><div class="perf-badge">MAX PAUSE &lt; 0.5 MILLISECOND</div></div>
+      <div class="heap-vis">
+        <div class="heap-young">Young Gen (Eden &amp; Survivor - 16GB)</div>
+        <div class="heap-old">Old Gen (Tenured - Colored Pointers - 32GB)</div>
+        <div class="heap-free">Available Heap Headroom (16GB)</div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px;">
+        <div style="background:#111a2e; padding:10px; border-radius:6px; font-size:11px;">
+          <div style="color:#64748b;">CONCURRENT MARK</div>
+          <div style="color:#38bdf8; font-weight:700;">Zero Stop-World</div>
+        </div>
+        <div style="background:#111a2e; padding:10px; border-radius:6px; font-size:11px;">
+          <div style="color:#64748b;">COLORED POINTERS</div>
+          <div style="color:#10b981; font-weight:700;">Load Barrier Active</div>
+        </div>
+        <div style="background:#111a2e; padding:10px; border-radius:6px; font-size:11px;">
+          <div style="color:#64748b;">MAX RECORDED PAUSE</div>
+          <div style="color:#f59e0b; font-weight:700;">0.38 ms</div>
+        </div>
+        <div style="background:#111a2e; padding:10px; border-radius:6px; font-size:11px;">
+          <div style="color:#64748b;">TOTAL HEAP SIZE</div>
+          <div style="color:#a855f7; font-weight:700;">64 GB (Terabyte scale)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Throughput & Latency Distribution -->
+    <div class="perf-card">
+      <div class="perf-header"><div class="perf-title">PRODUCTION TELEMETRY: 500K REQ/SEC BENCHMARK</div><div class="perf-badge">FLAT P99 PROFILE</div></div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+        <div style="background:#111a2e; padding:12px; border-radius:8px;">
+          <div style="font-size:10.5px; color:#64748b; font-weight:700;">SUSTAINED RPS</div>
+          <div style="font-size:22px; font-weight:700; color:#38bdf8;">524,800</div>
+          <div style="font-size:10.5px; color:#10b981;">▲ 99.98% success rate</div>
+        </div>
+        <div style="background:#111a2e; padding:12px; border-radius:8px;">
+          <div style="font-size:10.5px; color:#64748b; font-weight:700;">P99 LATENCY</div>
+          <div style="font-size:22px; font-weight:700; color:#10b981;">2.14 ms</div>
+          <div style="font-size:10.5px; color:#94a3b8;">Zero GC latency spikes</div>
+        </div>
+        <div style="background:#111a2e; padding:12px; border-radius:8px;">
+          <div style="font-size:10.5px; color:#64748b; font-weight:700;">CPU SATURATION</div>
+          <div style="font-size:22px; font-weight:700; color:#f59e0b;">42.8%</div>
+          <div style="font-size:10.5px; color:#94a3b8;">128 vCPUs linear scaling</div>
+        </div>
+      </div>
+      <div style="height:48px; background:#0a0f1d; border-radius:6px; padding:0 14px; display:flex; align-items:center; gap:12px;">
+        <span style="font-size:10px; color:#64748b; font-weight:700;">REAL-TIME P99 LATENCY (1HR)</span>
+        <svg style="flex:1; height:24px;">
+          <path d="M0,12 Q100,10 200,12 T400,12 T600,11 T800,12" fill="none" stroke="#10b981" stroke-width="2"/>
+        </svg>
+        <span style="font-size:11px; color:#10b981; font-weight:700;">STABLE 1.84ms</span>
+      </div>
+    </div>
+  </div>
+  <div class="subtitle-vignette"></div>
+</body></html>

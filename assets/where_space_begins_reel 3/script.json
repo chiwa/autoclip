@@ -1,0 +1,113 @@
+{
+  "project": {
+    "id": "where_space_begins",
+    "title": "Where Space Begins",
+    "language": "th",
+    "resolution": "1080x1920"
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Puck",
+    "speed": 1.15
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "เคยสงสัยไหมครับ... ว่าเราต้องขึ้นไปสูงจากพื้นโลกแค่ไหน ถึงจะถือว่าออกสู่อวกาศแล้วจริงๆ?",
+      "tts_text": "เคยสงสัยไหมครับ... ว่าเราต้องขึ้นไปสูงจากพื้นโลกแค่ไหน ถึงจะถือว่าออกสู่อวกาศแล้วจริงๆ?",
+      "subtitle": "เคยสงสัยไหมครับ... ต้องสูงแค่ไหนถึงเรียกว่า \"อวกาศ\"?",
+      "lip_sync": true,
+      "character_id": "mamase-presenter-v1",
+      "motion": "slow_zoom_in"
+    },
+    {
+      "id": "scene-02-atmosphere",
+      "image": "images/scene-02-atmosphere.png",
+      "narration": "ความจริงคือ โลกของเราไม่มีขอบเขตที่ขีดเส้นแบ่งอวกาศเอาไว้อย่างชัดเจนครับ ชั้นบรรยากาศมันแค่เบาบางลงเรื่อยๆ จนจางหายไป",
+      "tts_text": "ความจริงคือ โลกของเราไม่มีขอบเขตที่ขีดเส้นแบ่งอวกาศเอาไว้อย่างชัดเจนครับ ชั้นบรรยากาศมันแค่เบาบางลงเรื่อยๆ จนจางหายไป",
+      "subtitle": "ความจริงโลกไม่มีเส้นแบ่งอวกาศชัดเจน บรรยากาศแค่บางลงเรื่อยๆ",
+      "motion": "pan_left_to_right",
+      "wan": {
+        "prompt": "Slow cinematic pan along the glowing blue Earth limb fading into the deep black void of space, realistic atmospheric scattering, 4k, documentary style.",
+        "negative_prompt": "text, watermark, ugly, deformed, blurry, noisy",
+        "seed": 902,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-karman",
+      "image": "images/scene-03-karman.png",
+      "narration": "แต่ในทางวิทยาศาสตร์และการบินสากล เรายึดเส้นสมมติที่เรียกว่า \"เส้นคาร์มัน\" (Kármán line) ที่ความสูงหนึ่งร้อยกิโลเมตรเหนือระดับน้ำทะเล",
+      "tts_text": "แต่ในทางวิทยาศาสตร์และการบินสากล เรายึดเส้นสมมติที่เรียกว่า \"เส้นคาร์มัน\" ที่ความสูงหนึ่งร้อยกิโลเมตรเหนือระดับน้ำทะเล",
+      "subtitle": "ทางวิทยาศาสตร์ใช้ \"เส้นคาร์มัน\" (Kármán line) ที่ความสูง 100 กม.",
+      "motion": "slow_zoom_in",
+      "wan": {
+        "prompt": "A glowing ethereal golden boundary line hovering high above the Earth's atmosphere at the edge of space, cinematic lighting, realistic clouds far below, slow push in.",
+        "negative_prompt": "text, watermark, ugly, deformed, blurry, noisy",
+        "seed": 903,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-aerodynamics",
+      "image": "images/scene-04-aerodynamics.png",
+      "narration": "สาเหตุที่ต้องเป็นร้อยกิโลเมตร เพราะที่จุดนี้ อากาศเบาบางมากจนปีกเครื่องบินไม่สามารถสร้างแรงยกได้อีกต่อไป ต้องใช้ความเร็วระดับยานอวกาศเท่านั้นถึงจะไปต่อได้",
+      "tts_text": "สาเหตุที่ต้องเป็นร้อยกิโลเมตร เพราะที่จุดนี้ อากาศเบาบางมากจนปีกเครื่องบินไม่สามารถสร้างแรงยกได้อีกต่อไป ต้องใช้ความเร็วระดับยานอวกาศเท่านั้นถึงจะไปต่อได้",
+      "subtitle": "ที่จุดนี้อากาศเบาบางจนปีกเครื่องบินใช้งานไม่ได้ ต้องใช้ยานอวกาศ",
+      "motion": "slow_zoom_in",
+      "wan": {
+        "prompt": "A sleek spacecraft igniting its engines at the extreme edge of the atmosphere, intense thruster glow, atmospheric heat distortion, transitioning into the blackness of space, dynamic camera tracking.",
+        "negative_prompt": "text, watermark, ugly, deformed, blurry, noisy",
+        "seed": 904,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-usaf",
+      "image": "images/scene-05-usaf.png",
+      "narration": "แต่เดี๋ยวก่อน! ถ้าคุณไปถามองค์กรอย่างนาซ่า หรือกองทัพอากาศสหรัฐฯ พวกเขากลับมองว่า แค่บินสูงเกินแปดสิบกิโลเมตร คุณก็จะได้ประดับเข็มเชิดชูเกียรติเป็นนักบินอวกาศแล้วครับ",
+      "tts_text": "แต่เดี๋ยวก่อน! ถ้าคุณไปถามองค์กรอย่างนาซ่า หรือกองทัพอากาศสหรัฐฯ พวกเขากลับมองว่า แค่บินสูงเกินแปดสิบกิโลเมตร คุณก็จะได้ประดับเข็มเชิดชูเกียรติเป็นนักบินอวกาศแล้วครับ",
+      "subtitle": "แต่นาซ่าและกองทัพสหรัฐฯ ให้เริ่มนับที่ 80 กิโลเมตร",
+      "motion": "slow_zoom_in",
+      "wan": {
+        "prompt": "An experimental hypersonic X-plane soaring through the pitch black stratosphere, faint curvature of the Earth below, metallic fuselage reflecting sunlight, smooth steady camera movement.",
+        "negative_prompt": "text, watermark, ugly, deformed, blurry, noisy",
+        "seed": 905,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-iss",
+      "image": "images/scene-06-iss.png",
+      "narration": "ส่วนสถานีอวกาศนานาชาติ หรือ ไอเอสเอส (ISS) ที่นักบินอวกาศขึ้นไปทำงานกันนั้น โคจรอยู่สูงกว่าเส้นคาร์มันถึงสี่เท่า หรือประมาณสี่ร้อยกิโลเมตรนู่นเลยครับ",
+      "tts_text": "ส่วนสถานีอวกาศนานาชาติ หรือ ไอเอสเอส ที่นักบินอวกาศขึ้นไปทำงานกันนั้น โคจรอยู่สูงกว่าเส้นคาร์มันถึงสี่เท่า หรือประมาณสี่ร้อยกิโลเมตรนู่นเลยครับ",
+      "subtitle": "ส่วนสถานีอวกาศนานาชาติ (ISS) โคจรสูงกว่านั้นมาก ที่ประมาณ 400 กม.",
+      "motion": "pan_left_to_right",
+      "wan": {
+        "prompt": "The International Space Station orbiting silently above the Earth, massive solar panels reflecting intense sunlight, stunning blue Earth background with white clouds, slow cinematic orbital drift.",
+        "negative_prompt": "text, watermark, ugly, deformed, blurry, noisy",
+        "seed": 906,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-mamase-outro",
+      "image": "images/scene-07-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "subtitle": "ถ้าชอบเรื่องราววิทยาศาสตร์และอวกาศ ฝากกดติดตาม Mamase จักรวาลของใจ",
+      "motion": "slow_zoom_in"
+    }
+  ]
+}

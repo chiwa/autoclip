@@ -1,0 +1,134 @@
+{
+  "project": {
+    "id": "mamase-eris-reel-v1",
+    "title": "ERIS — โลกที่บรรยากาศแข็งตัวตกลงบนพื้น",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Warm, engaging, authoritative, inspiring Thai documentary storyteller tone."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "รู้ไหมครับว่า มีโลกใบหนึ่งที่หนาวจัด จนชั้นบรรยากาศของมัน... แข็งตัวและร่วงลงมาเคลือบพื้นผิวทั้งดวง?",
+      "tts_text": "รู้ไหมครับว่า มีโลกใบหนึ่งที่หนาวจัด จนชั้นบรรยากาศของมัน... แข็งตัวและร่วงลงมาเคลือบพื้นผิวทั้งดวง?",
+      "subtitle": "ERIS\nโลกที่บรรยากาศ แข็งตัวตกลงบนพื้น",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve the key art typography, Mamase logo, and presenter. The presenter gestures toward the brilliant gleaming white dwarf planet Eris and its moon in deep space with natural lip sync. Starry cosmos background, smooth cinematic motion.",
+        "negative_prompt": "text modification, title distortion, face distortion, flicker, jitter, sudden camera movement, watermark",
+        "seed": 915,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-planet-killer-pluto",
+      "image": "images/scene-02-planet-killer-pluto.png",
+      "narration": "นี่คือ เอริส ดาวเคราะห์แคระที่ใหญ่เกือบเท่าพลูโต และเป็นต้นเหตุตัวจริง ที่ทำให้พลูโตถูกปลดออกจากการเป็นดาวเคราะห์ดวงที่เก้าในปี 2006",
+      "tts_text": "นี่คือ เอ-ริส ดาวเคราะห์แคระที่ใหญ่เกือบเท่าพลูโต และเป็นต้นเหตุตัวจริง ที่ทำให้พลูโตถูกปลดออกจากการเป็นดาวเคราะห์ดวงที่เก้าในปี สองพันหก",
+      "subtitle": "ต้นเหตุปลดพลูโตในปี 2006\nดาวเคราะห์แคระที่ใหญ่เกือบเท่าพลูโต",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-twin-sizes-dysnomia",
+      "image": "images/scene-03-twin-sizes-dysnomia.png",
+      "narration": "เอริสมีรัศมีประมาณ 1,163 กิโลเมตร มีดวงจันทร์บริวารชื่อ ดิสนอเมีย และที่น่าทึ่งคือ มันหมุนรอบตัวเอง 25.9 ชั่วโมง หนึ่งวันของมันแทบจะยาวเท่ากับโลกเราเลยครับ",
+      "tts_text": "เอ-ริส มีรัศมีประมาณ หนึ่งพันหนึ่งร้อยหกสิบสาม กิโลเมตร มีดวงจันทร์บริวารชื่อ ดิส-นอ-เมีย และที่น่าทึ่งคือ มันหมุนรอบตัวเอง ยี่สิบห้าจุดเก้า ชั่วโมง หนึ่งวันของมันแทบจะยาวเท่ากับโลกเราเลยครับ",
+      "subtitle": "มีดวงจันทร์ชื่อดิสนอเมีย\nหนึ่งวันยาว 25.9 ชม. ใกล้เคียงกับโลก",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-04-cosmic-mirror",
+      "image": "images/scene-04-cosmic-mirror.png",
+      "narration": "แต่สิ่งที่ทำให้นักดาราศาสตร์ประหลาดใจที่สุด คือผิวนอกที่สว่างเหมือนกระจกเงา มันสะท้อนแสงแดดได้สูงถึง 96% ขาวบริสุทธิ์ยิ่งกว่าหิมะบนโลก",
+      "tts_text": "แต่สิ่งที่ทำให้นักดาราศาสตร์ประหลาดใจที่สุด คือผิวนอกที่สว่างเหมือนกระจกเงา มันสะท้อนแสงแดดได้สูงถึง เก้าสิบหกเปอร์เซ็นต์ ขาวบริสุทธิ์ยิ่งกว่าหิมะบนโลก",
+      "subtitle": "ผิวนอกสะท้อนแสงสูง 96%\nสว่างเจิดจ้าเหมือนกระจกเงา",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-05-atmospheric-collapse",
+      "image": "images/scene-05-atmospheric-collapse.png",
+      "narration": "นั่นเพราะตอนที่มันโคจรห่างไกลดวงอาทิตย์ อุณหภูมิติดลบกว่า 240 องศา จนก๊าซไนโตรเจนและมีเทนในอากาศ แข็งตัวและตกลงมาเคลือบพื้นดินจนกลายเป็นแผ่นน้ำแข็งขาวประกาย",
+      "tts_text": "นั่นเพราะตอนที่มันโคจรห่างไกลดวงอาทิตย์ อุณหภูมิติดลบกว่า สองร้อยสี่สิบ องศา จนก๊าซไนโตรเจนและมีเทนในอากาศ แข็งตัวและตกลงมาเคลือบพื้นดินจนกลายเป็นแผ่นน้ำแข็งขาวประกาย",
+      "subtitle": "หนาวจัดติดลบ 240 องศา\nก๊าซไนโตรเจนแข็งตัวร่วงลงสู่พื้น",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-06-breathing-world-orbit",
+      "image": "images/scene-06-breathing-world-orbit.png",
+      "narration": "เอริสใช้เวลาถึง 557 ปีในการโคจรรอบดวงอาทิตย์หนึ่งรอบ และเมื่อมันเข้าใกล้แดดในอีกหลายร้อยปีข้างหน้า น้ำแข็งจะระเหิดกลับเป็นบรรยากาศอีกครั้ง... โลกใบนี้จึง หายใจเปิดปิดบรรยากาศ ตามฤดูกาล",
+      "tts_text": "เอ-ริส ใช้เวลาถึง ห้าร้อยห้าสิบเจ็ด ปีในการโคจรรอบดวงอาทิตย์หนึ่งรอบ และเมื่อมันเข้าใกล้แดดในอีกหลายร้อยปีข้างหน้า น้ำแข็งจะระเหิดกลับเป็นบรรยากาศอีกครั้ง... โลกใบนี้จึง หายใจเปิดปิดบรรยากาศ ตามฤดูกาล",
+      "subtitle": "วงโคจรรี 557 ปี\nโลกที่หายใจเปิด-ปิดบรรยากาศตามฤดูกาล",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "smooth_right"
+    },
+    {
+      "id": "scene-07-unreached-observatory",
+      "image": "images/scene-07-unreached-observatory.png",
+      "narration": "และจนถึงวันนี้ มนุษย์ยังไม่เคยส่งยานอวกาศลำไหนไปสำรวจเอริสเลยครับ ภาพทั้งหมดที่เรามี เกิดจากการส่องกล้องโทรทรรศน์ และการคำนวณจากระยะไกลหลายพันล้านกิโลเมตรเท่านั้น",
+      "tts_text": "และจนถึงวันนี้ มนุษย์ยังไม่เคยส่งยานอวกาศลำไหนไปสำรวจ เอ-ริส เลยครับ ภาพทั้งหมดที่เรามี เกิดจากการส่องกล้องโทรทรรศน์ และการคำนวณจากระยะไกลหลายพันล้านกิโลเมตรเท่านั้น",
+      "subtitle": "ยังไม่เคยมียานอวกาศไปเยือน\nสำรวจผ่านกล้องโทรทรรศน์ระยะไกล",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-08-mamase-frontier-payoff",
+      "image": "images/scene-08-mamase-frontier-payoff.png",
+      "narration": "โลกที่มนุษย์ยังไม่เคยไปสัมผัส... แต่กลับทรงพลังพอที่จะเปลี่ยนตำราดาราศาสตร์ของโลกเราไปตลอดกาลครับ",
+      "tts_text": "โลกที่มนุษย์ยังไม่เคยไปสัมผัส... แต่กลับทรงพลังพอที่จะเปลี่ยนตำราดาราศาสตร์ของโลกเราไปตลอดกาลครับ",
+      "subtitle": "โลกที่เรายังไม่เคยไปถึง\nแต่เปลี่ยนตำราดาราศาสตร์ไปตลอดกาล",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.05,
+      "focus": "center",
+      "transition": "none",
+      "show_subtitle": false
+    }
+  ]
+}

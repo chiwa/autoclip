@@ -1,0 +1,190 @@
+{
+  "project": {
+    "id": "mamase-europa-clipper-reel-v1",
+    "title": "Europa — ถ้ามีชีวิตอยู่ใต้ดวงจันทร์ของ Jupiter ล่ะ?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.3,
+    "style_prompt": "Read aloud like a charismatic science storyteller with a playful personality. Sound curious, friendly, slightly cheeky, and genuinely excited by surprising facts. Keep the delivery natural and conversational, with small pauses for comedic timing and emphasis. Never sound like a news anchor. Keep the delivery energetic, clear, playful, warm, and reassuring. Make the listener feel relaxed and curious, never rushed, tense, or overly dramatic."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "สวัสดีครับ ยินดีต้อนรับสู่ Mamase จักรวาลของใจ วันนี้เราจะมาตั้งคำถามว่า... ถ้าเอเลียนในระบบสุริยะไม่ได้อยู่บนดาวอังคาร แต่อยู่ใต้ผืนน้ำแข็งของยูโรปาล่ะครับ?",
+      "tts_text": "สวัสดีครับ ยินดีต้อนรับสู่ มามาเซ่ จักรวาลของใจ วันนี้เราจะมาตั้งคำถามว่า... ถ้าเอเลียนในระบบสุริยะไม่ได้อยู่บนดาวอังคาร แต่อยู่ใต้ผืนน้ำแข็งของ ยูโรปา ล่ะครับ?",
+      "subtitle": "สิ่งมีชีวิตใต้ผืนน้ำแข็งยูโรปา?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.2,
+      "focus": "right",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Use the canonical Mamase anime presenter identity, friendly Thai male with tousled black hair, thin rectangular glasses and navy blazer, face-forward on the right for a talking shot. Premium science-documentary book-cover composition: icy moon Europa with orange-brown fractures, Jupiter glowing in background, Europa Clipper spacecraft, elegant Thai hook text in upper left. Subtle natural head movement and gentle pointing gesture, stable composition.",
+        "negative_prompt": "extra person, extra text, watermark, logo, distorted face, distorted hands, duplicated fingers, blurry spacecraft, flicker, jitter, sudden camera movement",
+        "seed": 901,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-ocean-paradox",
+      "image": "images/scene-02-ocean-paradox.png",
+      "narration": "ยูโรปา ดวงจันทร์ขนาดพอ ๆ กับดวงจันทร์ของเรา แต่ใต้เปลือกน้ำแข็งหนายี่สิบกิโลเมตร กลับซ่อน 'มหาสมุทรน้ำเหลว' ที่มีน้ำมากกว่าโลกทั้งใบรวมกันถึง 2 เท่า!",
+      "tts_text": "ยูโรปา ดวงจันทร์ขนาดพอ ๆ กับดวงจันทร์ของเรา แต่ใต้เปลือกน้ำแข็งหนายี่สิบกิโลเมตร กลับซ่อน มหาสมุทรน้ำเหลว ที่มีน้ำมากกว่าโลกทั้งใบรวมกันถึง สอง เท่า!",
+      "subtitle": "มหาสมุทรซ่อนเร้น มากกว่าโลก 2 เท่า",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic cross-section of Europa's interior structure, thick outer ice crust over a vast luminous deep blue global liquid ocean, rocky core at the center, scientifically accurate educational space documentary, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, aliens, flicker, jitter",
+        "seed": 902,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-tidal-heating",
+      "image": "images/scene-03-tidal-heating.png",
+      "narration": "ไกลจากดวงอาทิตย์ขนาดนั้น น้ำไม่แข็งหมดได้ยังไง? คำตอบคือ 'แรงดึงดูดไทดัล' ของดาวพฤหัสบดี ที่คอยบีบนวดยูโรปาจนเกิดความร้อนจากแกนในครับ",
+      "tts_text": "ไกลจากดวงอาทิตย์ขนาดนั้น น้ำไม่แข็งหมดได้ยังไง? คำตอบคือ แรงดึงดูดไทดัล ของดาวพฤหัสบดี ที่คอยบีบนวดยูโรปาจนเกิดความร้อนจากแกนในครับ",
+      "subtitle": "ดาวพฤหัสบดีบีบนวดให้เกิดความร้อน",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Massive banded planet Jupiter exerting immense gravitational tidal forces on orbiting icy moon Europa, gentle rhythmic flexing and heating of Europa's core, calm planetary motion in space, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, aliens, explosions, flicker, jitter",
+        "seed": 903,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-hydrothermal-vents",
+      "image": "images/scene-04-hydrothermal-vents.png",
+      "narration": "ที่ก้นมหาสมุทรลึก จึงอาจมีปล่องน้ำพุร้อนเหมือนก้นทะเลลึกบนโลก แหล่งพลังงานบริสุทธิ์ที่ทำให้สิ่งมีชีวิตถือกำเนิดได้... แม้ไม่เคยเห็นแสงอาทิตย์เลยสักครั้ง",
+      "tts_text": "ที่ก้นมหาสมุทรลึก จึงอาจมีปล่องน้ำพุร้อนเหมือนก้นทะเลลึกบนโลก แหล่งพลังงานบริสุทธิ์ที่ทำให้สิ่งมีชีวิตถือกำเนิดได้... แม้ไม่เคยเห็นแสงอาทิตย์เลยสักครั้ง",
+      "subtitle": "ปล่องน้ำร้อนก้นสมุทร แหล่งกำเนิดชีวิต",
+      "motion": "gentle_float",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Dark abyss of Europa's subsurface ocean floor, active hydrothermal vents spewing warm mineral-rich black smoke, faint blue bioluminescent alien microbes drifting in warm thermal currents, majestic deep-sea astrobiology, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, monster, bright sunlight, flicker, jitter",
+        "seed": 904,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-water-plumes",
+      "image": "images/scene-05-water-plumes.png",
+      "narration": "และบางครั้ง แรงดันมหาศาลก็ระเบิดเป็น 'ไอน้ำพุพุ่งทะลุรอยแตก' ขึ้นสู่อวกาศ เป็นหลักฐานชัดเจนว่าข้างใต้มีของเหลวที่ยังมีชีวิตชีวาอยู่จริง ๆ",
+      "tts_text": "และบางครั้ง แรงดันมหาศาลก็ระเบิดเป็น ไอน้ำพุพุ่งทะลุรอยแตก ขึ้นสู่อวกาศ เป็นหลักฐานชัดเจนว่าข้างใต้มีของเหลวที่ยังมีชีวิตชีวาอยู่จริง ๆ",
+      "subtitle": "น้ำพุพุ่งทะลุรอยแตกสู่อวกาศ",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Spectacular geysers and plumes of water vapor erupting from icy fractures on Europa high into space vacuum, glistening ice crystals against dark Jupiter backdrop, cinematic scientific realism, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, violent fireball explosion, flicker, jitter",
+        "seed": 905,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-europa-clipper",
+      "image": "images/scene-06-europa-clipper.png",
+      "narration": "นี่คือเหตุผลที่ NASA ส่งพระเอกอย่าง Europa Clipper ยานสำรวจดาวเคราะห์ที่ใหญ่ที่สุด ออกเดินทางไปพิสูจน์ความลับนี้ด้วยเรดาร์ส่องทะลุน้ำแข็ง",
+      "tts_text": "นี่คือเหตุผลที่ นาซา ส่งพระเอกอย่าง ยูโรปา คลิปเปอร์ ยานสำรวจดาวเคราะห์ที่ใหญ่ที่สุด ออกเดินทางไปพิสูจน์ความลับนี้ด้วยเรดาร์ส่องทะลุน้ำแข็ง",
+      "subtitle": "ยาน Europa Clipper บินสำรวจเจาะลึก",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "NASA Europa Clipper spacecraft in deep space, giant 30-meter solar arrays fully deployed, high-gain antenna and radar booms glinting in sunlight, approaching the cracked ice world Europa, high-detail aerospace engineering, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, aliens, flicker, jitter",
+        "seed": 906,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-tasting-plumes",
+      "image": "images/scene-07-tasting-plumes.png",
+      "narration": "ยานไม่ต้องลงจอด แต่จะบินเฉียดผ่านละอองน้ำพุเพื่อ 'ชิม' สารอินทรีย์และเกลือแร่ ว่าที่นั่นมีองค์ประกอบที่พร้อมสำหรับสิ่งมีชีวิตหรือไม่",
+      "tts_text": "ยานไม่ต้องลงจอด แต่จะบินเฉียดผ่านละอองน้ำพุเพื่อ ชิม สารอินทรีย์และเกลือแร่ ว่าที่นั่นมีองค์ประกอบที่พร้อมสำหรับสิ่งมีชีวิตหรือไม่",
+      "subtitle": "บินเฉียด 'ชิม' สารอินทรีย์กลางอวกาศ",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Europa Clipper spacecraft performing low-altitude flyby directly through erupting water vapor plume above Europa, mass spectrometer collecting atmospheric dust and organic molecules, scientific drama, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, crash, explosion, cartoon, flicker, jitter",
+        "seed": 907,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-08-philosophical-climax",
+      "image": "images/scene-08-philosophical-climax.png",
+      "narration": "บางที ชีวิตในจักรวาลอาจไม่ได้เริ่มบนดาวเคราะห์ที่อบอุ่นใต้แสงตะวัน... แต่อาจซ่อนตัวอยู่ในมหาสมุทรอันเงียบสงบ ใต้เกราะน้ำแข็งนับล้านดวงครับ",
+      "tts_text": "บางที ชีวิตในจักรวาลอาจไม่ได้เริ่มบนดาวเคราะห์ที่อบอุ่นใต้แสงตะวัน... แต่อาจซ่อนตัวอยู่ในมหาสมุทรอันเงียบสงบ ใต้เกราะน้ำแข็งนับล้านดวงครับ",
+      "subtitle": "ชีวิตในมหาสมุทรใต้เกราะน้ำแข็ง",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Contemplative philosophical climax: glowing crescent Europa floating peacefully in vast cosmos beside giant Jupiter, mysterious blue warmth radiating through delicate ice fractures, serene space documentary poetry, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, flicker, jitter, violent action",
+        "seed": 908,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ค้นพบโลก ค้นพบใจ กับ Mamase จักรวาลของใจ",
+      "tts_text": "ค้นพบโลก ค้นพบใจ กับ มามาเซ่ จักรวาลของใจ",
+      "subtitle": "ค้นพบโลก ค้นพบใจ\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Mamase brand outro, glowing cyan orbiting planet in dark navy space, peaceful and contemplative.",
+        "negative_prompt": "watermark, blur, jitter",
+        "seed": 98,
+        "frames": 81,
+        "lip_sync": false
+      }
+    }
+  ]
+}

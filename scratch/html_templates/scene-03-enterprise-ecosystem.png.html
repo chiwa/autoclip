@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1080px; height: 1920px; background: #06090e; overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    position: relative;
+  }
+  .arch-bg {
+    position: absolute; top: 0; left: 0; width: 1080px; height: 1920px;
+    background: radial-gradient(circle at 50% 40%, #121c2d 0%, #090e17 55%, #05070a 100%);
+  }
+  .iso-grid {
+    position: absolute; top: 0; left: 0; width: 1080px; height: 1920px;
+    background-image:
+      linear-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(circle at 50% 45%, black 40%, transparent 85%);
+  }
+  .core-glow {
+    position: absolute; top: 350px; left: 50%; transform: translateX(-50%);
+    width: 950px; height: 1000px;
+    background: radial-gradient(circle at center, rgba(56, 189, 248, 0.12) 0%, rgba(16, 185, 129, 0.06) 45%, transparent 70%);
+    filter: blur(60px);
+  }
+  .stack-container {
+    position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
+    width: 960px; display: flex; flex-direction: column; gap: 20px; z-index: 10;
+  }
+  .arch-tier {
+    width: 100%; background: linear-gradient(180deg, #111823 0%, #0d121b 100%);
+    border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(56, 189, 248, 0.04);
+    padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; position: relative;
+  }
+  .tier-tag { display: flex; align-items: center; justify-content: space-between; }
+  .tag-pill { height: 10px; width: 120px; background: #334155; border-radius: 5px; }
+  .tag-status { width: 10px; height: 10px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px #10b981; }
+
+  /* Ingress Cards */
+  .ingress-row { display: flex; gap: 16px; }
+  .ingress-card {
+    flex: 1; height: 75px; background: #16202e; border-radius: 10px;
+    border: 1px solid rgba(56, 189, 248, 0.2); box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: space-around; padding: 0 16px;
+  }
+  .card-icon-hex { width: 32px; height: 32px; border-radius: 8px; background: rgba(56, 189, 248, 0.2); border: 1px solid #38bdf8; }
+  .card-bars { display: flex; flex-direction: column; gap: 6px; width: 130px; }
+  .c-bar-1 { height: 8px; background: #e2e8f0; border-radius: 4px; }
+  .c-bar-2 { height: 6px; width: 65%; background: #64748b; border-radius: 3px; }
+
+  /* Core Microservices Cluster (Spring Boot) */
+  .service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .service-card {
+    background: #141d2a; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.6); padding: 16px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .service-card.highlight { border-color: rgba(56, 189, 248, 0.35); background: #172436; }
+  .svc-header { display: flex; align-items: center; gap: 10px; }
+  .svc-dot { width: 12px; height: 12px; border-radius: 3px; background: #38bdf8; }
+  .svc-dot.green { background: #10b981; }
+  .svc-dot.amber { background: #f59e0b; }
+  .svc-dot.purple { background: #c084fc; }
+  .svc-metrics { display: flex; flex-direction: column; gap: 5px; }
+  .m-track { height: 6px; background: #1f2937; border-radius: 3px; overflow: hidden; }
+  .m-fill { height: 100%; border-radius: 3px; }
+
+  /* Conduits & Bus lines */
+  .bus-conduit {
+    width: 100%; height: 44px; background: #0c121b; border-radius: 10px;
+    border: 1px dashed rgba(56, 189, 248, 0.3); display: flex; align-items: center; justify-content: space-around;
+    padding: 0 20px;
+  }
+  .bus-packet {
+    width: 55px; height: 14px; background: rgba(56, 189, 248, 0.2); border-radius: 7px;
+    border: 1px solid #38bdf8; box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+  }
+  .bus-packet.orange {
+    background: rgba(249, 115, 22, 0.2); border-color: #f97316; box-shadow: 0 0 10px rgba(249, 115, 22, 0.4);
+  }
+
+  /* Streaming Tier (Kafka) */
+  .stream-tier {
+    width: 100%; background: linear-gradient(180deg, #121822 0%, #0d121a 100%);
+    border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+    padding: 18px 24px; display: flex; flex-direction: column; gap: 12px;
+  }
+  .stream-topics { display: flex; flex-direction: column; gap: 8px; }
+  .topic-lane {
+    height: 34px; background: #090d14; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.04);
+    display: flex; align-items: center; padding: 0 12px; gap: 10px;
+  }
+  .topic-badge { width: 60px; height: 14px; background: #1f2937; border-radius: 3px; }
+  .msg-dots { display: flex; gap: 8px; flex: 1; justify-content: space-around; }
+  .m-dot { width: 10px; height: 10px; border-radius: 50%; background: #38bdf8; box-shadow: 0 0 8px #38bdf8; }
+  .m-dot.green { background: #10b981; box-shadow: 0 0 8px #10b981; }
+  .m-dot.amber { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
+
+  /* Persistence Tier */
+  .db-row { display: flex; gap: 16px; justify-content: center; }
+  .db-cylinder-card {
+    flex: 1; height: 110px; background: #131a26; border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.07); box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+    display: flex; align-items: center; justify-content: center; gap: 16px; padding: 12px;
+  }
+  .db-disk-stack { display: flex; flex-direction: column; gap: 5px; width: 44px; }
+  .db-disk {
+    height: 12px; background: #253346; border-radius: 6px; border: 1px solid rgba(56, 189, 248, 0.3);
+  }
+
+  .safe-area-lower {
+    position: absolute; bottom: 0; left: 0; width: 1080px; height: 380px;
+    background: linear-gradient(180deg, transparent 0%, rgba(5, 7, 10, 0.5) 100%);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+  <div class="arch-bg"></div>
+  <div class="iso-grid"></div>
+  <div class="core-glow"></div>
+  <div class="stack-container">
+    <!-- 1. Gateway & Edge Tier -->
+    <div class="arch-tier">
+      <div class="tier-tag"><div class="tag-pill"></div><div class="tag-status"></div></div>
+      <div class="ingress-row">
+        <div class="ingress-card"><div class="card-icon-hex"></div><div class="card-bars"><div class="c-bar-1"></div><div class="c-bar-2"></div></div></div>
+        <div class="ingress-card"><div class="card-icon-hex" style="border-color:#10b981;background:rgba(16,185,129,0.2)"></div><div class="card-bars"><div class="c-bar-1"></div><div class="c-bar-2"></div></div></div>
+        <div class="ingress-card"><div class="card-icon-hex" style="border-color:#f59e0b;background:rgba(245,158,11,0.2)"></div><div class="card-bars"><div class="c-bar-1"></div><div class="c-bar-2"></div></div></div>
+      </div>
+    </div>
+    <!-- 2. Core Spring Boot Microservices Cluster -->
+    <div class="arch-tier" style="padding:22px 24px">
+      <div class="tier-tag"><div class="tag-pill" style="width:140px;background:#475569"></div><div class="tag-status"></div></div>
+      <div class="service-grid">
+        <div class="service-card highlight">
+          <div class="svc-header"><div class="svc-dot"></div><div class="c-bar-1" style="width:80px"></div></div>
+          <div class="svc-metrics"><div class="m-track"><div class="m-fill" style="width:75%;background:#38bdf8"></div></div><div class="m-track"><div class="m-fill" style="width:40%;background:#10b981"></div></div></div>
+        </div>
+        <div class="service-card">
+          <div class="svc-header"><div class="svc-dot green"></div><div class="c-bar-1" style="width:70px"></div></div>
+          <div class="svc-metrics"><div class="m-track"><div class="m-fill" style="width:85%;background:#10b981"></div></div><div class="m-track"><div class="m-fill" style="width:50%;background:#38bdf8"></div></div></div>
+        </div>
+        <div class="service-card">
+          <div class="svc-header"><div class="svc-dot amber"></div><div class="c-bar-1" style="width:85px"></div></div>
+          <div class="svc-metrics"><div class="m-track"><div class="m-fill" style="width:60%;background:#f59e0b"></div></div><div class="m-track"><div class="m-fill" style="width:30%;background:#10b981"></div></div></div>
+        </div>
+        <div class="service-card">
+          <div class="svc-header"><div class="svc-dot purple"></div><div class="c-bar-1" style="width:75px"></div></div>
+          <div class="svc-metrics"><div class="m-track"><div class="m-fill" style="width:90%;background:#c084fc"></div></div><div class="m-track"><div class="m-fill" style="width:65%;background:#38bdf8"></div></div></div>
+        </div>
+        <div class="service-card highlight">
+          <div class="svc-header"><div class="svc-dot"></div><div class="c-bar-1" style="width:90px"></div></div>
+          <div class="svc-metrics"><div class="m-track"><div class="m-fill" style="width:80%;background:#38bdf8"></div></div><div class="m-track"><div class="m-fill" style="width:55%;background:#10b981"></div></div></div>
+        </div>
+        <div class="service-card">
+          <div class="svc-header"><div class="svc-dot green"></div><div class="c-bar-1" style="width:65px"></div></div>
+          <div class="svc-metrics"><div class="m-track"><div class="m-fill" style="width:70%;background:#10b981"></div></div><div class="m-track"><div class="m-fill" style="width:45%;background:#f59e0b"></div></div></div>
+        </div>
+      </div>
+    </div>
+    <!-- 3. Distributed Event Streaming (Kafka) -->
+    <div class="stream-tier">
+      <div class="tier-tag"><div class="tag-pill" style="width:130px"></div><div class="tag-status" style="background:#38bdf8;box-shadow:0 0 10px #38bdf8"></div></div>
+      <div class="stream-topics">
+        <div class="topic-lane"><div class="topic-badge"></div><div class="msg-dots"><div class="m-dot"></div><div class="m-dot green"></div><div class="m-dot"></div><div class="m-dot amber"></div><div class="m-dot green"></div><div class="m-dot"></div></div></div>
+        <div class="topic-lane"><div class="topic-badge" style="background:#263346"></div><div class="msg-dots"><div class="m-dot green"></div><div class="m-dot"></div><div class="m-dot amber"></div><div class="m-dot"></div><div class="m-dot green"></div><div class="m-dot"></div></div></div>
+      </div>
+    </div>
+    <!-- 4. Distributed Persistence Tier -->
+    <div class="arch-tier">
+      <div class="tier-tag"><div class="tag-pill" style="width:110px"></div><div class="tag-status"></div></div>
+      <div class="db-row">
+        <div class="db-cylinder-card"><div class="db-disk-stack"><div class="db-disk"></div><div class="db-disk"></div><div class="db-disk"></div></div><div class="card-bars"><div class="c-bar-1"></div><div class="c-bar-2"></div></div></div>
+        <div class="db-cylinder-card"><div class="db-disk-stack"><div class="db-disk" style="border-color:#10b981"></div><div class="db-disk" style="border-color:#10b981"></div><div class="db-disk" style="border-color:#10b981"></div></div><div class="card-bars"><div class="c-bar-1"></div><div class="c-bar-2"></div></div></div>
+        <div class="db-cylinder-card"><div class="db-disk-stack"><div class="db-disk" style="border-color:#f59e0b"></div><div class="db-disk" style="border-color:#f59e0b"></div><div class="db-disk" style="border-color:#f59e0b"></div></div><div class="card-bars"><div class="c-bar-1"></div><div class="c-bar-2"></div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="safe-area-lower"></div>
+</body>
+</html>

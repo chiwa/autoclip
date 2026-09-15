@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1080px;
+    height: 1920px;
+    background: #090d16;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "JetBrains Mono", monospace;
+    color: #e2e8f0;
+    position: relative;
+  }
+  
+  /* Deep room atmosphere & subtle wall lighting */
+  .room-bg {
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(circle at 540px 300px, rgba(30, 58, 138, 0.18) 0%, transparent 65%),
+      radial-gradient(circle at 150px 800px, rgba(14, 165, 233, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 900px 800px, rgba(245, 158, 11, 0.06) 0%, transparent 50%),
+      linear-gradient(180deg, #090d16 0%, #0b1120 60%, #05070c 100%);
+  }
+
+  /* Sound acoustic wall panels behind desk */
+  .wall-texture {
+    position: absolute;
+    top: 0; left: 0; width: 1080px; height: 1100px;
+    background-image: repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 40px, transparent 40px, transparent 80px);
+    opacity: 0.8;
+  }
+
+  /* Main Ultra-wide Curved Monitor Frame */
+  .monitor-frame {
+    position: absolute;
+    top: 60px;
+    left: 40px;
+    width: 1000px;
+    height: 1120px;
+    background: #111827;
+    border-radius: 16px;
+    box-shadow: 
+      0 30px 80px rgba(0,0,0,0.85),
+      0 0 0 1px rgba(255,255,255,0.08),
+      0 0 40px rgba(56, 189, 248, 0.12);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 10;
+  }
+
+  /* IDE Window Header */
+  .ide-header {
+    height: 48px;
+    background: #0f172a;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 12px;
+  }
+  .window-dots {
+    display: flex;
+    gap: 8px;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot-red { background: #ef4444; }
+  .dot-yellow { background: #f59e0b; }
+  .dot-green { background: #10b981; }
+
+  .ide-tabs {
+    display: flex;
+    margin-left: 20px;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .tab {
+    padding: 8px 18px;
+    border-radius: 6px 6px 0 0;
+    color: #94a3b8;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tab.active {
+    background: #1e293b;
+    color: #38bdf8;
+    border-top: 2px solid #38bdf8;
+  }
+  .java-badge {
+    color: #f97316;
+    font-weight: 700;
+  }
+
+  /* IDE Body: Sidebar + Editor + Telemetry */
+  .ide-body {
+    flex: 1;
+    display: flex;
+    background: #0a0f1d;
+  }
+
+  .ide-sidebar {
+    width: 220px;
+    background: #0c1322;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    padding: 16px 12px;
+    font-size: 12px;
+    color: #64748b;
+  }
+  .project-name {
+    font-weight: 700;
+    color: #cbd5e1;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 11px;
+  }
+  .file-tree-item {
+    padding: 5px 8px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #94a3b8;
+    margin-bottom: 2px;
+  }
+  .file-tree-item.active {
+    background: rgba(56, 189, 248, 0.12);
+    color: #38bdf8;
+    font-weight: 600;
+  }
+
+  /* Code Editor */
+  .code-editor {
+    flex: 1;
+    padding: 20px 24px;
+    font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    color: #e2e8f0;
+    overflow: hidden;
+  }
+  .line { display: flex; gap: 16px; }
+  .line-num { color: #334155; width: 28px; text-align: right; user-select: none; }
+  .kw { color: #f43f5e; font-weight: 600; }
+  .type { color: #38bdf8; font-weight: 600; }
+  .anno { color: #eab308; }
+  .fn { color: #60a5fa; }
+  .str { color: #34d399; }
+  .com { color: #475569; font-style: italic; }
+  .var { color: #f1f5f9; }
+
+  /* Right Telemetry Pane */
+  .ide-telemetry {
+    width: 260px;
+    background: #090e1a;
+    border-left: 1px solid rgba(255,255,255,0.06);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .metric-card {
+    background: #0f172a;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 12px;
+  }
+  .metric-title {
+    font-size: 11px;
+    color: #64748b;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .metric-val {
+    font-size: 22px;
+    font-weight: 700;
+    color: #38bdf8;
+  }
+  .metric-sub {
+    font-size: 11px;
+    color: #10b981;
+    margin-top: 2px;
+  }
+
+  /* Monitor Stand & Soundbar */
+  .monitor-stand {
+    position: absolute;
+    top: 1180px;
+    left: 490px;
+    width: 100px;
+    height: 90px;
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    z-index: 5;
+  }
+  .monitor-base {
+    position: absolute;
+    top: 1260px;
+    left: 360px;
+    width: 360px;
+    height: 18px;
+    background: #1e293b;
+    border-radius: 9px;
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.9);
+    z-index: 6;
+  }
+
+  /* Desk Mat & Mechanical Keyboard Setup */
+  .desk-surface {
+    position: absolute;
+    top: 1240px;
+    left: 0;
+    width: 1080px;
+    height: 680px;
+    background: linear-gradient(180deg, #090d16 0%, #060911 50%, #020306 100%);
+    border-top: 1px solid rgba(255,255,255,0.05);
+    z-index: 4;
+  }
+  
+  .desk-mat {
+    position: absolute;
+    top: 1290px;
+    left: 60px;
+    width: 960px;
+    height: 480px;
+    background: #0d1322;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.04);
+    box-shadow: inset 0 2px 10px rgba(0,0,0,0.6), 0 20px 50px rgba(0,0,0,0.8);
+    z-index: 7;
+  }
+
+  /* Realistic Mechanical Keyboard */
+  .keyboard-frame {
+    position: absolute;
+    top: 1330px;
+    left: 140px;
+    width: 600px;
+    height: 200px;
+    background: #111827;
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.05);
+    z-index: 8;
+  }
+  .key-rows { display: flex; flex-direction: column; gap: 5px; }
+  .key-row { display: flex; gap: 5px; }
+  .key {
+    height: 28px;
+    background: #1e293b;
+    border-radius: 4px;
+    box-shadow: 0 3px 0 #0f172a;
+    flex: 1;
+    border: 1px solid rgba(255,255,255,0.03);
+  }
+  .key.space { flex: 6; background: #243247; }
+  .key.accent { background: #0284c7; box-shadow: 0 3px 0 #0369a1; }
+  .key.mod { flex: 1.5; background: #162032; }
+
+  /* Wrist Rest */
+  .wrist-rest {
+    position: absolute;
+    top: 1540px;
+    left: 140px;
+    width: 600px;
+    height: 45px;
+    background: #0b101c;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.03);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.7);
+    z-index: 8;
+  }
+
+  /* Mouse on Right */
+  .mouse {
+    position: absolute;
+    top: 1370px;
+    left: 810px;
+    width: 80px;
+    height: 140px;
+    background: radial-gradient(circle at 40px 40px, #1e293b 0%, #0f172a 100%);
+    border-radius: 40px;
+    box-shadow: 0 15px 30px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.06);
+    z-index: 8;
+  }
+  .mouse-wheel {
+    position: absolute;
+    top: 25px;
+    left: 36px;
+    width: 8px;
+    height: 22px;
+    background: #38bdf8;
+    border-radius: 4px;
+  }
+
+  /* Ceramic Coffee Mug on Coaster */
+  .coffee-mug {
+    position: absolute;
+    top: 1330px;
+    left: 910px;
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #2d1810 40%, #522d1e 75%, #1e293b 100%);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.7), 0 0 0 3px #334155;
+    z-index: 8;
+  }
+
+  /* Subtitle Safe Vignette Gradient at very bottom */
+  .subtitle-vignette {
+    position: absolute;
+    bottom: 0; left: 0; width: 1080px; height: 350px;
+    background: linear-gradient(180deg, transparent 0%, rgba(3, 7, 18, 0.7) 60%, rgba(3, 7, 18, 0.95) 100%);
+    pointer-events: none;
+    z-index: 20;
+  }
+</style>
+</head>
+<body>
+  <div class="room-bg"></div>
+  <div class="wall-texture"></div>
+
+  <!-- Big Curvature Monitor -->
+  <div class="monitor-frame">
+    <div class="ide-header">
+      <div class="window-dots">
+        <div class="dot dot-red"></div>
+        <div class="dot dot-yellow"></div>
+        <div class="dot dot-green"></div>
+      </div>
+      <div class="ide-tabs">
+        <div class="tab active"><span class="java-badge">J</span> CoreBankingEngine.java</div>
+        <div class="tab">TransactionPipeline.java</div>
+        <div class="tab">VirtualThreadCluster.java</div>
+      </div>
+    </div>
+
+    <div class="ide-body">
+      <!-- File Explorer -->
+      <div class="ide-sidebar">
+        <div class="project-name">enterprise-banking</div>
+        <div class="file-tree-item">src/main/java</div>
+        <div class="file-tree-item">├── domain</div>
+        <div class="file-tree-item active">│   ├── CoreBankingEngine.java</div>
+        <div class="file-tree-item">│   └── AccountAggregate.java</div>
+        <div class="file-tree-item">├── infrastructure</div>
+        <div class="file-tree-item">│   ├── KafkaEventStream.java</div>
+        <div class="file-tree-item">│   └── ZGCMemoryPolicy.java</div>
+        <div class="file-tree-item">└── pom.xml</div>
+      </div>
+
+      <!-- Code Content with Authentic Java 21 -->
+      <div class="code-editor">
+        <div class="line"><span class="line-num">1</span><span><span class="kw">package</span> <span class="var">com.enterprise.banking.core;</span></span></div>
+        <div class="line"><span class="line-num">2</span><span></span></div>
+        <div class="line"><span class="line-num">3</span><span><span class="anno">@Service</span></span></div>
+        <div class="line"><span class="line-num">4</span><span><span class="anno">@RequiredArgsConstructor</span></span></div>
+        <div class="line"><span class="line-num">5</span><span><span class="kw">public class</span> <span class="type">CoreBankingEngine</span> {</span></div>
+        <div class="line"><span class="line-num">6</span><span>&nbsp;&nbsp;<span class="kw">private final</span> <span class="type">TransactionLedger</span> <span class="var">ledger;</span></span></div>
+        <div class="line"><span class="line-num">7</span><span>&nbsp;&nbsp;<span class="kw">private final</span> <span class="type">EventPublisher</span> <span class="var">eventBus;</span></span></div>
+        <div class="line"><span class="line-num">8</span><span></span></div>
+        <div class="line"><span class="line-num">9</span><span>&nbsp;&nbsp;<span class="com">// High-throughput virtual thread transaction executor</span></span></div>
+        <div class="line"><span class="line-num">10</span><span>&nbsp;&nbsp;<span class="anno">@Transactional</span>(<span class="var">isolation</span> = <span class="type">SERIALIZABLE</span>)</span></div>
+        <div class="line"><span class="line-num">11</span><span>&nbsp;&nbsp;<span class="kw">public</span> <span class="type">PaymentReceipt</span> <span class="fn">processTransfer</span>(<span class="type">TransferRequest</span> <span class="var">req</span>) {</span></div>
+        <div class="line"><span class="line-num">12</span><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">try</span> (<span class="kw">var</span> <span class="var">scope</span> = <span class="kw">new</span> <span class="type">StructuredTaskScope</span>.<span class="type">ShutdownOnFailure</span>()) {</span></div>
+        <div class="line"><span class="line-num">13</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="type">Subtask</span>&lt;<span class="type">Boolean</span>&gt; <span class="var">auth</span> = <span class="var">scope</span>.<span class="fn">fork</span>(() -&gt; <span class="fn">verifyAccount</span>(<span class="var">req</span>.<span class="fn">from</span>()));</span></div>
+        <div class="line"><span class="line-num">14</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="type">Subtask</span>&lt;<span class="type">RiskScore</span>&gt; <span class="var">risk</span> = <span class="var">scope</span>.<span class="fn">fork</span>(() -&gt; <span class="fn">evaluateRisk</span>(<span class="var">req</span>));</span></div>
+        <div class="line"><span class="line-num">15</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">scope</span>.<span class="fn">join</span>().<span class="fn">throwIfFailed</span>();</span></div>
+        <div class="line"><span class="line-num">16</span><span></span></div>
+        <div class="line"><span class="line-num">17</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">if</span> (<span class="var">risk</span>.<span class="fn">get</span>().<span class="fn">isApproved</span>() &amp;&amp; <span class="var">auth</span>.<span class="fn">get</span>()) {</span></div>
+        <div class="line"><span class="line-num">18</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="type">LedgerEntry</span> <span class="var">entry</span> = <span class="var">ledger</span>.<span class="fn">commit</span>(<span class="var">req</span>.<span class="fn">amount</span>());</span></div>
+        <div class="line"><span class="line-num">19</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="var">eventBus</span>.<span class="fn">publish</span>(<span class="kw">new</span> <span class="type">TransferCompletedEvent</span>(<span class="var">entry</span>));</span></div>
+        <div class="line"><span class="line-num">20</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="type">PaymentReceipt</span>.<span class="fn">success</span>(<span class="var">entry</span>.<span class="fn">id</span>());</span></div>
+        <div class="line"><span class="line-num">21</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span></div>
+        <div class="line"><span class="line-num">22</span><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="type">PaymentReceipt</span>.<span class="fn">declined</span>(<span class="str">"RISK_THRESHOLD_EXCEEDED"</span>);</span></div>
+        <div class="line"><span class="line-num">23</span><span>&nbsp;&nbsp;&nbsp;&nbsp;}</span></div>
+        <div class="line"><span class="line-num">24</span><span>&nbsp;&nbsp;}</span></div>
+        <div class="line"><span class="line-num">25</span><span>}</span></div>
+      </div>
+
+      <!-- Right Telemetry Panel -->
+      <div class="ide-telemetry">
+        <div class="metric-card">
+          <div class="metric-title">JVM RUNTIME</div>
+          <div class="metric-val">JDK 21 LTS</div>
+          <div class="metric-sub">● HotSpot 64-Bit Server</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">VIRTUAL THREADS</div>
+          <div class="metric-val">1,240,000</div>
+          <div class="metric-sub">▲ 0.04% CPU overhead</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">THROUGHPUT</div>
+          <div class="metric-val">485,200/s</div>
+          <div class="metric-sub">● p99 latency 1.8ms</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">GC PAUSE (ZGC)</div>
+          <div class="metric-val">&lt; 0.42 ms</div>
+          <div class="metric-sub">● Sub-millisecond target</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="monitor-stand"></div>
+  <div class="monitor-base"></div>
+
+  <!-- Desk Surface & Hardware -->
+  <div class="desk-surface"></div>
+  <div class="desk-mat"></div>
+
+  <div class="keyboard-frame">
+    <div class="key-rows">
+      <div class="key-row"><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key mod"></div></div>
+      <div class="key-row"><div class="key mod"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key mod"></div></div>
+      <div class="key-row"><div class="key mod"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key accent"></div></div>
+      <div class="key-row"><div class="key mod"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key"></div><div class="key mod"></div></div>
+      <div class="key-row"><div class="key mod"></div><div class="key mod"></div><div class="key mod"></div><div class="key space"></div><div class="key mod"></div><div class="key mod"></div><div class="key mod"></div></div>
+    </div>
+  </div>
+  <div class="wrist-rest"></div>
+
+  <div class="mouse">
+    <div class="mouse-wheel"></div>
+  </div>
+
+  <div class="coffee-mug"></div>
+
+  <div class="subtitle-vignette"></div>
+</body>
+</html>

@@ -1,0 +1,122 @@
+{
+  "project": {
+    "id": "mamase-milky-way-andromeda-merger-reel-v1",
+    "title": "เมื่อ Milky Way กับ Andromeda กำลังจะรวมกัน!",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: \"เฮ้ย... จริงดิ?\" Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "รู้ไหมครับว่า... ท้องฟ้าที่เราเห็นอยู่ทุกคืน กำลังจะหายไปตลอดกาล เพราะมีกาแล็กซียักษ์กำลังพุ่งตรงมาชนทางช้างเผือกของเรา!",
+      "tts_text": "รู้ไหมครับว่า... ท้องฟ้าที่เราเห็นอยู่ทุกคืน กำลังจะหายไปตลอดกาล เพราะมีกาแล็กซียักษ์กำลังพุ่งตรงมาชนทางช้างเผือกของเรา!",
+      "subtitle": "ท้องฟ้าที่เราเห็นอยู่ทุกคืน...\nกำลังจะเปลี่ยนไปตลอดกาล!",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic vertical master shot of two colliding spiral galaxies swirling across starry night sky above a mountain ridge with explorer pointing up and corgi dog, subtle slow push-in",
+        "negative_prompt": "text distortion, face distortion, flicker, sudden movement, watermark, logo",
+        "seed": 2026,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-cosmic-collision-course",
+      "image": "images/scene-02-cosmic-collision-course.png",
+      "narration": "นั่นคือกาแล็กซีแอนโดรเมดาครับ มันกำลังพุ่งเข้าหาเราด้วยความเร็วถึง 110 กิโลเมตรต่อวินาที และคาดว่าจะปะทะกันในอีกประมาณ 4.5 พันล้านปีข้างหน้า!",
+      "tts_text": "นั่นคือกาแล็กซี แอนโดรเมดา ครับ มันกำลังพุ่งเข้าหาเราด้วยความเร็วถึง หนึ่งร้อยสิบกิโลเมตรต่อวินาที และคาดว่าจะปะทะกันในอีกประมาณ สี่จุดห้าพันล้านปีข้างหน้า!",
+      "subtitle": "พุ่งเข้าหากันด้วยความเร็ว 110 กม./วินาที\nจะเริ่มปะทะกันในอีก 4.5 พันล้านปี!",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-paradox-no-direct-hits",
+      "image": "images/scene-03-paradox-no-direct-hits.png",
+      "narration": "คำว่า 'กาแล็กซีชนกัน' ฟังดูเหมือนหายนะ... แต่เชื่อไหมครับว่า โอกาสที่ดาวฤกษ์หรือโลกของเราจะชนกับดาวดวงอื่น มีแทบจะเป็นศูนย์!",
+      "tts_text": "คำว่า กาแล็กซีชนกัน ฟังดูเหมือนหายนะ... แต่เชื่อไหมครับว่า โอกาสที่ดาวฤกษ์หรือโลกของเราจะชนกับดาวดวงอื่น มีแทบจะเป็นศูนย์!",
+      "subtitle": "ฟังดูเหมือนวันสิ้นโลก...\nแต่ดาวแทบไม่มีโอกาสชนกันเลยแม้แต่ดวงเดียว!",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-04-empty-void-between-stars",
+      "image": "images/scene-04-empty-void-between-stars.png",
+      "narration": "เพราะในกาแล็กซี พื้นที่ส่วนใหญ่คือความว่างเปล่าอันไพศาล ระยะห่างระหว่างดวงดาวไกลเป็นล้านล้านกิโลเมตร พวกมันจึงแค่เคลื่อนที่สวนผ่านกันเหมือนเมฆหมอกสองก้อน",
+      "tts_text": "เพราะในกาแล็กซี พื้นที่ส่วนใหญ่คือความว่างเปล่าอันไพศาล ระยะห่างระหว่างดวงดาวไกลเป็นล้านล้านกิโลเมตร พวกมันจึงแค่เคลื่อนที่สวนผ่านกันเหมือนเมฆหมอกสองก้อน",
+      "subtitle": "อวกาศว่างเปล่ามหาศาล\nดวงดาวจึงลอยสวนทางกันเหมือนเมฆหมอก",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-05-future-night-sky-starburst",
+      "image": "images/scene-05-future-night-sky-starburst.png",
+      "narration": "แต่สิ่งที่น่าทึ่งที่สุดคือท้องฟ้าครับ! ในอีก 3 พันล้านปี แอนโดรเมดาจะขยายใหญ่จนเต็มตา และเมื่อก๊าซถูกอัดแน่น จะเกิดการจุดประกายดาวฤกษ์ใหม่นับล้านดวงสว่างไสวไปทั่วฟ้า!",
+      "tts_text": "แต่สิ่งที่น่าทึ่งที่สุดคือท้องฟ้าครับ! ในอีก สามพันล้านปี แอนโดรเมดาจะขยายใหญ่จนเต็มตา และเมื่อก๊าซถูกอัดแน่น จะเกิดการจุดประกายดาวฤกษ์ใหม่นับล้านดวงสว่างไสวไปทั่วฟ้า!",
+      "subtitle": "แอนโดรเมดาจะสว่างเต็มผืนฟ้า\nเกิดดาวฤกษ์ใหม่นับล้านดวงระยิบระยับ!",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-06-black-hole-dance-merger",
+      "image": "images/scene-06-black-hole-dance-merger.png",
+      "narration": "จากนั้น หลุมดำมวลยิ่งยวดใจกลางของทั้งสองกาแล็กซี จะค่อยๆ หมุนวนเข้าหากัน ปล่อยคลื่นความโน้มถ่วงอันมหาศาล ก่อนจะหลอมรวมเป็นหลุมดำยักษ์หนึ่งเดียว",
+      "tts_text": "จากนั้น หลุมดำมวลยิ่งยวดใจกลางของทั้งสองกาแล็กซี จะค่อยๆ หมุนวนเข้าหากัน ปล่อยคลื่นความโน้มถ่วงอันมหาศาล ก่อนจะหลอมรวมเป็นหลุมดำยักษ์หนึ่งเดียว",
+      "subtitle": "หลุมดำใจกลางสองกาแล็กซี\nจะเต้นรำและรวมกันเป็นหนึ่งเดียว",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-07-birth-of-milkomeda",
+      "image": "images/scene-07-birth-of-milkomeda.png",
+      "narration": "และในที่สุด สองกาแล็กซีจะรวมตัวกลายเป็นกาแล็กซีทรงรีขนาดยักษ์แห่งใหม่ ที่มีชื่อว่า 'มิลโคเมดา'... เตือนให้เรารู้ว่า ในจักรวาล การชนกันไม่ใช่จุดจบ แต่คือการเกิดใหม่อันงดงามครับ",
+      "tts_text": "และในที่สุด สองกาแล็กซีจะรวมตัวกลายเป็นกาแล็กซีทรงรีขนาดยักษ์แห่งใหม่ ที่มีชื่อว่า มิลโคเมดา... เตือนให้เรารู้ว่า ในจักรวาล การชนกันไม่ใช่จุดจบ แต่คือการเกิดใหม่อันงดงามครับ",
+      "subtitle": "กำเนิดกาแล็กซียักษ์ใหม่ 'มิลโคเมดา'\nการชนกันในจักรวาล คือการเกิดใหม่อันงดงาม",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-08-brand-outro",
+      "image": "images/scene-08-brand-outro.png",
+      "narration": "ถ้าชอบเรื่องราวดาราศาสตร์แบบนี้ กดติดตาม แล้วมาร่วมค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวดาราศาสตร์แบบนี้ กดติดตาม แล้วมาร่วมค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "show_subtitle": true,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

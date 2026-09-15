@@ -1,0 +1,128 @@
+{
+  "project": {
+    "resolution": "1920x1080",
+    "fps": 30,
+    "title": "จักรวรรดิขอมยิ่งใหญ่ขนาดไหน…แล้วทำไมหายไป?"
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.10
+  },
+  "scenes": [
+    {
+      "image": "images/scene-01.png",
+      "narration": "จักรวรรดิขอมยิ่งใหญ่ขนาดไหน... แล้วทำไมจู่ๆ ถึงหายไป?",
+      "tts_text": "จักรวรรดิขอมยิ่งใหญ่ขนาดไหน... แล้วทำไมจู่ๆ ถึงหายไป?",
+      "motion": "zoom_in",
+      "wan": "Cinematic slow push in on the presenter. Dark monsoon clouds subtly moving in the background, contrasting with the golden sunlight on Angkor Wat.",
+      "lip_sync": true
+    },
+    {
+      "image": "images/scene-02.png",
+      "narration": "ย้อนกลับไปนับพันปีก่อน เอเชียตะวันออกเฉียงใต้ยังไม่มีเส้นพรมแดนแบบที่เราคุ้นเคย ผู้คนและวัฒนธรรมไหลเวียนไปตามสายน้ำและผืนป่า",
+      "tts_text": "ย้อนกลับไปนับพันปีก่อน เอเชียตะวันออกเฉียงใต้ยังไม่มีเส้นพรมแดนแบบที่เราคุ้นเคย ผู้คนและวัฒนธรรมไหลเวียนไปตามสายน้ำและผืนป่า",
+      "motion": "pan_right",
+      "wan": "Slow cinematic pan right over a lush tropical river with ancient merchant boats and diverse travelers."
+    },
+    {
+      "image": "images/scene-03.png",
+      "narration": "จนกระทั่งศตวรรษที่ 9 พระเจ้าชัยวรมันที่ 2 ได้สถาปนาจักรวรรดิขึ้นบนยอดเขาพนมกุเลน จุดเริ่มต้นของมหาอำนาจที่จะเปลี่ยนแปลงภูมิภาคนี้ไปตลอดกาล",
+      "tts_text": "จนกระทั่งศตวรรษที่เก้า พระเจ้าชัยวรมันที่สอง ได้สถาปนาจักรวรรดิขึ้นบนยอดเขาพนมกุเลน จุดเริ่มต้นของมหาอำนาจที่จะเปลี่ยนแปลงภูมิภาคนี้ไปตลอดกาล",
+      "motion": "zoom_in",
+      "wan": "Cinematic slow zoom out from a high vantage point on Kulen Mountain, revealing a vast pristine plain below under dramatic sunlight."
+    },
+    {
+      "image": "images/scene-04.png",
+      "narration": "เมืองหลวงอย่าง 'พระนคร' หรือ Angkor เติบโตจนกลายเป็นมหานครที่ใหญ่ที่สุดในโลกยุคก่อนอุตสาหกรรม ใหญ่กว่าลอนดอนในยุคเดียวกันถึงหลายเท่าตัว!",
+      "tts_text": "เมืองหลวงอย่าง 'พระนคร' หรืออังกอร์ เติบโตจนกลายเป็นมหานครที่ใหญ่ที่สุดในโลกยุคก่อนอุตสาหกรรม ใหญ่กว่าลอนดอนในยุคเดียวกันถึงหลายเท่าตัว!",
+      "motion": "slow_pan_left",
+      "wan": "Epic wide drone-like shot slowly panning left over the sprawling ancient city of Angkor at its absolute peak, filled with wooden houses, massive temples, and thousands of people."
+    },
+    {
+      "image": "images/scene-05.png",
+      "narration": "เคล็ดลับความยิ่งใหญ่ไม่ใช่แค่กำลังคน แต่คือ 'น้ำ' โครงข่ายคลองและบารายขนาดยักษ์ เปลี่ยนพื้นที่ราบให้เป็นอู่ข้าวอู่น้ำที่หล่อเลี้ยงคนนับล้าน",
+      "tts_text": "เคล็ดลับความยิ่งใหญ่ไม่ใช่แค่กำลังคน แต่คือ 'น้ำ' โครงข่ายคลองและบารายขนาดยักษ์ เปลี่ยนพื้นที่ราบให้เป็นอู่ข้าวอู่น้ำที่หล่อเลี้ยงคนนับล้าน",
+      "motion": "pan_up",
+      "wan": "Smooth camera glide over an immense man-made reservoir (baray) reflecting the sun, surrounded by lush rice fields and intricate canal systems."
+    },
+    {
+      "image": "images/scene-06.png",
+      "narration": "ความมั่งคั่งนี้นำไปสู่การสร้าง 'นครวัด' ปราสาทหินทรายที่ใช้หินมากกว่ามหาพีระมิดแห่งกิซ่า แกะสลักอย่างวิจิตรบรรจงทุกตารางนิ้ว",
+      "tts_text": "ความมั่งคั่งนี้นำไปสู่การสร้าง 'นครวัด' ปราสาทหินทรายที่ใช้หินมากกว่ามหาพีระมิดแห่งกิซ่า แกะสลักอย่างวิจิตรบรรจงทุกตารางนิ้ว",
+      "motion": "zoom_in",
+      "wan": "Dynamic low-angle shot showing thousands of skilled artisans and workers moving massive sandstone blocks to construct Angkor Wat. Sunlight flares through the rising stone pillars."
+    },
+    {
+      "image": "images/scene-07.png",
+      "narration": "ในยุคของพระเจ้าสุริยวรมันที่ 2 นครวัดตั้งตระหง่านในฐานะศูนย์กลางจักรวาลบนโลกมนุษย์ เป็นสัญลักษณ์ของอำนาจที่ไม่มีใครเทียบได้",
+      "tts_text": "ในยุคของพระเจ้าสุริยวรมันที่สอง นครวัดตั้งตระหง่านในฐานะศูนย์กลางจักรวาลบนโลกมนุษย์ เป็นสัญลักษณ์ของอำนาจที่ไม่มีใครเทียบได้",
+      "motion": "zoom_out",
+      "wan": "Majestic wide shot pulling back slowly to reveal the completed Angkor Wat in all its glory, with a grand royal procession walking along the massive stone causeway."
+    },
+    {
+      "image": "images/scene-08.png",
+      "narration": "หากเรามองดูภาพสลักบนระเบียงหิน เราจะเห็นภาพชีวิต การเดินทัพ และผู้คนที่ขับเคลื่อนจักรวรรดินี้... ราวกับมีชีวิตจริง",
+      "tts_text": "หากเรามองดูภาพสลักบนระเบียงหิน เราจะเห็นภาพชีวิต การเดินทัพ และผู้คนที่ขับเคลื่อนจักรวรรดินี้... ราวกับมีชีวิตจริง",
+      "motion": "pan_right",
+      "wan": "Camera tracks smoothly along a highly detailed sandstone bas-relief of soldiers marching. The stone carvings subtly blend into living, moving ancient Khmer soldiers in real life."
+    },
+    {
+      "image": "images/scene-09.png",
+      "narration": "แต่ความยิ่งใหญ่ก็ดึงดูดศัตรู... ในศตวรรษที่ 12 กองทัพจามปะทะเดือดกับอาณาจักรขอมทางน้ำ และตีเมืองพระนครแตกได้สำเร็จ",
+      "tts_text": "แต่ความยิ่งใหญ่ก็ดึงดูดศัตรู... ในศตวรรษที่สิบสอง กองทัพจามปะทะเดือดกับอาณาจักรขอมทางน้ำ และตีเมืองพระนครแตกได้สำเร็จ",
+      "motion": "zoom_in",
+      "wan": "Intense cinematic shot of ancient naval warfare on the Tonle Sap lake. War boats clash amidst fire and smoke, with the glowing city of Angkor in the background under threat."
+    },
+    {
+      "image": "images/scene-10.png",
+      "narration": "ทว่า พระเจ้าชัยวรมันที่ 7 ก็กอบกู้แผ่นดินคืนมาได้ พระองค์สร้าง 'นครธม' และ 'ปราสาทบายน' ฟื้นฟูจักรวรรดิให้ยิ่งใหญ่กว่าเดิม",
+      "tts_text": "ทว่า พระเจ้าชัยวรมันที่เจ็ด ก็กอบกู้แผ่นดินคืนมาได้ พระองค์สร้าง 'นครธม' และ 'ปราสาทบายน' ฟื้นฟูจักรวรรดิให้ยิ่งใหญ่กว่าเดิม",
+      "motion": "slow_pan_left",
+      "wan": "Golden morning light reveals the massive stone faces of the Bayon temple being constructed. People travel across the Naga bridge, signifying a rebirth of the empire."
+    },
+    {
+      "image": "images/scene-11.png",
+      "narration": "ในยุคนั้น เมืองพระนครคึกคักไปด้วยพ่อค้าจากจีน อินเดีย และแดนไกล เป็นศูนย์กลางเศรษฐกิจและพหุวัฒนธรรมที่ซับซ้อน",
+      "tts_text": "ในยุคนั้น เมืองพระนครคึกคักไปด้วยพ่อค้าจากจีน อินเดีย และแดนไกล เป็นศูนย์กลางเศรษฐกิจและพหุวัฒนธรรมที่ซับซ้อน",
+      "motion": "pan_right",
+      "wan": "Bustling ancient marketplace scene filled with diverse traders, Chinese merchants, Khmer artisans, and farmers exchanging goods under warm sunlight."
+    },
+    {
+      "image": "images/scene-12.png",
+      "narration": "แต่โลกกำลังเปลี่ยนไป... การค้าทางทะเลเริ่มสำคัญกว่าเส้นทางบก ศูนย์อำนาจใหม่ๆ รอบข้างเริ่มก่อตัวและสร้างแรงกดดันมหาศาล",
+      "tts_text": "แต่โลกกำลังเปลี่ยนไป... การค้าทางทะเลเริ่มสำคัญกว่าเส้นทางบก ศูนย์อำนาจใหม่ๆ รอบข้างเริ่มก่อตัวและสร้างแรงกดดันมหาศาล",
+      "motion": "zoom_out",
+      "wan": "Cinematic shot of merchant ships departing down a wide river towards the sea, leaving the inland capital behind. Troops march along a dirt road in the foreground."
+    },
+    {
+      "image": "images/scene-13.png",
+      "narration": "ซ้ำร้าย ภัยธรรมชาติก็มาเยือน ภัยแล้งยาวนานหลายทศวรรษทำให้บารายที่เคยเต็มเปี่ยมเหือดแห้ง ระบบชลประทานที่เคยหล่อเลี้ยงคนนับล้านเริ่มล้มเหลว",
+      "tts_text": "ซ้ำร้าย ภัยธรรมชาติก็มาเยือน ภัยแล้งยาวนานหลายทศวรรษทำให้บารายที่เคยเต็มเปี่ยมเหือดแห้ง ระบบชลประทานที่เคยหล่อเลี้ยงคนนับล้านเริ่มล้มเหลว",
+      "motion": "zoom_in",
+      "wan": "Harsh, dry sunlight beating down on a cracked, empty reservoir bed. The once-thriving canals are dry, and the sandstone structures look dusty and strained."
+    },
+    {
+      "image": "images/scene-14.png",
+      "narration": "และเมื่อฝนมรสุมรุนแรงพัดกระหน่ำซ้ำ โครงข่ายน้ำที่ทรุดโทรมก็พังทลาย... มหานครแห่งนี้ไม่สามารถรับน้ำหนักตัวเองได้อีกต่อไป",
+      "tts_text": "และเมื่อฝนมรสุมรุนแรงพัดกระหน่ำซ้ำ โครงข่ายน้ำที่ทรุดโทรมก็พังทลาย... มหานครแห่งนี้ไม่สามารถรับน้ำหนักตัวเองได้อีกต่อไป",
+      "motion": "pan_up",
+      "wan": "Violent monsoon rain pours down. Flash floods violently erode massive earthen dikes and overwhelm the ancient sandstone water channels, causing them to collapse."
+    },
+    {
+      "image": "images/scene-15.png",
+      "narration": "จักรวรรดิขอมไม่ได้ 'หายสาบสูญ' ไปไหนครับ ผู้คนแค่ย้ายศูนย์กลางอำนาจลงใต้ ทิ้งนครวัดให้กลายเป็นมรดกที่ธรรมชาติโอบกอด... รอวันให้โลกกลับมาค้นพบอีกครั้ง",
+      "tts_text": "จักรวรรดิขอมไม่ได้ 'หายสาบสูญ' ไปไหนครับ ผู้คนแค่ย้ายศูนย์กลางอำนาจลงใต้ ทิ้งนครวัดให้กลายเป็นมรดกที่ธรรมชาติโอบกอด... รอวันให้โลกกลับมาค้นพบอีกครั้ง",
+      "motion": "zoom_out",
+      "wan": "Peaceful cinematic shot of Angkor Wat gradually being embraced by lush jungle vegetation. Sunlight pierces through the morning mist. Buddhist monks walk peacefully among the structures."
+    },
+    {
+      "image": "images/scene-16.png",
+      "narration": "ถ้าชอบเรื่องราวประวัติศาสตร์ โลก วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวประวัติศาสตร์ โลก วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "motion": "none",
+      "wan": "Presenter looking directly at the camera with a warm smile, encouraging the audience to like, share, and subscribe. Soft cinematic studio lighting.",
+      "lip_sync": true
+    }
+  ]
+}

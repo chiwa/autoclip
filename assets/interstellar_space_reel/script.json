@@ -1,0 +1,134 @@
+{
+  "project": {
+    "id": "mamase-interstellar-space-reel-v1",
+    "title": "Interstellar Space — หลังออกจากระบบสุริยะ เราเจออะไร?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Warm, inspiring, clear, authoritative Thai documentary storyteller tone."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "เมื่อยานอวกาศหลุดพ้นขอบระบบสุริยะออกไป... เราจะเจอกับความว่างเปล่าที่มืดมิดจริง ๆ หรือเปล่าครับ?",
+      "tts_text": "เมื่อยานอวกาศหลุดพ้นขอบระบบสุริยะออกไป... เราจะเจอกับความว่างเปล่าที่มืดมิดจริง ๆ หรือเปล่าครับ?",
+      "subtitle": "INTERSTELLAR SPACE\nพ้นระบบสุริยะ... เราเจออะไร?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve the key art typography, Mamase logo, and presenter. The presenter gestures toward the vast, glowing interstellar plasma ocean beyond the solar system with natural lip sync. Starry cosmos background, smooth cinematic motion.",
+        "negative_prompt": "text modification, title distortion, face distortion, flicker, jitter, sudden camera movement, watermark",
+        "seed": 884,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-heliopause",
+      "image": "images/scene-02-heliopause.png",
+      "narration": "หลายคนคิดว่าอวกาศระหว่างดวงดาวคือความว่างเปล่าสนิท แต่ข้อมูลจากยานวอยเอเจอร์ที่เดินทางพ้นขอบระบบสุริยะออกไป เผยความจริงที่ต่างออกไปสิ้นเชิงครับ",
+      "tts_text": "หลายคนคิดว่าอวกาศระหว่างดวงดาวคือความว่างเปล่าสนิท แต่ข้อมูลจากยาน วอยเอเจอร์ ที่เดินทางพ้นขอบระบบสุริยะออกไป เผยความจริงที่ต่างออกไปสิ้นเชิงครับ",
+      "subtitle": "พ้นฟองสบู่สุริยะ (Heliopause)\nข้อมูลจริงจากยาน Voyager",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-cosmic-rays",
+      "image": "images/scene-03-cosmic-rays.png",
+      "narration": "ทันทีที่ข้ามพรมแดน ลมสุริยะจากดวงอาทิตย์ก็เงียบหายไป แต่สิ่งที่พุ่งเข้ามาแทน คือ รังสีคอสมิกจากดาราจักร อนุภาคพลังงานสูงยิ่งยวดที่เดินทางมาจากทั่วทางช้างเผือก",
+      "tts_text": "ทันทีที่ข้ามพรมแดน ลมสุริยะจากดวงอาทิตย์ก็เงียบหายไป แต่สิ่งที่พุ่งเข้ามาแทน คือ รังสีคอสมิกจากดาราจักร อนุภาคพลังงานสูงยิ่งยวดที่เดินทางมาจากทั่วทางช้างเผือก",
+      "subtitle": "รังสีคอสมิกพุ่งกระฉูด\nอนุภาคความเร็วเกือบเท่าแสง",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-04-plasma-ism",
+      "image": "images/scene-04-plasma-ism.png",
+      "narration": "และพื้นที่ตรงนี้ไม่ได้มีแต่ความว่างเปล่า แต่เต็มไปด้วย พลาสมาอวกาศ ไอออนของไฮโดรเจนและฮีเลียมที่บางเบามาก แต่ว่องไวและพร้อมนำพากระแสแม่เหล็ก",
+      "tts_text": "และพื้นที่ตรงนี้ไม่ได้มีแต่ความว่างเปล่า แต่เต็มไปด้วย พลาสมาอวกาศ ไอออนของไฮโดรเจนและฮีเลียมที่บางเบามาก แต่ว่องไวและพร้อมนำพากระแสแม่เหล็ก",
+      "subtitle": "สสารระหว่างดาว (ISM)\nพลาสมาไฮโดรเจนและฮีเลียม",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-05-cosmic-dust",
+      "image": "images/scene-05-cosmic-dust.png",
+      "narration": "ปะปนอยู่กับ ฝุ่นคอสมิก ละอองธาตุหนักและโมเลกุลคาร์บอนที่ซากดาวฤกษ์รุ่นก่อนพ่นทิ้งไว้ รอคอยการรวมตัวเป็นดาวเคราะห์และสิ่งมีชีวิตรุ่นต่อไป",
+      "tts_text": "ปะปนอยู่กับ ฝุ่นคอสมิก ละอองธาตุหนักและโมเลกุลคาร์บอนที่ซากดาวฤกษ์รุ่นก่อนพ่นทิ้งไว้ รอคอยการรวมตัวเป็นดาวเคราะห์และสิ่งมีชีวิตรุ่นต่อไป",
+      "subtitle": "ฝุ่นคอสมิก & สารอินทรีย์\nเถ้าถ่านจากซูเปอร์โนวาโบราณ",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-06-local-cloud",
+      "image": "images/scene-06-local-cloud.png",
+      "narration": "ที่น่าทึ่งคือ ตอนนี้ระบบสุริยะของเรา กำลังล่องลอยอยู่ท่ามกลางกลุ่มก๊าซที่ชื่อว่า เมฆระหว่างดาวท้องถิ่น ซึ่งอยู่ในโพรงฟองยักษ์ที่เกิดจาก ซูเปอร์โนวา โบราณ",
+      "tts_text": "ที่น่าทึ่งคือ ตอนนี้ระบบสุริยะของเรา กำลังล่องลอยอยู่ท่ามกลางกลุ่มก๊าซที่ชื่อว่า เมฆระหว่างดาวท้องถิ่น ซึ่งอยู่ในโพรงฟองยักษ์ที่เกิดจาก ซูเปอร์โนวา โบราณ",
+      "subtitle": "ระบบสุริยะกำลังแล่นผ่าน\nLocal Interstellar Cloud",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "center",
+      "transition": "smooth_right"
+    },
+    {
+      "id": "scene-07-magnetic-fields",
+      "image": "images/scene-07-magnetic-fields.png",
+      "narration": "นอกจากนี้ยังมี เส้นแรงแม่เหล็กของดาราจักร ที่คดเคี้ยวและคอยเบี่ยงเบนทิศทางของอนุภาค ราวกับกระแสน้ำในมหาสมุทรที่มองไม่เห็น",
+      "tts_text": "นอกจากนี้ยังมี เส้นแรงแม่เหล็กของดาราจักร ที่คดเคี้ยวและคอยเบี่ยงเบนทิศทางของอนุภาค ราวกับกระแสน้ำในมหาสมุทรที่มองไม่เห็น",
+      "subtitle": "สนามแม่เหล็กดาราจักร\nกระแสน้ำที่มองไม่เห็นในอวกาศ",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-08-cosmic-cradle",
+      "image": "images/scene-08-cosmic-cradle.png",
+      "narration": "อวกาศระหว่างดวงดาว จึงไม่ใช่สุสานที่ว่างเปล่า... แต่คือมหาสมุทรแห่งชีวิต ที่เชื่อมต่อทุกดวงดาว และเป็นจุดเริ่มต้นของทุกสิ่งในจักรวาลครับ",
+      "tts_text": "อวกาศระหว่างดวงดาว จึงไม่ใช่สุสานที่ว่างเปล่า... แต่คือมหาสมุทรแห่งชีวิต ที่เชื่อมต่อทุกดวงดาว และเป็นจุดเริ่มต้นของทุกสิ่งในจักรวาลครับ",
+      "subtitle": "ไม่ใช่ความว่างเปล่า\nแต่มันคือมหาสมุทรแห่งดวงดาว",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.05,
+      "focus": "center",
+      "transition": "none",
+      "show_subtitle": false
+    }
+  ]
+}

@@ -25,13 +25,9 @@ Never put API keys, `.env`, credentials, private tokens, or unrelated project fi
 - Cover strange places, surprising science, unexpected space stories, and timely topics.
 - Lead with a strong factual hook, explain the mechanism clearly, add a meaningful reveal, then close with wonder rather than sensationalism.
 - Write natural spoken Thai. Avoid misleading certainty, invented facts, graphic imagery, and claims that confuse myth with evidence.
-- Prefer approximately 55–70 seconds when the subject supports it, with enough scenes to keep the visuals varied. Duration is an editorial target, not a fixed schema field.
+- Prefer 45–60 seconds (acceptable max 75 seconds), with enough scenes (normally 4–7) to keep visuals varied.
 - Use documentary-style, non-graphic visuals. Vary aerial, wide, close-up, explanatory, wildlife, and atmospheric compositions where relevant.
-- Branding narration: `ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ`
-- Branding `tts_text`: `ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ`
-- Branding subtitle: `กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ`
-- Keep the call to action warm and conversational. Do not shout, pressure the
-  viewer, or insert multiple promotional interruptions earlier in the clip.
+- Reel Ending CTA: End with one short topic-specific discussion question (e.g. `ถ้ามีโอกาส คุณกล้าเป็นมนุษย์รุ่นแรกที่ไปอยู่ดาวอังคารไหม?`). Strictly forbid generic CTAs ("กดไลก์ กดแชร์", "ติดตาม", "คอมเมนต์คุยกัน", "ขอบคุณที่รับชม"). Zero spoken words after the CTA.
 
 ## Thai Java Zone visual style bible
 

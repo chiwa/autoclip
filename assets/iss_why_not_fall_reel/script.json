@@ -1,0 +1,171 @@
+{
+  "project": {
+    "id": "mamase-iss-why-not-fall-reel-v1",
+    "title": "ทำไม ISS ไม่ตก ทั้งที่มันกำลังตกอยู่ตลอดเวลา?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Keep pauses brief and natural. The delivery should feel spontaneous and human, with a subtle smile in the voice. Keep the pacing medium to slightly fast, but don't rush. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ไอเอสเอสไม่ได้ลอยนิ่งอยู่เหนือโลกนะครับ มันกำลังตกลงมาตลอดเวลา แต่ทำไมถึงไม่เคยตกถึงพื้น?",
+      "tts_text": "ไอเอสเอสไม่ได้ลอยนิ่งอยู่เหนือโลกนะครับ มันกำลังตกลงมาตลอดเวลา แต่ทำไมถึงไม่เคยตกถึงพื้น?",
+      "subtitle": "ISS กำลังตก\nแต่ทำไมไม่ถึงพื้น?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.11,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Preserve the supplied cinematic vertical key art exactly: the real International Space Station dominates the frame above curved Earth while a young male explorer and his fluffy dog watch from the lower foreground. Slow cinematic camera push toward the ISS, subtle Earth parallax and sunlight glint, stable physically credible orbital motion. Keep all existing typography and branding perfectly stable and readable.",
+        "negative_prompt": "new text, altered text, misspelled text, altered logo, extra spacecraft, deformed station, distorted person, distorted dog, flicker, jitter, sudden camera movement",
+        "seed": 1201,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-gravity",
+      "image": "images/scene-02-gravity.png",
+      "narration": "คำตอบแรกคือ แรงโน้มถ่วงยังดึงสถานีลงหาโลกเหมือนวัตถุทุกชิ้น มันไม่ได้อยู่ในบริเวณที่แรงโน้มถ่วงหายไปเลยครับ",
+      "tts_text": "คำตอบแรกคือ แรงโน้มถ่วงยังดึงสถานีลงหาโลกเหมือนวัตถุทุกชิ้น มันไม่ได้อยู่ในบริเวณที่แรงโน้มถ่วงหายไปเลยครับ",
+      "subtitle": "แรงโน้มถ่วงยังดึง ISS ลงหาโลก",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Accurate International Space Station continuously descending toward the curved Earth while maintaining forward orbital motion, dramatic sunrise rim light, subtle camera tracking, realistic orbital documentary cinematography, stable spacecraft geometry, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, extra station, broken solar panels, distortion, flicker, jitter, fast camera",
+        "seed": 1202,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-orbital-speed",
+      "image": "images/scene-03-orbital-speed.png",
+      "narration": "แต่ในเวลาเดียวกัน มันพุ่งไปข้างหน้าด้วยความเร็วประมาณสองหมื่นแปดพันแปดร้อยกิโลเมตรต่อชั่วโมง เร็วจนบินรอบโลกได้ในเวลาราวเก้าสิบสองนาที",
+      "tts_text": "แต่ในเวลาเดียวกัน มันพุ่งไปข้างหน้าด้วยความเร็วประมาณ สองหมื่นแปดพันแปดร้อย กิโลเมตรต่อชั่วโมง เร็วจนบินรอบโลกได้ในเวลาราว เก้าสิบสอง นาที",
+      "subtitle": "28,800 กม./ชม.\nรอบโลกในประมาณ 92 นาที",
+      "motion": "pan_left_to_right",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "The International Space Station races laterally over curved Earth at orbital velocity, stars and clouds showing restrained smooth parallax, realistic 28,800 km per hour sense of speed without blur, cinematic documentary tracking shot, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, warp speed, extreme blur, deformed station, flicker, jitter",
+        "seed": 1203,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-falling-around-earth",
+      "image": "images/scene-04-falling-around-earth.png",
+      "narration": "ทุกครั้งที่สถานีตกเข้าใกล้โลก พื้นผิวโค้งของโลกก็โค้งหนีไปในอัตราที่พอดีกัน มันจึงตกอยู่ตลอด แต่ตกพลาดพื้นโลกไปเรื่อย ๆ",
+      "tts_text": "ทุกครั้งที่สถานีตกเข้าใกล้โลก พื้นผิวโค้งของโลกก็โค้งหนีไปในอัตราที่พอดีกัน มันจึงตกอยู่ตลอด แต่ตกพลาดพื้นโลกไปเรื่อย ๆ",
+      "subtitle": "ตกตลอดเวลา\nแต่พลาดพื้นโลกไปเรื่อย ๆ",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Scientific cinematic visualization of the ISS following the curvature of Earth, one continuous spacecraft moving along a graceful orbital arc while falling around the planet, smooth camera orbit, physically credible scale and motion, no text or diagram labels.",
+        "negative_prompt": "text, numbers, labels, watermark, multiple solid stations, broken spacecraft, cartoon, flicker, jitter",
+        "seed": 1204,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-free-fall",
+      "image": "images/scene-05-free-fall.png",
+      "narration": "นักบินอวกาศก็ไม่ได้ลอยเพราะไม่มีแรงโน้มถ่วงนะครับ พวกเขา สถานี และของทุกชิ้น กำลังตกไปพร้อมกัน จึงดูเหมือนไร้น้ำหนัก",
+      "tts_text": "นักบินอวกาศก็ไม่ได้ลอยเพราะไม่มีแรงโน้มถ่วงนะครับ พวกเขา สถานี และของทุกชิ้น กำลังตกไปพร้อมกัน จึงดูเหมือนไร้น้ำหนัก",
+      "subtitle": "ทุกอย่างกำลังตกพร้อมกัน\nจึงดูเหมือนไร้น้ำหนัก",
+      "motion": "gentle_float",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Inside the ISS Cupola, astronauts and small objects float together in continuous free fall with Earth visible through the windows, very gentle natural body and object drift, warm human documentary moment, stable faces and hands, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, extra limbs, distorted hands, floating hair distortion, fast movement, flicker, jitter",
+        "seed": 1205,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-reboost",
+      "image": "images/scene-06-reboost.png",
+      "narration": "อย่างไรก็ตาม ที่ความสูงหลายร้อยกิโลเมตรยังมีบรรยากาศบางเบาคอยต้านจนสถานีช้าลง จึงต้องใช้ยานที่เชื่อมต่ออยู่ช่วยยกระดับวงโคจรเป็นระยะ",
+      "tts_text": "อย่างไรก็ตาม ที่ความสูงหลายร้อยกิโลเมตรยังมีบรรยากาศบางเบาคอยต้านจนสถานีช้าลง จึงต้องใช้ยานที่เชื่อมต่ออยู่ช่วยยกระดับวงโคจรเป็นระยะ",
+      "subtitle": "บรรยากาศยังต้าน ISS\nจึงต้อง Reboost เป็นระยะ",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "A docked cargo spacecraft performs a restrained ISS orbital reboost above Earth, short controlled blue-white thruster plumes, solar arrays remain stable, sunrise light, accurate engineering documentary style, smooth continuous motion, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, explosion, fireball, extreme plume, deformed spacecraft, flicker, jitter",
+        "seed": 1206,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-final-payoff",
+      "image": "images/scene-07-final-payoff.png",
+      "narration": "ดังนั้น ไอเอสเอสไม่ได้แขวนอยู่บนฟ้าครับ มันกำลังตกและพลาดโลกซ้ำแล้วซ้ำอีก นั่นแหละคือสิ่งที่เราเรียกว่า วงโคจร",
+      "tts_text": "ดังนั้น ไอเอสเอสไม่ได้แขวนอยู่บนฟ้าครับ มันกำลังตกและพลาดโลกซ้ำแล้วซ้ำอีก นั่นแหละคือสิ่งที่เราเรียกว่า วงโคจร",
+      "subtitle": "วงโคจร คือการตก\nแล้วพลาดโลกซ้ำ ๆ",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Majestic final shot of the International Space Station continuously falling around the glowing curvature of Earth at orbital sunrise, smooth elegant orbital drift, subtle parallax, scientifically credible cinematic documentary image, hopeful final payoff, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, deformed station, extra station, fantasy planet, flicker, jitter, sudden camera",
+        "seed": 1207,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-08-brand-outro",
+      "image": "images/scene-08-brand-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "show_subtitle": true,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.06,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Preserve the supplied Mamase branded end scene exactly. Add only a very slow cinematic push-in, subtle star shimmer and gentle atmospheric glow. Keep the person, dog, logo and all existing text perfectly stable and readable.",
+        "negative_prompt": "new text, changed text, misspelled text, altered logo, extra person, extra dog, flicker, jitter, blur, sudden camera movement",
+        "seed": 98,
+        "frames": 81,
+        "lip_sync": false
+      }
+    }
+  ]
+}

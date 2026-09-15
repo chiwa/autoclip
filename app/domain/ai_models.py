@@ -68,6 +68,7 @@ class AiProgressEntry(BaseModel):
 class AiProject(BaseModel):
     project_id: str
     topic: str = ""
+    channel_id: str = "undefined"
     status: AiProjectStatus = AiProjectStatus.CHATTING
     messages: list[AiChatMessage] = Field(default_factory=list)
     scenes: list[AiScene] = Field(default_factory=list)
@@ -80,6 +81,7 @@ class AiProject(BaseModel):
     error: dict | None = None
     package_path: str | None = None
     package_summary: dict | None = None
+    hook_gate: dict | None = None
     created_at: datetime = Field(default_factory=local_now)
     updated_at: datetime = Field(default_factory=local_now)
 

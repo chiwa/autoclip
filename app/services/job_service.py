@@ -20,6 +20,7 @@ from app.infrastructure.filesystem import Workspace, WorkspaceManager
 from app.infrastructure.tts import create_tts_provider
 from app.services.package_service import PackageService
 from app.services.narration_audio_service import NarrationAudioProcessor
+from app.services.zodiac_narration_guard import ZodiacNarrationGuard
 from app.services.pronunciation_service import PronunciationService
 from app.services.bgm_service import ensure_default_bgm, resolve_podcast_bgm
 from app.services.video_service import RenderProfile, SceneRenderer, SubtitleRenderer, VideoComposer
@@ -133,7 +134,9 @@ class JobService:
         self.persistence = persistence
         self.pronunciation = PronunciationService()
 
-    def submit(self, uploaded_file, tts_provider: str | None = None, subtitle_mode: str | None = None, script_json: str | None = None, render_engine: str | None = None, output_format: str | None = None, motion_resolution: str | None = None) -> JobRecord:
+    def submit(self, uploaded_file, tts_provider: str | None = None, subtitle_mode: str | None = None, script_json: str | None = None, render_engine: str | None = None, output_format: str | None = None, motion_resolution: str | None = None, channel_id: str = "undefined") -> JobRecord:
+        if self.persistence:
+            channel_id = self.persistence.valid_channel_id(channel_id)
         selected_provider = (tts_provider or self.settings.tts.provider or "google-gemini").strip().lower()
         # Keep UI/config aliases backwards compatible while exposing one
         # canonical provider name to the rendering pipeline.
@@ -193,7 +196,7 @@ class JobService:
             except Exception as exc:
                 logger.exception("script preview patch failed")
                 raise AppError("SCRIPT_JSON_INVALID", "ค่าที่แก้ไขใน Scene Preview ไม่ถูกต้อง") from exc
-        record = self.registry.set(JobRecord(job_id=job_id, status=JobStatus.RECEIVED, progress=0, current_step="Upload received", tts_provider=selected_provider, subtitle_mode=subtitle_mode, render_engine=selected_engine, output_format=selected_output_format))
+        record = self.registry.set(JobRecord(job_id=job_id, status=JobStatus.RECEIVED, progress=0, current_step="Upload received", tts_provider=selected_provider, subtitle_mode=subtitle_mode, render_engine=selected_engine, output_format=selected_output_format, metadata={"channelId": channel_id}))
         if self.persistence: self.persistence.upsert_job(record)
         self._investigation_log(job_id, "job_received", render_engine=selected_engine, output_format=selected_output_format, tts_provider=selected_provider, upload_bytes=size)
         self._log(job_id, "INFO", "Package uploaded")
@@ -205,7 +208,7 @@ class JobService:
         self.executor.submit(self._process, job_id, workspace)
         return record
 
-    def submit_path(self, package_path: Path, tts_provider: str | None = None, subtitle_mode: str | None = None, script_json: str | None = None, render_engine: str | None = None, output_format: str | None = None, motion_resolution: str | None = None) -> JobRecord:
+    def submit_path(self, package_path: Path, tts_provider: str | None = None, subtitle_mode: str | None = None, script_json: str | None = None, render_engine: str | None = None, output_format: str | None = None, motion_resolution: str | None = None, channel_id: str = "undefined") -> JobRecord:
         """Submit a server-created package through the same render pipeline."""
         if not package_path.is_file():
             raise AppError("PACKAGE_INVALID", "Generated package is unavailable")
@@ -213,7 +216,7 @@ class JobService:
             def __init__(self, path: Path): self.file = path.open("rb")
         source = _File(package_path)
         try:
-            return self.submit(source, tts_provider, subtitle_mode, script_json, render_engine, output_format)
+            return self.submit(source, tts_provider, subtitle_mode, script_json, render_engine, output_format, motion_resolution, channel_id)
         finally:
             source.file.close()
 
@@ -234,11 +237,14 @@ class JobService:
         bgm_track: str = "mamase-podcast-bg.mp3",
         bgm_volume: float | None = None,
         focus: str = "center",
+        channel_id: str = "undefined",
     ) -> JobRecord:
         if not script_text or not script_text.strip():
             raise AppError("PODCAST_SCRIPT_EMPTY", "กรุณาใส่บทพูดสำหรับ Podcast")
 
         cleaned_title = title.strip() or "YouTube Podcast"
+        if self.persistence:
+            channel_id = self.persistence.valid_channel_id(channel_id)
         job_id = str(uuid.uuid4())
         workspace = self.workspaces.create(job_id)
 
@@ -327,7 +333,7 @@ class JobService:
             )
         )
         if self.persistence:
-            self.persistence.ensure_project(project_id, cleaned_title, 1, "RENDERING")
+            self.persistence.ensure_project(project_id, cleaned_title, 1, "RENDERING", "podcast", channel_id)
             self.persistence.upsert_job(record)
 
         self._investigation_log(job_id, "podcast_job_received", title=cleaned_title, voice=selected_voice, speed=selected_speed)
@@ -405,12 +411,15 @@ class JobService:
                 try:
                     raw_meta = json.loads(metadata_file.read_text(encoding="utf-8"))
                     if isinstance(raw_meta, dict):
-                        video_metadata = {"title": str(raw_meta.get("title") or "-"), "description": str(raw_meta.get("description") or "-")}
+                        video_metadata = raw_meta
+                        if not video_metadata.get("title"): video_metadata["title"] = "-"
+                        if not video_metadata.get("description"): video_metadata["description"] = "-"
                 except Exception:
                     self._log(job_id, "WARNING", "video-metadata.json ไม่ถูกต้อง; ใช้ค่าเริ่มต้น (-)")
             self.registry.set_project(job_id, script.project.id)
             if self.persistence:
-                self.persistence.ensure_project(script.project.id, script.project.title, len(script.scenes), "RENDERING")
+                project_type = "zodiac" if script.project.id.startswith("zodiac-") else "reel"
+                self.persistence.ensure_project(script.project.id, script.project.title, len(script.scenes), "RENDERING", project_type, ((job.metadata or {}).get("channelId") if job else None) or "undefined")
                 current = self.registry.get(job_id)
                 if current: self.persistence.upsert_job(current)
             self._log(job_id, "INFO", "script.json validated")
@@ -477,6 +486,8 @@ class JobService:
                 self._log(job_id, "INFO", f"Generating Google Gemini narration in parallel ({parallelism} workers)")
                 self._investigation_log(job_id, "tts_parallelism", provider=selected_provider, workers=parallelism, scene_count=count)
 
+            is_zodiac_job = script.project.id.startswith("zodiac-")
+
             def synthesize_scene(index: int, scene) -> tuple[int, float]:
                 output = workspace.generated_audio / f"{scene.id}.wav"
                 try:
@@ -484,7 +495,18 @@ class JobService:
                         self._log(job_id, "INFO", f"Reusing existing narration for scene {index + 1}")
                         audio_duration = self.narration_audio.process(output)
                         return index, audio_duration
-                    provider.synthesize(self.pronunciation.resolve_scene(scene), script.project.language, script.voice.voice, script.voice.speed, output)
+                    if is_zodiac_job:
+                        final_text = (scene.tts_text or scene.narration).strip()
+                        provider_text = ZodiacNarrationGuard.provider_text(scene, self.pronunciation)
+                        ZodiacNarrationGuard.verify_provider_text(final_text, provider_text, self.pronunciation)
+                        # Keep style and content visibly separate in technical
+                        # logs. Never construct a combined prompt string.
+                        self._log(job_id, "INFO", f"TTS_STYLE_INSTRUCTION:\n{getattr(provider, 'style_prompt', '') or ''}")
+                        self._log(job_id, "INFO", f"FINAL_NARRATION_TEXT:\n{provider_text}")
+                        self._investigation_log(job_id, "zodiac_narration_guard_passed", scene_id=scene.id)
+                    else:
+                        provider_text = self.pronunciation.resolve_scene(scene)
+                    provider.synthesize(provider_text, script.project.language, script.voice.voice, script.voice.speed, output)
                     audio_duration = self.narration_audio.process(output)
                     return index, audio_duration
                 except AppError:
@@ -1284,12 +1306,16 @@ class JobService:
             self._log(job_id, "ERROR", f"Retry English audio ไม่สำเร็จ: {error.message}")
             logger.exception("job_id=%s english_audio_retry_failed", job_id)
 
-    def update_video_metadata_tags(self, job_id: str, title: str, description: str, artist: str = "Mamase") -> bool:
+    def update_video_metadata_tags(self, job_id: str, title: str, description: str, artist: str = "Mamase", keywords: str | None = None) -> bool:
         try:
             video_path = self.final_video(job_id)
             if not video_path.is_file():
                 return False
             meta_args = build_ffmpeg_metadata_args(title=title, description=description, artist=artist)
+            if keywords:
+                clean_keywords = "".join(char for char in str(keywords) if char.isprintable() or char == " ").strip()[:1000]
+                if clean_keywords:
+                    meta_args.extend(["-metadata", f"keywords={clean_keywords}"])
             if not meta_args:
                 return False
             temp_path = video_path.with_name(f"{video_path.stem}_meta_tmp{video_path.suffix}")

@@ -1,0 +1,122 @@
+{
+  "project": {
+    "id": "mamase-uranus-40-years-myth-reel-v1",
+    "title": "ดาวยูเรนัส เราเข้าใจผิดมาเกือบ 40 ปี?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: \"เฮ้ย... จริงดิ?\" Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ดาวยูเรนัส... ลูกกลมสีฟ้าที่ดูน่าเบื่อที่สุด แต่รู้ไหมครับว่าตำราเรียนที่เราอ่านกันมาเกือบ 40 ปี มาจากยานอวกาศที่บินผ่านแค่ 6 ชั่วโมง?!",
+      "tts_text": "ดาวยูเรนัส... ลูกกลมสีฟ้าที่ดูน่าเบื่อที่สุด แต่รู้ไหมครับว่าตำราเรียนที่เราอ่านกันมาเกือบ 40 ปี มาจากยานอวกาศที่บินผ่านแค่ หกชั่วโมง?!",
+      "subtitle": "ดาวยูเรนัสที่ดู 'น่าเบื่อ' ที่สุด\nแต่ตำราเรียน 40 ปี มาจากการบินผ่านแค่ 6 ชั่วโมง?!",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic vertical master shot of young man with golden retriever beside camping lantern on rocky cliff, looking up at colossal cyan glowing Uranus with faint vertical rings in night sky, subtle starlight twinkle",
+        "negative_prompt": "text distortion, face distortion, flicker, sudden movement, watermark, logo",
+        "seed": 2026,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-voyager2-uranus-flyby",
+      "image": "images/scene-02-voyager2-uranus-flyby.png",
+      "narration": "ยูเรนัสอยู่ห่างออกไป 3 พันล้านกิโลเมตร มนุษย์เคยส่งยานไปใกล้สุดแค่ครั้งเดียวคือยาน วอยเอเจอร์ 2 ในปี 1986 ซึ่งบินโฉบผ่านเพียง 6 ชั่วโมง แล้วภาพเหล่านั้นก็กลายเป็นความรู้ทั้งหมดที่เรามี",
+      "tts_text": "ยูเรนัสอยู่ห่างออกไป สามพันล้านกิโลเมตร มนุษย์เคยส่งยานไปใกล้สุดแค่ครั้งเดียวคือยาน วอยเอเจอร์สอง ในปี 1986 ซึ่งบินโฉบผ่านเพียง หกชั่วโมง แล้วภาพเหล่านั้นก็กลายเป็นความรู้ทั้งหมดที่เรามี",
+      "subtitle": "ห่างออกไป 3 พันล้านกิโลเมตร\nมนุษย์เคยไปเยือนแค่ครั้งเดียว คือ Voyager 2",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-rolling-sideways-impact",
+      "image": "images/scene-03-rolling-sideways-impact.png",
+      "narration": "ความแปลกประหลาดแรกคือ มันเป็นดาวที่ 'นอนตะแคงกลิ้งไป' รอบดวงอาทิตย์ แกนเอียงถึง 98 องศา คาดว่าเกิดจากวัตถุมหึมาพุ่งชนในอดีต ทำให้หนึ่งฤดูกาลยาวนานถึง 42 ปี!",
+      "tts_text": "ความแปลกประหลาดแรกคือ มันเป็นดาวที่ นอนตะแคงกลิ้งไป รอบดวงอาทิตย์ แกนเอียงถึง เก้าสิบแปดองศา คาดว่าเกิดจากวัตถุมหึมาพุ่งชนในอดีต ทำให้หนึ่งฤดูกาลยาวนานถึง สี่สิบสองปี!",
+      "subtitle": "ดาวที่ 'นอนตะแคงกลิ้งไป'\nแกนเอียง 98° หนึ่งฤดูยาวนานถึง 42 ปี!",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-04-black-rings-miranda-cliff",
+      "image": "images/scene-04-black-rings-miranda-cliff.png",
+      "narration": "แถมยังมีวงแหวนสีดำมืดสนิท และมีดวงจันทร์ 'มิแรนดา' ที่มีหน้าผาสูงชันถึง 20 กิโลเมตร ราวกับดวงดาวที่เคยถูกทุบแตกเป็นเสี่ยงๆ แล้วกลับมาประกอบร่างใหม่",
+      "tts_text": "แถมยังมีวงแหวนสีดำมืดสนิท และมีดวงจันทร์ มิแรนดา ที่มีหน้าผาสูงชันถึง ยี่สิบกิโลเมตร ราวกับดวงดาวที่เคยถูกทุบแตกเป็นเสี่ยงๆ แล้วกลับมาประกอบร่างใหม่",
+      "subtitle": "วงแหวนสีดำมืดสนิท\nและดวงจันทร์ 'มิแรนดา' ที่มีหน้าผาสูง 20 กม.",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-05-hot-ocean-diamond-rain",
+      "image": "images/scene-05-hot-ocean-diamond-rain.png",
+      "narration": "ลึกลงไป ยูเรนัสไม่ใช่ดาวก๊าซล้วน แต่เป็นยักษ์น้ำแข็งที่มีมหาสมุทรร้อนยวบยาบ มีสนามแม่เหล็กเอียงเป๋ส่ายไปมา และแรงดันมหาศาลที่เชื่อว่าทำให้เกิด 'ฝนเพชร' ตกสู่ใจกลางดาว",
+      "tts_text": "ลึกลงไป ยูเรนัสไม่ใช่ดาวก๊าซล้วน แต่เป็นยักษ์น้ำแข็งที่มีมหาสมุทรร้อนยวบยาบ มีสนามแม่เหล็กเอียงเป๋ส่ายไปมา และแรงดันมหาศาลที่เชื่อว่าทำให้เกิด ฝนเพชร ตกสู่ใจกลางดาว",
+      "subtitle": "ดาวยักษ์น้ำแข็งที่มีมหาสมุทรร้อน\nสนามแม่เหล็กเอียงเป๋ และ 'ฝนเพชร' ตกสู่แกนกลาง",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-06-solar-storm-sick-planet",
+      "image": "images/scene-06-solar-storm-sick-planet.png",
+      "narration": "แต่จุดพีคคือการค้นพบใหม่ในปี 2024! เมื่อนักวิทยาศาสตร์นำข้อมูลมาวิเคราะห์ใหม่ แล้วพบว่า... แท้จริงแล้วเราไปเยือนใน 'วันที่ดาวกำลังป่วย' จากพายุสุริยะรุนแรงที่เพิ่งซัดกระหน่ำ!",
+      "tts_text": "แต่จุดพีคคือการค้นพบใหม่ในปี 2024! เมื่อนักวิทยาศาสตร์นำข้อมูลมาวิเคราะห์ใหม่ แล้วพบว่า... แท้จริงแล้วเราไปเยือนใน วันที่ดาวกำลังป่วย จากพายุสุริยะรุนแรงที่เพิ่งซัดกระหน่ำ!",
+      "subtitle": "ความจริงเพิ่งเฉลยในปี 2024!\nเราไปเยือนใน 'วันที่ดาวกำลังป่วย' จากพายุสุริยะ",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-07-quiet-giant-deep-mystery",
+      "image": "images/scene-07-quiet-giant-deep-mystery.png",
+      "narration": "พายุในวันนั้นบีบอัดสนามแม่เหล็กจนเพี้ยน ทำให้เราเข้าใจมันผิดไปเกือบ 40 ปี... ขนาดดาวเพื่อนบ้านยังหลอกเราได้ จักรวาลจึงเตือนเราว่า สิ่งที่ตาเห็นเพียงเสี้ยววินาที อาจไม่ใช่ความจริงทั้งหมดที่ซ่อนอยู่ครับ",
+      "tts_text": "พายุในวันนั้นบีบอัดสนามแม่เหล็กจนเพี้ยน ทำให้เราเข้าใจมันผิดไปเกือบ 40 ปี... ขนาดดาวเพื่อนบ้านยังหลอกเราได้ จักรวาลจึงเตือนเราว่า สิ่งที่ตาเห็นเพียงเสี้ยววินาที อาจไม่ใช่ความจริงทั้งหมดที่ซ่อนอยู่ครับ",
+      "subtitle": "เราเข้าใจผิดมาเกือบ 40 ปี\nสิ่งที่ตาเห็นในเสี้ยววินาที อาจไม่ใช่ความจริงทั้งหมด",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-08-brand-outro",
+      "image": "images/scene-08-brand-outro.png",
+      "narration": "ถ้าชอบเรื่องราวดาราศาสตร์แบบนี้ กดติดตาม แล้วมาร่วมค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวดาราศาสตร์แบบนี้ กดติดตาม แล้วมาร่วมค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "show_subtitle": true,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

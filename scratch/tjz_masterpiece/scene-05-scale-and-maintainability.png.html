@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><style>
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1080px; height: 1920px; background: #070a12;
+    overflow: hidden; font-family: "JetBrains Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+    color: #f1f5f9; position: relative;
+  }
+  .bg-glow {
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(circle at 540px 320px, rgba(30, 58, 138, 0.28) 0%, transparent 65%),
+      radial-gradient(circle at 180px 850px, rgba(14, 165, 233, 0.16) 0%, transparent 55%),
+      radial-gradient(circle at 900px 1050px, rgba(16, 185, 129, 0.12) 0%, transparent 55%),
+      radial-gradient(circle at 540px 1450px, rgba(30, 58, 138, 0.22) 0%, transparent 60%),
+      linear-gradient(180deg, #050811 0%, #0c1322 50%, #04060b 100%);
+    z-index: 1;
+  }
+  .grid-pattern {
+    position: absolute; inset: 0;
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+    background-size: 36px 36px; z-index: 2;
+  }
+  .subtitle-vignette {
+    position: absolute; bottom: 0; left: 0; width: 1080px; height: 320px;
+    background: linear-gradient(180deg, transparent 0%, rgba(5, 8, 15, 0.75) 45%, rgba(3, 5, 10, 0.98) 100%);
+    pointer-events: none; z-index: 30;
+  }
+
+  .mod-canvas {
+    position: absolute; top: 35px; left: 35px; width: 1010px; height: 1580px;
+    display: flex; flex-direction: column; justify-content: space-between; z-index: 10;
+  }
+  .mod-card {
+    background: #0d1527; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+    padding: 18px 22px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); display: flex; flex-direction: column; justify-content: space-between;
+    height: 360px;
+  }
+  .mod-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px; }
+  .mod-title { font-size: 13px; font-weight: 700; color: #38bdf8; letter-spacing: 0.5px; text-transform: uppercase; }
+  .mod-badge { font-size: 11px; color: #10b981; font-weight: 600; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.25); padding: 3px 10px; border-radius: 6px; }
+
+  .code-block {
+    background: #0a0f1d; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;
+    padding: 14px 18px; font-size: 12px; line-height: 1.65; color: #e2e8f0;
+  }
+  .kw { color: #f43f5e; font-weight: 600; }
+  .type { color: #38bdf8; font-weight: 600; }
+  .fn { color: #60a5fa; }
+  .str { color: #34d399; }
+  .var { color: #f1f5f9; }
+  .com { color: #475569; font-style: italic; }
+
+  .layers-stack { display: flex; flex-direction: column; gap: 7px; }
+  .layer-row {
+    background: #111a2e; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;
+    padding: 11px 16px; display: flex; justify-content: space-between; align-items: center;
+  }
+  .layer-name { font-size: 12.5px; font-weight: 700; color: #f8fafc; }
+  .layer-rule { font-size: 11px; color: #38bdf8; }
+
+  .timeline-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .time-box { background: #111a2e; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; padding: 12px; text-align: center; }
+  .time-ver { font-size: 14px; font-weight: 700; color: #38bdf8; }
+  .time-desc { font-size: 10.5px; color: #94a3b8; margin-top: 3px; }
+</style></head>
+<body>
+  <div class="bg-glow"></div><div class="grid-pattern"></div>
+  <div class="mod-canvas">
+    <!-- Strong Type Safety & Pattern Matching -->
+    <div class="mod-card">
+      <div class="mod-header"><div class="mod-title">COMPILE-TIME TYPE SAFETY: SEALED HIERARCHIES &amp; RECORDS</div><div class="mod-badge">EXHAUSTIVE PATTERN MATCHING</div></div>
+      <div class="code-block">
+        <div><span class="kw">public sealed interface</span> <span class="type">PaymentResult</span> <span class="kw">permits</span> <span class="type">Settled</span>, <span class="type">Declined</span>, <span class="type">FraudHold</span> {}</div>
+        <div style="margin-top:3px;"><span class="kw">public record</span> <span class="type">Settled</span>(<span class="type">TxnId</span> <span class="var">id</span>, <span class="type">Money</span> <span class="var">amount</span>, <span class="type">Instant</span> <span class="var">timestamp</span>) <span class="kw">implements</span> <span class="type">PaymentResult</span> {}</div>
+        <div style="margin-top:3px;"><span class="kw">public record</span> <span class="type">Declined</span>(<span class="type">TxnId</span> <span class="var">id</span>, <span class="type">String</span> <span class="var">reason</span>) <span class="kw">implements</span> <span class="type">PaymentResult</span> {}</div>
+        <div style="margin-top:5px;"><span class="kw">public</span> <span class="type">String</span> <span class="fn">handle</span>(<span class="type">PaymentResult</span> <span class="var">res</span>) = <span class="kw">switch</span> (<span class="var">res</span>) {</div>
+        <div>&nbsp;&nbsp;<span class="kw">case</span> <span class="type">Settled</span> <span class="var">s</span>   -&gt; <span class="str">"Success: "</span> + <span class="var">s</span>.<span class="fn">id</span>() + <span class="str">" | Amount: "</span> + <span class="var">s</span>.<span class="fn">amount</span>();</div>
+        <div>&nbsp;&nbsp;<span class="kw">case</span> <span class="type">Declined</span> <span class="var">d</span>  -&gt; <span class="str">"Rejected: "</span> + <span class="var">d</span>.<span class="fn">reason</span>();</div>
+        <div>&nbsp;&nbsp;<span class="kw">case</span> <span class="type">FraudHold</span> <span class="var">f</span> -&gt; <span class="str">"Escalate to RiskOps: "</span> + <span class="var">f</span>.<span class="fn">riskScore</span>();</div>
+        <div>}; <span class="com">// Compiler guarantees all branches handled with zero default needed</span></div>
+      </div>
+      <div style="background:#0a0f1d; padding:8px 12px; border-radius:6px; display:flex; justify-content:space-between; font-size:11px; color:#94a3b8;">
+        <span>● Null Safety: <strong>Objects.requireNonNull() in Compact Constructors</strong></span>
+        <span style="color:#10b981;">● Zero NullPointerExceptions in Core Domain</span>
+      </div>
+    </div>
+
+    <!-- Clean Architecture Layers -->
+    <div class="mod-card">
+      <div class="mod-header"><div class="mod-title">CLEAN MODULAR ARCHITECTURE: DEPENDENCY INVERSION</div><div class="mod-badge">10-YEAR CODEBASE SURVIVAL</div></div>
+      <div class="layers-stack">
+        <div class="layer-row" style="border-left: 4px solid #38bdf8;"><div class="layer-name">1. Ingress Adapters</div><div class="layer-rule">Spring MVC Rest, gRPC Endpoints, Kafka Consumers</div></div>
+        <div class="layer-row" style="border-left: 4px solid #10b981;"><div class="layer-name">2. Application Use Cases</div><div class="layer-rule">Transaction Handlers, Command &amp; Query Bus</div></div>
+        <div class="layer-row" style="border-left: 4px solid #f59e0b;"><div class="layer-name">3. Pure Domain Entities</div><div class="layer-rule">Account Aggregates, Value Objects, Zero Lib Deps</div></div>
+        <div class="layer-row" style="border-left: 4px solid #a855f7;"><div class="layer-name">4. Infrastructure Adapters</div><div class="layer-rule">PostgreSQL JPA Repositories, Kafka Event Sinks</div></div>
+      </div>
+      <div style="background:#0a0f1d; padding:8px 12px; border-radius:6px; display:flex; justify-content:space-between; font-size:11px; color:#94a3b8;">
+        <span>● Dependency Rule: <strong>Dependencies point strictly inward toward Domain</strong></span>
+        <span style="color:#38bdf8;">● ArchUnit Test: 100% Enforced in CI</span>
+      </div>
+    </div>
+
+    <!-- Backward Compatibility Guarantees -->
+    <div class="mod-card">
+      <div class="mod-header"><div class="mod-title">ENTERPRISE LONGEVITY: BACKWARD COMPATIBILITY GUARANTEE</div><div class="mod-badge">BINARY COMPATIBLE</div></div>
+      <div class="timeline-grid">
+        <div class="time-box"><div class="time-ver">Java 8 (2014)</div><div class="time-desc">Lambdas / Streams API</div></div>
+        <div class="time-box"><div class="time-ver">Java 17 (2021)</div><div class="time-desc">Records &amp; Sealed Classes</div></div>
+        <div class="time-box"><div class="time-ver" style="color:#10b981;">Java 21 (LTS)</div><div class="time-desc">Virtual Threads &amp; ZGC</div></div>
+        <div class="time-box"><div class="time-ver">Java 25 (LTS)</div><div class="time-desc">Project Valhalla / Leyden</div></div>
+      </div>
+      <div style="font-size:11px; color:#94a3b8; line-height:1.45; background:#0a0f1d; padding:10px 14px; border-radius:6px;">
+        Enterprises run decade-old core banking services without breaking rewrites. Continuous binary backward compatibility protects billions of dollars in enterprise software investments.
+      </div>
+    </div>
+
+    <!-- Enterprise Large-Team Scale -->
+    <div class="mod-card">
+      <div class="mod-header"><div class="mod-title">ENGINEERING GOVERNANCE: AUTOMATED QUALITY GATES</div><div class="mod-badge">500+ ENGINEERS COLLABORATING</div></div>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+        <div style="background:#111a2e; padding:12px; border-radius:8px;">
+          <div style="font-size:10.5px; color:#64748b; font-weight:700;">AUTOMATED TESTS</div>
+          <div style="font-size:22px; font-weight:700; color:#38bdf8;">18,420</div>
+          <div style="font-size:10.5px; color:#10b981;">100% Passing (CI Pipeline)</div>
+        </div>
+        <div style="background:#111a2e; padding:12px; border-radius:8px;">
+          <div style="font-size:10.5px; color:#64748b; font-weight:700;">CODE COVERAGE</div>
+          <div style="font-size:22px; font-weight:700; color:#10b981;">99.4%</div>
+          <div style="font-size:10.5px; color:#94a3b8;">Jacoco Branch Coverage</div>
+        </div>
+        <div style="background:#111a2e; padding:12px; border-radius:8px;">
+          <div style="font-size:10.5px; color:#64748b; font-weight:700;">SONARQUBE GATE</div>
+          <div style="font-size:22px; font-weight:700; color:#a855f7;">GRADE A</div>
+          <div style="font-size:10.5px; color:#94a3b8;">Zero Security Hotspots</div>
+        </div>
+      </div>
+      <div style="background:#0a0f1d; padding:10px 14px; border-radius:6px; display:flex; justify-content:space-between; font-size:11px; color:#94a3b8;">
+        <span>● ArchUnit Architecture Rules: <strong>Enforced</strong></span>
+        <span>● Automated CI Build: <strong>Passed in 3m 42s</strong></span>
+        <span style="color:#10b981;">● Security Vulnerabilities: <strong>0</strong></span>
+      </div>
+    </div>
+  </div>
+  <div class="subtitle-vignette"></div>
+</body></html>

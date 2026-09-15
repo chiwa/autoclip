@@ -1,0 +1,188 @@
+{
+  "project": {
+    "id": "betelgeuse-supernova-reel",
+    "title": "ถ้าดาว ‘บีเทลจุส’ ระเบิดคืนนี้? จะเกิดอะไรขึ้นกับโลกของเรา!",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Clear, engaging, warm, authoritative Thai documentary presenter tone."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ถ้าดาวฤกษ์ยักษ์แดง ‘บีเทลจุส’ ในกลุ่มดาวนายพราน ระเบิดเป็นซูเปอร์โนวาในคืนนี้... จะเกิดอะไรขึ้นกับโลกของเรา?",
+      "tts_text": "ถ้าดาวฤกษ์ยักษ์แดง บีเทลจุส ในกลุ่มดาวนายพราน ระเบิดเป็น ซูเปอร์โนวา ในคืนนี้... จะเกิดอะไรขึ้นกับโลกของเรา?",
+      "subtitle": "ถ้า ‘บีเทลจุส’ ระเบิดคืนนี้\nจะเกิดอะไรขึ้นกับโลก?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Preserve the key art typography and presenter. Massive boiling red supergiant star Betelgeuse in Orion constellation with fiery plasma convective flares and starry cosmos. Subtle stellar flicker, slow cinematic camera push.",
+        "negative_prompt": "text modification, title distortion, face distortion, flicker, jitter, sudden camera movement, watermark",
+        "seed": 7001,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-dying-giant",
+      "image": "images/scene-02-dying-giant.png",
+      "narration": "บีเทลจุส คือดาวยักษ์แดงที่มีขนาดใหญ่กว่าดวงอาทิตย์ของเราถึง 700 เท่า มันเผาผลาญเชื้อเพลิงจนหมด และกำลังเต้นตุบๆ อยู่ในช่วงท้ายของชีวิต",
+      "tts_text": "บีเทลจุส คือดาวยักษ์แดงที่มีขนาดใหญ่กว่าดวงอาทิตย์ของเราถึง เจ็ดร้อยเท่า มันเผาผลาญเชื้อเพลิงจนหมด และกำลังเต้นตุบๆ อยู่ในช่วงท้ายของชีวิต",
+      "subtitle": "ดาวยักษ์ใหญ่กว่าดวงอาทิตย์ 700 เท่า\nกำลังเผาผลาญเชื้อเพลิงช่วงท้ายชีวิต",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Extreme close-up of violent boiling convective plasma cells on red supergiant photosphere. Enormous magnetic loops and fiery prominences arching over turbulent glowing surface. Slow hypnotic camera drift.",
+        "negative_prompt": "text, cartoon, watermark, logo, HUD, sudden flash, low resolution",
+        "seed": 7002,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-supernova-explosion",
+      "image": "images/scene-03-supernova-explosion.png",
+      "narration": "เมื่อแกนกลางยุบตัวลง มันจะระเบิดเป็น ‘ซูเปอร์โนวา’ ปลดปล่อยพลังงานมหาศาลเทียบเท่ากับแสงของดาวฤกษ์หลายพันล้านดวงรวมกัน!",
+      "tts_text": "เมื่อแกนกลางยุบตัวลง มันจะระเบิดเป็น ซูเปอร์โนวา ปลดปล่อยพลังงานมหาศาลเทียบเท่ากับแสงของดาวฤกษ์หลายพันล้านดวงรวมกัน!",
+      "subtitle": "ระเบิดซูเปอร์โนวามหาศาล\nสว่างเทียบเท่าดาวพันล้านดวง",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.18,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Cataclysmic core-collapse supernova eruption in deep space. Blinding white-blue central flash with expanding relativistic shockwave tearing through violet and amber gas clouds. Volumetric dynamic expansion.",
+        "negative_prompt": "text, watermark, logo, HUD, explosion debris, jitter, strobe",
+        "seed": 7003,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-two-moons-night-sky",
+      "image": "images/scene-04-two-moons-night-sky.png",
+      "narration": "บนโลกของเรา แสงจากการระเบิดจะสว่างจ้าจนส่องให้เห็นเงาในยามค่ำคืน สว่างเทียบเท่าพระจันทร์เต็มดวง และมองเห็นได้ชัดเจนแม้ในเวลากลางวัน นานหลายเดือน",
+      "tts_text": "บนโลกของเรา แสงจากการระเบิดจะสว่างจ้าจนส่องให้เห็นเงาในยามค่ำคืน สว่างเทียบเท่าพระจันทร์เต็มดวง และมองเห็นได้ชัดเจนแม้ในเวลากลางวัน นานหลายเดือน",
+      "subtitle": "สว่างเท่าพระจันทร์เต็มดวง\nมองเห็นได้ชัดแม้ตอนกลางวัน",
+      "motion": "pan_right_to_left",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Night sky over dramatic snow-capped alpine mountains. Glowing Milky Way arch with brilliantly shining golden supernova star illuminating the mountain peaks and clouds. Majestic slow landscape pan.",
+        "negative_prompt": "text, modern city buildings, cars, telephone wires, watermark, logo, flicker",
+        "seed": 7004,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-safe-distance",
+      "image": "images/scene-05-safe-distance.png",
+      "narration": "แต่ไม่ต้องตกใจครับ เพราะบีเทลจุสอยู่ห่างจากเราถึง 640 ปีแสง ระยะนี้ปลอดภัยเกินกว่าที่รังสีอันตรายจะทำลายชั้นบรรยากาศโลกได้",
+      "tts_text": "แต่ไม่ต้องตกใจครับ เพราะบีเทลจุสอยู่ห่างจากเราถึง หกร้อยสี่สิบปีแสง ระยะนี้ปลอดภัยเกินกว่าที่รังสีอันตรายจะทำลายชั้นบรรยากาศโลกได้",
+      "subtitle": "อยู่ห่างออกไป 640 ปีแสง\nปลอดภัย ไม่ทำลายชั้นบรรยากาศโลก",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Deep cosmic perspective showing concentric solar planetary orbits orbiting our Sun, with Orion constellation and distant stars shining peacefully in background. Smooth gliding camera motion.",
+        "negative_prompt": "text, labels, HUD, sci-fi weapons, laser beams, watermark, logo, wobble",
+        "seed": 7005,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-cosmic-forge",
+      "image": "images/scene-06-cosmic-forge.png",
+      "narration": "และการระเบิดนี้ไม่ใช่แค่จุดจบ แต่มันคือเตาหลอมจักรวาลที่พ่นธาตุอย่าง เหล็ก คาร์บอน และออกซิเจน ออกไปกระจายทั่วอวกาศ",
+      "tts_text": "และการระเบิดนี้ไม่ใช่แค่จุดจบ แต่มันคือเตาหลอมจักรวาลที่พ่นธาตุอย่าง เหล็ก คาร์บอน และออกซิเจน ออกไปกระจายทั่วอวกาศ",
+      "subtitle": "เตาหลอมแห่งจักรวาล\nสร้างธาตุเหล็ก คาร์บอน ออกซิเจน",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Stunning Crab Nebula supernova remnant expanding in deep space. Filaments of glowing emerald green, amber gold, and sapphire blue gas seeded with cosmic heavy elements. Slow majestic volumetric push.",
+        "negative_prompt": "text, chemical formulas, charts, watermark, logo, flicker, jitter",
+        "seed": 7006,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-we-are-stardust",
+      "image": "images/scene-07-we-are-stardust.png",
+      "narration": "ธาตุเหล่านี้เองที่จะกลายมาเป็นดาวเคราะห์ดวงใหม่... และเป็นองค์ประกอบของร่างกายเราทุกคน",
+      "tts_text": "ธาตุเหล่านี้เองที่จะกลายมาเป็นดาวเคราะห์ดวงใหม่... และเป็นองค์ประกอบของร่างกายเราทุกคน",
+      "subtitle": "ธาตุตั้งต้นของดาวดวงใหม่\nและร่างกายของพวกเราทุกคน",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Pristine orbital horizon of Earth at sunrise. Thin luminous blue atmosphere glowing above curved limb with dark cosmic void beyond. Slow contemplative camera glide.",
+        "negative_prompt": "text, satellites, space junk, cartoon, watermark, logo, jitter",
+        "seed": 7007,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-08-philosophical-insight",
+      "image": "images/scene-08-philosophical-insight.png",
+      "narration": "ความตายของดวงดาว จึงเตือนเราว่า เราไม่ได้เกิดขึ้นมาในจักรวาลนี้... แต่เราคือส่วนหนึ่งของจักรวาลที่กำลังมองดูตัวเอง",
+      "tts_text": "ความตายของดวงดาว จึงเตือนเราว่า เราไม่ได้เกิดขึ้นมาในจักรวาลนี้... แต่เราคือส่วนหนึ่งของจักรวาลที่กำลังมองดูตัวเอง",
+      "subtitle": "เราไม่ได้แค่เกิดในจักรวาล\nแต่เราคือจักรวาลที่กำลังมองดูตัวเอง",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Deep starry night at Paranal Observatory. Giant telescope dome firing a golden laser guide star directly into the heart of the Milky Way galaxy. Slow inspiring camera pull-out.",
+        "negative_prompt": "text, tourists, cars, streetlights, watermark, logo, wobble",
+        "seed": 7008,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Mamase brand outro, glowing cyan orbiting planet in dark navy space, peaceful and contemplative.",
+        "negative_prompt": "watermark, blur, jitter",
+        "seed": 98,
+        "frames": 81,
+        "lip_sync": false
+      }
+    }
+  ]
+}

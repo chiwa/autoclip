@@ -1,0 +1,133 @@
+{
+  "project": {
+    "id": "mamase-lunar-gateway-reel-v1",
+    "title": "Lunar Gateway จำเป็นจริงไหม หรือเป็นสถานีที่ทำให้ภารกิจซับซ้อนและแพงขึ้น?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Warm, engaging, authoritative, inspiring Thai documentary storyteller tone."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ถ้าในอดีต ยาน Apollo บินตรงไปลงดวงจันทร์ได้โดยไม่ต้องมีสถานีอวกาศ แล้วทำไมโครงการ Artemis ต้องสร้าง Lunar Gateway? มันคือโครงสร้างพื้นฐานที่จำเป็นจริง ๆ หรือเป็นแค่สถานีที่ทำให้ภารกิจซับซ้อนและเปลืองงบขึ้นกันแน่?",
+      "tts_text": "ถ้าในอดีต ยาน อะพอลโล บินตรงไปลงดวงจันทร์ได้โดยไม่ต้องมีสถานีอวกาศ แล้วทำไมโครงการ อาเทมิส ต้องสร้าง ลูนาร์ เกตเวย์? มันคือโครงสร้างพื้นฐานที่จำเป็นจริง ๆ หรือเป็นแค่สถานีที่ทำให้ภารกิจซับซ้อนและเปลืองงบขึ้นกันแน่?",
+      "subtitle": "LUNAR GATEWAY จำเป็นจริงไหม?\nหรือแค่ทำให้ภารกิจซับซ้อนและแพงขึ้น?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve key art typography, characters, and branding layout. The Lunar Gateway space station floats in high lunar orbit near the glowing Moon while cosmic stars drift. Subtle cinematic push-in.",
+        "negative_prompt": "text distortion, typography distortion, face distortion, flicker, sudden movement, watermark",
+        "seed": 2028,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-direct-flight-critique",
+      "image": "images/scene-02-direct-flight-critique.png",
+      "narration": "ฝ่ายวิจารณ์มองว่า ยานลงจอดรุ่นใหม่อย่าง Starship ของ SpaceX หรือ Blue Origin มีศักยภาพพอที่จะบินตรงสู่ดวงจันทร์ได้เลย การต้องเพิ่มสถานี Gateway เข้ามาคั่นกลาง ยิ่งเพิ่มความซับซ้อน จุดเชื่อมต่อ และผลาญงบประมาณมหาศาล",
+      "tts_text": "ฝ่ายวิจารณ์มองว่า ยานลงจอดรุ่นใหม่อย่าง สตาร์ชิป ของ สเปซเอ็กซ์ หรือ บลู ออริจิน มีศักยภาพพอที่จะบินตรงสู่ดวงจันทร์ได้เลย การต้องเพิ่มสถานี เกตเวย์ เข้ามาคั่นกลาง ยิ่งเพิ่มความซับซ้อน จุดเชื่อมต่อ และผลาญงบประมาณมหาศาล",
+      "subtitle": "บินตรงไปลงเลยได้ไหม?\nทำไมต้องแวะสถานีให้เสี่ยงและเปลืองงบ?",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_right"
+    },
+    {
+      "id": "scene-03-nrho-orbit",
+      "image": "images/scene-03-nrho-orbit.png",
+      "narration": "แต่ NASA ไม่ได้วางมันไว้ในวงโคจรธรรมดาครับ! พวกเขาเลือกวงโคจรพิเศษที่เรียกว่า NRHO ซึ่งใช้แรงดึงดูดของโลกและดวงจันทร์ช่วยพยุง ทำให้แทบไม่ต้องใช้เชื้อเพลิงรักษาระดับ แถมยังมองเห็นโลกและสื่อสารได้ตลอด 24 ชั่วโมง",
+      "tts_text": "แต่ นาซา ไม่ได้วางมันไว้ในวงโคจรธรรมดาครับ! พวกเขาเลือกวงโคจรพิเศษที่เรียกว่า เอ็นอาร์เอชโอ ซึ่งใช้แรงดึงดูดของโลกและดวงจันทร์ช่วยพยุง ทำให้แทบไม่ต้องใช้เชื้อเพลิงรักษาระดับ แถมยังมองเห็นโลกและสื่อสารได้ตลอด ยี่สิบสี่ ชั่วโมง",
+      "subtitle": "วงโคจรพิเศษ NRHO\nแทบไม่เปลืองเชื้อเพลิง และเห็นโลกตลอด 24 ชม.",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-04-ppe-halo-modules",
+      "image": "images/scene-04-ppe-halo-modules.png",
+      "narration": "หัวใจหลักจะเริ่มต้นด้วย 2 โมดูลแรก คือ PPE เครื่องยนต์ขับเคลื่อนไฟฟ้าพลังงานไอออนจากโซลาร์เซลล์ยักษ์ และ HALO ห้องปรับแรงดัน ที่พักอาศัย และศูนย์บัญชาการขนาดกะทัดรัด",
+      "tts_text": "หัวใจหลักจะเริ่มต้นด้วย สอง โมดูลแรก คือ พีพีอี เครื่องยนต์ขับเคลื่อนไฟฟ้าพลังงานไอออนจากโซลาร์เซลล์ยักษ์ และ เฮโล ห้องปรับแรงดัน ที่พักอาศัย และศูนย์บัญชาการขนาดกะทัดรัด",
+      "subtitle": "PPE & HALO\nเครื่องยนต์ไอออนยักษ์ และศูนย์บัญชาการของนักบิน",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-05-staging-docking-hub",
+      "image": "images/scene-05-staging-docking-hub.png",
+      "narration": "Gateway จึงทำหน้าที่เสมือนจุดพักรถกลางอวกาศ เป็นท่าเทียบยาน Orion จากโลก นัดพบกับยานลงจอดดวงจันทร์ และคลังถ่ายโอนเสบียง โดยไม่ต้องแบกเชื้อเพลิงทั้งหมดลงไปที่พื้นผิว",
+      "tts_text": "เกตเวย์ จึงทำหน้าที่เสมือนจุดพักรถกลางอวกาศ เป็นท่าเทียบยาน โอไรออน จากโลก นัดพบกับยานลงจอดดวงจันทร์ และคลังถ่ายโอนเสบียง โดยไม่ต้องแบกเชื้อเพลิงทั้งหมดลงไปที่พื้นผิว",
+      "subtitle": "จุดพักรถกลางอวกาศ\nท่าเทียบยาน Orion ยานลงจอด และคลังส่งเสบียง",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-06-international-coalition",
+      "image": "images/scene-06-international-coalition.png",
+      "narration": "นอกจากนี้ มันคือโซ่ล็อกความร่วมมือนานาชาติ ทั้งแคนาดา ยุโรป ญี่ปุ่น และยูเออี ซึ่งร่วมสร้างแขนกล โมดูล และระบบขนส่ง เพื่อรับประกันว่าโครงการสำรวจอวกาศนี้ จะไม่ถูกยกเลิกง่ายๆ เมื่อเปลี่ยนรัฐบาล",
+      "tts_text": "นอกจากนี้ มันคือโซ่ล็อกความร่วมมือนานาชาติ ทั้งแคนาดา ยุโรป ญี่ปุ่น และยูเออี ซึ่งร่วมสร้างแขนกล โมดูล และระบบขนส่ง เพื่อรับประกันว่าโครงการสำรวจอวกาศนี้ จะไม่ถูกยกเลิกง่ายๆ เมื่อเปลี่ยนรัฐบาล",
+      "subtitle": "พันธมิตรนานาชาติ\nโครงสร้างพื้นฐานระดับโลกที่ยากจะถูกยกเลิก",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-07-moon-to-mars-testbed",
+      "image": "images/scene-07-moon-to-mars-testbed.png",
+      "narration": "และเป้าหมายสุดท้ายไม่ได้หยุดแค่ดวงจันทร์... ถ้าเราจะส่งมนุษย์ไปดาวอังคารนาน 3 ปี Gateway คือสนามทดสอบเทคโนโลยีการมีชีวิตรอดนอกเกราะสนามแม่เหล็กโลกที่ดีที่สุดของมนุษยชาติ",
+      "tts_text": "และเป้าหมายสุดท้ายไม่ได้หยุดแค่ดวงจันทร์... ถ้าเราจะส่งมนุษย์ไปดาวอังคารนาน สาม ปี เกตเวย์ คือสนามทดสอบเทคโนโลยีการมีชีวิตรอดนอกเกราะสนามแม่เหล็กโลกที่ดีที่สุดของมนุษยชาติ",
+      "subtitle": "จากดวงจันทร์... สู่ก้าวแรกบนดาวอังคาร\nสนามทดสอบเทคโนโลยี นอกสนามแม่เหล็กโลก",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-08-gateway-verdict-climax",
+      "image": "images/scene-08-gateway-verdict-climax.png",
+      "narration": "Apollo ไปดวงจันทร์เพื่อพิสูจน์ว่าเราไปได้ แต่ Gateway กำลังพยายามสร้างถนนและสถานี เพื่อให้มนุษย์กลับไปอยู่ถาวร และออกเดินทางต่อได้ไกลกว่าเดิมครับ",
+      "tts_text": "อะพอลโล ไปดวงจันทร์เพื่อพิสูจน์ว่าเราไปได้ แต่ เกตเวย์ กำลังพยายามสร้างถนนและสถานี เพื่อให้มนุษย์กลับไปอยู่ถาวร และออกเดินทางต่อได้ไกลกว่าเดิมครับ",
+      "subtitle": "Apollo ไปเพื่อพิสูจน์ว่าไปได้\nแต่ Gateway สร้างขึ้นเพื่อให้เราอยู่ถาวร",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.05,
+      "focus": "center",
+      "transition": "none",
+      "show_subtitle": false
+    }
+  ]
+}

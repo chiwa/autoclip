@@ -1,0 +1,272 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>คนเหนือดวง · Weekly History</title><link rel="stylesheet" href="/static/style.css?v=24"></head>
+<body><main><header><a class="brand" href="/zodiac-weekly">🔮 คนเหนือดวง</a><nav class="app-nav"><a href="/zodiac-weekly">สร้าง 12 ราศี</a><a class="active" href="/zodiac-history">Weekly History</a><a href="/reels-history">Reels History</a><a href="/podcast-history">Podcast History</a></nav></header>
+<section class="tool-card zodiac-hero"><span class="eyebrow">WEEKLY BATCH HISTORY</span><h1>ประวัติดวง 12 ราศี</h1><p class="muted">หนึ่งสัปดาห์ต่อหนึ่งชุด เปิดดู ดาวน์โหลด หรือจัดการงานลูกทั้ง 12 ราศีได้จากที่เดียว</p></section>
+<div class="history-channel-filter"><label for="channelFilter">Channel<select id="channelFilter"><option value="all">ทุก Channel</option></select></label><a class="button secondary small" href="/channels">จัดการ Channel</a></div><section id="list" class="zodiac-results" aria-live="polite">กำลังโหลด…</section></main><script src="/static/channels.js?v=1"></script><script>
+const list=document.querySelector('#list'),channelFilter=document.querySelector('#channelFilter');let allBatches=[];const zodiacChannelFilterKey='autoclip.history.filters.zodiac';let activeChannel='all';try{activeChannel=JSON.parse(localStorage.getItem(zodiacChannelFilterKey)||'{}').channel||'all'}catch(_){}
+async function api(url,options){const response=await fetch(url,options);const data=await response.json().catch(()=>({}));if(!response.ok)throw new Error(data.detail?.message||'ทำรายการไม่สำเร็จ');return data}
+function action(label,href,onclick,primary=false){const node=href?document.createElement('a'):document.createElement('button');node.className=`button ${primary?'primary':'secondary'}`;node.textContent=label;if(href)node.href=href;if(onclick)node.onclick=onclick;return node}
+function render(batches){list.replaceChildren();if(!batches.length){list.innerHTML='<section class="tool-card history-empty">ยังไม่มีชุดดวงรายสัปดาห์</section>';return}
+const urlParams=new URLSearchParams(location.search);
+const targetBatch=urlParams.get('batch')||urlParams.get('view');
+const autoViewAll=urlParams.get('view')==='all'||Boolean(urlParams.get('batch'));
+
+for(const batch of batches){
+  const s=batch.summary,card=document.createElement('details');
+  card.className='tool-card zodiac-batch-card';
+  card.dataset.batchId=batch.batchId;
+  const head=document.createElement('summary');
+  head.innerHTML=`<div><span class="eyebrow">🔮 คนเหนือดวง</span><h2>${batch.week.displayTh}</h2><p class="muted">${s.completed}/12 Completed · ${s.failed} Failed · ${s.running} Pending</p></div><span class="status-pill">${batch.status}</span>`;
+  card.append(head);
+  const controls=document.createElement('div');
+  controls.className='actions batch-actions';
+  const viewAllBtn=action('ดูคลิปทั้งหมด (View All)',null,()=>toggleViewAll(batch,card,viewAllBtn));
+  viewAllBtn.className='button secondary view-all-btn';
+  controls.append(
+    action('Open',`/zodiac-weekly?batch=${encodeURIComponent(batch.batchId)}`),
+    viewAllBtn,
+    action(`Download All MP4 (${s.completed}/12)`,`/api/zodiac/batches/${batch.batchId}/all-videos`),
+    action('Download ZIP',`/api/zodiac/batches/${batch.batchId}/complete-archive`,null,true),
+    action('Regenerate Failed',null,()=>retry(batch.batchId)),
+    action('Delete Batch',null,()=>removeBatch(batch))
+  );
+  card.append(controls);
+
+  const feedContainer=document.createElement('div');
+  feedContainer.className='zodiac-video-feed';
+  feedContainer.hidden=true;
+  card.append(feedContainer);
+
+  const children=document.createElement('div');
+  children.className='zodiac-child-list';
+  for(const child of batch.children){
+    const row=document.createElement('article');
+    row.className='zodiac-child-row';
+    let stepInfo = child.currentStep ? ` · ${child.currentStep}` : '';
+    if (child.status === 'FAILED' && child.error && child.error.message) {
+      stepInfo += ` <span style="color:var(--error-text, red);">(${child.error.message})</span>`;
+    }
+    const pubBadge = child.published ? '<span class="publish-state published" style="margin-left: 8px;">เผยแพร่แล้ว</span>' : '<span class="publish-state" style="margin-left: 8px;">ยังไม่เผยแพร่</span>';
+    row.innerHTML=`<div><strong>${String(child.zodiac.order).padStart(2,'0')} ราศี${child.zodiac.name_th}</strong> ${pubBadge}<br><small>${child.status} · ${child.progress}%${stepInfo}</small></div>`;
+    const actions=document.createElement('div');
+    actions.className='actions';
+    actions.append(action('Preview',`/jobs/${child.jobId}/preview`));
+    if(child.videoAvailable)actions.append(action('Download MP4',`/api/zodiac/batches/${batch.batchId}/${child.zodiac.id}/video`));
+    actions.append(action('ZIP',`/api/zodiac/batches/${batch.batchId}/${child.zodiac.id}/package`),action('Metadata',`/api/zodiac/batches/${batch.batchId}/${child.zodiac.id}/metadata`),action('Regenerate',null,()=>regenerate(batch.batchId,child.zodiac.id)));
+    if(child.projectId) {
+      actions.append(action(child.published ? 'เปลี่ยนเป็นยังไม่เผยแพร่' : 'มาร์คว่าเผยแพร่แล้ว', null, (e) => setPublished(child.projectId, !child.published, e.currentTarget)));
+    }
+    row.append(actions);
+    children.append(row);
+  }
+  card.append(children);
+  list.append(card);
+
+  if(targetBatch&&batch.batchId===targetBatch){
+    card.open=true;
+    if(autoViewAll){
+      toggleViewAll(batch,card,viewAllBtn);
+    }
+  }
+}}
+
+function toggleViewAll(batch,card,btn){
+  const feed=card.querySelector('.zodiac-video-feed');
+  if(!feed)return;
+  card.open=true;
+  if(!feed.hidden){
+    feed.hidden=true;
+    feed.replaceChildren();
+    if(btn)btn.textContent='ดูคลิปทั้งหมด (View All)';
+    return;
+  }
+  feed.replaceChildren();
+  feed.hidden=false;
+  if(btn)btn.textContent='ซ่อนคลิปทั้งหมด (Hide Videos)';
+
+  const feedHead=document.createElement('div');
+  feedHead.className='zodiac-feed-header';
+  feedHead.innerHTML=`<h3>คลิป 12 ราศี · ${batch.week.displayTh}</h3><span class="pill">${batch.summary.completed}/12 พร้อมดู</span><button id="regenAllBtn" class="button secondary">Regenerate ใหม่ทั้งหมด</button>`;
+  feed.append(feedHead);
+
+  const feedList=document.createElement('div');
+  feedList.className='zodiac-feed-list';
+
+  // Sort children by zodiac order 1 to 12
+  const sorted=[...batch.children].sort((a,b)=>(a.zodiac?.order||0)-(b.zodiac?.order||0));
+  for(const child of sorted){
+    const vCard=document.createElement('article');
+    vCard.className='zodiac-video-card';
+    const orderStr=String(child.zodiac.order).padStart(2,'0');
+    const zName=child.zodiac.name_th;
+
+    const head=document.createElement('div');
+    head.className='zodiac-video-head';
+    const vPubBadge = child.published ? '<span class="publish-state published" style="margin-left: 8px;">เผยแพร่แล้ว</span>' : '<span class="publish-state" style="margin-left: 8px;">ยังไม่เผยแพร่</span>';
+    head.innerHTML=`<strong>${orderStr} ราศี${zName}</strong> ${vPubBadge}<span class="status-pill">${child.status}</span>`;
+    
+    const metaDiv = document.createElement('div');
+    metaDiv.className = 'zodiac-video-meta';
+    const mTitle = child.metadata?.title || '-';
+    let mDesc = child.metadata?.description || '-';
+    if(child.metadata?.hashtags && Array.isArray(child.metadata.hashtags)) {
+        mDesc += '\n\n' + child.metadata.hashtags.join(' ');
+    }
+    
+    const titleRow = document.createElement('div');
+    titleRow.style.display = 'flex';
+    titleRow.style.justifyContent = 'space-between';
+    titleRow.style.alignItems = 'flex-start';
+    titleRow.style.marginBottom = '12px';
+    const h4 = document.createElement('h4');
+    h4.textContent = mTitle;
+    h4.style.margin = '0';
+    const copyTitleBtn = document.createElement('button');
+    copyTitleBtn.className = 'button small secondary';
+    copyTitleBtn.textContent = 'Copy Title';
+    copyTitleBtn.onclick = () => { navigator.clipboard.writeText(mTitle); copyTitleBtn.textContent = 'Copied!'; setTimeout(()=>copyTitleBtn.textContent='Copy Title', 2000); };
+    titleRow.append(h4, copyTitleBtn);
+
+    const descRow = document.createElement('div');
+    descRow.style.display = 'flex';
+    descRow.style.justifyContent = 'space-between';
+    descRow.style.alignItems = 'center';
+    descRow.style.marginTop = '12px';
+    const copyDescBtn = document.createElement('button');
+    copyDescBtn.className = 'button small secondary';
+    copyDescBtn.textContent = 'Copy Caption';
+    copyDescBtn.onclick = () => { navigator.clipboard.writeText(mDesc); copyDescBtn.textContent = 'Copied!'; setTimeout(()=>copyDescBtn.textContent='Copy Caption', 2000); };
+    descRow.append(document.createElement('div'), copyDescBtn);
+
+    const pre = document.createElement('pre');
+    pre.textContent = mDesc;
+    
+    metaDiv.append(titleRow, pre, descRow);
+
+    const mediaDiv = document.createElement('div');
+    mediaDiv.className = 'zodiac-video-media';
+    mediaDiv.append(head);
+
+    if(child.videoAvailable){
+      const video=document.createElement('video');
+      video.className='zodiac-video-player';
+      video.controls=true;
+      video.playsInline=true;
+      video.preload='metadata';
+      video.src=`/api/zodiac/batches/${batch.batchId}/${child.zodiac.id}/video`;
+      mediaDiv.append(video);
+    }else{
+      const placeholder=document.createElement('div');
+      placeholder.className='zodiac-video-empty';
+      placeholder.innerHTML=`<span>🔮</span><span>${child.status==='COMPLETED'?'กำลังโหลดวิดีโอ...':`ยังไม่มีคลิป (${child.status})`}</span>`;
+      mediaDiv.append(placeholder);
+    }
+
+    const vActions=document.createElement('div');
+    vActions.className='actions';
+    vActions.append(action('Preview',`/jobs/${child.jobId}/preview`));
+    if(child.videoAvailable){
+      vActions.append(action('Download MP4',`/api/zodiac/batches/${batch.batchId}/${child.zodiac.id}/video`));
+    }
+    if(child.projectId) {
+      vActions.append(action(child.published ? 'ยกเลิกเผยแพร่' : 'มาร์คว่าเผยแพร่แล้ว', null, (e) => setPublished(child.projectId, !child.published, e.currentTarget)));
+    }
+    mediaDiv.append(vActions);
+    vCard.append(metaDiv, mediaDiv);
+    feedList.append(vCard);
+  }
+  feed.append(feedList);
+  
+  const regenBtn = feed.querySelector('#regenAllBtn');
+  if(regenBtn) {
+    regenBtn.onclick = () => showRegenPopup(batch);
+  }
+}
+
+function showRegenPopup(batch) {
+  const dialog=document.createElement('dialog');
+  
+  const zodiacs = [];
+  for(const child of batch.children) {
+      if(!child.metadata) continue;
+      const desc = child.metadata.description || '';
+      const work = (desc.match(/การงาน:\s*(.*?)(?=\nการเงิน:)/s)||[])[1]?.trim() || '';
+      const finance = (desc.match(/การเงิน:\s*(.*?)(?=\nความรัก:)/s)||[])[1]?.trim() || '';
+      const love = (desc.match(/ความรัก:\s*(.*?)(?=\nคำแนะนำ:)/s)||[])[1]?.trim() || '';
+      const advice = (desc.match(/คำแนะนำ:\s*(.*?)(?=\n\n|\nการดูดวง)/s)||[])[1]?.trim() || '';
+      zodiacs.push({
+          id: child.zodiac.id,
+          hook: child.metadata.hook || '',
+          work: work,
+          finance: finance,
+          love: love,
+          advice: advice
+      });
+  }
+  
+  const payload = {
+      week: batch.week,
+      tts_provider: batch.ttsProvider || "google-gemini",
+      zodiacs: zodiacs,
+      visual: batch.visual || {},
+      voice: batch.voice || {}
+  };
+  
+  dialog.innerHTML=`<form method="dialog" style="min-width:min(700px,90vw); display:flex; flex-direction:column; gap:16px;">
+      <h2 style="margin:0">Regenerate All (New Batch)</h2>
+      <p style="margin:0; color:var(--muted); font-size:14px;">โปรดตรวจสอบ JSON ข้อมูลของทั้ง 12 ราศีด้านล่าง หากต้องการแก้ไขข้อความสามารถแก้ในนี้ได้เลย<br>เมื่อกด Generate จะเป็นการสร้าง 12 งานใหม่ทันที</p>
+      <textarea id="regenJson" style="height:400px; font-family:monospace; font-size:13px; line-height:1.4; padding:12px; border-radius:8px; border:1px solid rgba(140,115,255,0.4); background:rgba(0,0,0,0.3); color:#c8adff;">${JSON.stringify(payload, null, 2)}</textarea>
+      <div class="actions" style="justify-content:flex-end">
+          <button type="button" class="button secondary" onclick="this.closest('dialog').close()">Cancel</button>
+          <button type="submit" id="regenSubmit" class="button primary">Generate</button>
+      </div>
+  </form>`;
+  
+  document.body.append(dialog);
+  
+  dialog.querySelector('form').onsubmit = async (e) => {
+      e.preventDefault();
+      const btn = dialog.querySelector('#regenSubmit');
+      try {
+          const body = JSON.parse(dialog.querySelector('#regenJson').value);
+          btn.disabled = true;
+          btn.textContent = 'Generating...';
+          const newBatch = await api('/api/zodiac/batches', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(body)
+          });
+          dialog.close();
+          window.location.href = `/zodiac-weekly?batch=${encodeURIComponent(newBatch.batchId)}`;
+      } catch (err) {
+          alert('Error: ' + err.message);
+          btn.disabled = false;
+          btn.textContent = 'Generate';
+      }
+  };
+  
+  dialog.addEventListener('close', () => dialog.remove());
+  dialog.showModal();
+}
+
+async function load(){try{const [batchData,channelData]=await Promise.all([api('/api/zodiac/batches'),api('/api/channels')]);allBatches=batchData.batches||[];channelFilter.replaceChildren(new Option('ทุก Channel','all'),...(channelData.channels||[]).map(channel=>new Option(channel.name,channel.id)));if(![...channelFilter.options].some(option=>option.value===activeChannel))activeChannel='all';channelFilter.value=activeChannel;render(allBatches.filter(batch=>activeChannel==='all'||(batch.channelId||'undefined')===activeChannel))}catch(error){list.innerHTML=`<section class="error-box">${error.message}</section>`}}
+channelFilter.onchange=()=>{activeChannel=channelFilter.value;try{const saved=JSON.parse(localStorage.getItem(zodiacChannelFilterKey)||'{}');localStorage.setItem(zodiacChannelFilterKey,JSON.stringify({...saved,channel:activeChannel}))}catch(_){}render(allBatches.filter(batch=>activeChannel==='all'||(batch.channelId||'undefined')===activeChannel))};
+async function retry(id){try{await api(`/api/zodiac/batches/${id}/retry-failed`,{method:'POST'});load()}catch(error){alert(error.message)}}
+async function regenerate(batch,zodiac){if(!confirm('สร้างวิดีโอราศีนี้ใหม่หรือไม่? งานราศีอื่นจะไม่ถูกรันซ้ำ'))return;try{await api(`/api/zodiac/batches/${batch}/${zodiac}/regenerate`,{method:'POST'});load()}catch(error){alert(error.message)}}
+async function removeBatch(batch){const text=`ลบชุดดวงประจำสัปดาห์ ${batch.week.displayTh} ทั้งหมดหรือไม่?\n\nจะลบงานลูก วิดีโอ metadata ZIP และภาพวันที่ของชุดนี้\nภาพ master ใน assets/12ราศี จะไม่ถูกลบ`;if(!confirm(text))return;try{await api(`/api/zodiac/batches/${batch.batchId}`,{method:'DELETE'});load()}catch(error){alert(error.message)}}
+async function setPublished(projectId, published, control) {
+  control.disabled = true;
+  try {
+    await api(`/api/history/${encodeURIComponent(projectId)}/published`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ published })
+    });
+    load();
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    control.disabled = false;
+  }
+}
+load();
+</script><script src="/static/nav.js?v=4"></script></body></html>

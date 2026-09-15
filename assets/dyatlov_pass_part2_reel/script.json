@@ -1,0 +1,130 @@
+{
+  "project": {
+    "id": "mamase-dyatlov-pass-part2-reel-v1",
+    "title": "Dyatlov Pass Part 2 — หิมะอาจเป็นคำตอบหรือไม่?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, intelligent, slightly mysterious, conversational Thai male voice. Sound like a thoughtful friend explaining a fascinating scientific mystery. Keep the delivery cinematic but restrained, with connected phrasing and brief natural pauses. Never sound like a horror narrator, movie trailer, advertisement, announcer, or news anchor."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "กว่า 60 ปี คนสงสัยว่าอะไรทำให้นักเดินป่า 9 คน ออกจากเต็นท์กลางความหนาวจัด จนกระทั่งนักวิทยาศาสตร์ลองจำลองคืนนั้นขึ้นมาใหม่",
+      "tts_text": "กว่าหกสิบปี คนสงสัยว่าอะไรทำให้นักเดินป่าเก้าคน ออกจากเต็นท์กลางความหนาวจัด จนกระทั่งนักวิทยาศาสตร์ลองจำลองคืนนั้นขึ้นมาใหม่",
+      "subtitle": "Dyatlov Pass\nไม่ใช่ UFO?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "right",
+      "transition": "fade_black",
+      "wan": {
+        "prompt": "Preserve the supplied cinematic Dyatlov Pass artwork, canonical Mamase presenter identity, exact title, actual circular Mamase logo in the upper-right, tent, footprints and composition. Presenter speaks naturally with subtle blinking and minimal head movement. Wind-driven snow moves across the slope and tent fabric shifts slightly. Keep all text and the upper-right logo completely static and unchanged. Slow stable cinematic push-in.",
+        "negative_prompt": "changed text, misspelled text, changed logo, warped logo, extra logo, watermark, distorted face, distorted hands, bodies, blood, UFO craft, aliens, giant avalanche, flicker, jitter, sudden camera movement",
+        "seed": 5901,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-1959",
+      "image": "images/scene-02-1959-expedition.png",
+      "narration": "ปี 1959 นักเดินทางชาวโซเวียต 9 คน เสียชีวิตบนเทือกเขาอูราล และเต็นท์ที่ถูกทิ้งไว้ก็กลายเป็นต้นกำเนิดของปริศนา",
+      "tts_text": "ปีหนึ่งพันเก้าร้อยห้าสิบเก้า นักเดินทางชาวโซเวียตเก้าคน เสียชีวิตบนเทือกเขาอูราล และเต็นท์ที่ถูกทิ้งไว้ก็กลายเป็นต้นกำเนิดของปริศนา",
+      "subtitle": "ปี 1959 · นักเดินป่า 9 คน",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.11,
+      "focus": "right",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-03-mystery",
+      "image": "images/scene-03-abandoned-camp.png",
+      "narration": "เต็นท์เสียหาย รอยเท้ามุ่งลงป่า และสภาพศพที่ผิดคาด ทำให้เกิดคำอธิบายตั้งแต่อาวุธลับ ไปจนถึง UFO",
+      "tts_text": "เต็นท์เสียหาย รอยเท้ามุ่งลงป่า และสภาพศพที่ผิดคาด ทำให้เกิดคำอธิบายตั้งแต่อาวุธลับ ไปจนถึง ยูเอฟโอ",
+      "subtitle": "หลักฐานแปลก\nทฤษฎียิ่งมากขึ้น",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "left",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-04-theories",
+      "image": "images/scene-04-theories.png",
+      "narration": "แต่คำอธิบายที่น่าสนใจที่สุดในวันนี้ อาจธรรมดากว่านั้นมากครับ เพราะตัวการอาจเป็นหิมะบนภูเขานั่นเอง",
+      "tts_text": "แต่คำอธิบายที่น่าสนใจที่สุดในวันนี้ อาจธรรมดากว่านั้นมากครับ เพราะตัวการอาจเป็นหิมะบนภูเขานั่นเอง",
+      "subtitle": "คำตอบอาจธรรมดากว่านั้น",
+      "motion": "pan_left_to_right",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "left",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-05-science-model",
+      "image": "images/scene-05-model.png",
+      "narration": "แบบจำลองเสนอว่า การขุดไหล่เขาเพื่อตั้งเต็นท์ รวมกับลมที่พัดหิมะมาสะสมด้านบน อาจทำให้ชั้นหิมะหลุดในเวลาต่อมา",
+      "tts_text": "แบบจำลองเสนอว่า การขุดไหล่เขาเพื่อตั้งเต็นท์ รวมกับลมที่พัดหิมะมาสะสมด้านบน อาจทำให้ชั้นหิมะหลุดในเวลาต่อมา",
+      "subtitle": "ตัดไหล่เขา + ลมสะสมหิมะ",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-06-slab-avalanche",
+      "image": "images/scene-06-slab.png",
+      "narration": "มันไม่ต้องเป็นหิมะถล่มมหึมาครับ แผ่นหิมะขนาดกะทัดรัดก็อาจกระแทกเต็นท์ บังคับให้ทุกคนหนี และอธิบายบาดเจ็บบางส่วนได้",
+      "tts_text": "มันไม่ต้องเป็นหิมะถล่มมหึมาครับ แผ่นหิมะขนาดกะทัดรัดก็อาจกระแทกเต็นท์ บังคับให้ทุกคนหนี และอธิบายบาดเจ็บบางส่วนได้",
+      "subtitle": "Slab avalanche\nเล็ก แต่รุนแรงได้",
+      "motion": "slow_zoom_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.14,
+      "focus": "left",
+      "transition": "smooth_left",
+      "wan": {
+        "prompt": "Preserve the supplied scientific snow-slab scene and actual circular Mamase logo. A compact cohesive slab cracks along the weak layer and slides only a short distance against part of the tent. Blowing snow begins to cover the small release trace. Keep the mountain stable and the upper-right logo completely static and unchanged. Slow controlled documentary camera movement, physically credible, not a giant avalanche.",
+        "negative_prompt": "changed logo, warped logo, extra logo, text, labels, arrows, giant avalanche, snow tsunami, people, bodies, blood, explosion, portal, flicker, jitter, fast camera",
+        "seed": 5906,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-payoff",
+      "image": "images/scene-07-payoff.png",
+      "narration": "แบบจำลองแสดงว่าเหตุการณ์แบบนี้เป็นไปได้ แต่ยังไม่ใช่คำตอบสุดท้าย บางทีธรรมชาติธรรมดา ก็ซับซ้อนพอจะเป็นปริศนาได้นานกว่าครึ่งศตวรรษครับ",
+      "tts_text": "แบบจำลองแสดงว่าเหตุการณ์แบบนี้เป็นไปได้ แต่ยังไม่ใช่คำตอบสุดท้าย บางทีธรรมชาติธรรมดา ก็ซับซ้อนพอจะเป็นปริศนาได้นานกว่าครึ่งศตวรรษครับ",
+      "subtitle": "เป็นไปได้\nแต่ยังไม่ใช่คำตอบสุดท้าย",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-08-mamase-end",
+      "image": "images/scene-08-mamase-end.png",
+      "narration": "ถ้าชอบเรื่องราววิทยาศาสตร์ ประวัติศาสตร์ และเรื่องลึกลับที่มีเหตุผล กดไลก์ กดแชร์ และกดติดตาม แล้วพบกันในเรื่องต่อไปกับ Mamase ครับ",
+      "tts_text": "ถ้าชอบเรื่องราววิทยาศาสตร์ ประวัติศาสตร์ และเรื่องลึกลับที่มีเหตุผล กดไลก์ กดแชร์ และกดติดตาม แล้วพบกันในเรื่องต่อไปกับ มามาเซ่ ครับ",
+      "subtitle": false,
+      "show_subtitle": false,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.05,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

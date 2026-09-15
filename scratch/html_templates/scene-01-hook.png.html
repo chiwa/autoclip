@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1080px; height: 1920px; background: #06090e; overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    position: relative;
+  }
+  .wall {
+    position: absolute; top: 0; left: 0; width: 1080px; height: 1150px;
+    background: radial-gradient(circle at 68% 28%, #162030 0%, #0c1119 55%, #06090e 100%);
+  }
+  .acoustic-slats {
+    position: absolute; top: 0; left: 0; width: 1080px; height: 1150px;
+    background: repeating-linear-gradient(
+      90deg, rgba(255, 255, 255, 0.018) 0px, rgba(255, 255, 255, 0.018) 16px,
+      transparent 16px, transparent 32px
+    );
+    mask-image: radial-gradient(circle at 60% 35%, rgba(0,0,0,0.85) 0%, transparent 80%);
+  }
+  .lamp-glow {
+    position: absolute; top: 0; right: 0; width: 550px; height: 1400px;
+    background: radial-gradient(ellipse at 90% 10%, rgba(245, 158, 11, 0.09) 0%, rgba(245, 158, 11, 0.03) 45%, transparent 75%);
+    filter: blur(50px); pointer-events: none;
+  }
+  .monitor-ambient-glow {
+    position: absolute; top: 70px; left: 50%; transform: translateX(-50%);
+    width: 1040px; height: 950px;
+    background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.16) 0%, rgba(30, 58, 138, 0.08) 50%, transparent 75%);
+    filter: blur(60px);
+  }
+  .monitor-container {
+    position: absolute; top: 70px; left: 50%; transform: translateX(-50%);
+    width: 1000px; display: flex; flex-direction: column; align-items: center; z-index: 10;
+  }
+  .monitor-frame {
+    width: 1000px; height: 930px;
+    background: linear-gradient(180deg, #1b2636 0%, #101724 100%);
+    border-radius: 20px; padding: 12px;
+    box-shadow: 0 35px 80px -15px rgba(0, 0, 0, 0.95), 0 0 0 1px rgba(255, 255, 255, 0.1), 0 0 40px rgba(56, 189, 248, 0.08);
+    display: flex; flex-direction: column;
+  }
+  .monitor-screen {
+    flex: 1; background: #090d14; border-radius: 12px; overflow: hidden; display: flex;
+    border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+  }
+  .ide-nav {
+    width: 210px; background: #0c1119; border-right: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 18px 14px; display: flex; flex-direction: column; gap: 11px;
+  }
+  .nav-title { height: 10px; width: 65px; background: #334155; border-radius: 4px; margin-bottom: 6px; }
+  .tree-row { display: flex; align-items: center; gap: 8px; }
+  .folder-icon { width: 12px; height: 10px; background: #f59e0b; border-radius: 2px; }
+  .java-icon { width: 12px; height: 12px; background: #38bdf8; border-radius: 3px; }
+  .conf-icon { width: 12px; height: 12px; background: #10b981; border-radius: 3px; }
+  .node-bar { height: 7px; background: #475569; border-radius: 3px; }
+  .ide-editor { flex: 1; display: flex; flex-direction: column; background: #0a0e15; }
+  .tab-bar {
+    height: 38px; background: #080b10; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex; align-items: center; padding: 0 12px; gap: 6px;
+  }
+  .active-tab {
+    height: 28px; width: 145px; background: #111722; border-radius: 6px 6px 0 0;
+    border: 1px solid rgba(255, 255, 255, 0.08); border-bottom: none;
+    display: flex; align-items: center; padding: 0 10px; gap: 8px;
+  }
+  .inactive-tab {
+    height: 28px; width: 115px; display: flex; align-items: center; padding: 0 10px; gap: 8px; opacity: 0.35;
+  }
+  .code-scroll {
+    flex: 1; padding: 18px 18px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .c-row { display: flex; gap: 7px; align-items: center; }
+  .c-line-num { width: 22px; height: 7px; background: #1e293b; border-radius: 3px; margin-right: 12px; }
+  .t-ann { height: 8px; background: #fbbf24; border-radius: 4px; }
+  .t-kw { height: 8px; background: #c084fc; border-radius: 4px; }
+  .t-type { height: 8px; background: #38bdf8; border-radius: 4px; }
+  .t-fn { height: 8px; background: #60a5fa; border-radius: 4px; }
+  .t-str { height: 8px; background: #34d399; border-radius: 4px; }
+  .t-var { height: 8px; background: #f472b6; border-radius: 4px; }
+  .t-cm { height: 8px; background: #475569; border-radius: 4px; }
+  .t-op { height: 8px; width: 14px; background: #94a3b8; border-radius: 3px; }
+  .ide-term {
+    height: 140px; background: #070a0f; border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 12px 16px; display: flex; flex-direction: column; gap: 7px;
+  }
+  .term-title-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+  .dot-green { width: 8px; height: 8px; border-radius: 50%; background: #10b981; }
+  .term-txt { display: flex; gap: 8px; align-items: center; }
+  .ide-right {
+    width: 240px; background: #0b0f17; border-left: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 18px 14px; display: flex; flex-direction: column; gap: 14px;
+  }
+  .card-metric {
+    background: #101622; border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .spark-chart {
+    height: 40px; background: linear-gradient(180deg, rgba(56, 189, 248, 0.15) 0%, rgba(56, 189, 248, 0) 100%);
+    border-bottom: 2px solid #38bdf8; border-radius: 4px;
+  }
+  .stand-column {
+    width: 70px; height: 60px;
+    background: linear-gradient(90deg, #182230 0%, #2b394d 50%, #182230 100%);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+  }
+  .stand-foot {
+    width: 280px; height: 12px;
+    background: linear-gradient(180deg, #2d3a4d 0%, #171f2b 100%);
+    border-radius: 6px; box-shadow: 0 8px 20px rgba(0,0,0,0.8);
+  }
+  .desk-plane {
+    position: absolute; top: 1040px; left: 0; width: 1080px; height: 880px;
+    background: linear-gradient(180deg, #141b26 0%, #0f151f 35%, #0a0e16 100%);
+    border-top: 2px solid rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 30px 60px rgba(56, 189, 248, 0.04), 0 -20px 40px rgba(0,0,0,0.9);
+    display: flex; flex-direction: column; align-items: center; padding: 25px 40px 0 40px;
+  }
+  .desk-mat {
+    width: 1000px; height: 720px; background: #080b11; border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.95), inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+    display: flex; flex-direction: column; align-items: center; padding: 30px 50px; position: relative;
+  }
+  .desk-gear {
+    width: 100%; display: flex; align-items: center; justify-content: center; gap: 45px; margin-top: 10px;
+  }
+  .keyboard-assembly {
+    display: flex; flex-direction: column; gap: 12px; align-items: center;
+  }
+  .keyboard {
+    width: 620px; height: 230px; background: #0e131d; border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.85), 0 0 25px rgba(56, 189, 248, 0.06);
+    padding: 18px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .wrist-rest {
+    width: 620px; height: 70px; background: linear-gradient(180deg, #141c28 0%, #0c121b 100%);
+    border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.6);
+  }
+  .kb-line { display: flex; gap: 7px; flex: 1; }
+  .k-cap { flex: 1; background: #182232; border-radius: 5px; box-shadow: 0 3px 0 #0d121c; }
+  .k-cap.mod { background: #222e42; }
+  .k-cap.accent { background: #1e3a5f; }
+  .k-cap.space { flex: 4.5; }
+  .mouse {
+    width: 90px; height: 155px; background: linear-gradient(180deg, #1d2638 0%, #111722 100%);
+    border-radius: 45px; box-shadow: 0 18px 35px rgba(0,0,0,0.75), inset 0 1px 2px rgba(255,255,255,0.12);
+    border: 1px solid rgba(255, 255, 255, 0.06); position: relative;
+  }
+  .mouse-roller {
+    position: absolute; top: 26px; left: 50%; transform: translateX(-50%);
+    width: 11px; height: 28px; background: #2d3b52; border-radius: 6px;
+  }
+  .coffee-station {
+    position: absolute; right: 50px; top: 50px; width: 95px; height: 95px;
+    background: radial-gradient(circle at 40% 40%, #1e2838 0%, #101622 100%);
+    border-radius: 50%; box-shadow: 0 18px 35px rgba(0,0,0,0.85), inset 0 0 0 9px #151d2a;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .coffee-fill {
+    width: 62px; height: 62px; background: #1a120b; border-radius: 50%;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.9);
+  }
+  .screen-desk-reflection {
+    position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 800px; height: 120px;
+    background: radial-gradient(ellipse at 50% 0%, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .safe-area-lower {
+    position: absolute; bottom: 0; left: 0; width: 1080px; height: 380px;
+    background: linear-gradient(180deg, transparent 0%, rgba(7, 10, 15, 0.5) 100%);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+  <div class="wall"></div>
+  <div class="acoustic-slats"></div>
+  <div class="lamp-glow"></div>
+  <div class="monitor-ambient-glow"></div>
+  <div class="monitor-container">
+    <div class="monitor-frame">
+      <div class="monitor-screen">
+        <div class="ide-nav">
+          <div class="nav-title"></div>
+          <div class="tree-row"><div class="folder-icon"></div><div class="node-bar" style="width:105px"></div></div>
+          <div class="tree-row" style="margin-left:14px"><div class="java-icon"></div><div class="node-bar" style="width:90px"></div></div>
+          <div class="tree-row" style="margin-left:14px"><div class="java-icon"></div><div class="node-bar" style="width:115px"></div></div>
+          <div class="tree-row" style="margin-left:14px"><div class="conf-icon"></div><div class="node-bar" style="width:80px"></div></div>
+          <div class="tree-row"><div class="folder-icon" style="background:#6366f1"></div><div class="node-bar" style="width:95px"></div></div>
+          <div class="tree-row" style="margin-left:14px"><div class="java-icon"></div><div class="node-bar" style="width:100px"></div></div>
+          <div class="tree-row" style="margin-left:14px"><div class="java-icon"></div><div class="node-bar" style="width:85px"></div></div>
+          <div class="tree-row"><div class="folder-icon" style="background:#ec4899"></div><div class="node-bar" style="width:90px"></div></div>
+          <div class="tree-row" style="margin-left:14px"><div class="java-icon"></div><div class="node-bar" style="width:75px"></div></div>
+          <div class="tree-row"><div class="folder-icon" style="background:#10b981"></div><div class="node-bar" style="width:85px"></div></div>
+          <div class="tree-row" style="margin-left:14px"><div class="java-icon"></div><div class="node-bar" style="width:95px"></div></div>
+        </div>
+        <div class="ide-editor">
+          <div class="tab-bar">
+            <div class="active-tab"><div class="java-icon" style="width:10px;height:10px"></div><div class="node-bar" style="width:75px"></div></div>
+            <div class="inactive-tab"><div class="conf-icon" style="width:10px;height:10px"></div><div class="node-bar" style="width:60px"></div></div>
+          </div>
+          <div class="code-scroll">
+            <div class="c-row"><div class="c-line-num"></div><div class="t-ann" style="width:130px"></div></div>
+            <div class="c-row"><div class="c-line-num"></div><div class="t-kw" style="width:50px"></div><div class="t-type" style="width:130px"></div></div>
+            <div class="c-row"><div class="c-line-num"></div></div>
+            <div class="c-row" style="margin-left:24px"><div class="c-line-num"></div><div class="t-ann" style="width:100px"></div></div>
+            <div class="c-row" style="margin-left:24px"><div class="c-line-num"></div><div class="t-kw" style="width:55px"></div><div class="t-type" style="width:70px"></div><div class="t-fn" style="width:140px"></div></div>
+            <div class="c-row" style="margin-left:48px"><div class="c-line-num"></div><div class="t-cm" style="width:190px"></div></div>
+            <div class="c-row" style="margin-left:48px"><div class="c-line-num"></div><div class="t-var" style="width:85px"></div><div class="t-op"></div><div class="t-fn" style="width:90px"></div><div class="t-str" style="width:110px"></div></div>
+            <div class="c-row" style="margin-left:48px"><div class="c-line-num"></div><div class="t-kw" style="width:45px"></div><div class="t-fn" style="width:110px"></div><div class="t-var" style="width:60px"></div></div>
+            <div class="c-row" style="margin-left:24px"><div class="c-line-num"></div><div class="t-kw" style="width:30px"></div></div>
+            <div class="c-row"><div class="c-line-num"></div></div>
+            <div class="c-row" style="margin-left:24px"><div class="c-line-num"></div><div class="t-ann" style="width:90px"></div></div>
+            <div class="c-row" style="margin-left:24px"><div class="c-line-num"></div><div class="t-kw" style="width:55px"></div><div class="t-type" style="width:80px"></div><div class="t-fn" style="width:120px"></div></div>
+            <div class="c-row" style="margin-left:48px"><div class="c-line-num"></div><div class="t-type" style="width:95px"></div><div class="t-var" style="width:70px"></div><div class="t-op"></div><div class="t-kw" style="width:35px"></div><div class="t-type" style="width:90px"></div></div>
+            <div class="c-row" style="margin-left:48px"><div class="c-line-num"></div><div class="t-var" style="width:65px"></div><div class="t-fn" style="width:85px"></div><div class="t-var" style="width:55px"></div></div>
+            <div class="c-row" style="margin-left:48px"><div class="c-line-num"></div><div class="t-kw" style="width:50px"></div><div class="t-fn" style="width:105px"></div></div>
+            <div class="c-row" style="margin-left:24px"><div class="c-line-num"></div><div class="t-kw" style="width:30px"></div></div>
+            <div class="c-row" style="margin-left:24px"><div class="c-line-num"></div><div class="t-ann" style="width:110px"></div></div>
+            <div class="c-row" style="margin-left:24px"><div class="c-line-num"></div><div class="t-kw" style="width:55px"></div><div class="t-type" style="width:85px"></div><div class="t-fn" style="width:130px"></div></div>
+            <div class="c-row" style="margin-left:48px"><div class="c-line-num"></div><div class="t-kw" style="width:45px"></div><div class="t-var" style="width:95px"></div><div class="t-op"></div><div class="t-fn" style="width:75px"></div></div>
+            <div class="c-row" style="margin-left:24px"><div class="c-line-num"></div><div class="t-kw" style="width:30px"></div></div>
+            <div class="c-row" style="margin-left:24px"><div class="c-line-num"></div><div class="t-ann" style="width:85px"></div></div>
+            <div class="c-row" style="margin-left:24px"><div class="c-line-num"></div><div class="t-kw" style="width:45px"></div><div class="t-type" style="width:70px"></div><div class="t-fn" style="width:115px"></div></div>
+            <div class="c-row" style="margin-left:48px"><div class="c-line-num"></div><div class="t-fn" style="width:90px"></div><div class="t-var" style="width:80px"></div></div>
+            <div class="c-row" style="margin-left:24px"><div class="c-line-num"></div><div class="t-kw" style="width:30px"></div></div>
+          </div>
+          <div class="ide-term">
+            <div class="term-title-bar"><div class="dot-green"></div><div class="node-bar" style="width:140px;background:#64748b"></div></div>
+            <div class="term-txt"><div class="node-bar" style="width:75px;background:#38bdf8"></div><div class="node-bar" style="width:220px"></div></div>
+            <div class="term-txt"><div class="node-bar" style="width:110px;background:#10b981"></div><div class="node-bar" style="width:170px"></div></div>
+            <div class="term-txt"><div class="node-bar" style="width:90px;background:#f59e0b"></div><div class="node-bar" style="width:190px"></div></div>
+          </div>
+        </div>
+        <div class="ide-right">
+          <div class="card-metric">
+            <div class="node-bar" style="width:85px;background:#64748b"></div>
+            <div class="spark-chart"></div>
+            <div style="display:flex;justify-content:space-between;margin-top:4px">
+              <div class="node-bar" style="width:40px;background:#38bdf8"></div>
+              <div class="node-bar" style="width:50px;background:#10b981"></div>
+            </div>
+          </div>
+          <div class="card-metric">
+            <div class="node-bar" style="width:110px;background:#64748b"></div>
+            <div style="display:flex;flex-direction:column;gap:6px;margin-top:4px">
+              <div style="height:6px;background:#1e293b;border-radius:3px;overflow:hidden"><div style="height:100%;width:82%;background:#38bdf8"></div></div>
+              <div style="height:6px;background:#1e293b;border-radius:3px;overflow:hidden"><div style="height:100%;width:58%;background:#10b981"></div></div>
+              <div style="height:6px;background:#1e293b;border-radius:3px;overflow:hidden"><div style="height:100%;width:91%;background:#6366f1"></div></div>
+            </div>
+          </div>
+          <div class="card-metric">
+            <div class="node-bar" style="width:95px;background:#64748b"></div>
+            <div style="display:flex;gap:6px;margin-top:4px">
+              <div style="flex:1;height:28px;background:rgba(56,189,248,0.15);border:1px solid #38bdf8;border-radius:4px"></div>
+              <div style="flex:1;height:28px;background:rgba(16,185,129,0.15);border:1px solid #10b981;border-radius:4px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stand-column"></div>
+    <div class="stand-foot"></div>
+  </div>
+  <div class="desk-plane">
+    <div class="desk-mat">
+      <div class="screen-desk-reflection"></div>
+      <div class="desk-gear">
+        <div class="keyboard-assembly">
+          <div class="keyboard">
+            <div class="kb-line"><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div></div>
+            <div class="kb-line"><div class="k-cap mod"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap mod"></div></div>
+            <div class="kb-line"><div class="k-cap mod"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap mod"></div><div class="k-cap mod"></div></div>
+            <div class="kb-line"><div class="k-cap mod"></div><div class="k-cap"></div><div class="k-cap"></div><div class="k-cap space"></div><div class="k-cap"></div><div class="k-cap accent"></div><div class="k-cap mod"></div></div>
+          </div>
+          <div class="wrist-rest"></div>
+        </div>
+        <div class="mouse"><div class="mouse-roller"></div></div>
+      </div>
+      <div class="coffee-station"><div class="coffee-fill"></div></div>
+    </div>
+  </div>
+  <div class="safe-area-lower"></div>
+</body>
+</html>

@@ -1,0 +1,135 @@
+{
+  "project": {
+    "id": "mamase-venus-bright-evening-reel-v1",
+    "title": "ดาวสว่างลึกลับหัวค่ำทางทิศตะวันตก: ดาวศุกร์ & 2 ปรากฏการณ์สำคัญกันยายน",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Clear, engaging, warm, authoritative Thai documentary presenter tone."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ช่วงนี้ใครมองไปทางทิศตะวันตกตอนหัวค่ำ แล้วเห็นดาวดวงหนึ่งส่องสว่างจ้าผิดปกติ จนคิดว่าเป็น UFO จริง ๆ มันคืออะไรครับ?",
+      "tts_text": "ช่วงนี้ใครมองไปทางทิศตะวันตกตอนหัวค่ำ แล้วเห็นดาวดวงหนึ่งส่องสว่างจ้าผิดปกติ จนคิดว่าเป็น ยูเอฟโอ จริง ๆ มันคืออะไรครับ?",
+      "subtitle": "VENUS\nดาวสว่างลึกลับหัวค่ำ?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve the key art typography, Mamase logo, and presenter. The presenter gestures toward the dazzling evening star Venus in the twilight western sky with natural lip sync. Smooth cinematic motion.",
+        "negative_prompt": "text modification, title distortion, face distortion, flicker, jitter, sudden camera movement, watermark",
+        "seed": 923,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-bright-star",
+      "image": "images/scene-02-bright-star.png",
+      "narration": "ดาวดวงนั้นไม่ใช่ UFO หรือโดรนครับ แต่คือ 'ดาวศุกร์' หรือดาวประจำเมือง ดาวเคราะห์เพื่อนบ้านที่ได้ชื่อว่าเป็นฝาแฝดของโลก",
+      "tts_text": "ดาวดวงนั้นไม่ใช่ ยูเอฟโอ หรือโดรนครับ แต่คือ ดาวศุกร์ หรือดาวประจำเมือง ดาวเคราะห์เพื่อนบ้านที่ได้ชื่อว่าเป็นฝาแฝดของโลก",
+      "subtitle": "ดาวสว่างดวงนั้นไม่ใช่ UFO\nแต่คือ \"ดาวศุกร์\" ฝาแฝดของโลก",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-albedo-clouds",
+      "image": "images/scene-03-albedo-clouds.png",
+      "narration": "สาเหตุที่ช่วงนี้มันสว่างตาแตก เป็นเพราะดาวศุกร์กำลังโคจรสะท้อนแสงอาทิตย์มายังโลกเต็มที่ ประกอบกับบรรยากาศเมฆกรดที่สะท้อนแสงได้ถึง 70% ครับ",
+      "tts_text": "สาเหตุที่ช่วงนี้มันสว่างตาแตก เป็นเพราะดาวศุกร์กำลังโคจรสะท้อนแสงอาทิตย์มายังโลกเต็มที่ ประกอบกับบรรยากาศเมฆกรดที่สะท้อนแสงได้ถึงเจ็ดสิบเปอร์เซ็นต์ครับ",
+      "subtitle": "ทำไมถึงสว่างเป็นพิเศษ?\nเมฆกรดสะท้อนแสงอาทิตย์ถึง 70%",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-04-peak-brilliancy",
+      "image": "images/scene-04-peak-brilliancy.png",
+      "narration": "และในวันที่ 22 กันยายนนี้ ดาวศุกร์จะเข้าสู่ช่วงที่สว่างที่สุดบนท้องฟ้าหัวค่ำ ปรากฏเด่นชัดตั้งแต่ดวงอาทิตย์ตกดินยาวไปจนถึงเกือบสองทุ่มครับ",
+      "tts_text": "และในวันที่ยี่สิบสองกันยายนนี้ ดาวศุกร์จะเข้าสู่ช่วงที่สว่างที่สุดบนท้องฟ้าหัวค่ำ ปรากฏเด่นชัดตั้งแต่ดวงอาทิตย์ตกดินยาวไปจนถึงเกือบสองทุ่มครับ",
+      "subtitle": "22 กันยายนนี้\nดาวศุกร์สว่างที่สุดในรอบปี (ถึง 19:40 น.)",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-05-lunar-occultation",
+      "image": "images/scene-05-lunar-occultation.png",
+      "narration": "แต่ก่อนหน้านั้น วันที่ 14 กันยายน จะมีปรากฏการณ์หาดูยาก 'ดวงจันทร์บังดาวศุกร์' เริ่มตั้งแต่เวลา 19 นาฬิกา 28 นาที",
+      "tts_text": "แต่ก่อนหน้านั้น วันที่สิบสี่กันยายน จะมีปรากฏการณ์หาดูยาก ดวงจันทร์บังดาวศุกร์ เริ่มตั้งแต่เวลาสิบเก้านาฬิกายี่สิบแปดนาที",
+      "subtitle": "14 กันยายน: ปรากฏการณ์หายาก\nดวงจันทร์บังดาวศุกร์ (เริ่ม 19:28 น.)",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-06-setting-horizon",
+      "image": "images/scene-06-setting-horizon.png",
+      "narration": "สำหรับในไทย เรามีเวลาดูสั้นมากครับ เพราะหลังจากดวงจันทร์เริ่มบัง ดาวทั้งสองจะตกลับขอบฟ้าไปก่อนที่เราจะได้เห็นดาวศุกร์โผล่ออกมาอีกฝั่ง",
+      "tts_text": "สำหรับในไทย เรามีเวลาดูสั้นมากครับ เพราะหลังจากดวงจันทร์เริ่มบัง ดาวทั้งสองจะตกลับขอบฟ้าไปก่อนที่เราจะได้เห็นดาวศุกร์โผล่ออกมาอีกฝั่ง",
+      "subtitle": "ในไทยเห็นได้ช่วงสั้น ๆ\nทั้งคู่จะตกลับขอบฟ้าก่อนโผล่อีกฝั่ง",
+      "motion": "pan_down",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "bottom",
+      "transition": "smooth_right"
+    },
+    {
+      "id": "scene-07-observatory-viewpoint",
+      "image": "images/scene-07-observatory-viewpoint.png",
+      "narration": "ใครอยากชม แนะนำให้หาจุดสังเกตการณ์ที่ฟ้าทิศตะวันตกโปร่งโล่ง ไม่มีตึกหรือภูเขาบัง เริ่มมองหาได้ทันทีที่แสงอาทิตย์ลับขอบฟ้าครับ",
+      "tts_text": "ใครอยากชม แนะนำให้หาจุดสังเกตการณ์ที่ฟ้าทิศตะวันตกโปร่งโล่ง ไม่มีตึกหรือภูเขาบัง เริ่มมองหาได้ทันทีที่แสงอาทิตย์ลับขอบฟ้าครับ",
+      "subtitle": "จุดสังเกต: ทิศตะวันตก ฟ้าเปิดโล่ง\nมองหาได้ทันทีหลังอาทิตย์ตกดิน",
+      "motion": "gentle_float",
+      "motion_speed": "slow",
+      "motion_intensity": 0.10,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-08-earth-venus-cosmic",
+      "image": "images/scene-08-earth-venus-cosmic.png",
+      "narration": "ท้องฟ้ามีเรื่องเล่าและจังหวะของมันเสมอ หัวค่ำนี้ ลองเงยหน้ามองทิศตะวันตก แล้วทักทายดาวเคราะห์เพื่อนบ้านดวงนี้ดูนะครับ",
+      "tts_text": "ท้องฟ้ามีเรื่องเล่าและจังหวะของมันเสมอ หัวค่ำนี้ ลองเงยหน้ามองทิศตะวันตก แล้วทักทายดาวเคราะห์เพื่อนบ้านดวงนี้ดูนะครับ",
+      "subtitle": "หัวค่ำนี้ ลองเงยหน้ามองฟ้า\nแล้วทักทายดาวเคราะห์เพื่อนบ้านกันครับ",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": false,
+      "show_subtitle": false,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.05,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

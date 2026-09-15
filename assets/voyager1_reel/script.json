@@ -1,0 +1,133 @@
+{
+  "project": {
+    "id": "mamase-voyager1-reel-v1",
+    "title": "Voyager 1 — มนุษย์ยังคุยกับยานที่ไกลขนาดนั้นได้อย่างไร?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Warm, engaging, authoritative, inspiring Thai documentary storyteller tone."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "รู้ไหมครับว่า วอยเอเจอร์ 1 กำลังลอยอยู่ในความมืดมิด ห่างจากเราไปกว่า 24,000 ล้านกิโลเมตร... แต่มนุษย์บนโลก ยังคงคุยกับมันได้อยู่?",
+      "tts_text": "รู้ไหมครับว่า วอยเอเจอร์ หนึ่ง กำลังลอยอยู่ในความมืดมิด ห่างจากเราไปกว่า สองหมื่นสี่พันล้านกิโลเมตร... แต่มนุษย์บนโลก ยังคงคุยกับมันได้อยู่?",
+      "subtitle": "VOYAGER 1\nมนุษย์คุยกับยานที่ไกลขนาดนั้น ได้อย่างไร?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve the key art typography, Mamase logo, and characters. The high-gain antenna dish of Voyager 1 gleams in the dark cosmic void with faint starlight drifting. Subtle cinematic camera push-in.",
+        "negative_prompt": "text modification, title distortion, face distortion, flicker, jitter, sudden camera movement, watermark",
+        "seed": 1977,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-interstellar-distance",
+      "image": "images/scene-02-interstellar-distance.png",
+      "narration": "ยานลำนี้ถูกปล่อยตั้งแต่ปี 1977 ตอนนี้มันข้ามพ้นขอบระบบสุริยะ เข้าสู่ห้วงอวกาศระหว่างดวงดาว กลายเป็นสิ่งประดิษฐ์ของมนุษย์ที่อยู่ไกลโลกที่สุดในประวัติศาสตร์",
+      "tts_text": "ยานลำนี้ถูกปล่อยตั้งแต่ปี หนึ่งเก้าเจ็ดเจ็ด ตอนนี้มันข้ามพ้นขอบระบบสุริยะ เข้าสู่ห้วงอวกาศระหว่างดวงดาว กลายเป็นสิ่งประดิษฐ์ของมนุษย์ที่อยู่ไกลโลกที่สุดในประวัติศาสตร์",
+      "subtitle": "ข้ามพ้นขอบระบบสุริยะ\nสิ่งประดิษฐ์ที่อยู่ไกลโลกที่สุดในประวัติศาสตร์",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_right"
+    },
+    {
+      "id": "scene-03-light-speed-delay",
+      "image": "images/scene-03-light-speed-delay.png",
+      "narration": "ที่ระยะห่างระดับนี้ แม้แต่คลื่นวิทยุที่วิ่งด้วยความเร็วแสง ยังต้องใช้เวลาเดินทางขาเดียวนานถึง 23 ชั่วโมง ถ้าเราส่งคำสั่งไป แล้วรอมันตอบกลับ ต้องใช้เวลานานเกือบ 2 วันเต็มๆ ครับ",
+      "tts_text": "ที่ระยะห่างระดับนี้ แม้แต่คลื่นวิทยุที่วิ่งด้วยความเร็วแสง ยังต้องใช้เวลาเดินทางขาเดียวนานถึง ยี่สิบสาม ชั่วโมง ถ้าเราส่งคำสั่งไป แล้วรอมันตอบกลับ ต้องใช้เวลานานเกือบ สอง วันเต็มๆ ครับ",
+      "subtitle": "สัญญาณวิทยุวิ่งด้วยความเร็วแสง\nส่งไป-กลับ ต้องรอนานเกือบ 2 วันเต็ม",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-04-refrigerator-bulb-power",
+      "image": "images/scene-04-refrigerator-bulb-power.png",
+      "narration": "ที่น่าทึ่งยิ่งกว่าคือ เครื่องส่งสัญญาณของวอยเอเจอร์ 1 มีกำลังส่งเพียงแค่ 22 วัตต์... พอๆ กับหลอดไฟดวงเล็กๆ ในตู้เย็นบ้านเราเท่านั้นเอง",
+      "tts_text": "ที่น่าทึ่งยิ่งกว่าคือ เครื่องส่งสัญญาณของวอยเอเจอร์ หนึ่ง มีกำลังส่งเพียงแค่ ยี่สิบสอง วัตต์... พอๆ กับหลอดไฟดวงเล็กๆ ในตู้เย็นบ้านเราเท่านั้นเอง",
+      "subtitle": "เครื่องส่งสัญญาณกำลังเพียง 22 วัตต์\nเทียบเท่าหลอดไฟดวงเล็กในตู้เย็น",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-05-attowatt-signal-earth",
+      "image": "images/scene-05-attowatt-signal-earth.png",
+      "narration": "และเมื่อคลื่นวิทยุนั้นเดินทางข้าม 24,000 ล้านกิโลเมตรมาถึงโลก พลังงานของมันจะแผ่วเบาจนเหลือไม่ถึง 1 ใน 1,000 ล้านล้านล้านวัตต์ อ่อนแรงกว่าถ่านนาฬิกาข้อมือนับล้านเท่า",
+      "tts_text": "และเมื่อคลื่นวิทยุนั้นเดินทางข้าม สองหมื่นสี่พันล้านกิโลเมตร มาถึงโลก พลังงานของมันจะแผ่วเบาจนเหลือไม่ถึง หนึ่งในพันล้านล้านล้านวัตต์ อ่อนแรงกว่าถ่านนาฬิกาข้อมือนับล้านเท่า",
+      "subtitle": "พลังงานที่มาถึงโลกเหลือไม่ถึง 10⁻²⁰ วัตต์\nเบากว่าถ่านนาฬิกานับล้านเท่า",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-06-dsn-giant-dishes",
+      "image": "images/scene-06-dsn-giant-dishes.png",
+      "narration": "แต่นักวิทยาศาสตร์รับมันได้ ด้วยเครือข่าย Deep Space Network จานรับสัญญาณยักษ์ขนาด 70 เมตร 3 แห่งทั่วโลก ที่คอยหมุนรับและกรองคลื่นเสียงแผ่วเบานี้ ออกมาจากสัญญาณรบกวนของเอกภพ",
+      "tts_text": "แต่นักวิทยาศาสตร์รับมันได้ ด้วยเครือข่าย ดีพ สเปซ เน็ตเวิร์ก จานรับสัญญาณยักษ์ขนาด เจ็ดสิบ เมตร สาม แห่งทั่วโลก ที่คอยหมุนรับและกรองคลื่นเสียงแผ่วเบานี้ ออกมาจากสัญญาณรบกวนของเอกภพ",
+      "subtitle": "Deep Space Network (DSN)\nจานรับสัญญาณยักษ์ 70 เมตรทั่วโลก",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-07-golden-record-humanity",
+      "image": "images/scene-07-golden-record-humanity.png",
+      "narration": "และบนยาน ยังมีแผ่นจานเสียงทองคำ Golden Record บันทึกเสียงคำทักทาย บทเพลง และภาพถ่ายของมนุษยชาติ เพื่อบอกสิ่งมีชีวิตทรงปัญญาว่า ครั้งหนึ่ง... พวกเราเคยอยู่ที่นี่",
+      "tts_text": "และบนยาน ยังมีแผ่นจานเสียงทองคำ โกลเด้น เรคคอร์ด บันทึกเสียงคำทักทาย บทเพลง และภาพถ่ายของมนุษยชาติ เพื่อบอกสิ่งมีชีวิตทรงปัญญาว่า ครั้งหนึ่ง... พวกเราเคยอยู่ที่นี่",
+      "subtitle": "The Golden Record\nจานเสียงทองคำ บันทึกเรื่องราวของมนุษยชาติ",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-08-silent-voyage-milkyway",
+      "image": "images/scene-08-silent-voyage-milkyway.png",
+      "narration": "แม้ในอีกไม่กี่ปี พลังงานนิวเคลียร์ของมันจะหมดลง และการสื่อสารจะดับสนิท... แต่วอยเอเจอร์ 1 จะยังคงลอยผ่านดวงดาวในทางช้างเผือกต่อไปชั่วนิรันดร์",
+      "tts_text": "แม้ในอีกไม่กี่ปี พลังงานนิวเคลียร์ของมันจะหมดลง และการสื่อสารจะดับสนิท... แต่วอยเอเจอร์ หนึ่ง จะยังคงลอยผ่านดวงดาวในทางช้างเผือกต่อไปชั่วนิรันดร์",
+      "subtitle": "แม้สัญญาณจะดับลงในอนาคต\nแต่ยานจะเดินทางในทางช้างเผือกชั่วนิรันดร์",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.05,
+      "focus": "center",
+      "transition": "none",
+      "show_subtitle": false
+    }
+  ]
+}

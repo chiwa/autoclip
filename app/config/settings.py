@@ -16,6 +16,11 @@ class AppSettings(BaseModel):
     cleanup_on_startup: bool = False
 
 
+class ReelHookGateSettings(BaseModel):
+    enabled: bool = True
+    max_hook_characters: int = Field(120, ge=40, le=240)
+
+
 class ServerSettings(BaseModel):
     host: str = "0.0.0.0"
     port: int = Field(8000, gt=0, le=65535)
@@ -53,7 +58,7 @@ class TtsSettings(BaseModel):
     google_model: str = "gemini-2.5-flash-tts"
     google_voice: str = "Fenrir"
     google_pitch: float = Field(0.0, ge=-20, le=20)
-    google_speaking_rate: float = Field(1.0, ge=0.5, le=2.0)
+    google_speaking_rate: float = Field(1.05, ge=0.5, le=2.0)
     google_parallelism: int = Field(6, ge=1, le=12)
     silence_trim: SilenceTrimSettings = SilenceTrimSettings()
     google_style_prompt: str = (
@@ -259,6 +264,7 @@ class Settings(BaseModel):
     subtitle: SubtitleSettings = SubtitleSettings()
     youtube: YouTubeSettings = YouTubeSettings()
     podcast: PodcastSettings = PodcastSettings()
+    reel_hook_gate: ReelHookGateSettings = ReelHookGateSettings()
     openai_api_key: str | None = None
     openai_model: str = "gpt-5-mini"
     image_model: str = "gpt-image-1"
@@ -266,6 +272,17 @@ class Settings(BaseModel):
     gemini_api_key: str | None = None
     gemini_text_model: str = "gemini-3.6-flash"
     gemini_image_model: str = "gemini-2.5-flash-image"
+    # Server-side only. Never expose this value to the browser or packages.
+    deepseek_api_key: str | None = None
+    deepseek_model: str = "deepseek-v4-flash"
+    deepseek_base_url: str = "https://api.deepseek.com"
+    # `/ai` uses the locally authenticated Antigravity CLI by default. This
+    # keeps its session credentials outside AutoClip's configuration.
+    ai_provider: str = "antigravity"
+    ai_image_provider: str = "gemini"
+    antigravity_cli_path: Path = Path("/opt/homebrew/bin/agy")
+    antigravity_model: str = "gemini-3.8-flash-medium"
+    antigravity_timeout_seconds: int = Field(900, gt=30, le=3600)
     ai_instructions: str = "You are the AutoClip Mamase assistant. Create concise factual Thai short-form scripts. Return JSON with message and scenes when asked for a preview. Every scene needs id,narration,subtitle,image_prompt,motion,transition,estimated_duration. Always put the Mamase brand outro last."
 
 
@@ -319,6 +336,8 @@ def load_settings(path: str | Path | None = None) -> Settings:
         "AUTOCLIP_FFMPEG_SCENE_PARALLELISM": ("video", "ffmpeg_scene_parallelism"),
         "AUTOCLIP_MAX_UPLOAD_MB": ("app", "max_upload_mb"),
         "AUTOCLIP_MAX_EXTRACTED_MB": ("app", "max_extracted_mb"),
+        "AUTOCLIP_REEL_HOOK_GATE_ENABLED": ("reel_hook_gate", "enabled"),
+        "AUTOCLIP_REEL_HOOK_MAX_CHARACTERS": ("reel_hook_gate", "max_hook_characters"),
         "AUTOCLIP_LTX_ENABLED": ("ltx", "enabled"),
         "AUTOCLIP_LTX_SSH_HOST": ("ltx", "ssh_host"),
         "AUTOCLIP_LTX_RUNPOD_HOST": ("ltx", "ssh_host"),
@@ -383,6 +402,11 @@ def load_settings(path: str | Path | None = None) -> Settings:
         "AUTOCLIP_PODCAST_DEFAULT_BGM_VOLUME": ("podcast", "default_bgm_volume"),
         "AUTOCLIP_PODCAST_DEFAULT_STYLE_PROMPT": ("podcast", "default_style_prompt"),
         "AUTOCLIP_PODCAST_DEFAULT_ENGLISH_STYLE_PROMPT": ("podcast", "default_english_style_prompt"),
+        "AUTOCLIP_AI_PROVIDER": ("ai_provider",),
+        "AUTOCLIP_AI_IMAGE_PROVIDER": ("ai_image_provider",),
+        "AUTOCLIP_ANTIGRAVITY_CLI_PATH": ("antigravity_cli_path",),
+        "AUTOCLIP_ANTIGRAVITY_MODEL": ("antigravity_model",),
+        "AUTOCLIP_ANTIGRAVITY_TIMEOUT_SECONDS": ("antigravity_timeout_seconds",),
     }
     openai_key = os.getenv("OPENAI_API_KEY")
     # Native development does not get Docker Compose's automatic .env
@@ -431,6 +455,12 @@ def load_settings(path: str | Path | None = None) -> Settings:
     gemini_key = _dotenv_value("GEMINI_API_KEY", config_path)
     if gemini_key:
         data["gemini_api_key"] = gemini_key
+    if value := _dotenv_value("DEEPSEEK_API_KEY", config_path):
+        data["deepseek_api_key"] = value
+    if value := _dotenv_value("AUTOCLIP_DEEPSEEK_MODEL", config_path):
+        data["deepseek_model"] = value
+    if value := _dotenv_value("AUTOCLIP_DEEPSEEK_BASE_URL", config_path):
+        data["deepseek_base_url"] = value.rstrip("/")
     if os.getenv("AUTOCLIP_OPENAI_MODEL"):
         data["openai_model"] = os.environ["AUTOCLIP_OPENAI_MODEL"]
     if os.getenv("AUTOCLIP_IMAGE_MODEL"):
@@ -449,7 +479,9 @@ def load_settings(path: str | Path | None = None) -> Settings:
     if os.getenv("YOUTUBE_API_KEY"): data.setdefault("youtube", {})["api_key"] = os.environ["YOUTUBE_API_KEY"]
     for env_name, target in overrides.items():
         if value := _dotenv_value(env_name, config_path):
-            if len(target) == 2:
+            if len(target) == 1:
+                data[target[0]] = value
+            elif len(target) == 2:
                 _set_nested(data, target, value)
             else:
                 section, parent, key = target

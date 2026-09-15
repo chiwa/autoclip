@@ -1,0 +1,153 @@
+{
+  "project": {
+    "id": "mamase-venus-day-longer-than-year-reel-v1",
+    "title": "บนดาวศุกร์ หนึ่งวันยาวกว่าหนึ่งปีจริงไหม?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: \"เฮ้ย... จริงดิ?\" Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ถ้าคุณย้ายไปอยู่บนดาวศุกร์ คุณอาจฉลองวันเกิดครบรอบหนึ่งปี ทั้งที่วันแรกยังไม่จบเลยครับ ฟังดูเหมือนนาฬิกาพัง แต่เรื่องนี้เกิดขึ้นจริง",
+      "tts_text": "ถ้าคุณย้ายไปอยู่บนดาวศุกร์ คุณอาจฉลองวันเกิดครบรอบหนึ่งปี ทั้งที่วันแรกยังไม่จบเลยครับ ฟังดูเหมือนนาฬิกาพัง แต่เรื่องนี้เกิดขึ้นจริง",
+      "subtitle": "ดาวศุกร์ 1 วัน ยาวกว่า 1 ปี?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.18,
+      "focus": "right",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Preserve the supplied 2D anime Mamase presenter identity, face, rectangular black glasses, tousled black hair, Thai title and original composition. The presenter speaks naturally toward camera with delighted surprise, subtle head movement and a gentle pointing gesture toward the enormous cloud-covered Venus. Venusian clouds drift slowly, sunlight glows along the planetary rim, stable face-forward talking shot, premium cinematic science documentary lighting, smooth continuous motion.",
+        "negative_prompt": "new text, changed text, subtitles, watermark, logo, extra person, distorted face, covered mouth, warped glasses, distorted hands, duplicated fingers, flicker, jitter, sudden camera movement, rapid zoom",
+        "seed": 7201,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-orbit-vs-rotation",
+      "image": "images/scene-02-orbit-vs-rotation.png",
+      "narration": "คำตอบคือจริงครับ ดาวศุกร์ใช้เวลาหมุนรอบตัวเองประมาณสองร้อยสี่สิบสามวันโลก แต่ใช้เวลาโคจรรอบดวงอาทิตย์เพียงประมาณสองร้อยยี่สิบห้าวันโลก",
+      "tts_text": "คำตอบคือจริงครับ ดาวศุกร์ใช้เวลาหมุนรอบตัวเองประมาณสองร้อยสี่สิบสามวันโลก แต่ใช้เวลาโคจรรอบดวงอาทิตย์เพียงประมาณสองร้อยยี่สิบห้าวันโลก",
+      "subtitle": "หมุนรอบตัวเอง 243 วันโลก\nโคจรรอบดวงอาทิตย์ 225 วันโลก",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-03-day-vs-year",
+      "image": "images/scene-03-day-vs-year.png",
+      "narration": "หนึ่งปีคือเวลาที่ดาวเคราะห์โคจรรอบดวงอาทิตย์ครบหนึ่งรอบ ส่วนหนึ่งวันในที่นี้ คือเวลาที่ดาวหมุนรอบแกนของตัวเองครบหนึ่งรอบครับ",
+      "tts_text": "หนึ่งปีคือเวลาที่ดาวเคราะห์โคจรรอบดวงอาทิตย์ครบหนึ่งรอบ ส่วนหนึ่งวันในที่นี้ คือเวลาที่ดาวหมุนรอบแกนของตัวเองครบหนึ่งรอบครับ",
+      "subtitle": "1 ปี = โคจรครบหนึ่งรอบ\n1 วัน = หมุนรอบแกนครบหนึ่งรอบ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "top",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-04-slow-rotation-mystery",
+      "image": "images/scene-04-slow-rotation-mystery.png",
+      "narration": "ดาวศุกร์หมุนช้ามาก และนักวิทยาศาสตร์ยังไม่รู้คำตอบทั้งหมด อาจเกี่ยวกับแรงดึงดูดจากดวงอาทิตย์ บรรยากาศที่หนาแน่น หรือการชนครั้งใหญ่ในอดีต",
+      "tts_text": "ดาวศุกร์หมุนช้ามาก และนักวิทยาศาสตร์ยังไม่รู้คำตอบทั้งหมด อาจเกี่ยวกับแรงดึงดูดจากดวงอาทิตย์ บรรยากาศที่หนาแน่น หรือการชนครั้งใหญ่ในอดีต",
+      "subtitle": "ทำไมดาวศุกร์หมุนช้ามาก?",
+      "motion": "gentle_float",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-05-retrograde-sunrise",
+      "image": "images/scene-05-retrograde-sunrise.png",
+      "narration": "แต่เดี๋ยวก่อน ดาวศุกร์ไม่ได้แค่หมุนช้า มันยังหมุนย้อนทิศจากดาวเคราะห์ส่วนใหญ่ด้วย ถ้ายืนอยู่บนดาวศุกร์ คุณจะเห็นดวงอาทิตย์ขึ้นทางทิศตะวันตก",
+      "tts_text": "แต่เดี๋ยวก่อน ดาวศุกร์ไม่ได้แค่หมุนช้า มันยังหมุนย้อนทิศจากดาวเคราะห์ส่วนใหญ่ด้วย ถ้ายืนอยู่บนดาวศุกร์ คุณจะเห็นดวงอาทิตย์ขึ้นทางทิศตะวันตก",
+      "subtitle": "ดวงอาทิตย์ขึ้นทางทิศตะวันตก",
+      "motion": "pan_right_to_left",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "left",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-06-solar-day",
+      "image": "images/scene-06-solar-day.png",
+      "narration": "อย่างไรก็ตาม ถ้านับวันจากพระอาทิตย์ขึ้นครั้งหนึ่ง ไปถึงพระอาทิตย์ขึ้นครั้งถัดไป วันสุริยะของดาวศุกร์จะยาวประมาณหนึ่งร้อยสิบเจ็ดวันโลก เพราะการหมุนและการโคจรหักล้างกันบางส่วน",
+      "tts_text": "อย่างไรก็ตาม ถ้านับวันจากพระอาทิตย์ขึ้นครั้งหนึ่ง ไปถึงพระอาทิตย์ขึ้นครั้งถัดไป วันสุริยะของดาวศุกร์จะยาวประมาณหนึ่งร้อยสิบเจ็ดวันโลก เพราะการหมุนและการโคจรหักล้างกันบางส่วน",
+      "subtitle": "พระอาทิตย์ขึ้นถึงครั้งถัดไป = 117 วันโลก",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.13,
+      "focus": "top",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-07-hostile-twin",
+      "image": "images/scene-07-hostile-twin.png",
+      "narration": "ดาวศุกร์มีขนาดใกล้เคียงโลก จนเคยถูกเรียกว่าโลกฝาแฝด แต่พื้นผิวกลับร้อนประมาณสี่ร้อยหกสิบห้าองศาเซลเซียส และมีแรงดันสูงกว่าโลกประมาณเก้าสิบเท่า",
+      "tts_text": "ดาวศุกร์มีขนาดใกล้เคียงโลก จนเคยถูกเรียกว่าโลกฝาแฝด แต่พื้นผิวกลับร้อนประมาณสี่ร้อยหกสิบห้าองศาเซลเซียส และมีแรงดันสูงกว่าโลกประมาณเก้าสิบเท่า",
+      "subtitle": "โลกฝาแฝดที่ร้อน 465°C\nแรงดันสูงกว่าโลกประมาณ 90 เท่า",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "bottom",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-08-long-sunset",
+      "image": "images/scene-08-long-sunset.png",
+      "narration": "เพราะฉะนั้น หากไปรอชมพระอาทิตย์ตกที่นั่น คุณอาจต้องรอนานหลายสัปดาห์ แต่ไม่แนะนำให้กางเก้าอี้รอนะครับ เก้าอี้น่าจะพังก่อน",
+      "tts_text": "เพราะฉะนั้น หากไปรอชมพระอาทิตย์ตกที่นั่น คุณอาจต้องรอนานหลายสัปดาห์ แต่ไม่แนะนำให้กางเก้าอี้รอนะครับ เก้าอี้น่าจะพังก่อน",
+      "subtitle": "พระอาทิตย์ตกสวย... แต่เก้าอี้คงพังก่อน",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "bottom",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-09-cosmic-rhythms",
+      "image": "images/scene-09-cosmic-rhythms.png",
+      "narration": "ดาวศุกร์จึงเตือนเราว่า คำว่าวันและปีไม่ได้ยาวเท่ากันทั่วจักรวาล นาฬิกาที่เราคุ้นเคย เป็นเพียงจังหวะของโลกเท่านั้น",
+      "tts_text": "ดาวศุกร์จึงเตือนเราว่า คำว่าวันและปีไม่ได้ยาวเท่ากันทั่วจักรวาล นาฬิกาที่เราคุ้นเคย เป็นเพียงจังหวะของโลกเท่านั้น",
+      "subtitle": "เวลาแต่ละโลก มีจังหวะไม่เหมือนกัน",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-10-mamase-outro",
+      "image": "images/scene-10-mamase-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Mamase brand outro, glowing cyan orbiting planet in dark navy space, peaceful and contemplative.",
+        "negative_prompt": "watermark, blur, jitter",
+        "seed": 98,
+        "frames": 81,
+        "lip_sync": false
+      }
+    }
+  ]
+}

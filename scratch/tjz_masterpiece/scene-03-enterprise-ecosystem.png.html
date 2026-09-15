@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><style>
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    width: 1080px; height: 1920px; background: #070a12;
+    overflow: hidden; font-family: "JetBrains Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace;
+    color: #f1f5f9; position: relative;
+  }
+  .bg-glow {
+    position: absolute; inset: 0;
+    background: 
+      radial-gradient(circle at 540px 320px, rgba(30, 58, 138, 0.28) 0%, transparent 65%),
+      radial-gradient(circle at 180px 850px, rgba(14, 165, 233, 0.16) 0%, transparent 55%),
+      radial-gradient(circle at 900px 1050px, rgba(16, 185, 129, 0.12) 0%, transparent 55%),
+      radial-gradient(circle at 540px 1450px, rgba(30, 58, 138, 0.22) 0%, transparent 60%),
+      linear-gradient(180deg, #050811 0%, #0c1322 50%, #04060b 100%);
+    z-index: 1;
+  }
+  .grid-pattern {
+    position: absolute; inset: 0;
+    background-image: 
+      linear-gradient(to right, rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+    background-size: 36px 36px; z-index: 2;
+  }
+  .subtitle-vignette {
+    position: absolute; bottom: 0; left: 0; width: 1080px; height: 320px;
+    background: linear-gradient(180deg, transparent 0%, rgba(5, 8, 15, 0.75) 45%, rgba(3, 5, 10, 0.98) 100%);
+    pointer-events: none; z-index: 30;
+  }
+
+  .arch-canvas {
+    position: absolute; top: 35px; left: 35px; width: 1010px; height: 1580px;
+    display: flex; flex-direction: column; justify-content: space-between; z-index: 10;
+  }
+  .tier-card {
+    background: #0d1527; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px;
+    padding: 16px 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); display: flex; flex-direction: column; justify-content: space-between;
+    height: 275px;
+  }
+  .tier-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px; }
+  .tier-title { font-size: 13px; font-weight: 700; color: #38bdf8; letter-spacing: 0.5px; text-transform: uppercase; }
+  .tier-badge { font-size: 11px; color: #10b981; font-weight: 600; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.25); padding: 3px 10px; border-radius: 6px; }
+  
+  .nodes-grid { display: grid; gap: 10px; }
+  .grid-4 { grid-template-columns: repeat(4, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+
+  .node-box {
+    background: #111a2e; border: 1px solid rgba(255,255,255,0.06); border-radius: 8px;
+    padding: 12px 14px; display: flex; flex-direction: column; gap: 4px;
+  }
+  .node-box.highlight { border-color: rgba(56, 189, 248, 0.4); background: #13223f; }
+  .node-name { font-size: 12.5px; font-weight: 700; color: #f8fafc; }
+  .node-desc { font-size: 11px; color: #94a3b8; line-height: 1.35; }
+  .node-tech { font-size: 10px; color: #38bdf8; font-weight: 600; text-transform: uppercase; }
+
+  .tier-footer {
+    background: #0a0f1d; border-radius: 6px; padding: 8px 14px; display: flex; justify-content: space-between;
+    font-size: 11px; color: #94a3b8; border: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .conduit-bar {
+    height: 16px; display: flex; align-items: center; justify-content: center; gap: 12px;
+  }
+  .conduit-line { flex: 1; height: 2px; background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.6), transparent); }
+  .conduit-label { font-size: 9.5px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+</style></head>
+<body>
+  <div class="bg-glow"></div><div class="grid-pattern"></div>
+  <div class="arch-canvas">
+    <!-- Tier 1: Client Ingress & Gateway -->
+    <div class="tier-card">
+      <div class="tier-header"><div class="tier-title">TIER 1: TRAFFIC INGRESS &amp; API GATEWAY</div><div class="tier-badge">SPRING CLOUD GATEWAY</div></div>
+      <div class="nodes-grid grid-3">
+        <div class="node-box"><div class="node-name">Rate Limiter &amp; WAF</div><div class="node-desc">Distributed Token Bucket / Redis Cluster</div><div class="node-tech">Reactive Non-Blocking Filter</div></div>
+        <div class="node-box highlight"><div class="node-name">OAuth2 / OIDC Security</div><div class="node-desc">Spring Security 6.2 / Keycloak</div><div class="node-tech">Stateless JWT Signature Verification</div></div>
+        <div class="node-box"><div class="node-name">Global Load Balancer</div><div class="node-desc">Envoy / Netflix Ribbon Mesh</div><div class="node-tech">Weighted Round Robin &amp; Canary</div></div>
+      </div>
+      <div class="tier-footer">
+        <span>● Active Ingress Conduits: <strong>100GbE Spine-Leaf</strong></span>
+        <span>● SSL Offloading: <strong>TLSv1.3 Hardware Accelerated</strong></span>
+        <span style="color:#10b981;">● Status: <strong>0 Dropped Packets</strong></span>
+      </div>
+    </div>
+
+    <div class="conduit-bar"><div class="conduit-line"></div><div class="conduit-label">High-Speed RPC / gRPC Netty Pipeline</div><div class="conduit-line"></div></div>
+
+    <!-- Tier 2: Microservices Layer -->
+    <div class="tier-card">
+      <div class="tier-header"><div class="tier-title">TIER 2: SPRING BOOT MICROSERVICES CLUSTER</div><div class="tier-badge">JAVA 21 LTS RUNTIME</div></div>
+      <div class="nodes-grid grid-4">
+        <div class="node-box highlight"><div class="node-name">AccountService</div><div class="node-desc">Core Ledger Aggregates</div><div class="node-tech">@RestController</div></div>
+        <div class="node-box highlight"><div class="node-name">PaymentGateway</div><div class="node-desc">ISO 20022 Adapter</div><div class="node-tech">@Transactional</div></div>
+        <div class="node-box"><div class="node-name">FraudEngine</div><div class="node-desc">Real-time ML Inference</div><div class="node-tech">Resilience4j CB</div></div>
+        <div class="node-box"><div class="node-name">NotificationHub</div><div class="node-desc">Async Event Dispatch</div><div class="node-tech">VirtualThreadExecutor</div></div>
+      </div>
+      <div class="tier-footer">
+        <span>● Microservice Pods: <strong>256 Instances</strong></span>
+        <span>● Concurrency: <strong>1.2M Virtual Threads</strong></span>
+        <span style="color:#38bdf8;">● Inter-Service RPC: <strong>Sub-millisecond gRPC</strong></span>
+      </div>
+    </div>
+
+    <div class="conduit-bar"><div class="conduit-line"></div><div class="conduit-label">Enterprise Distributed Event Mesh (KRaft Protocol)</div><div class="conduit-line"></div></div>
+
+    <!-- Tier 3: Event Stream Fabric (Kafka) -->
+    <div class="tier-card">
+      <div class="tier-header"><div class="tier-title">TIER 3: APACHE KAFKA DISTRIBUTED EVENT FABRIC</div><div class="tier-badge">1.8M EVENTS / SEC</div></div>
+      <div class="nodes-grid grid-3">
+        <div class="node-box"><div class="node-name">transfers.inbound</div><div class="node-desc">32 Partitions / 3x In-Sync Replicas</div><div class="node-tech">Exactly-Once Semantics (EOS-2)</div></div>
+        <div class="node-box highlight"><div class="node-name">fraud.verified</div><div class="node-desc">Kafka Streams State Topology</div><div class="node-tech">RocksDB Persistent StateStore</div></div>
+        <div class="node-box"><div class="node-name">ledger.committed</div><div class="node-desc">Compacted Immutable Audit Log</div><div class="node-tech">Schema Registry Avro Serialization</div></div>
+      </div>
+      <div class="tier-footer">
+        <span>● Cluster Quorum: <strong>KRaft 5-Broker Controller</strong></span>
+        <span>● Message Durability: <strong>acks=all min.insync.replicas=2</strong></span>
+        <span style="color:#10b981;">● End-to-End Lag: <strong>0 ms</strong></span>
+      </div>
+    </div>
+
+    <div class="conduit-bar"><div class="conduit-line"></div><div class="conduit-label">ACID Distributed Persistence &amp; Replication Conduits</div><div class="conduit-line"></div></div>
+
+    <!-- Tier 4: Enterprise Persistence -->
+    <div class="tier-card">
+      <div class="tier-header"><div class="tier-title">TIER 4: ENTERPRISE PERSISTENCE &amp; DATA GRID</div><div class="tier-badge">ZERO DATA LOSS (RPO=0)</div></div>
+      <div class="nodes-grid grid-3">
+        <div class="node-box highlight"><div class="node-name">PostgreSQL 16 Cluster</div><div class="node-desc">Primary-Standby Multi-AZ Synchronous</div><div class="node-tech">Hibernate ORM 6.4 / HikariCP Pool</div></div>
+        <div class="node-box"><div class="node-name">Distributed Data Grid</div><div class="node-desc">Redis 7 Cluster / Hazelcast IMDG</div><div class="node-tech">Sub-millisecond L2 Caching Tier</div></div>
+        <div class="node-box"><div class="node-name">Audit Data Vault</div><div class="node-desc">Encrypted WORM Compliance Storage</div><div class="node-tech">SEC 17a-4 Regulatory Archive</div></div>
+      </div>
+      <div class="tier-footer">
+        <span>● Transaction Isolation: <strong>SERIALIZABLE (ACID)</strong></span>
+        <span>● Read Replica Sync: <strong>Streaming WAL &lt; 1ms</strong></span>
+        <span style="color:#f59e0b;">● Encryption: <strong>AES-256 at Rest &amp; Transit</strong></span>
+      </div>
+    </div>
+
+    <div class="conduit-bar"><div class="conduit-line"></div><div class="conduit-label">Telemetry &amp; OpenTelemetry Distributed Tracing Spine</div><div class="conduit-line"></div></div>
+
+    <!-- Tier 5: Observability & Cloud Ops -->
+    <div class="tier-card">
+      <div class="tier-header"><div class="tier-title">TIER 5: ENTERPRISE OBSERVABILITY &amp; CLOUD PLATFORM</div><div class="tier-badge">FULL DISTRIBUTED TRACING</div></div>
+      <div class="nodes-grid grid-3">
+        <div class="node-box"><div class="node-name">Prometheus JVM Metrics</div><div class="node-desc">Micrometer Collector (GC, Threads, Heap)</div><div class="node-tech">10s Real-time Scrape Resolution</div></div>
+        <div class="node-box highlight"><div class="node-name">Grafana Cloud NOC</div><div class="node-desc">Unified SRE Dashboards &amp; SLO Tracker</div><div class="node-tech">Real-time P99 Latency Anomaly Alerting</div></div>
+        <div class="node-box"><div class="node-name">OpenTelemetry Tracing</div><div class="node-desc">W3C TraceContext Ingress to Storage</div><div class="node-tech">Tempo / Jaeger Distributed Spans</div></div>
+      </div>
+      <div class="tier-footer">
+        <span>● SRE Reliability Target: <strong>99.9999% Availability</strong></span>
+        <span>● Ingest Rate: <strong>250k spans/sec</strong></span>
+        <span style="color:#10b981;">● Anomaly Detection: <strong>ML Auto-Heal Active</strong></span>
+      </div>
+    </div>
+  </div>
+  <div class="subtitle-vignette"></div>
+</body></html>

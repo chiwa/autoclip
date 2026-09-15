@@ -1,0 +1,122 @@
+{
+  "project": {
+    "id": "mamase-alpha-centauri-reel-v1",
+    "title": "Alpha Centauri — บ้านหลังถัดไปของเราอยู่ไกลแค่ไหน?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: \"เฮ้ย... จริงดิ?\" Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ดาวที่อยู่ใกล้โลกที่สุด นอกจากดวงอาทิตย์... รู้ไหมครับว่าต้องใช้เวลาเดินทางนานถึง 73,000 ปี!",
+      "tts_text": "ดาวที่อยู่ใกล้โลกที่สุด นอกจากดวงอาทิตย์... รู้ไหมครับว่าต้องใช้เวลาเดินทางนานถึง เจ็ดหมื่นสามพันปี!",
+      "subtitle": "ดาวที่อยู่ใกล้โลกที่สุด...\nต้องเดินทางนานถึง 73,000 ปี!",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Preserve observatory dome architecture, giant telescope, explorer operating controls, alert golden retriever, and glowing Alpha Centauri stars through the dome slit. Subtle cinematic low-angle push-in.",
+        "negative_prompt": "text distortion, face distortion, flicker, sudden movement, watermark, logo",
+        "seed": 2026,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-triple-star-system",
+      "image": "images/scene-02-triple-star-system.png",
+      "narration": "นั่นคือ อัลฟา เซนทอรี... และที่น่าทึ่งคือ มันไม่ได้มีแค่ดาวดวงเดียว แต่เป็นระบบดาวฤกษ์ 3 ดวงที่เต้นรำอยู่ด้วยกัน!",
+      "tts_text": "นั่นคือ อัลฟา เซนทอรี... และที่น่าทึ่งคือ มันไม่ได้มีแค่ดาวดวงเดียว แต่เป็นระบบดาวฤกษ์ สามดวงที่เต้นรำอยู่ด้วยกัน!",
+      "subtitle": "อัลฟา เซนทอรี...\nระบบดาวฤกษ์ 3 ดวงที่โคจรร่วมกัน",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-03-proxima-b-exoplanet",
+      "image": "images/scene-03-proxima-b-exoplanet.png",
+      "narration": "ดวงที่ใกล้เราที่สุดจริง ๆ คือ พร็อกซิมา เซนทอรี ดาวแคระแดงดวงจิ๋วที่แอบซ่อนอยู่ พร้อมกับดาวเคราะห์ที่มีขนาดพอ ๆ กับโลกของเรา!",
+      "tts_text": "ดวงที่ใกล้เราที่สุดจริง ๆ คือ พร็อกซิมา เซนทอรี ดาวแคระแดงดวงจิ๋วที่แอบซ่อนอยู่ พร้อมกับดาวเคราะห์ที่มีขนาดพอ ๆ กับโลกของเรา!",
+      "subtitle": "พร็อกซิมา เซนทอรี\nดาวแคระแดงที่มีดาวเคราะห์ขนาดเท่าโลก!",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-04-voyager-distance-void",
+      "image": "images/scene-04-voyager-distance-void.png",
+      "narration": "ระยะทาง 4.24 ปีแสง ฟังดูเหมือนใกล้... แต่ถ้ายานวอยเอเจอร์ 1 ที่เร็วระดับ 60,000 กิโลเมตรต่อชั่วโมง บินตรงไป จะต้องใช้เวลากว่า 73,000 ปี!",
+      "tts_text": "ระยะทาง สี่จุดสองสี่ ปีแสง ฟังดูเหมือนใกล้... แต่ถ้ายาน วอยเอเจอร์ วัน ที่เร็วระดับ หกหมื่นกิโลเมตรต่อชั่วโมง บินตรงไป จะต้องใช้เวลากว่า เจ็ดหมื่นสามพันปี!",
+      "subtitle": "ระยะทาง 4.24 ปีแสง\nยานวอยเอเจอร์ 1 ต้องบินกว่า 73,000 ปี!",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-05-breakthrough-starshot",
+      "image": "images/scene-05-breakthrough-starshot.png",
+      "narration": "แต่นักวิทยาศาสตร์ไม่ยอมแพ้ครับ! เรากำลังพัฒนา โครงการสตาร์ช็อต ยานจิ๋วติดใบเรือเลเซอร์ ที่เร่งความเร็วได้ถึง 20% ของความเร็วแสง!",
+      "tts_text": "แต่นักวิทยาศาสตร์ไม่ยอมแพ้ครับ! เรากำลังพัฒนา โครงการสตาร์ช็อต ยานจิ๋วติดใบเรือเลเซอร์ ที่เร่งความเร็วได้ถึง ยี่สิบเปอร์เซ็นต์ ของความเร็วแสง!",
+      "subtitle": "โครงการสตาร์ช็อต\nยานใบเรือเลเซอร์ เร็ว 20% ของความเร็วแสง!",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-06-arrival-20-years",
+      "image": "images/scene-06-arrival-20-years.png",
+      "narration": "ซึ่งถ้าทำสำเร็จจริง จาก 73,000 ปี จะลดลงเหลือเพียง 20 ปีเท่านั้น... นั่นหมายความว่า ในช่วงชีวิตของเรา เราอาจได้เห็นภาพถ่ายพื้นผิวของดาวดวงใหม่!",
+      "tts_text": "ซึ่งถ้าทำสำเร็จจริง จาก เจ็ดหมื่นสามพันปี จะลดลงเหลือเพียง ยี่สิบปีเท่านั้น... นั่นหมายความว่า ในช่วงชีวิตของเรา เราอาจได้เห็นภาพถ่ายพื้นผิวของดาวดวงใหม่!",
+      "subtitle": "จาก 73,000 ปี เหลือแค่ 20 ปี!\nมนุษย์อาจได้เห็นภาพจริงในชั่วชีวิตนี้",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-07-humanity-second-home",
+      "image": "images/scene-07-humanity-second-home.png",
+      "narration": "อัลฟา เซนทอรี อาจไม่ได้เป็นแค่จุดแสงบนฟ้า... แต่อาจเป็นบ้านหลังที่สอง ที่มนุษยชาติจะก้าวไปถึงในอนาคตครับ",
+      "tts_text": "อัลฟา เซนทอรี อาจไม่ได้เป็นแค่จุดแสงบนฟ้า... แต่อาจเป็นบ้านหลังที่สอง ที่มนุษยชาติจะก้าวไปถึงในอนาคตครับ",
+      "subtitle": "อัลฟา เซนทอรี\nบ้านหลังที่สองของมนุษยชาติในอนาคต",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-08-brand-outro",
+      "image": "images/scene-08-brand-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "show_subtitle": true,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

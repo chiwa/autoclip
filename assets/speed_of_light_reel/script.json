@@ -1,0 +1,130 @@
+{
+  "project": {
+    "id": "mamase-speed-of-light-reel-v1",
+    "title": "เรารู้ได้ยังไงว่า ไม่มีอะไรเร็วกว่าแสง?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound confident, friendly, curious, and slightly cheeky, like a charismatic Thai creator casually sharing a fascinating discovery with a close friend. Keep the delivery flowing and connected, with a medium-fast pace and clear pronunciation. Use brief natural pauses only when they help comprehension. Never sound like a news presenter, announcer, advertisement, or formal narrator."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "เรารู้ได้ยังไงว่า ไม่มีอะไรเร็วกว่าแสง? คำตอบอยู่ในกฎของอวกาศและเวลาครับ",
+      "tts_text": "เรารู้ได้ยังไงว่า ไม่มีอะไรเร็วกว่าแสง? คำตอบอยู่ในกฎของอวกาศและเวลาครับ",
+      "subtitle": "เรารู้ได้ยังไงว่า\nไม่มีอะไรเร็วกว่าแสง?",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "right",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Preserve the supplied Mamase anime male presenter, face, rectangular glasses, tousled black hair, outfit, Thai cover text, logo, and composition exactly. He speaks naturally with subtle blinking, breathing, a small head movement, and a gentle pointing gesture. A brilliant photon streak and distant spacecraft drift subtly behind him, cinematic stable camera push-in.",
+        "negative_prompt": "text mutation, misspelled Thai, logo mutation, extra person, distorted face, deformed hands, duplicated fingers, warped spacecraft, flicker, jitter, sudden camera movement",
+        "seed": 31401,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-mass-near-light-speed",
+      "image": "images/scene-02-mass-near-light-speed.png",
+      "narration": "ยิ่งวัตถุมีมวลเข้าใกล้ความเร็วแสง มันยิ่งต้องใช้พลังงานมหาศาล",
+      "tts_text": "ยิ่งวัตถุมีมวลเข้าใกล้ความเร็วแสง มันยิ่งต้องใช้พลังงานมหาศาล",
+      "subtitle": "ยิ่งเข้าใกล้ความเร็วแสง\nยิ่งต้องใช้พลังงานมหาศาล",
+      "motion": "cinematic_push_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-energy-rises",
+      "image": "images/scene-03-energy-rises.png",
+      "narration": "เติมพลังงานมากขึ้นเรื่อยๆ แต่ความเร็วกลับเพิ่มได้น้อยลงทุกที",
+      "tts_text": "เติมพลังงานมากขึ้นเรื่อยเรื่อย แต่ความเร็วกลับเพิ่มได้น้อยลงทุกที",
+      "subtitle": "พลังงานเพิ่มมหาศาล\nแต่ความเร็วเพิ่มน้อยลง",
+      "motion": "documentary_pan",
+      "motion_speed": "normal",
+      "motion_intensity": 0.13,
+      "focus": "left",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-04-infinite-energy-limit",
+      "image": "images/scene-04-infinite-energy-limit.png",
+      "narration": "และถ้าจะให้ถึงความเร็วแสงพอดี สมการบอกว่าต้องใช้พลังงานเป็นอนันต์",
+      "tts_text": "และถ้าจะให้ถึงความเร็วแสงพอดี สมการบอกว่าต้องใช้พลังงานเป็นอนันต์",
+      "subtitle": "ถึงความเร็วแสงพอดี?\nต้องใช้พลังงานเป็นอนันต์",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.11,
+      "focus": "top",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-05-causality",
+      "image": "images/scene-05-causality.png",
+      "narration": "ถ้าข้อมูลเร็วกว่าแสง เหตุและผลอาจสลับลำดับในบางกรอบอ้างอิง จนผลดูเหมือนเกิดก่อนเหตุ",
+      "tts_text": "ถ้าข้อมูลเร็วกว่าแสง เหตุและผลอาจสลับลำดับในบางกรอบอ้างอิง จนผลดูเหมือนเกิดก่อนเหตุ",
+      "subtitle": "เร็วกว่าแสงอาจทำให้\nผลดูเหมือนเกิดก่อนเหตุ",
+      "motion": "gentle_float",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "dissolve"
+    },
+    {
+      "id": "scene-06-expanding-space",
+      "image": "images/scene-06-expanding-space.png",
+      "narration": "แต่กาแล็กซีไกลๆ อาจถอยห่างเร็วกว่านั้นได้ เพราะอวกาศเองกำลังขยาย ไม่ใช่วัตถุวิ่งฝ่าความเร็วแสง",
+      "tts_text": "แต่กาแล็กซีไกลไกล อาจถอยห่างเร็วกว่านั้นได้ เพราะอวกาศเองกำลังขยาย ไม่ใช่วัตถุวิ่งฝ่าความเร็วแสง",
+      "subtitle": "กาแล็กซีถอยห่างได้เร็วกว่า\nเพราะอวกาศกำลังขยาย",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_right",
+      "wan": {
+        "prompt": "Galaxies remain locally stable while the vast cosmic web and spacetime between galaxy clusters expand smoothly, increasing separation across the frame. Slow elegant pull-back, subtle redshift glow, restrained parallax, cinematic science documentary, stable geometry.",
+        "negative_prompt": "text, labels, arrows, equations, logo, watermark, exploding galaxies, warped galaxy shapes, flicker, jitter, sudden camera movement",
+        "seed": 31406,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-light-limit",
+      "image": "images/scene-07-light-limit.png",
+      "narration": "ดังนั้นแสงจึงเป็นขีดจำกัดของข้อมูล และวัตถุที่มีมวล ตามฟิสิกส์ที่เราทดสอบได้ครับ",
+      "tts_text": "ดังนั้นแสงจึงเป็นขีดจำกัดของข้อมูล และวัตถุที่มีมวล ตามฟิสิกส์ที่เราทดสอบได้ครับ",
+      "subtitle": "ความเร็วแสงคือขีดจำกัด\nของข้อมูลและวัตถุที่มีมวล",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "fade_black"
+    },
+    {
+      "id": "scene-08-outro",
+      "image": "images/scene-08-outro.png",
+      "narration": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวอวกาศ จักรวาล วิทยาศาสตร์ และเทคโนโลยี กดไลก์ กดแชร์ และกดติดตาม แล้วมาค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": false,
+      "show_subtitle": false,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.05,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

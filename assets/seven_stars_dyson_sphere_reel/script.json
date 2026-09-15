@@ -1,0 +1,122 @@
+{
+  "project": {
+    "id": "mamase-7-mysterious-stars-dyson-sphere-reel-v1",
+    "title": "7 ดาวปริศนา เจอเอเลี่ยนแล้ว?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: \"เฮ้ย... จริงดิ?\" Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ในปี 2024 นักดาราศาสตร์ตรวจพบดาว 7 ดวง จาก 5 ล้านดวง... ที่แผ่รังสีความร้อนสูงผิดปกติ นี่คือ 'รอยนิ้วมือ' ของอารยธรรมต่างดาวจริงหรือ?!",
+      "tts_text": "ในปี 2024 นักดาราศาสตร์ตรวจพบดาว เจ็ดดวง จาก ห้าล้านดวง... ที่แผ่รังสีความร้อนสูงผิดปกติ นี่คือ รอยนิ้วมือ ของอารยธรรมต่างดาวจริงหรือ?!",
+      "subtitle": "พบดาว 7 ดวง ปล่อยความร้อนผิดปกติ\nนี่คือร่องรอย 'อารยธรรมต่างดาว' จริงหรือ?!",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic vertical master shot of amazed young man and golden retriever looking up at giant glowing Dyson Sphere swarm structure enclosing star, JWST golden mirrors reflecting starlight",
+        "negative_prompt": "text distortion, face distortion, flicker, sudden movement, watermark, logo",
+        "seed": 2026,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-thermodynamics-waste-heat",
+      "image": "images/scene-02-thermodynamics-waste-heat.png",
+      "narration": "เราไม่ต้องเห็นตัวเอเลี่ยนครับ เพราะตามกฎฟิสิกส์ ไม่ว่าเทคโนโลยีจะล้ำแค่ไหน เมื่อมีการใช้พลังงาน จะต้องคาย 'ความร้อนเหลือทิ้ง' ออกมาในรูปคลื่นอินฟราเรดเสมอ",
+      "tts_text": "เราไม่ต้องเห็นตัวเอเลี่ยนครับ เพราะตามกฎฟิสิกส์ ไม่ว่าเทคโนโลยีจะล้ำแค่ไหน เมื่อมีการใช้พลังงาน จะต้องคาย ความร้อนเหลือทิ้ง ออกมาในรูปคลื่นอินฟราเรดเสมอ",
+      "subtitle": "ตามกฎเทอร์โมไดนามิกส์\nการใช้พลังงาน ย่อมปล่อย 'ความร้อนเหลือทิ้ง' เสมอ",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-dyson-sphere-swarm-concept",
+      "image": "images/scene-03-dyson-sphere-swarm-concept.png",
+      "narration": "นี่คือแนวคิด 'ไดสัน สเฟียร์' ที่เสนอโดย ฟรีแมน ไดสัน... เมื่ออารยธรรมเจริญถึงขีดสุด พวกเขาจะสร้างโครงข่ายโซลาร์เซลล์อวกาศนับล้านชิ้น ล้อมรอบดาวฤกษ์เพื่อสูบพลังงานทั้งหมดมาใช้",
+      "tts_text": "นี่คือแนวคิด ไดสัน สเฟียร์ ที่เสนอโดย ฟรีแมน ไดสัน... เมื่ออารยธรรมเจริญถึงขีดสุด พวกเขาจะสร้างโครงข่ายโซลาร์เซลล์อวกาศนับล้านชิ้น ล้อมรอบดาวฤกษ์เพื่อสูบพลังงานทั้งหมดมาใช้",
+      "subtitle": "Dyson Sphere โครงข่ายขนาดยักษ์\nล้อมรอบดาวฤกษ์ เพื่อสูบพลังงานมาใช้",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-04-kardashev-scale-type-two",
+      "image": "images/scene-04-kardashev-scale-type-two.png",
+      "narration": "ตามสเกลคาร์ดาเชฟ นี่คือ 'อารยธรรมระดับสอง' ที่ควบคุมพลังงานของดาวฤกษ์ได้ทั้งดวง ซึ่งหากมนุษย์เราใช้พลังงานเพิ่มขึ้นเรื่อยๆ เราอาจต้องสร้างมันในอีกหนึ่งถึงสองพันปีข้างหน้า",
+      "tts_text": "ตามสเกลคาร์ดาเชฟ นี่คือ อารยธรรมระดับสอง ที่ควบคุมพลังงานของดาวฤกษ์ได้ทั้งดวง ซึ่งหากมนุษย์เราใช้พลังงานเพิ่มขึ้นเรื่อยๆ เราอาจต้องสร้างมันในอีกหนึ่งถึงสองพันปีข้างหน้า",
+      "subtitle": "อารยธรรมระดับ 2 ควบคุมพลังงานทั้งดวงดาว\nมนุษย์อาจต้องสร้างในอีกพันกว่าปีข้างหน้า",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-05-jwst-deep-observation",
+      "image": "images/scene-05-jwst-deep-observation.png",
+      "narration": "เพื่อพิสูจน์ความจริง กล้องโทรทรรศน์อวกาศ เจมส์ เว็บบ์ จึงซูมเข้าไปส่องดูดาวต้องสงสัยอย่างละเอียดทันที",
+      "tts_text": "เพื่อพิสูจน์ความจริง กล้องโทรทรรศน์อวกาศ เจมส์ เว็บบ์ จึงซูมเข้าไปส่องดูดาวต้องสงสัยอย่างละเอียดทันที",
+      "subtitle": "กล้อง James Webb ซูมเข้าไปส่อง\nเพื่อหาความจริงว่าคืออะไรกันแน่!",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-06-twist-background-agn-galaxy",
+      "image": "images/scene-06-twist-background-agn-galaxy.png",
+      "narration": "แต่ผลลัพธ์กลับหักมุม! ความร้อนที่เห็นไม่ได้มาจากเอเลี่ยน แต่มาจาก 'หลุมดำมวลยิ่งยวด' ในกาแล็กซีโบราณ ที่อยู่ซ้อนเป็นฉากหลังดาวฤกษ์พอดิบพอดีครับ",
+      "tts_text": "แต่ผลลัพธ์กลับหักมุม! ความร้อนที่เห็นไม่ได้มาจากเอเลี่ยน แต่มาจาก หลุมดำมวลยิ่งยวด ในกาแล็กซีโบราณ ที่อยู่ซ้อนเป็นฉากหลังดาวฤกษ์พอดิบพอดีครับ",
+      "subtitle": "ผลลัพธ์หักมุม!\nแท้จริงคือ 'หลุมดำ' ในกาแล็กซีโบราณที่อยู่ข้างหลัง",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-07-sagans-wisdom-night-sky",
+      "image": "images/scene-07-sagans-wisdom-night-sky.png",
+      "narration": "การยังไม่พบ ไม่ได้แปลว่าไม่มีอยู่จริง และอย่างที่ คาร์ล ซาแกน เคยกล่าวไว้ว่า 'การกล่าวอ้างที่ยิ่งใหญ่ ย่อมต้องการหลักฐานที่หนักแน่นพอ' จักรวาลยังคงรอให้เราค้นหาต่อไปครับ",
+      "tts_text": "การยังไม่พบ ไม่ได้แปลว่าไม่มีอยู่จริง และอย่างที่ คาร์ล ซาแกน เคยกล่าวไว้ว่า การกล่าวอ้างที่ยิ่งใหญ่ ย่อมต้องการหลักฐานที่หนักแน่นพอ จักรวาลยังคงรอให้เราค้นหาต่อไปครับ",
+      "subtitle": "การยังไม่พบ ไม่ได้แปลว่าไม่มีอยู่จริง\nจักรวาลยังมีความลับรอให้เราค้นพบเสมอ",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-08-brand-outro",
+      "image": "images/scene-08-brand-outro.png",
+      "narration": "ถ้าชอบเรื่องราวดาราศาสตร์แบบนี้ กดติดตาม แล้วมาร่วมค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวดาราศาสตร์แบบนี้ กดติดตาม แล้วมาร่วมค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "show_subtitle": true,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

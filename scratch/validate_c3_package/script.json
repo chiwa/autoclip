@@ -1,0 +1,190 @@
+{
+  "project": {
+    "id": "mamase-cislunar-c3-constellation-reel-v1",
+    "title": "ทางด่วนอวกาศโลก-ดวงจันทร์: ฝูงดาวเทียม C3",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.3,
+    "style_prompt": "Read aloud like a charismatic science storyteller with a playful personality. Sound curious, friendly, slightly cheeky, and genuinely excited by surprising facts. Keep the delivery natural and conversational, with small pauses for comedic timing and emphasis. Never sound like a news anchor. Keep the delivery energetic, clear, playful, warm, and reassuring. Make the listener feel relaxed and curious, never rushed, tense, or overly dramatic."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "สวัสดีครับ ยินดีต้อนรับสู่ Mamase จักรวาลของใจ ห้วงอวกาศระหว่างโลกกับดวงจันทร์ที่เคยว่างเปล่า กำลังจะกลายเป็น 'เครือข่ายอัจฉริยะ' ด้วยฝูงดาวเทียมจิ๋ว 30 ลำ... และรู้ไหมครับว่า ประเทศไทยเราได้ร่วมภารกิจนี้ด้วย!",
+      "tts_text": "สวัสดีครับ ยินดีต้อนรับสู่ มามาเซ่ จักรวาลของใจ ห้วงอวกาศระหว่างโลกกับดวงจันทร์ที่เคยว่างเปล่า กำลังจะกลายเป็น เครือข่ายอัจฉริยะ ด้วยฝูงดาวเทียมจิ๋ว สามสิบ ลำ... และรู้ไหมครับว่า ประเทศไทยเราได้ร่วมภารกิจนี้ด้วย!",
+      "subtitle": "ฝูงดาวเทียม C3 เครือข่ายทางด่วนโลก-ดวงจันทร์",
+      "motion": "cinematic_push_in",
+      "motion_speed": "normal",
+      "motion_intensity": 0.2,
+      "focus": "right",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Use the canonical Mamase anime presenter identity, friendly Thai male with tousled black hair, thin rectangular glasses and navy blazer, face-forward on the right for a talking shot. High-tech CubeSat satellites in cislunar space between blue Earth and glowing Moon, elegant Thai hook text in upper left. Subtle natural head movement and gentle pointing gesture, stable composition.",
+        "negative_prompt": "extra person, extra text, watermark, logo, distorted face, distorted hands, duplicated fingers, blurry spacecraft, flicker, jitter, sudden camera movement",
+        "seed": 901,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": true,
+        "character_id": "mamase-presenter-v1"
+      }
+    },
+    {
+      "id": "scene-02-cislunar-frontier",
+      "image": "images/scene-02-cislunar-frontier.png",
+      "narration": "พื้นที่ที่เรียกว่า 'ซีสลูนาร์' ครอบคลุมตั้งแต่เหนือวงโคจรโลกออกไปถึง 2 ล้านกิโลเมตร นี่คือเส้นทางยุทธศาสตร์สำคัญที่มนุษย์กำลังจะใช้เดินทางไปกลับดวงจันทร์ในทศวรรษนี้ครับ",
+      "tts_text": "พื้นที่ที่เรียกว่า ซีสลูนาร์ ครอบคลุมตั้งแต่เหนือวงโคจรโลกออกไปถึง สอง ล้านกิโลเมตร นี่คือเส้นทางยุทธศาสตร์สำคัญที่มนุษย์กำลังจะใช้เดินทางไปกลับดวงจันทร์ในทศวรรษนี้ครับ",
+      "subtitle": "ซีสลูนาร์: เขตอวกาศ 2 ล้านกิโลเมตร",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic space documentary view of vast cislunar space between planet Earth and the Moon spanning 2 million kilometers, orbital highway trajectories connecting the two worlds in deep cosmos, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, flicker, jitter",
+        "seed": 902,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-03-invisible-dangers",
+      "image": "images/scene-03-invisible-dangers.png",
+      "narration": "แต่การอยู่นอกร่มเงาสนามแม่เหล็กโลกนั้นอันตรายมาก พายุสุริยะ รังสีคอสมิก และสะเก็ดดาว อาจทำลายยานหรือเป็นอันตรายถึงชีวิตนักบินอวกาศได้ในเสี้ยววินาที",
+      "tts_text": "แต่การอยู่นอกร่มเงาสนามแม่เหล็กโลกนั้นอันตรายมาก พายุสุริยะ รังสีคอสมิก และสะเก็ดดาว อาจทำลายยานหรือเป็นอันตรายถึงชีวิตนักบินอวกาศได้ในเสี้ยววินาที",
+      "subtitle": "อันตรายจากพายุสุริยะนอกสนามแม่เหล็กโลก",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.16,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic space science documentary showing violent solar storm and cosmic radiation particles bombarding deep space outside Earth magnetic shield, dramatic space weather physics, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, explosion, flicker, jitter",
+        "seed": 903,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-04-cubesat-swarm",
+      "image": "images/scene-04-cubesat-swarm.png",
+      "narration": "จีนจึงเปิดตัวโครงการ C3 ส่งฝูงดาวเทียมจิ๋วขนาดไม่เกิน 30 กิโลกรัม จำนวน 30 ลำ กระจายตัวเป็นโครงข่ายตรวจวัดสภาพแวดล้อมอวกาศตลอด 24 ชั่วโมง",
+      "tts_text": "จีนจึงเปิดตัวโครงการ ซีทรี ส่งฝูงดาวเทียมจิ๋วขนาดไม่เกิน สามสิบ กิโลกรัม จำนวน สามสิบ ลำ กระจายตัวเป็นโครงข่ายตรวจวัดสภาพแวดล้อมอวกาศตลอด ยี่สิบสี่ ชั่วโมง",
+      "subtitle": "ฝูงคิวบ์แซต 30 ลำ เฝ้าระวังภัย 24 ชม.",
+      "motion": "gentle_float",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "dissolve",
+      "wan": {
+        "prompt": "Cinematic aerospace engineering shot of sleek modern 30-kilogram CubeSats flying in constellation formation in deep space, solar panels deployed, micro-thrusters, scientific sensors glistening in sunlight, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, damage, flicker, jitter",
+        "seed": 904,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-05-lunar-base-support",
+      "image": "images/scene-05-lunar-base-support.png",
+      "narration": "ฝูงดาวเทียมนี้จะทำหน้าที่ทั้งเป็นสถานีตรวจสภาพอวกาศ คอยชี้เป้าแหล่งน้ำแข็ง และสนับสนุนการสร้างสถานีวิจัยถาวรบนดวงจันทร์ของมนุษย์ก่อนปี 2030",
+      "tts_text": "ฝูงดาวเทียมนี้จะทำหน้าที่ทั้งเป็นสถานีตรวจสภาพอวกาศ คอยชี้เป้าแหล่งน้ำแข็ง และสนับสนุนการสร้างสถานีวิจัยถาวรบนดวงจันทร์ของมนุษย์ก่อนปี สองพันสามสิบ",
+      "subtitle": "รองรับการสร้างสถานีวิจัยบนดวงจันทร์",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic documentary view of lunar south pole craters with permanent shadows, CubeSat satellite surveying overhead for water ice, supporting future international lunar research station, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, fire, explosion, flicker, jitter",
+        "seed": 905,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-06-thailand-global-partnership",
+      "image": "images/scene-06-thailand-global-partnership.png",
+      "narration": "ที่พิเศษที่สุดคือ นี่ไม่ใช่ภารกิจเดี่ยว แต่เปิดกว้างให้ทั่วโลก และนักวิทยาศาสตร์ไทยเราก็เป็นหนึ่งในกลุ่มแรก ๆ ที่เข้าร่วมโครงการประวัติศาสตร์นี้ครับ",
+      "tts_text": "ที่พิเศษที่สุดคือ นี่ไม่ใช่ภารกิจเดี่ยว แต่เปิดกว้างให้ทั่วโลก และนักวิทยาศาสตร์ไทยเราก็เป็นหนึ่งในกลุ่มแรก ๆ ที่เข้าร่วมโครงการประวัติศาสตร์นี้ครับ",
+      "subtitle": "ไทยร่วมเป็นหนึ่งในชาติบุกเบิกโครงการ",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic documentary shot of modern international space operations center and satellite tracking screens, global scientific partnership, deep space communication dish under starry sky, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, flicker, jitter",
+        "seed": 906,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-07-gamma-ray-discovery",
+      "image": "images/scene-07-gamma-ray-discovery.png",
+      "narration": "นอกจากดูแลความปลอดภัยให้นักบินอวกาศแล้ว เครือข่ายนี้ยังทำหน้าที่เป็นกล้องโทรทรรศน์ขนาดยักษ์ คอยตรวจจับการระเบิดของรังสีแกมมาที่ไกลโพ้นในจักรวาลอีกด้วย",
+      "tts_text": "นอกจากดูแลความปลอดภัยให้นักบินอวกาศแล้ว เครือข่ายนี้ยังทำหน้าที่เป็นกล้องโทรทรรศน์ขนาดยักษ์ คอยตรวจจับการระเบิดของรังสีแกมมาที่ไกลโพ้นในจักรวาลอีกด้วย",
+      "subtitle": "ตรวจจับการระเบิดรังสีแกมมาลึกสุดจักรวาล",
+      "motion": "cinematic_pull_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.15,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic astrophysical documentary shot of an ultra-bright Gamma-Ray Burst explosion in distant deep space, relativistic jet cutting through cosmic darkness, detected by deep space satellite network, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, explosion, flicker, jitter",
+        "seed": 907,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-08-philosophical-climax",
+      "image": "images/scene-08-philosophical-climax.png",
+      "narration": "การก้าวออกจากโลกสู่ดวงจันทร์ จะไม่ได้มีเพียงผู้กล้าลำพังอีกต่อไป แต่มีโครงข่ายความร่วมมือของมวลมนุษยชาติ คอยส่องทางและปกป้องพวกเราอยู่เสมอครับ",
+      "tts_text": "การก้าวออกจากโลกสู่ดวงจันทร์ จะไม่ได้มีเพียงผู้กล้าลำพังอีกต่อไป แต่มีโครงข่ายความร่วมมือของมวลมนุษยชาติ คอยส่องทางและปกป้องพวกเราอยู่เสมอครับ",
+      "subtitle": "ก้าวสู่ดวงจันทร์ด้วยความร่วมมือของมนุษยชาติ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Sublime, peaceful, inspiring space documentary shot of planet Earth and Moon floating together in cosmic space, subtle interconnected golden orbital network, human unity and achievement, no text.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, flicker, jitter",
+        "seed": 908,
+        "frames": 81,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-09-mamase-outro",
+      "image": "images/scene-09-mamase-outro.png",
+      "narration": "ค้นพบโลก ค้นพบใจ กับ Mamase จักรวาลของใจ",
+      "tts_text": "ค้นพบโลก ค้นพบใจ กับ มามาเซ่ จักรวาลของใจ",
+      "subtitle": "ค้นพบโลก ค้นพบใจ\nMamase จักรวาลของใจ",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none",
+      "wan": {
+        "prompt": "Mamase brand outro, glowing cyan orbiting planet in dark navy space, peaceful and contemplative.",
+        "negative_prompt": "text, subtitle, watermark, logo, cartoon, extra planet, extra stars, flicker, jitter",
+        "seed": 98,
+        "frames": 81,
+        "lip_sync": false
+      }
+    }
+  ]
+}

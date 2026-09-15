@@ -1,0 +1,33 @@
+{
+  "output": "scratch/test_cover.png",
+  "dimensions": [
+    1080,
+    1920
+  ],
+  "brand_asset_count": 1,
+  "text_layers": [
+    "topic_title",
+    "thai_hook"
+  ],
+  "text_rect": [
+    56,
+    190,
+    1024,
+    784
+  ],
+  "protected_zones": [
+    [
+      450,
+      1100,
+      1050,
+      1900
+    ],
+    [
+      150,
+      1100,
+      550,
+      1900
+    ]
+  ],
+  "forbidden_layers": []
+}

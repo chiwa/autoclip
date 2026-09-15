@@ -3,7 +3,9 @@ import base64
 import json
 import queue
 import shutil
+import sqlite3
 import uuid
+from datetime import date
 from pathlib import Path
 
 from fastapi import APIRouter, File, Form, HTTPException, Request, UploadFile
@@ -14,9 +16,157 @@ from app.domain.enums import JobStatus
 from app.domain.errors import AppError, public_error
 from app.domain.events import JobEvent, JobEventType
 from app.domain.ai_models import AiProject
+from app.domain.zodiac_models import ZodiacBatchImport, ZodiacMetadataUpdate
 from app.services.bgm_service import ensure_default_bgm, get_podcast_bgm_catalog, resolve_podcast_bgm
 
 router = APIRouter(prefix="/api")
+
+
+def _zodiac_readings(body: ZodiacBatchImport) -> dict[str, dict]:
+    return {item.id: item.model_dump() for item in body.zodiacs}
+
+
+@router.get("/zodiac/master")
+def zodiac_master(request: Request) -> dict:
+    try:
+        return request.app.state.zodiac_service.master()
+    except AppError as exc:
+        raise HTTPException(400, public_error(exc)) from exc
+
+
+@router.get("/zodiac/example")
+def zodiac_example(request: Request) -> dict:
+    master = request.app.state.zodiac_service.master()
+    return {
+        "schema": "autoclip.zodiac-weekly-batch.v1",
+        "week": {"start_date": "2026-09-14", "end_date": "2026-09-20"},
+        "tts_provider": "google-gemini",
+        "voice": {"voice": "Iapetus", "language": "th-TH", "speed": 1.10},
+        "visual": {
+            "use_template_as_primary_visual": True,
+            "generate_new_images": False,
+            "date_overlay": {"enabled": True, "text_source": "week.display_th", "preserve_master_image": True},
+            "motion": {"enabled": False, "preset": "none"},
+        },
+        "zodiacs": [],
+        "help": "เว้น zodiacs เป็น [] เพื่อให้ระบบสร้างคำทำนายมาตรฐาน หรือใส่ครบ 12 ราศีตามรายการ master",
+        "master": master["zodiacs"],
+    }
+
+
+@router.post("/zodiac/batches")
+def create_zodiac_batch(request: Request, body: ZodiacBatchImport) -> dict:
+    try:
+        return request.app.state.zodiac_service.create_batch(
+            body.start_date, body.end_date, body.tts_provider, _zodiac_readings(body),
+            body.visual.model_dump(), body.voice.model_dump(), body.channel_id,
+        )
+    except AppError as exc:
+        raise HTTPException(400, public_error(exc)) from exc
+    except KeyError as exc:
+        raise HTTPException(400, public_error(AppError("CHANNEL_NOT_FOUND", "ไม่พบ Channel ที่เลือก"))) from exc
+
+
+@router.get("/zodiac/batches")
+def list_zodiac_batches(request: Request) -> dict:
+    return {"batches": request.app.state.zodiac_service.list_batches()}
+
+
+@router.get("/zodiac/batches/{batch_id}")
+def get_zodiac_batch(request: Request, batch_id: str) -> dict:
+    try:
+        return request.app.state.zodiac_service.get_batch(batch_id)
+    except AppError as exc:
+        raise HTTPException(404, public_error(exc)) from exc
+
+
+@router.post("/zodiac/batches/{batch_id}/retry-failed")
+def retry_zodiac_batch(request: Request, batch_id: str) -> dict:
+    try:
+        return request.app.state.zodiac_service.retry_failed(batch_id)
+    except AppError as exc:
+        raise HTTPException(400, public_error(exc)) from exc
+
+
+@router.post("/zodiac/batches/{batch_id}/{zodiac_id}/regenerate")
+def regenerate_zodiac_child(request: Request, batch_id: str, zodiac_id: str) -> dict:
+    try:
+        return request.app.state.zodiac_service.regenerate_child(batch_id, zodiac_id)
+    except AppError as exc:
+        raise HTTPException(409, public_error(exc)) from exc
+
+
+@router.delete("/zodiac/batches/{batch_id}")
+def delete_zodiac_batch(request: Request, batch_id: str) -> dict:
+    try:
+        return request.app.state.zodiac_service.delete_batch(batch_id)
+    except AppError as exc:
+        raise HTTPException(409, public_error(exc)) from exc
+
+
+@router.get("/zodiac/batches/{batch_id}/{zodiac_id}/package")
+def download_zodiac_package(request: Request, batch_id: str, zodiac_id: str) -> FileResponse:
+    path = request.app.state.zodiac_service.package_path(batch_id, zodiac_id)
+    return FileResponse(path, media_type="application/zip", filename=path.name)
+
+
+@router.get("/zodiac/batches/{batch_id}/{zodiac_id}/video")
+def download_zodiac_video(request: Request, batch_id: str, zodiac_id: str) -> FileResponse:
+    path = request.app.state.zodiac_service.video_path(batch_id, zodiac_id)
+    filename = request.app.state.zodiac_service.video_filename(batch_id, zodiac_id)
+    return FileResponse(path, media_type="video/mp4", filename=filename)
+
+
+@router.get("/zodiac/batches/{batch_id}/all-packages")
+def download_all_zodiac_packages(request: Request, batch_id: str) -> FileResponse:
+    path = request.app.state.zodiac_service.archive(batch_id, "packages")
+    return FileResponse(path, media_type="application/zip", filename=path.name)
+
+
+@router.get("/zodiac/batches/{batch_id}/all-videos")
+def download_all_zodiac_videos(request: Request, batch_id: str) -> FileResponse:
+    path = request.app.state.zodiac_service.archive(batch_id, "videos")
+    return FileResponse(path, media_type="application/zip", filename=path.name)
+
+
+@router.get("/zodiac/batches/{batch_id}/complete-archive")
+def download_complete_zodiac_archive(request: Request, batch_id: str) -> FileResponse:
+    path = request.app.state.zodiac_service.complete_archive(batch_id)
+    return FileResponse(path, media_type="application/zip", filename=path.name)
+
+
+@router.patch("/zodiac/batches/{batch_id}/{zodiac_id}/metadata")
+def update_zodiac_metadata(request: Request, batch_id: str, zodiac_id: str, body: ZodiacMetadataUpdate) -> dict:
+    try:
+        return request.app.state.zodiac_service.update_metadata(batch_id, zodiac_id, body.model_dump())
+    except AppError as exc:
+        raise HTTPException(400, public_error(exc)) from exc
+
+
+@router.post("/zodiac/batches/{batch_id}/regenerate-metadata")
+def regenerate_zodiac_metadata(request: Request, batch_id: str) -> dict:
+    try:
+        return request.app.state.zodiac_service.regenerate_metadata(batch_id)
+    except AppError as exc:
+        raise HTTPException(400, public_error(exc)) from exc
+
+
+@router.get("/zodiac/batches/{batch_id}/{zodiac_id}/metadata")
+def download_zodiac_metadata(request: Request, batch_id: str, zodiac_id: str) -> FileResponse:
+    path = request.app.state.zodiac_service.metadata_path(batch_id, zodiac_id)
+    return FileResponse(path, media_type="application/json", filename=path.name)
+
+
+@router.get("/zodiac/batches/{batch_id}/upload-csv")
+def download_zodiac_csv(request: Request, batch_id: str) -> FileResponse:
+    path = request.app.state.zodiac_service.csv_path(batch_id)
+    return FileResponse(path, media_type="text/csv", filename="youtube-upload.csv")
+
+
+@router.get("/zodiac/batches/{batch_id}/all-metadata")
+def download_all_zodiac_metadata(request: Request, batch_id: str) -> FileResponse:
+    path = request.app.state.zodiac_service.metadata_archive(batch_id)
+    return FileResponse(path, media_type="application/zip", filename=path.name)
 
 
 class AiMessageRequest(BaseModel):
@@ -26,6 +176,7 @@ class AiMessageRequest(BaseModel):
 class AiAutomaticRequest(BaseModel):
     topic: str = Field(min_length=1, max_length=500)
     concept: str = Field(default="", max_length=4000)
+    channel_id: str = "undefined"
 
 
 class AiSceneUpdate(BaseModel):
@@ -50,6 +201,46 @@ class VideoMetadataRequest(BaseModel):
     title: str = Field(default="-", max_length=100)
     description: str = Field(default="-", max_length=10000)
     hashtags: str = Field(default="", max_length=3000)
+
+
+class HistoryPublishStatusRequest(BaseModel):
+    published: bool
+
+class ChannelRequest(BaseModel):
+    name: str = Field(min_length=1, max_length=100)
+
+class ProjectChannelRequest(BaseModel):
+    channelId: str = Field(min_length=1, max_length=80)
+
+
+class ZodiacAiDraftRequest(BaseModel):
+    start_date: date
+    end_date: date
+
+
+@router.get("/zodiac/ai/status")
+def zodiac_ai_status(request: Request) -> dict:
+    return request.app.state.zodiac_ai_service.status()
+
+
+@router.get("/zodiac/ai/log")
+def zodiac_ai_log(request: Request) -> dict:
+    return {"log": request.app.state.zodiac_ai_service.last_log}
+
+
+@router.post("/zodiac/ai/draft")
+def zodiac_ai_draft(request: Request, body: ZodiacAiDraftRequest) -> dict:
+    if body.end_date < body.start_date:
+        raise HTTPException(422, {"code": "INVALID_WEEK", "message": "วันสิ้นสุดต้องไม่ก่อนวันเริ่มต้น"})
+    try:
+        draft = request.app.state.zodiac_ai_service.generate(body.start_date, body.end_date)
+        return {
+            **draft,
+            "draft": draft,
+            "log": request.app.state.zodiac_ai_service.last_log,
+        }
+    except AppError as exc:
+        raise HTTPException(400, public_error(exc)) from exc
 
 
 @router.post("/tts")
@@ -164,6 +355,7 @@ def create_podcast_job(
     bgm_track: str = Form("mamase-podcast-bg.mp3"),
     bgm_volume: float = Form(0.08),
     focus: str = Form("center"),
+    channel_id: str = Form("undefined"),
 ) -> dict:
     effective_script = (script_text if script_text is not None else script) or ""
     if not effective_script.strip():
@@ -185,10 +377,107 @@ def create_podcast_job(
             bgm_track=bgm_track,
             bgm_volume=bgm_volume,
             focus=focus,
+            channel_id=channel_id,
         )
     except AppError as exc:
         raise HTTPException(400, public_error(exc)) from exc
+    except KeyError as exc:
+        raise HTTPException(400, public_error(AppError("CHANNEL_NOT_FOUND", "ไม่พบ Channel ที่เลือก"))) from exc
     return {"jobId": record.job_id, "status": record.status}
+
+
+@router.post("/quick-reel")
+def create_quick_reel(
+    request: Request,
+    image: UploadFile | None = File(None),
+    images: list[UploadFile] | None = File(None),
+    script: str | None = Form(None),
+    script_text: str | None = Form(None),
+    tts_segments: str | None = Form(None),
+    voice: str = Form("Iapetus"),
+    speed: float = Form(1.10),
+    style_prompt: str | None = Form(None),
+    motion: str = Form("static"),
+    fit: str = Form("cover"),
+    hook_enabled: bool = Form(False),
+    hook_text: str = Form(""),
+    hook_position: str = Form("top"),
+    subtitles_enabled: bool = Form(True),
+    bgm_enabled: bool = Form(False),
+    bgm_track: str = Form("cosmic_drift"),
+    bgm_file: UploadFile | None = File(None),
+    bgm_volume: float = Form(0.10),
+    title: str = Form(""),
+    description: str = Form(""),
+    hashtags: str = Form(""),
+    channel_id: str = Form("undefined"),
+) -> dict:
+    effective_script = (script_text if script_text is not None else script) or ""
+    if not effective_script.strip():
+        raise HTTPException(400, public_error(AppError("QUICK_REEL_SCRIPT_EMPTY", "กรุณาใส่บทพูดสำหรับ Quick Reel")))
+    try:
+        parsed_segments: list[str] | None = None
+        if tts_segments:
+            try:
+                decoded = json.loads(tts_segments)
+            except json.JSONDecodeError as exc:
+                raise AppError("QUICK_REEL_TTS_SEGMENTS_INVALID", "ข้อมูล tts array ไม่ใช่ JSON ที่ถูกต้อง") from exc
+            if not isinstance(decoded, list) or not decoded or not all(isinstance(item, str) and item.strip() for item in decoded):
+                raise AppError("QUICK_REEL_TTS_SEGMENTS_INVALID", "tts ต้องเป็น array ของข้อความที่ไม่ว่าง")
+            parsed_segments = [item.strip() for item in decoded]
+        record = request.app.state.quick_reel_service.submit_quick_reel(
+            image_file=image,
+            image_files=images,
+            script_text=effective_script,
+            tts_segments=parsed_segments,
+            voice=voice,
+            speed=speed,
+            style_prompt=style_prompt,
+            motion=motion,
+            fit=fit,
+            hook_enabled=hook_enabled,
+            hook_text=hook_text,
+            hook_position=hook_position,
+            subtitles_enabled=subtitles_enabled,
+            bgm_enabled=bgm_enabled,
+            bgm_track=bgm_track,
+            bgm_file=bgm_file,
+            bgm_volume=bgm_volume,
+            title=title,
+            description=description,
+            hashtags=hashtags,
+            channel_id=channel_id,
+        )
+    except AppError as exc:
+        raise HTTPException(400, public_error(exc)) from exc
+    except KeyError as exc:
+        raise HTTPException(400, public_error(AppError("CHANNEL_NOT_FOUND", "ไม่พบ Channel ที่เลือก"))) from exc
+    return {"jobId": record.job_id, "status": record.status}
+
+
+@router.get("/quick-reel/{job_id}")
+def get_quick_reel(request: Request, job_id: str) -> dict:
+    try:
+        return request.app.state.quick_reel_service.get_job(job_id)
+    except AppError as exc:
+        raise HTTPException(404 if exc.code == "JOB_NOT_FOUND" else 400, public_error(exc)) from exc
+
+
+@router.get("/quick-reel/{job_id}/video")
+def get_quick_reel_video(request: Request, job_id: str) -> FileResponse:
+    try:
+        path = request.app.state.quick_reel_service.video_path(job_id)
+        return FileResponse(path, media_type="video/mp4", filename=f"quick-reel-{job_id[:8]}.mp4")
+    except AppError as exc:
+        raise HTTPException(404 if exc.code in {"JOB_NOT_FOUND", "VIDEO_NOT_READY"} else 400, public_error(exc)) from exc
+
+
+@router.delete("/quick-reel/{job_id}")
+def delete_quick_reel(request: Request, job_id: str) -> dict:
+    try:
+        return request.app.state.quick_reel_service.delete_job(job_id)
+    except AppError as exc:
+        raise HTTPException(404 if exc.code == "JOB_NOT_FOUND" else 400, public_error(exc)) from exc
 
 
 @router.post("/jobs", status_code=202)
@@ -201,13 +490,16 @@ def create_job(
     output_format: str | None = Form(None),
     motion_resolution: str | None = Form(None),
     script_json: str | None = Form(None),
+    channel_id: str = Form("undefined"),
 ) -> dict:
     if not file.filename or not file.filename.lower().endswith(".zip"):
         raise HTTPException(400, public_error(AppError("PACKAGE_INVALID", "Exactly one ZIP file is required")))
     try:
-        record = request.app.state.job_service.submit(file, tts_provider, subtitle_mode, script_json, render_engine, output_format, motion_resolution)
+        record = request.app.state.job_service.submit(file, tts_provider, subtitle_mode, script_json, render_engine, output_format, motion_resolution, channel_id)
     except AppError as exc:
         raise HTTPException(413 if exc.code == "UPLOAD_TOO_LARGE" else 400, public_error(exc)) from exc
+    except KeyError as exc:
+        raise HTTPException(400, public_error(AppError("CHANNEL_NOT_FOUND", "ไม่พบ Channel ที่เลือก"))) from exc
     return {"jobId": record.job_id, "status": record.status}
 
 
@@ -364,6 +656,85 @@ def ai_status(request: Request) -> dict:
 def history(request: Request) -> dict:
     return {"projects": request.app.state.persistence.history()}
 
+@router.get("/channels")
+def list_channels(request: Request) -> dict:
+    return {"channels": request.app.state.persistence.channels()}
+
+@router.post("/channels", status_code=201)
+def create_channel(request: Request, body: ChannelRequest) -> dict:
+    try:
+        return request.app.state.persistence.create_channel(body.name)
+    except (ValueError, sqlite3.IntegrityError) as exc:
+        raise HTTPException(409, public_error(AppError("CHANNEL_NAME_INVALID", "ชื่อ Channel ว่างหรือซ้ำกับชื่อเดิม"))) from exc
+
+@router.patch("/channels/{channel_id}")
+def rename_channel(request: Request, channel_id: str, body: ChannelRequest) -> dict:
+    try:
+        return request.app.state.persistence.rename_channel(channel_id, body.name)
+    except KeyError as exc:
+        raise HTTPException(404, public_error(AppError("CHANNEL_NOT_FOUND", "ไม่พบ Channel"))) from exc
+    except (ValueError, sqlite3.IntegrityError) as exc:
+        raise HTTPException(409, public_error(AppError("CHANNEL_NAME_INVALID", "ชื่อ Channel ว่าง ซ้ำ หรือแก้ไขไม่ได้"))) from exc
+
+@router.patch("/history/{history_id}/channel")
+def set_history_channel(request: Request, history_id: str, body: ProjectChannelRequest) -> dict:
+    try:
+        return request.app.state.persistence.set_project_channel(history_id, body.channelId)
+    except KeyError as exc:
+        raise HTTPException(404, public_error(AppError("CHANNEL_OR_PROJECT_NOT_FOUND", "ไม่พบ Channel หรือ Content"))) from exc
+
+
+@router.patch("/history/{history_id}/published")
+def set_history_published(request: Request, history_id: str, body: HistoryPublishStatusRequest) -> dict:
+    try:
+        return request.app.state.persistence.set_published(history_id, body.published)
+    except KeyError as exc:
+        raise HTTPException(404, public_error(AppError("PROJECT_NOT_FOUND", "ไม่พบโปรเจกต์"))) from exc
+
+
+@router.get("/jobs/{job_id}/publication")
+def get_job_publication(request: Request, job_id: str) -> dict:
+    record = request.app.state.job_service.restore(job_id)
+    if not record:
+        raise HTTPException(404, public_error(AppError("JOB_NOT_FOUND", "Job was not found")))
+    if not record.project_id:
+        raise HTTPException(409, public_error(AppError("PROJECT_NOT_LINKED", "งานนี้ยังไม่ได้เชื่อมกับโปรเจกต์")))
+    return {"jobId": job_id, "projectId": record.project_id, "published": request.app.state.persistence.get_published(record.project_id)}
+
+@router.get("/jobs/{job_id}/channel")
+def get_job_channel(request: Request, job_id: str) -> dict:
+    record = request.app.state.job_service.restore(job_id)
+    if not record or not record.project_id:
+        raise HTTPException(404, public_error(AppError("JOB_NOT_FOUND", "ไม่พบงาน")))
+    channel = request.app.state.persistence.get_project_channel(record.project_id)
+    if not channel:
+        raise HTTPException(404, public_error(AppError("PROJECT_NOT_FOUND", "ไม่พบ Content")))
+    return {"jobId": job_id, "projectId": record.project_id, **channel}
+
+@router.patch("/jobs/{job_id}/channel")
+def set_job_channel(request: Request, job_id: str, body: ProjectChannelRequest) -> dict:
+    record = request.app.state.job_service.restore(job_id)
+    if not record or not record.project_id:
+        raise HTTPException(404, public_error(AppError("JOB_NOT_FOUND", "ไม่พบงาน")))
+    try:
+        return {"jobId": job_id, **request.app.state.persistence.set_project_channel(record.project_id, body.channelId)}
+    except KeyError as exc:
+        raise HTTPException(404, public_error(AppError("CHANNEL_NOT_FOUND", "ไม่พบ Channel"))) from exc
+
+
+@router.patch("/jobs/{job_id}/publication")
+def set_job_publication(request: Request, job_id: str, body: HistoryPublishStatusRequest) -> dict:
+    record = request.app.state.job_service.restore(job_id)
+    if not record:
+        raise HTTPException(404, public_error(AppError("JOB_NOT_FOUND", "Job was not found")))
+    if not record.project_id:
+        raise HTTPException(409, public_error(AppError("PROJECT_NOT_LINKED", "งานนี้ยังไม่ได้เชื่อมกับโปรเจกต์")))
+    try:
+        result = request.app.state.persistence.set_published(record.project_id, body.published)
+    except KeyError as exc:
+        raise HTTPException(404, public_error(AppError("PROJECT_NOT_FOUND", "ไม่พบโปรเจกต์"))) from exc
+    return {"jobId": job_id, **result}
+
 @router.get("/youtube/connections")
 def youtube_connections(request: Request) -> dict:
     return {"configured": request.app.state.youtube_service.configured(), "connections": request.app.state.persistence.youtube_connections()}
@@ -392,7 +763,10 @@ def youtube_upload(request: Request, history_id: str, body: YouTubeUploadRequest
     item=next((p for p in request.app.state.persistence.history() if p["id"]==history_id),None)
     if not item or not item.get("latestJob") or not item["latestJob"].get("videoAvailable"): raise HTTPException(400, public_error(AppError("VIDEO_NOT_READY", "ยังไม่มีวิดีโอที่สร้างเสร็จ")))
     job=request.app.state.persistence.get_job(item["latestJob"]["id"]); path=Path(job["final_path"])
-    try: return request.app.state.youtube_service.upload(body.connectionId,path,body.title,body.description,body.tags,body.privacyStatus)
+    try:
+        result = request.app.state.youtube_service.upload(body.connectionId,path,body.title,body.description,body.tags,body.privacyStatus)
+        request.app.state.persistence.set_published(history_id, True)
+        return result
     except AppError as exc: raise HTTPException(400, public_error(exc))
 
 
@@ -490,9 +864,11 @@ def create_automatic_ai_project(request: Request, body: AiAutomaticRequest) -> d
     The browser polls the project resource for the live, persisted progress log.
     """
     try:
-        return request.app.state.ai_project_service.create_automatic(body.topic, body.concept).model_dump(mode="json")
+        return request.app.state.ai_project_service.create_automatic(body.topic, body.concept, body.channel_id).model_dump(mode="json")
     except AppError as exc:
         raise HTTPException(400, public_error(exc)) from exc
+    except KeyError as exc:
+        raise HTTPException(400, public_error(AppError("CHANNEL_NOT_FOUND", "ไม่พบ Channel ที่เลือก"))) from exc
 
 
 @router.get("/ai/projects")
@@ -570,7 +946,8 @@ def _build_ai_package(request: Request, project_id: str, generate: bool) -> dict
         path = request.app.state.ai_project_service.build_package(project_id)
         result = {"projectId": project_id, "packageUrl": f"/api/ai/projects/{project_id}/package", "filename": path.name}
         if generate:
-            record = request.app.state.job_service.submit_path(path)
+            project = request.app.state.ai_project_service.get(project_id)
+            record = request.app.state.job_service.submit_path(path, channel_id=project.channel_id)
             result.update({"jobId": record.job_id, "status": record.status})
         return result
     except AppError as exc:

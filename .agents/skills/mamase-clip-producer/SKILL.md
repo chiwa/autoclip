@@ -27,7 +27,7 @@ For full details, reference files, and validation scripts, see also [`../mamase-
 
 ### Step 1: Script Writing & Review Gate
 1. Select/receive a topic aligned with approved channel themes (strange places worldwide, mysterious science, unexpected space stories, nature extremes, trending verified wonders).
-2. Structure the script into the standard **9-scene format** (8 story scenes + 1 Mamase brand outro).
+2. Structure the script for a dense **45–60 seconds** (max 75s; normally 4–7 story scenes + 1 Mamase brand outro). First spoken sentence must be a thumb-stopping Hook (0–3s); deliver a mini-wow every 10–15s; end with a topic-specific discussion CTA question.
 3. Write narration in the approved natural, playful, conversational storyteller persona.
 4. Present the complete script draft in clear Thai (UTF-8) including scene visuals, narration text, suggested camera motions, and transitions for พี่พี's review.
 5. Obtain approval before generating images or JSON.
@@ -39,20 +39,20 @@ For full details, reference files, and validation scripts, see also [`../mamase-
    - Use authentic astronomy/spacecraft data from NASA, JWST, ESO, Hubble, ESA.
    - Active composition fills **70–80%** of the frame (Foreground + Midground + Background depth).
    - Subtitle safe area (**y: 1380–1920**) is clean, calm, and dark.
-   - Scene 01: Narrative Key Art with canonical presenter (`mamase-presenter-v1`), directional rim lighting, and Sukhumvit Set Bold typography top-left.
+   - Scene 01: Narrative Key Art following `mamase-reels-cover`. Never include "MAMASE PODCAST", bilingual badges, or flags.
    - Scenes 02+: 100% clean documentary visuals with ZERO in-image text/HUD/logos/watermarks.
 3. Save durable master images in `assets/<topic_reel>/`. Never rely on `dist/` as durable reference.
 
 ### Step 3: JSON & ZIP Package Assembly
 1. Create `script.json` adhering strictly to the JSON contract:
-   - Voice: `google-gemini`, `Fenrir`, speed `1.0`, natural, playful, conversational storyteller prompt.
+   - Voice: `google-gemini`, `Fenrir`, speed `1.05`, natural, playful, conversational storyteller prompt.
    - Mandatory phonetic `tts_text` overrides for all foreign terms, acronyms, and numbers.
    - Scene 01 Wan: `steps: 25`, `seed: 901`, `frames: 81`, `lip_sync: true`, `character_id: "mamase-presenter-v1"`.
    - Every scene keeps an image and FFmpeg motion. Add `wan` only to scenes
      intended for generated motion. One ZIP works unchanged in both modes:
      FFmpeg selection renders all scenes with FFmpeg; Wan selection uses Wan
      for scenes with `wan` and FFmpeg for all remaining scenes.
-2. Ensure final scene uses the canonical locked Mamase Brand Outro asset and wording.
+2. Ensure final scene uses the locked Mamase Brand Outro asset with the topic-specific discussion CTA (never generic like/share/subscribe or "ขอบคุณที่รับชม"). Zero spoken words after the CTA.
 3. Create `video-metadata.json` with title, description, and hashtags.
 4. Archive at ZIP root without parent wrapping folder:
    ```text

@@ -1,0 +1,122 @@
+{
+  "project": {
+    "id": "mamase-dead-stars-night-sky-reel-v1",
+    "title": "ดาวที่เราเห็นคืนนี้…อาจตายไปแล้วหรือยัง?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.0,
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: \"เฮ้ย... จริงดิ?\" Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "เคยได้ยินไหมครับว่า... ดาวระยิบระยับที่เราเห็นบนฟ้าคืนนี้ แท้จริงแล้วอาจตายไปหมดแล้ว?!",
+      "tts_text": "เคยได้ยินไหมครับว่า... ดาวระยิบระยับที่เราเห็นบนฟ้าคืนนี้ แท้จริงแล้วอาจตายไปหมดแล้ว?!",
+      "subtitle": "ดาวที่เราเห็นบนท้องฟ้าคืนนี้...\nอาจตายไปหมดแล้วจริงไหม?",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade",
+      "wan": {
+        "prompt": "Cinematic vertical master shot of starry night sky with milky way, glowing supernova remnant, explorer smiling gently looking up beside corgi dog, subtle slow push-in",
+        "negative_prompt": "text distortion, face distortion, flicker, sudden movement, watermark, logo",
+        "seed": 2026,
+        "frames": 81,
+        "steps": 25,
+        "lip_sync": false
+      }
+    },
+    {
+      "id": "scene-02-light-time-machine",
+      "image": "images/scene-02-light-time-machine.png",
+      "narration": "เรื่องนี้มีส่วนจริงครับ เพราะแสงเดินทางด้วยความเร็วจำกัด แสงจากดวงอาทิตย์ใช้เวลา 8 นาที ส่วนแสงดาวบนฟ้า บางดวงต้องเดินทางนานหลายร้อยหรือหลายพันปีกว่าเราจะมองเห็น",
+      "tts_text": "เรื่องนี้มีส่วนจริงครับ เพราะแสงเดินทางด้วยความเร็วจำกัด แสงจากดวงอาทิตย์ใช้เวลา แปดนาที ส่วนแสงดาวบนฟ้า บางดวงต้องเดินทางนานหลายร้อยหรือหลายพันปีกว่าเราจะมองเห็น",
+      "subtitle": "แสงเดินทางด้วยความเร็วจำกัด\nภาพที่เราเห็น คือภาพจากอดีตเสมอ!",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-twist-almost-all-alive",
+      "image": "images/scene-03-twist-almost-all-alive.png",
+      "narration": "แต่คำตอบที่น่าทึ่งทางดาราศาสตร์คือ... ดาวเกือบทุกดวงที่คุณมองเห็นด้วยตาเปล่าในคืนนี้ 'ยังไม่ตายครับ!'",
+      "tts_text": "แต่คำตอบที่น่าทึ่งทางดาราศาสตร์คือ... ดาวเกือบทุกดวงที่คุณมองเห็นด้วยตาเปล่าในคืนนี้ ยังไม่ตายครับ!",
+      "subtitle": "แต่ความจริงคือ...\nดาวเกือบทุกดวงบนฟ้า ยังมีชีวิตอยู่!",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-04-lifespan-vs-distance",
+      "image": "images/scene-04-lifespan-vs-distance.png",
+      "narration": "ทำไมล่ะ? เพราะดาวฤกษ์ที่เราเห็นด้วยตาเปล่า ล้วนอยู่ใกล้โลกมากในรัศมีไม่เกินสองสามพันปีแสง ในขณะที่ดาวฤกษ์มีอายุยืนยาวนับร้อยล้านถึงหมื่นล้านปี โอกาสที่มันจะบังเอิญดับสูญพอดี จึงแทบไม่มีเลยครับ",
+      "tts_text": "ทำไมล่ะ? เพราะดาวฤกษ์ที่เราเห็นด้วยตาเปล่า ล้วนอยู่ใกล้โลกมากในรัศมีไม่เกินสองสามพันปีแสง ในขณะที่ดาวฤกษ์มีอายุยืนยาวนับร้อยล้านถึงหมื่นล้านปี โอกาสที่มันจะบังเอิญดับสูญพอดี จึงแทบไม่มีเลยครับ",
+      "subtitle": "ดาวมีอายุขัยนับพันล้านปี\nโอกาสที่จะดับพอดี จึงแทบเป็นศูนย์",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-05-exception-betelgeuse",
+      "image": "images/scene-05-exception-betelgeuse.png",
+      "narration": "จะมีข้อยกเว้นแค่ดาวยักษ์แดงที่ปลายอายุขัย อย่าง 'เบเทลจุส' ที่ห่างออกไป 640 ปีแสง... มันอาจระเบิดเป็นซูเปอร์โนวาไปแล้วในอดีต และแสงแห่งการสิ้นอายุขัย กำลังพุ่งมาหาเรา!",
+      "tts_text": "จะมีข้อยกเว้นแค่ดาวยักษ์แดงที่ปลายอายุขัย อย่าง เบเทลจุส ที่ห่างออกไป หกร้อยสี่สิบปีแสง... มันอาจระเบิดเป็นซูเปอร์โนวาไปแล้วในอดีต และแสงแห่งการสิ้นอายุขัย กำลังพุ่งมาหาเรา!",
+      "subtitle": "ยกเว้นดาวยักษ์แดงอย่าง 'เบเทลจุส'\nที่อาจระเบิดไปแล้วในอดีต!",
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-06-deep-void-true-graveyard",
+      "image": "images/scene-06-deep-void-true-graveyard.png",
+      "narration": "แต่ถ้ายิ่งมองลึกออกไปไกลระดับกาแล็กซีนับพันล้านปีแสง... ที่นั่นเรากำลังมองเห็นสุสานของดวงดาวและกาแล็กซียุคแรกเริ่ม ที่สูญสลายไปแล้วจริงแท้แน่นอน",
+      "tts_text": "แต่ถ้ายิ่งมองลึกออกไปไกลระดับกาแล็กซีนับพันล้านปีแสง... ที่นั่นเรากำลังมองเห็นสุสานของดวงดาวและกาแล็กซียุคแรกเริ่ม ที่สูญสลายไปแล้วจริงแท้แน่นอน",
+      "subtitle": "ยิ่งมองไกลระดับพันล้านปีแสง\nเรายิ่งมองเห็นสุสานดวงดาวในอดีต",
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-07-meaning-eternal-light",
+      "image": "images/scene-07-meaning-eternal-light.png",
+      "narration": "ท้องฟ้าจึงสอนให้เรารู้ว่า... แม้ตัวตนของดวงดาวอาจจะเปลี่ยนแปลงไป แต่แสงสว่างและความงดงามที่มันสร้างไว้ จะยังคงเดินทางเพื่อส่องประกายในใจเราเสมอครับ",
+      "tts_text": "ท้องฟ้าจึงสอนให้เรารู้ว่า... แม้ตัวตนของดวงดาวอาจจะเปลี่ยนแปลงไป แต่แสงสว่างและความงดงามที่มันสร้างไว้ จะยังคงเดินทางเพื่อส่องประกายในใจเราเสมอครับ",
+      "subtitle": "แม้ดาวอาจเปลี่ยนแปลงไป\nแต่แสงของมัน ยังคงส่องสว่างนำทางเราเสมอ",
+      "motion": "slow_zoom_out",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-08-brand-outro",
+      "image": "images/scene-08-brand-outro.png",
+      "narration": "ถ้าชอบเรื่องราวดาราศาสตร์แบบนี้ กดติดตาม แล้วมาร่วมค้นพบโลก ค้นพบใจ ไปกับ Mamase จักรวาลของใจครับ",
+      "tts_text": "ถ้าชอบเรื่องราวดาราศาสตร์แบบนี้ กดติดตาม แล้วมาร่วมค้นพบโลก ค้นพบใจ ไปกับ มามาเซ่ จักรวาลของใจครับ",
+      "subtitle": "กดไลก์ · แชร์ · ติดตาม\nMamase จักรวาลของใจ",
+      "show_subtitle": true,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

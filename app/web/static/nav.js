@@ -22,6 +22,7 @@
     ['สร้างด้วย AI','/ai'],
     ['สร้าง Podcast','/podcast'],
     ['🔮 ดวง 12 ราศี','/zodiac-weekly'],
+    ['Thai TTS','/tts'],
     ['Channels','/channels'],
   ]) {
     const link = document.createElement('a'); link.href = href; link.textContent = label;

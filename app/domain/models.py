@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 from datetime import datetime
 from pathlib import PurePosixPath
+from typing import Any
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
@@ -48,6 +49,50 @@ class Voice(BaseModel):
     style_prompt: str | None = Field(default=None, max_length=4_000)
 
 
+class ReelTtsModeConfig(BaseModel):
+    speed: float | None = Field(default=None, ge=0.5, le=2.0)
+    style: str | None = Field(default=None, max_length=4_000)
+
+    @field_validator("speed", mode="before")
+    @classmethod
+    def invalid_speed_is_missing(cls, value: Any) -> Any:
+        if value is None:
+            return None
+        try:
+            parsed = float(value)
+        except (TypeError, ValueError):
+            return None
+        return parsed if 0.5 <= parsed <= 2.0 else None
+
+    @field_validator("style")
+    @classmethod
+    def empty_style_is_missing(cls, value: str | None) -> str | None:
+        return value.strip() or None if value is not None else None
+
+
+class ReelTtsConfig(BaseModel):
+    voice: str | None = Field(default=None, min_length=1, max_length=80)
+    hook: ReelTtsModeConfig | None = None
+    normal: ReelTtsModeConfig | None = None
+
+    @field_validator("voice", mode="before")
+    @classmethod
+    def empty_voice_is_missing(cls, value: Any) -> Any:
+        return value.strip() or None if isinstance(value, str) else value
+
+
+class ReelOutroConfig(BaseModel):
+    enabled: bool = True
+    image: str = "mamase-reels-end-scence.png"
+    duration: float = Field(2.0, ge=1.5, le=2.5)
+    bgm_fade_out: bool = True
+
+    @field_validator("image")
+    @classmethod
+    def safe_image(cls, value: str) -> str:
+        return validate_relative_asset(value)
+
+
 class WanSceneOptions(BaseModel):
     """Optional, portable visual-generation hints for a Wan 2.2 / LTX-Video scene.
 
@@ -87,6 +132,9 @@ class Scene(BaseModel):
     motion_speed: str = "slow"
     motion_intensity: float | None = None
     focus: str = "center"
+    role: str | None = None
+    keywords: list[str] = Field(default_factory=list)
+    sfx: str | None = None
     wan: WanSceneOptions | None = None
     ltx: WanSceneOptions | None = None
 
@@ -141,6 +189,30 @@ class Scene(BaseModel):
             raise ValueError("unsupported focus point")
         return value
 
+    @field_validator("role")
+    @classmethod
+    def valid_role(cls, value: str | None) -> str | None:
+        if value is not None and value not in {"hook", "content", "outro"}:
+            raise ValueError("scene role must be hook, content, or outro")
+        return value
+
+    @field_validator("keywords")
+    @classmethod
+    def clean_keywords(cls, values: list[str]) -> list[str]:
+        cleaned: list[str] = []
+        for value in values:
+            keyword = value.strip()
+            if keyword and keyword not in cleaned:
+                cleaned.append(keyword)
+        return cleaned
+
+    @field_validator("sfx")
+    @classmethod
+    def safe_sfx(cls, value: str | None) -> str | None:
+        if value is not None and not SAFE_ID.fullmatch(value):
+            raise ValueError("sfx must be a safe identifier")
+        return value
+
     @field_validator("transition")
     @classmethod
     def supported_transition(cls, value: str | None) -> str | None:
@@ -175,7 +247,9 @@ class Scene(BaseModel):
 
 class Script(BaseModel):
     project: Project
-    voice: Voice
+    voice: Voice = Field(default_factory=lambda: Voice(provider="google-gemini", voice="Fenrir", speed=1.05))
+    reel_tts: ReelTtsConfig | None = None
+    outro: ReelOutroConfig | None = None
     scenes: list[Scene] = Field(min_length=1)
 
     @model_validator(mode="after")

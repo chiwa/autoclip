@@ -4,20 +4,21 @@
 - Thai descriptor: **จักรวาลของใจ**
 - Closing line: Topic-specific discussion question (e.g. `ถ้ามีโอกาส คุณกล้าเป็นมนุษย์รุ่นแรกที่ไปอยู่ดาวอังคารไหม?`)
 
-## Mandatory final scene
+## Mandatory silent post-roll
 
-Every completed Reel package ends with a dedicated branding scene after the editorial ending. It must be the final JSON scene:
+Every completed Mamase Reel appends the locked branding image only after final
+content narration and subtitles finish. It is not a JSON scene:
 
 ```json
 {
-  "id": "scene-NN-brand-outro",
-  "image": "images/scene-NN-brand-outro.png",
-  "narration": "ถ้ามีโอกาส คุณกล้าเป็นมนุษย์รุ่นแรกที่ไปอยู่ดาวอังคารไหม?",
-  "tts_text": "ถ้ามีโอกาส คุณกล้าเป็นมนุษย์รุ่นแรกที่ไปอยู่ดาวอังคารไหม?",
-  "subtitle": "ถ้ามีโอกาส คุณกล้าเป็นมนุษย์รุ่นแรกที่ไปอยู่ดาวอังคารไหม?",
-  "motion": "slow_zoom_in",
-  "transition": "none"
+  "outro": {
+    "enabled": true,
+    "image": "mamase-reels-end-scence.png",
+    "duration": 2.0,
+    "bgm_fade_out": true
+  }
 }
 ```
 
-Replace `NN` with the next sequential scene number. Use the topic-specific discussion question inviting viewer response. Strictly forbid generic CTAs ("กดไลก์", "กดแชร์", "คอมเมนต์คุยกัน", "ขอบคุณที่รับชม"). Zero spoken words after the CTA.
+Keep any topic-specific discussion question in the final content scene. The
+post-roll has no narration, TTS, subtitle, or scene-level motion plan.

@@ -599,7 +599,7 @@ horizontal output or the reverse.
 
 ### Reel / Shorts production default
 
-Mamase Reels must prioritize a very strong opening hook. The first 1–3 seconds are critical because viewers can swipe away immediately. Default to **45–60 seconds** of dense, curiosity-driven storytelling without forcing an exact duration. If the story genuinely needs longer and retention can support it, **60–120 seconds** is acceptable. Content density and curiosity are more important than fixed duration. Do not add filler to hit a runtime; every few seconds must add new information, payoff, reversal, consequence, or a larger question.
+Mamase Reels must prioritize a very strong opening hook. The first 1–3 seconds are critical because viewers can swipe away immediately. Follow `docs/mamase-reels-standard.md` as the canonical rule: target **45–55 seconds**, normally stay under **60 seconds**, and use about 6–9 narrated content scenes followed by a separate silent 2-second branding post-roll. Content density and curiosity are more important than fixed duration. Do not add filler to hit a runtime; every few seconds must add new information, payoff, reversal, consequence, or a larger question.
 
 #### Mandatory Reels Hook Rules
 
@@ -653,9 +653,9 @@ The viewer should feel continuous forward movement.
 
 #### Production Rules (TTS, Visuals, CTA, Duration)
 
-- **TTS Rule**: Google Gemini TTS voice `Fenrir`, language `th-TH`, default speed `1.05` (updated from 1.0 for energetic, crisp short-form pacing). The spoken script must begin directly with the hook, exactly matching the `hook` metadata field. Do not insert Mamase branding, greetings ("สวัสดีครับ"), "วันนี้เราจะมา...", "รู้หรือไม่...", episode labels, or intro music before the hook.
+- **TTS Rule**: Google Gemini TTS voice `Fenrir`, language `th-TH`. Scene 1 automatically uses the dedicated Hook style at speed `1.10`; Scene 2 onward uses the Normal Reel style at speed `1.05`, as defined in `docs/mamase-reels-standard.md`. The spoken script must begin directly with the hook, exactly matching the `hook` metadata field. Do not insert Mamase branding, greetings ("สวัสดีครับ"), "วันนี้เราจะมา...", "รู้หรือไม่...", episode labels, or intro music before the hook.
 - **Visual Rule**: The first visual scene must reinforce the hook immediately. Do not begin with generic stars, slow logo animation, or unrelated establishing shots. The first frame should visually communicate the mystery. The hero astronomical/scientific subject must dominate the frame (never a tiny pasted subject or an empty landscape that overpowers the hero subject).
-- **Duration & Pacing**: Target 45–60 seconds (acceptable maximum: 60–75 seconds). If estimated duration exceeds 75 seconds, revise and compress the script before returning. Deliver a mini-wow, reveal, or twist every 10–15 seconds to sustain retention without lecture format.
+- **Duration & Pacing**: Follow `docs/mamase-reels-standard.md`: target 45–55 seconds and normally remain under 60 seconds. Use about 6–9 narrated content scenes followed by the separate silent post-roll, with one visual source per content scene and no fake `visual_beats` support.
 - **Topic-Specific CTA Rule**: End the Reel with one short question naturally inviting discussion (opinion, prediction, or philosophical reaction) matching the topic. Strictly forbid generic CTAs ("อย่าลืมกดไลก์", "กดติดตาม", "คอมเมนต์คุยกันหน่อย", "ขอบคุณที่รับชม", or legacy canned outros). The CTA is the final spoken sentence with zero spoken text after it.
 - **Branding Rule**: Use "Mamase" or "Mamase REELS" only. Strictly NO "MAMASE PODCAST" on Reel assets, and strictly NO bilingual badges ("AVAILABLE IN THAI & ENGLISH") or flags.
 
@@ -726,22 +726,13 @@ For vertical Mamase Reels, follow `.codex/skills/mamase-reels/SKILL.md`:
   add another logo. A package copy may be proportionally resized to 1080x1920
   without altering the master or its composition.
 
-The locked image is mandatory as the final branding scene of every Reel. End
-the preceding content scene on a memorable scientific idea, twist, or implication.
-Then conclude the narration with the approved topic-specific discussion CTA question
-(matching the topic and naturally inviting audience thoughts or predictions):
-
-- narration: Exact topic-specific discussion question (e.g. `ถ้ามีโอกาส คุณกล้าเป็นมนุษย์รุ่นแรกที่ไปอยู่ดาวอังคารไหม?`)
-- `tts_text`: Phonetic equivalent when foreign terms or numbers are present
-- subtitle: Clean subtitle matching the discussion question
-- `motion: "slow_zoom_in"`, speed `slow`, intensity `0.1`, focus `center`, transition `none`
-- The generic legacy CTA (`ถ้าชอบเรื่องราวอวกาศ... กดไลก์ กดแชร์...`) is retired and forbidden.
-- Zero spoken words after the discussion CTA question.
-
-Place this scene last in `script.json`, retain the prescribed scene order, and
-copy a visually unchanged package derivative into the last scene's relative
-`images/` path. Resize proportionally to 1080x1920 when required by the Reel
-package; never modify the source master.
+The locked image is mandatory as a separate silent branding post-roll, not a
+story scene. End the final content scene on the memorable scientific idea or
+topic-specific question while its normal content image remains visible. Only
+after narration and subtitles end, append the end card for 2.0 seconds with no
+TTS and no subtitle; continue BGM briefly and fade it to silence. Use the
+optional top-level `outro` object from `docs/mamase-reels-standard.md`. Never
+place a narrated `brand-outro` scene in new `script.json` files.
 
 
 ### Required creative approval order

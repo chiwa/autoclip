@@ -17,7 +17,7 @@ For full details, reference files, and validation scripts, see also [`../mamase-
 
 ## 🛑 Mandatory Review Gate (Workflow Policy)
 
-> **IMPORTANT**: Before every production round, you MUST show the complete script (minimum 8–9 scenes) to **พี่พี** for review.
+> **IMPORTANT**: Before every production round, you MUST show the complete narrated content script to **พี่พี** for review.
 > **DO NOT** generate final images, `script.json`, or ZIP files until the script is explicitly approved.
 > Once approved, generate all master images and package assets autonomously without asking the user for prompt-by-prompt inputs.
 
@@ -27,7 +27,7 @@ For full details, reference files, and validation scripts, see also [`../mamase-
 
 ### Step 1: Script Writing & Review Gate
 1. Select/receive a topic aligned with approved channel themes (strange places worldwide, mysterious science, unexpected space stories, nature extremes, trending verified wonders).
-2. Structure the script for a dense **45–60 seconds** (max 75s; normally 4–7 story scenes + 1 Mamase brand outro). First spoken sentence must be a thumb-stopping Hook (0–3s); deliver a mini-wow every 10–15s; end with a topic-specific discussion CTA question.
+2. Follow `docs/mamase-reels-standard.md`: target **45–55 seconds**, normally under 60 seconds, with about 6–9 narrated content scenes plus the separate silent post-roll and one visual source per content scene. The first spoken sentence must be a thumb-stopping Hook (0–3s).
 3. Write narration in the approved natural, playful, conversational storyteller persona.
 4. Present the complete script draft in clear Thai (UTF-8) including scene visuals, narration text, suggested camera motions, and transitions for พี่พี's review.
 5. Obtain approval before generating images or JSON.
@@ -52,7 +52,7 @@ For full details, reference files, and validation scripts, see also [`../mamase-
      intended for generated motion. One ZIP works unchanged in both modes:
      FFmpeg selection renders all scenes with FFmpeg; Wan selection uses Wan
      for scenes with `wan` and FFmpeg for all remaining scenes.
-2. Ensure final scene uses the locked Mamase Brand Outro asset with the topic-specific discussion CTA (never generic like/share/subscribe or "ขอบคุณที่รับชม"). Zero spoken words after the CTA.
+2. Keep the topic-specific discussion CTA in the final content scene. Add top-level `outro` with the locked Mamase end-card, duration `2.0`, and BGM fade enabled. Never add the end-card to `scenes`; it has no narration, TTS, or subtitle.
 3. Create `video-metadata.json` with title, description, and hashtags.
 4. Archive at ZIP root without parent wrapping folder:
    ```text
@@ -62,7 +62,7 @@ For full details, reference files, and validation scripts, see also [`../mamase-
    ├── images/
    │   ├── scene-01-hook.png
    │   ├── ...
-   │   └── scene-09-mamase-outro.png
+   │   └── final-content-scene.png
    └── audio/ (optional)
    ```
 5. Validate package using `.agents/skills/mamase-autoclip-package/scripts/validate_package.py` and `unzip -t`.

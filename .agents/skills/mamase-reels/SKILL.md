@@ -1,9 +1,14 @@
 ---
 name: mamase-reels
-description: Master rules and specifications for Mamase (จักรวาลของใจ) vertical short-form videos (Reels, Shorts, TikTok), including mandatory opening hook rules, retention architecture, editorial visual standards, Scene 01 Key Art permanent workflow, topic-specific discussion CTA, Fenrir 1.05 TTS defaults, and standard machine-friendly JSON output format.
+description: Produce Mamase vertical Reels, Shorts, and TikTok videos using the canonical hook, retention, scene, subtitle, motion, Scene 01, and packaging rules.
 ---
 
 # Mamase Reels Production Skill
+
+Before planning or producing a Reel, read
+`/Users/zengcode/projects/autoclip/docs/mamase-reels-standard.md`. It is the
+canonical source of truth and overrides duplicated legacy timing, scene-count,
+subtitle, motion, hook, and outro guidance in this file.
 
 This skill governs the production of vertical short-form videos (Reels, Shorts, TikTok) for **Mamase (จักรวาลของใจ)** in `1080x1920` (9:16) format.
 
@@ -14,9 +19,9 @@ This skill governs the production of vertical short-form videos (Reels, Shorts, 
 When the user supplies only a topic, working title, or one-sentence premise, proceed autonomously:
 1. Research and verify facts from authoritative scientific sources (NASA, JWST, ESO, ESA, peer-reviewed astrophysics).
 2. Formulate the truthful, thumb-stopping Hook (0–3 seconds).
-3. Draft the tight 45–60 second narrative arc with mini-wows every 10–15 seconds.
+3. Draft a tight 45–55 second narrative arc, normally under 60 seconds.
 4. Craft the topic-specific discussion CTA.
-5. Plan the scenes (normally 4–7 content scenes).
+5. Plan about 6–9 narrated content scenes, then the separate silent post-roll, without padding.
 6. Design Scene 01 according to `mamase-reels-cover`.
 7. Pause only at the mandatory Scene 01 approval gate, then finish the remaining scenes and AutoClip package after approval.
 
@@ -65,15 +70,15 @@ Short-form viewers decide whether to keep watching continuously:
 - Every **10–15 seconds** must deliver a mini-wow, reveal, twist, or compelling new fact.
 - Maintain constant forward momentum.
 - Avoid lecture format, unbroken monologues, or repetitive restatements.
-- A useful progression: **Hook (0–3s) → Relatable context (3–10s) → Surprising reveal / Mini-wow (10–25s) → Mechanism / Twist (25–45s) → Big payoff & Topic-Specific CTA (45–60s)**.
+- A useful progression is **Hook → minimum context → payoff → mechanism/twist → memorable final idea or concise topic-specific question** within the canonical duration.
 
 ---
 
 ## 4. Duration & Pacing Standards
 
-- **Preferred Target**: **45–60 seconds**.
-- **Acceptable Maximum**: **60–75 seconds**.
-- **Compression First**: If the estimated duration exceeds 75 seconds, revise and compress the script before returning the result. Do not simply return 90–100 seconds and consider generation successful.
+- **Preferred Target**: **45–55 seconds**.
+- **Normal Maximum**: **60 seconds**, unless the story genuinely earns more time.
+- **Compression First**: If the estimate exceeds 60 seconds, prefer revising and compressing unless the story genuinely earns the additional time.
 - **Script compression before TTS speed adjustment**: Edit out filler, condense sentences, and sharpen points rather than artificially rushing the speech rate.
 - **No Part 1 / Part 2**: Avoid splitting a story into parts unless each part genuinely provides standalone value and a complete emotional/scientific payoff.
 
@@ -107,8 +112,11 @@ The CTA is normally the **final spoken sentence** of the Reel. There must be **n
 - **Provider**: `google-gemini`
 - **Language**: `th-TH`
 - **Voice**: `Fenrir`
-- **Default Speed**: `1.05` (updated from 1.0 for crisper, energetic short-form pacing)
-- **Style**: Natural, playful, conversational Thai storyteller—warm, confident, curious, and lightly cheeky without sounding like a news anchor or formal narrator.
+- **Scene 1**: Hook Style Prompt at speed `1.10`, selected automatically by position.
+- **Scene 2 onward**: Normal Style Prompt at speed `1.05`, selected automatically by position.
+- Do not add voice/style/speed fields to every scene. Use the optional top-level
+  `reel_tts` override described in `docs/mamase-reels-standard.md`.
+- **Style**: Use the exact Hook and Normal prompts from the canonical standard.
 
 ---
 
@@ -117,7 +125,7 @@ The CTA is normally the **final spoken sentence** of the Reel. There must be **n
 - Use `"Mamase"` or `"Mamase REELS"` only.
 - **Strictly NO "MAMASE PODCAST"** on Reel covers or assets.
 - **Strictly NO bilingual badges** (`"AVAILABLE IN THAI & ENGLISH"`), language flags, or audio-track labels on Reel assets.
-- End card must be short with the optional CTA question displayed or clean brand outro (`assets/branding/mamase/reels-end-scene.png`).
+- End card is a separate silent 2-second post-roll using `assets/branding/mamase/reels-end-scene.png`. It has no narration, TTS, or subtitles and starts only after the final content scene finishes.
 
 ---
 
@@ -173,9 +181,9 @@ When generating a Mamase Reel, return this JSON-compatible structure:
 - No generic subscribe/like/share language. No "ขอบคุณที่รับชม".
 
 ### Estimated Duration Requirement
-- Target: `45–60 seconds`. Acceptable: `60–75 seconds`.
+- Target: `45–55 seconds`; normally remain under `60 seconds`.
 - Calculate or estimate `estimated_duration_seconds` from actual spoken words (~3.5–4 syllables/sec in Thai at speed 1.05).
-- If duration exceeds 75 seconds, compress the script before returning.
+- If duration exceeds 60 seconds, compress unless the extra time is editorially necessary.
 
 ### TTS Content Requirements
 - Production-ready text only.
@@ -246,7 +254,7 @@ Rules for scenes:
 - Scene 1 contains the Hook.
 - The final scene containing narration contains the CTA.
 - Do not repeat the Hook or CTA.
-- Normally 4–7 scenes.
+- Normally 6–9 narrated content scenes. The top-level `outro` post-roll is not a scene and is excluded from narration scene count and image-to-TTS mapping.
 - Each scene has one clear narrative purpose.
 
 ---
@@ -266,7 +274,7 @@ For the existing AutoClip Quick Reel workflow, preserve compatibility with:
 When this minimal schema is required, all Hook and CTA rules still apply:
 - `tts` starts directly with the Hook (no greeting).
 - `tts` ends with the topic-specific CTA.
-- Target duration remains 45–60 seconds.
+- Target duration remains 45–55 seconds and normally under 60 seconds.
 - Do not add unsupported fields to endpoints expecting the minimal contract.
 
 ---
@@ -283,7 +291,7 @@ Before returning a generated Reel, verify:
 ```text
 ✓ hook == first spoken sentence of tts
 ✓ cta == final spoken sentence of tts
-✓ estimated_duration_seconds <= 75 seconds (target 45–60s)
+✓ estimated_duration_seconds targets 45–55 seconds and normally stays under 60 seconds
 ✓ no greeting or setup before hook
 ✓ no spoken text after CTA
 ✓ no generic engagement CTA ("กดไลก์", "คอมเมนต์คุยกัน", "ขอบคุณที่รับชม")

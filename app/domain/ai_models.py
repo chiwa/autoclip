@@ -38,6 +38,9 @@ class AiScene(BaseModel):
     image_path: str | None = None
     estimated_duration: float = Field(ge=0.5, le=120, default=5.0)
     approved: bool = False
+    role: str | None = None
+    keywords: list[str] = Field(default_factory=list)
+    sfx: str | None = None
     wan: dict | None = None
 
     @field_validator("id")

@@ -5,6 +5,10 @@ description: Create review-ready AutoClip ZIP packages for Mamase จักร�
 
 # Mamase AutoClip package
 
+For Reel/Short/TikTok packages, first read
+`/Users/zengcode/projects/autoclip/docs/mamase-reels-standard.md`. It is the
+canonical timing, scene, subtitle, motion, hook, outro, and compatibility rule.
+
 Use this skill when creating or revising a Mamase short-form video ZIP. Do not
 use it to change AutoClip application code or RunPod setup.
 
@@ -18,7 +22,7 @@ generate and approve the scene images, then create the finished package. It
 reports each planning, image, validation, and packaging step live. Keep scenes
 in the resulting `script.json` order.
 
-Public clips default to **45–60 seconds** (acceptable maximum: **60–75 seconds**; if estimated duration exceeds 75s, compress and revise script before returning). Normally use 4–7 content scenes plus the final brand scene (minimum 5–8 scenes). Never pad runtime with repeated narration, restated points, or decorative filler. Deliver a mini-wow or reveal every 10–15 seconds to sustain retention.
+Public Reels target **45–55 seconds** and normally stay under **60 seconds**. Use about 7–10 scenes including the final brand scene, while letting coherent story beats determine the exact count. Never pad runtime with repeated narration, restated points, or decorative filler.
 
 ### Mandatory Opening Hook & Mamase Reel Hook Gate
 
@@ -60,22 +64,20 @@ or clean sentence boundaries so Google TTS stays connected and even.
 
 Humor must clarify the science, not replace it. Never invent consequences,
 imply speculation is confirmed, or overstate a measurement for a punchline.
-For Gemini TTS, the channel's default delivery instruction is:
-
-> Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like you're casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising or funny moments, as if you're building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Let some sentences start softly and then become more animated when the story gets interesting. Keep the pacing medium to slightly fast, but don't rush. Avoid perfectly even timing between sentences. For surprising facts, sound genuinely impressed or amused, as if you're thinking: "เฮ้ย... จริงดิ?" Overall personality: friendly, curious, mischievous, charming, expressive, slightly teasing, and naturally excited. Think of a charismatic Thai content creator explaining something interesting on TikTok or Reels — casual, fun, and easy to listen to. Never sound robotic, overly dramatic, overly cute, or like you're reading from a script.
-
-When the Google Gemini TTS provider is selected, use the approved Mamase voice
-profile unless the user overrides it: voice `Fenrir`, `pitch: 0`, and
-`speakingRate: 1.05`. The target feeling is natural, playful, confident, and
-naturally conversational, with crisp energetic pacing.
+For Gemini TTS, use the exact two delivery prompts in
+`docs/mamase-reels-standard.md`: Scene 1 automatically uses the dedicated Hook
+style with `Fenrir` at speed `1.10`; Scene 2 onward automatically uses the
+Normal Mamase science-storyteller style with `Fenrir` at speed `1.05`. Do not
+copy voice/style/speed into each scene. Add the optional top-level `reel_tts`
+object only when the package needs a job-specific override.
 
 For Native AutoClip, Google Gemini TTS uses Application Default Credentials
 created with `gcloud auth application-default login` and its quota project. Do
 not create, store, or put service-account JSON keys in a ZIP or project config.
 The default provider is `google-gemini`; its default voice is `Fenrir`.
-When exposing Gemini settings in AutoClip, make the narration-style prompt and
-speaking rate editable. Always provide a **คืนค่า Mamase default** control that
-restores the approved prompt, Fenrir, and `speakingRate: 1.05`; list voices in
+When exposing Gemini settings in AutoClip, make Hook Style, Hook Speed, Normal
+Style, and Normal Speed editable. Always provide a **คืนค่า Mamase default** control that
+restores both approved prompts, Fenrir, Hook `1.10`, and Normal `1.05`; list voices in
 clearly labelled **ชาย** and **หญิง** groups, with Fenrir first.
 Keep narration silence trimming disabled by default. It may remain available as
 an explicit opt-in, but package generation must not trim scene audio edges
@@ -255,7 +257,7 @@ lower-center area for subtitles.
 
 ### Reel / Shorts pacing
 
-Default to a dense **45–60 second** Mamase Reel without padding or forcing an
+Default to a dense **45–55 second** Mamase Reel without padding or forcing an
 exact runtime. Use 60–120 seconds only when the subject has enough genuine
 reveals to sustain retention. Choose scene count from the story beats; every
 few seconds must add information, payoff, reversal, consequence, or a larger
@@ -263,7 +265,7 @@ question. Do not add filler or decorative b-roll merely to reach a duration.
 
 Use this default structure: `0–3 sec` hook; `3–10 sec` minimum context;
 `10–30 sec` payoff plus a real wow or reversal; `30–45 sec` twist or larger
-implication; and, when earned, `45–60 sec` memorable final payoff or strong
+implication; and a memorable final payoff or strong
 unanswered question.
 
 #### Mamase Reel Hook Gate
@@ -331,21 +333,21 @@ add another logo. Keep the source file untouched. Because the master is
 941x1672 while AutoClip Reel packages use 1080x1920, create a proportionally
 resized 1080x1920 package copy without changing its composition or artwork.
 
-End the preceding content scene on the story's memorable scientific idea,
-twist, or implication. Then conclude with the approved topic-specific discussion
-CTA question in the final branding scene:
+End the final content scene on the story's memorable scientific idea, twist,
+implication, or topic-specific question while that normal story image remains
+visible. The locked end-card is a separate silent branding post-roll and must
+never be placed in `scenes` for new packages. It starts only after the final
+narration and subtitle end, receives no TTS/subtitle, lasts 2.0 seconds, and
+fades BGM to silence:
 
 ```json
 {
-  "narration": "ถ้ามีโอกาส คุณกล้าเป็นมนุษย์รุ่นแรกที่ไปอยู่ดาวอังคารไหม?",
-  "tts_text": "ถ้ามีโอกาส คุณกล้าเป็นมนุษย์รุ่นแรกที่ไปอยู่ดาวอังคารไหม?",
-  "subtitle": "ถ้ามีโอกาส คุณกล้าเป็นมนุษย์รุ่นแรกที่ไปอยู่ดาวอังคารไหม?",
-  "show_subtitle": true,
-  "motion": "slow_zoom_in",
-  "motion_speed": "slow",
-  "motion_intensity": 0.1,
-  "focus": "center",
-  "transition": "none"
+  "outro": {
+    "enabled": true,
+    "image": "mamase-reels-end-scence.png",
+    "duration": 2.0,
+    "bgm_fade_out": true
+  }
 }
 ```
 
@@ -355,10 +357,10 @@ engagement language ("กดไลก์", "กดแชร์", "กดติ�
 The legacy canned outro is retired. The CTA is the final spoken sentence with
 zero spoken words after it.
 
-Give it the package's next ordered scene id ending in `brand-outro` and a
-relative image path in `images/`; it must remain the final `script.json` scene.
-The required narration is schema-valid and must not be empty. FFmpeg motion is always
-available; include a Wan plan only when Wan motion adds value.
+The AutoClip global locked asset is preferred, so the ZIP does not need to
+duplicate it. If a package includes a custom relative outro image, include the
+file at that exact path. Legacy narrated `brand-outro` packages remain readable
+and are migrated at render time, but producers must not create that format.
 
 ## Required ZIP contract
 

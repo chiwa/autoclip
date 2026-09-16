@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import html
+import re
 from dataclasses import dataclass
 from math import ceil
 from pathlib import Path
@@ -39,10 +41,28 @@ def srt_timestamp(seconds: float) -> str:
 
 
 class SubtitleRenderer:
-    def write(self, text: str, duration: float, output: Path, start_seconds: float = 0, end_seconds: float | None = None) -> Path:
+    KEYWORD_COLOR = "#55D7FF"
+
+    @classmethod
+    def emphasize_keywords(cls, text: str, keywords: list[str] | None = None) -> str:
+        rendered = html.escape(text, quote=False)
+        for keyword in (keywords or [])[:3]:
+            escaped_keyword = html.escape(keyword.strip(), quote=False)
+            if not escaped_keyword:
+                continue
+            rendered = re.sub(
+                re.escape(escaped_keyword),
+                lambda match: f'<font color="{cls.KEYWORD_COLOR}"><b>{match.group(0)}</b></font>',
+                rendered,
+                flags=re.IGNORECASE,
+            )
+        return rendered
+
+    def write(self, text: str, duration: float, output: Path, start_seconds: float = 0, end_seconds: float | None = None, keywords: list[str] | None = None) -> Path:
         end = duration if end_seconds is None else min(duration, end_seconds)
         start = max(0, min(start_seconds, end))
-        output.write_text(f"1\n{srt_timestamp(start)} --> {srt_timestamp(end)}\n{text}\n", encoding="utf-8")
+        caption = self.emphasize_keywords(text, keywords)
+        output.write_text(f"1\n{srt_timestamp(start)} --> {srt_timestamp(end)}\n{caption}\n", encoding="utf-8")
         return output
 
 
@@ -53,7 +73,6 @@ class SceneRenderer:
         "cinematic_push_in": 0.14, "cinematic_pull_out": 0.12,
         "gentle_float": 0.08, "documentary_pan": 0.10,
     }
-    AUTO_MOTIONS = ("cinematic_push_in", "pan_left_to_right", "slow_zoom_out", "pan_right_to_left_zoom_in", "documentary_pan")
     SPEED_FACTOR = {"slow": 0.9, "normal": 1.2, "fast": 1.5}
     def __init__(self, ffmpeg: FfmpegRunner, settings: Settings, profile: RenderProfile | None = None):
         self.ffmpeg = ffmpeg
@@ -64,13 +83,25 @@ class SceneRenderer:
         video = self.profile
         frames = max(1, round(duration * video.fps))
         w, h, fps = video.width, video.height, video.fps
-        base = f"scale={w}:{h}:force_original_aspect_ratio=increase,crop={w}:{h},setsar=1"
+        crop_focus = {
+            "top": ("(iw-ow)/2", "0"), "bottom": ("(iw-ow)/2", "ih-oh"),
+            "left": ("0", "(ih-oh)/2"), "right": ("iw-ow", "(ih-oh)/2"),
+            "top_left": ("0", "0"), "top_right": ("iw-ow", "0"),
+            "bottom_left": ("0", "ih-oh"), "bottom_right": ("iw-ow", "ih-oh"),
+            "center": ("(iw-ow)/2", "(ih-oh)/2"),
+        }[scene.focus]
+        base = f"scale={w}:{h}:force_original_aspect_ratio=increase,crop={w}:{h}:{crop_focus[0]}:{crop_focus[1]},setsar=1"
         # Keep a larger working canvas for camera motion; an output-sized
         # frame leaves zoompan with almost no room to pan or zoom visibly.
         # Do not crop this working canvas: zoompan needs the overscan area to
         # move even when zoom is exactly 1.0 (pure pan presets).
         motion_base = f"scale={w * 2}:{h * 2}:force_original_aspect_ratio=increase,setsar=1"
-        motion = self.AUTO_MOTIONS[sum(ord(c) for c in scene.id) % len(self.AUTO_MOTIONS)] if scene.motion == "auto" else scene.motion
+        auto_motion = {
+            "left": "pan_left_to_right_zoom_in", "top_left": "pan_left_to_right_zoom_in", "bottom_left": "pan_left_to_right_zoom_in",
+            "right": "pan_right_to_left_zoom_in", "top_right": "pan_right_to_left_zoom_in", "bottom_right": "pan_right_to_left_zoom_in",
+            "top": "pan_down_zoom_in", "bottom": "pan_up_zoom_in", "center": "cinematic_push_in",
+        }
+        motion = auto_motion[scene.focus] if scene.motion == "auto" else scene.motion
         if motion == "none":
             animated = base
         else:
@@ -150,6 +181,23 @@ class SceneRenderer:
             "-af", "apad", "-movflags", "+faststart", "-shortest", str(output),
         ]
         self.ffmpeg.run(args, "SCENE_RENDER_FAILED")
+        return output
+
+    def render_outro(self, image: Path, duration: float, output: Path) -> Path:
+        """Render a silent branding post-roll with no narration or subtitles."""
+        video = self.profile
+        vf = (
+            f"scale={video.width}:{video.height}:force_original_aspect_ratio=increase:flags=lanczos,"
+            f"crop={video.width}:{video.height},setsar=1,fps={video.fps},format={video.pixel_format}"
+        )
+        self.ffmpeg.run(
+            ["-loop", "1", "-i", str(image), "-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo",
+             "-t", f"{duration:.3f}", "-map", "0:v:0", "-map", "1:a:0", "-vf", vf,
+             "-c:v", video.codec, "-preset", "veryfast", "-crf", "23", "-pix_fmt", video.pixel_format,
+             "-r", str(video.fps), "-c:a", "aac", "-ar", "48000", "-ac", "2", "-b:a", "160k",
+             "-movflags", "+faststart", "-shortest", str(output)],
+            "REEL_OUTRO_RENDER_FAILED",
+        )
         return output
 
     def render_wan_video(self, scene: Scene, source_video: Path, narration: Path, subtitle: Path | None, duration: float, output: Path) -> Path:
@@ -371,6 +419,7 @@ class VideoComposer:
         title: str | None = None,
         description: str | None = None,
         artist: str | None = "Mamase",
+        bgm_fade_out_seconds: float | None = None,
     ) -> Path:
         joined = output_dir / "joined.mp4"
         transition = self.settings.video.transition_seconds
@@ -390,9 +439,15 @@ class VideoComposer:
         if bgm:
             bg_volume = self.settings.audio.background_volume
             narration_volume = self.settings.audio.narration_volume
+            fade_out = ""
+            if bgm_fade_out_seconds and bgm_fade_out_seconds > 0:
+                total_duration = self._transition_duration(durations or [], transitions or [], transition) if durations else 0.0
+                fade_duration = min(float(bgm_fade_out_seconds), total_duration)
+                fade_start = max(0.0, total_duration - fade_duration)
+                fade_out = f",afade=t=out:st={fade_start:.3f}:d={fade_duration:.3f}"
             audio_filter = (
                 f"[0:a]volume={narration_volume}[n];[1:a]volume={bg_volume},"
-                "afade=t=in:st=0:d=0.5[bg];[bg][n]sidechaincompress=threshold=0.02:ratio=8:attack=20:release=300[duck];"
+                f"afade=t=in:st=0:d=0.5{fade_out}[bg];[bg][n]sidechaincompress=threshold=0.02:ratio=8:attack=20:release=300[duck];"
                 "[n][duck]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-16:LRA=11:TP=-1.5[a]"
             )
             self.ffmpeg.run(["-i", str(joined), "-stream_loop", "-1", "-i", str(bgm), "-filter_complex", audio_filter, "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-ar", "48000", "-ac", "2", "-shortest", "-movflags", "+faststart", *meta_args, str(final)], "VIDEO_COMPOSITION_FAILED", timeout_seconds=self._composition_timeout(durations or []))

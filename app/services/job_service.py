@@ -24,6 +24,9 @@ from app.services.zodiac_narration_guard import ZodiacNarrationGuard
 from app.services.pronunciation_service import PronunciationService
 from app.services.bgm_service import ensure_default_bgm, resolve_podcast_bgm
 from app.services.video_service import RenderProfile, SceneRenderer, SubtitleRenderer, VideoComposer
+from app.services.reel_quality_validator import ReelQualityValidator
+from app.services.reel_tts_config import is_reel_script, resolve_reel_tts_config
+from app.services.reel_outro import migrate_legacy_outro_scene, resolve_reel_outro
 from app.services.persistence import Persistence
 from app.services.wan_service import ComfyWanClient, RunpodComfyLogTailer
 from app.services.ltx_service import RunpodLtxClient, RunpodLtxLogTailer, ltx_frames_for_duration
@@ -402,6 +405,18 @@ class JobService:
             render_profile = RenderProfile.from_project(self.settings, script.project.resolution, script.project.fps)
             self._investigation_log(job_id, "render_profile_resolved", width=render_profile.width, height=render_profile.height, fps=render_profile.fps)
             self._log(job_id, "INFO", f"Output resolution: {render_profile.width}x{render_profile.height}")
+            reel_outro = None
+            if is_reel_script(script) and not script.project.id.startswith("zodiac-"):
+                script, legacy_outro_image = migrate_legacy_outro_scene(script)
+                reel_outro = resolve_reel_outro(script, workspace.extracted, self.settings.reel_outro, legacy_outro_image)
+                if legacy_outro_image:
+                    self._log(job_id, "INFO", "[Reel][OUTRO] migrated legacy narration scene to silent post-roll")
+                self._log(job_id, "INFO", f"[Reel][OUTRO] enabled={str(reel_outro.enabled).lower()}")
+                if reel_outro.image:
+                    self._log(job_id, "INFO", f"[Reel][OUTRO] image={reel_outro.image.name}")
+                self._log(job_id, "INFO", f"[Reel][OUTRO] duration={reel_outro.duration:.1f}")
+                self._log(job_id, "INFO", f"[Reel][OUTRO] bgm_fade_out={str(reel_outro.bgm_fade_out).lower()}")
+                self._log(job_id, "INFO", "[Reel][OUTRO] start_after_final_narration=true")
             if bgm is None:
                 bgm = ensure_default_bgm(self.settings.app.workspace)
                 self._log(job_id, "INFO", "No BGM in package; using system ambient background music")
@@ -467,9 +482,21 @@ class JobService:
                     musetalk_client = None
 
             selected_provider = self.registry.get(job_id).tts_provider or self.settings.tts.provider
-            provider = create_tts_provider(selected_provider, self.settings)
-            if getattr(script.voice, "style_prompt", None) and hasattr(provider, "style_prompt"):
-                provider.style_prompt = script.voice.style_prompt
+            is_zodiac_job = script.project.id.startswith("zodiac-")
+            use_reel_tts = is_reel_script(script) and not is_zodiac_job
+            provider = None
+            reel_providers: dict[str, object] = {}
+            if use_reel_tts:
+                for scene_index in range(min(2, len(script.scenes))):
+                    effective = resolve_reel_tts_config(script, scene_index, self.settings.reel_tts, self.settings.tts)
+                    mode_provider = create_tts_provider(selected_provider, self.settings)
+                    if hasattr(mode_provider, "style_prompt"):
+                        mode_provider.style_prompt = effective.style
+                    reel_providers[effective.mode] = mode_provider
+            else:
+                provider = create_tts_provider(selected_provider, self.settings)
+                if getattr(script.voice, "style_prompt", None) and hasattr(provider, "style_prompt"):
+                    provider.style_prompt = script.voice.style_prompt
             count = len(script.scenes)
             parallelism = min(count, self.settings.tts.google_parallelism) if selected_provider == "google-gemini" else 1
             self._progress(job_id, JobStatus.GENERATING_AUDIO, 15, f"Generating narration 0 of {count}")
@@ -486,8 +513,6 @@ class JobService:
                 self._log(job_id, "INFO", f"Generating Google Gemini narration in parallel ({parallelism} workers)")
                 self._investigation_log(job_id, "tts_parallelism", provider=selected_provider, workers=parallelism, scene_count=count)
 
-            is_zodiac_job = script.project.id.startswith("zodiac-")
-
             def synthesize_scene(index: int, scene) -> tuple[int, float]:
                 output = workspace.generated_audio / f"{scene.id}.wav"
                 try:
@@ -495,18 +520,33 @@ class JobService:
                         self._log(job_id, "INFO", f"Reusing existing narration for scene {index + 1}")
                         audio_duration = self.narration_audio.process(output)
                         return index, audio_duration
+                    if use_reel_tts:
+                        effective = resolve_reel_tts_config(script, index, self.settings.reel_tts, self.settings.tts)
+                        scene_provider = reel_providers[effective.mode]
+                        scene_voice = effective.voice
+                        scene_speed = effective.speed
+                        self._log(
+                            job_id,
+                            "INFO",
+                            f"[Reel][TTS][{effective.mode}] scene={index + 1} "
+                            f"voice={effective.voice} speed={effective.speed:.2f} source={effective.source}",
+                        )
+                    else:
+                        scene_provider = provider
+                        scene_voice = script.voice.voice
+                        scene_speed = script.voice.speed
                     if is_zodiac_job:
                         final_text = (scene.tts_text or scene.narration).strip()
                         provider_text = ZodiacNarrationGuard.provider_text(scene, self.pronunciation)
                         ZodiacNarrationGuard.verify_provider_text(final_text, provider_text, self.pronunciation)
                         # Keep style and content visibly separate in technical
                         # logs. Never construct a combined prompt string.
-                        self._log(job_id, "INFO", f"TTS_STYLE_INSTRUCTION:\n{getattr(provider, 'style_prompt', '') or ''}")
+                        self._log(job_id, "INFO", f"TTS_STYLE_INSTRUCTION:\n{getattr(scene_provider, 'style_prompt', '') or ''}")
                         self._log(job_id, "INFO", f"FINAL_NARRATION_TEXT:\n{provider_text}")
                         self._investigation_log(job_id, "zodiac_narration_guard_passed", scene_id=scene.id)
                     else:
                         provider_text = self.pronunciation.resolve_scene(scene)
-                    provider.synthesize(provider_text, script.project.language, script.voice.voice, script.voice.speed, output)
+                    scene_provider.synthesize(provider_text, script.project.language, scene_voice, scene_speed, output)
                     audio_duration = self.narration_audio.process(output)
                     return index, audio_duration
                 except AppError:
@@ -544,6 +584,10 @@ class JobService:
                 )
                 for index in range(count)
             ]
+            reel_quality = ReelQualityValidator().evaluate(script, durations, transitions, transition_seconds)
+            for warning in reel_quality.warnings:
+                self._log(job_id, "WARNING", f"{warning.code}: {warning.message}")
+                self._investigation_log(job_id, "reel_quality_warning", **warning.as_dict())
             if render_engine == "ffmpeg_motion" or ai_scene_count == 0:
                 rendered = self._render_ffmpeg_scenes(job_id, script, durations, raw_audio_durations, workspace, render_profile, sub_mode, transitions, transition_seconds)
             for index, (scene, duration) in enumerate(zip(script.scenes, durations) if ai_scene_count else ()):
@@ -576,7 +620,7 @@ class JobService:
                     if subtitle_end > subtitle_start + 0.05:
                         self._log(job_id, "INFO", f"Adding Thai subtitles to scene {index + 1}")
                         self._investigation_log(job_id, "subtitle_window", scene_id=scene.id, start_seconds=round(subtitle_start, 3), end_seconds=round(subtitle_end, 3), transition_seconds=round(transition_seconds, 3))
-                        subtitle = subtitle_renderer.write(scene.subtitle or scene.narration, duration, workspace.subtitles / f"{scene.id}.srt", subtitle_start, subtitle_end)
+                        subtitle = subtitle_renderer.write(scene.subtitle or scene.narration, duration, workspace.subtitles / f"{scene.id}.srt", subtitle_start, subtitle_end, scene.keywords)
                     else:
                         self._log(job_id, "WARNING", f"Skipping subtitles for scene {index + 1}; transition leaves no readable subtitle window")
                         subtitle = None
@@ -714,6 +758,13 @@ class JobService:
                 self._investigation_log(job_id, "scene_render_completed", render_engine=actual_engine, selected_engine=render_engine, scene_id=scene.id, output=rendered[-1].name, elapsed_ms=round((time.monotonic() - scene_started) * 1000))
                 self._log(job_id, "SUCCESS", f"Scene rendered {index + 1} of {count}")
                 self._progress(job_id, JobStatus.RENDERING_SCENES, 40 + round(35 * (index + 1) / count), f"Rendered scene {index + 1} of {count}")
+            if reel_outro and reel_outro.enabled and reel_outro.image:
+                outro_output = workspace.rendered_scenes / "mamase-reel-post-roll.mp4"
+                self._log(job_id, "INFO", "Rendering silent Mamase Reel post-roll")
+                scene_renderer.render_outro(reel_outro.image, reel_outro.duration, outro_output)
+                rendered.append(outro_output)
+                durations.append(reel_outro.duration)
+                transitions.append("none")
             self._progress(job_id, JobStatus.COMPOSING, 80, "Combining scenes")
             self._log(job_id, "INFO", "Combining scenes")
             if bgm:
@@ -729,6 +780,7 @@ class JobService:
                 transitions,
                 title=video_metadata.get("title") if video_metadata.get("title") != "-" else script.project.title,
                 description=video_metadata.get("description") if video_metadata.get("description") != "-" else "",
+                bgm_fade_out_seconds=(reel_outro.duration if reel_outro and reel_outro.enabled and reel_outro.bgm_fade_out else None),
             )
             self._investigation_log(job_id, "compose_completed", render_engine=render_engine, final_path=final.name, elapsed_ms=round((time.monotonic() - started) * 1000))
             probe = self.ffprobe.probe(final)
@@ -742,6 +794,10 @@ class JobService:
                 "fileSizeBytes": final.stat().st_size,
                 "createdAt": local_now().isoformat(),
                 "videoMetadata": video_metadata,
+                "reelQuality": {
+                    "estimatedDurationSeconds": round(reel_quality.total_duration, 3),
+                    "warnings": [warning.as_dict() for warning in reel_quality.warnings],
+                },
             }
             self.registry.set_metadata(job_id, metadata)
             if self.persistence:
@@ -1134,7 +1190,7 @@ class JobService:
                     raw_audio_duration = raw_audio_durations[index] if raw_audio_durations and index < len(raw_audio_durations) else duration - leaving
                     subtitle_end = min(duration - leaving, raw_audio_duration + 0.15)
                     if subtitle_end > subtitle_start + 0.05:
-                        subtitle = SubtitleRenderer().write(scene.subtitle or scene.narration, duration, workspace.subtitles / f"{scene.id}.srt", subtitle_start, subtitle_end)
+                        subtitle = SubtitleRenderer().write(scene.subtitle or scene.narration, duration, workspace.subtitles / f"{scene.id}.srt", subtitle_start, subtitle_end, scene.keywords)
                         self._investigation_log(job_id, "subtitle_window", scene_id=scene.id, start_seconds=round(subtitle_start, 3), end_seconds=round(subtitle_end, 3), transition_seconds=round(transition_seconds, 3))
                 output = SceneRenderer(self.ffmpeg, self.settings, render_profile).render(scene, workspace.extracted / scene.image, workspace.generated_audio / f"{scene.id}.wav", subtitle, duration, final_scene_output)
                 return index, output, round((time.monotonic() - started) * 1000)

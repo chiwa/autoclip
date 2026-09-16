@@ -26,8 +26,6 @@ from app.services.reel_hook_validator import MamaseReelHookGate
 
 logger = logging.getLogger("autoclip.ai")
 
-BRAND_NARRATION = "ค้นพบโลก ค้นพบใจ กับ Mamase"
-BRAND_SUBTITLE = "Mamase\nจักรวาลของใจ"
 MOTIONS = {"none", "auto", "slow_zoom_in", "slow_zoom_out", "pan_left_to_right", "pan_right_to_left", "pan_up", "pan_down", "zoom_in", "zoom_out", "zoom_in_top_left", "zoom_in_top_right", "zoom_in_bottom_left", "zoom_in_bottom_right", "pan_left_to_right_zoom_in", "pan_right_to_left_zoom_in", "pan_up_zoom_in", "pan_down_zoom_in", "drift_top_left", "drift_top_right", "drift_bottom_left", "drift_bottom_right", "cinematic_push_in", "cinematic_pull_out", "gentle_float", "documentary_pan"}
 TRANSITIONS = {"none", "fade", "dissolve", "fade_black", "fade_white", "wipe_left", "wipe_right", "wipe_up", "wipe_down", "slide_left", "slide_right", "slide_up", "slide_down", "smooth_left", "smooth_right", "smooth_up", "smooth_down", "zoom_in", "pixelize", "radial"}
 
@@ -227,6 +225,9 @@ class GeminiAutoProvider:
             tts_text=tts_text,
             subtitle=str(raw["subtitle"]).strip() if raw.get("subtitle") else narration,
             show_subtitle=bool(raw.get("show_subtitle", True)),
+            role=str(raw.get("role", "")).strip() or None,
+            keywords=[str(value).strip() for value in raw.get("keywords", []) if str(value).strip()],
+            sfx=str(raw.get("sfx", "")).strip() or None,
             image_prompt=image_prompt,
             motion=motion,
             transition=transition,
@@ -706,16 +707,19 @@ class AiProjectService:
             if scene.id in seen or scene.motion not in MOTIONS or (scene.transition and scene.transition not in TRANSITIONS):
                 raise AppError("AI_OUTPUT_INVALID", "ข้อมูลฉากมี motion/transition หรือ id ไม่ถูกต้อง")
             seen.add(scene.id)
-        if not any(s.id.endswith("brand-outro") for s in scenes):
-            scenes.append(AiScene(id=f"scene-{len(scenes)+1:02d}-brand-outro", narration=BRAND_NARRATION, subtitle=BRAND_SUBTITLE, image_prompt="Mamase brand outro", motion="none", transition="none"))
-        else:
-            brand = next(s for s in scenes if s.id.endswith("brand-outro")); scenes = [s for s in scenes if s is not brand] + [brand]
+        legacy_outros = [scene for scene in scenes if scene.id.endswith("brand-outro")]
+        scenes = [scene for scene in scenes if not scene.id.endswith("brand-outro")]
+        if legacy_outros and scenes:
+            legacy = legacy_outros[-1]
+            final = scenes[-1]
+            final.narration = " ".join(part.strip() for part in (final.narration, legacy.narration) if part.strip())
+            final.subtitle = " ".join(part.strip() for part in (final.subtitle, legacy.subtitle) if part.strip())
         return scenes
 
     def update_scene(self, project_id: str, scene_id: str, changes: dict) -> AiProject:
         project = self.get(project_id); scene = next((s for s in project.scenes if s.id == scene_id), None)
         if not scene: raise AppError("SCENE_NOT_FOUND", "ไม่พบฉากที่ระบุ")
-        allowed = {"narration", "tts_text", "subtitle", "show_subtitle", "image_prompt", "motion", "transition", "estimated_duration", "wan"}
+        allowed = {"narration", "tts_text", "subtitle", "show_subtitle", "image_prompt", "motion", "transition", "estimated_duration", "role", "keywords", "sfx", "wan"}
         scene = scene.model_copy(update={k: v for k, v in changes.items() if k in allowed})
         project.scenes[project.scenes.index(next(s for s in project.scenes if s.id == scene_id))] = scene
         self._refresh_hook_gate(project)
@@ -771,12 +775,18 @@ class AiProjectService:
         for i, scene in enumerate(project.scenes, 1):
             target = images / f"scene-{i:02d}.png"; shutil.copyfile(self.root / project_id / scene.image_path, target)
             payload = {"id": scene.id, "image": f"images/{target.name}", "narration": scene.narration, "subtitle": scene.subtitle, "show_subtitle": scene.show_subtitle, "motion": scene.motion, "transition": scene.transition, "motion_speed": "slow"}
+            if scene.role:
+                payload["role"] = scene.role
+            if scene.keywords:
+                payload["keywords"] = scene.keywords
+            if scene.sfx:
+                payload["sfx"] = scene.sfx
             if scene.tts_text:
                 payload["tts_text"] = scene.tts_text
             if scene.wan:
                 payload["wan"] = scene.wan
             scenes.append(payload)
-        script = {"project": {"id": project_id, "title": project.topic or "Mamase AI Project", "language": "th-TH", "resolution": "1080x1920", "fps": 30}, "voice": {"provider": "google-gemini", "voice": self.settings.tts.google_voice, "speed": self.settings.tts.google_speaking_rate, "style_prompt": self.settings.tts.google_style_prompt}, "scenes": scenes}
+        script = {"project": {"id": project_id, "title": project.topic or "Mamase AI Project", "language": "th-TH", "resolution": "1080x1920", "fps": 30}, "voice": {"provider": "google-gemini", "voice": self.settings.tts.google_voice, "speed": self.settings.tts.google_speaking_rate, "style_prompt": self.settings.tts.google_style_prompt}, "outro": {"enabled": True, "image": "mamase-reels-end-scence.png", "duration": 2.0, "bgm_fade_out": True}, "scenes": scenes}
         (package_root / "script.json").write_text(json.dumps(script, ensure_ascii=False, indent=2), encoding="utf-8")
         metadata = {"title": project.topic or "Mamase AI Project", "description": f"{project.topic}\n\nค้นพบโลก ค้นพบใจ กับ Mamase จักรวาลของใจ\n#Mamase #จักรวาลของใจ"}
         (package_root / "video-metadata.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2), encoding="utf-8")

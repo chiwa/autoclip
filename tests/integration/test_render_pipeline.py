@@ -48,6 +48,17 @@ def test_thai_render_pipeline(tmp_path):
 
 
 @pytest.mark.integration
+def test_silent_outro_post_roll_render_with_existing_pipeline(tmp_path):
+    if not shutil.which("ffmpeg") or not shutil.which("ffprobe"):
+        pytest.skip("FFmpeg tools unavailable")
+    image = tmp_path / "reels-end-scene.png"
+    FfmpegRunner().run(["-f", "lavfi", "-i", "color=c=#071323:s=720x1280", "-frames:v", "1", str(image)], "SCENE_RENDER_FAILED")
+    output = SceneRenderer(FfmpegRunner(), Settings()).render_outro(image, 2.0, tmp_path / "outro.mp4")
+    assert output.is_file()
+    assert FfprobeRunner().duration(output) >= 1.9
+
+
+@pytest.mark.integration
 def test_motion_is_visibly_different_across_scene(tmp_path):
     """Render real 5s clips and compare beginning/middle/end frames."""
     if not shutil.which("ffmpeg"):

@@ -9,7 +9,7 @@ script.json
 images/
   scene-01.png
   ...
-  scene-NN-brand-outro.png
+  final-content-scene.png
 audio/                  optional
   bgm.mp3               optional
 ```
@@ -27,6 +27,7 @@ audio/                  optional
 {
   "project": {"id": "filesystem-safe-id", "title": "ชื่อคลิป", "language": "th-TH", "resolution": "1080x1920", "fps": 30},
   "voice": {"provider": "local", "voice": "thai-male-01", "speed": 1.0},
+  "outro": {"enabled": true, "image": "mamase-reels-end-scence.png", "duration": 2.0, "bgm_fade_out": true},
   "scenes": [
     {"id": "scene-01", "image": "images/scene-01.png", "narration": "ข้อความบรรยาย", "subtitle": "ข้อความบนจอ", "motion": "slow_zoom_in", "transition": "dissolve"}
   ]

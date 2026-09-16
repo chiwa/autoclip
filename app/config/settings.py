@@ -75,6 +75,21 @@ class TtsSettings(BaseModel):
     )
 
 
+class ReelTtsSettings(BaseModel):
+    voice: str | None = "Fenrir"
+    hook_speed: float | None = Field(1.10, ge=0.5, le=2.0)
+    normal_speed: float | None = Field(1.05, ge=0.5, le=2.0)
+    hook_style: str | None = None
+    normal_style: str | None = None
+
+
+class ReelOutroSettings(BaseModel):
+    enabled: bool = True
+    image: Path = Path("assets/branding/mamase/reels-end-scene.png")
+    duration: float = Field(2.0, ge=1.5, le=2.5)
+    bgm_fade_out: bool = True
+
+
 class AudioSettings(BaseModel):
     narration_volume: float = Field(1.0, ge=0, le=4)
     background_volume: float = Field(0.08, ge=0, le=1)
@@ -256,6 +271,8 @@ class Settings(BaseModel):
     server: ServerSettings = ServerSettings()
     video: VideoSettings = VideoSettings()
     tts: TtsSettings = TtsSettings()
+    reel_tts: ReelTtsSettings = ReelTtsSettings()
+    reel_outro: ReelOutroSettings = ReelOutroSettings()
     audio: AudioSettings = AudioSettings()
     wan: WanSettings = WanSettings()
     ltx: LtxSettings = LtxSettings()
@@ -283,7 +300,7 @@ class Settings(BaseModel):
     antigravity_cli_path: Path = Path("/opt/homebrew/bin/agy")
     antigravity_model: str = "gemini-3.8-flash-medium"
     antigravity_timeout_seconds: int = Field(900, gt=30, le=3600)
-    ai_instructions: str = "You are the AutoClip Mamase assistant. Create concise factual Thai short-form scripts. Return JSON with message and scenes when asked for a preview. Every scene needs id,narration,subtitle,image_prompt,motion,transition,estimated_duration. Always put the Mamase brand outro last."
+    ai_instructions: str = "You are the AutoClip Mamase assistant. Create concise factual Thai short-form scripts. Return JSON with message and narrated content scenes when asked for a preview. Every scene needs id,narration,subtitle,image_prompt,motion,transition,estimated_duration. Do not create a brand-outro scene; AutoClip appends the silent Mamase post-roll after narration ends."
 
 
 def _set_nested(data: dict[str, Any], path: tuple[str, str] | tuple[str, str, str], value: str) -> None:

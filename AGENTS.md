@@ -19,14 +19,17 @@ skill.
 For Mamase Reels, Shorts, or TikTok work, additionally read
 `/Users/zengcode/projects/autoclip/.agents/skills/mamase-reels/SKILL.md` and
 `/Users/zengcode/projects/autoclip/.agents/skills/mamase-reels-cover/SKILL.md`.
+Read `/Users/zengcode/projects/autoclip/docs/mamase-reels-standard.md` as the
+canonical source for Reel timing, scene, subtitle, motion, hook, outro, and
+compatibility rules; it overrides duplicated legacy numeric guidance.
 Its locked logo, mobile QA, and final-scene rules override older guidance.
 Every Scene 01 must inspect
 `/Users/zengcode/projects/autoclip/assets/branding/mamase/reference/mamase-reels-editorial-poster-master.png`.
 This is the permanent Premium Editorial Science Poster master for future
 Mamase Reel covers; match its visual language and quality while adapting the
 composition, action, setting, and scientific subjects to each topic.
-Target a dense 45–60 seconds by default (acceptable: 60–75 seconds; if over
-75s, compress and revise script before returning). Treat the `Mamase Reel Hook Gate`
+Target 45–55 seconds by default and normally stay under 60 seconds. Use about
+6–9 narrated content scenes plus a separate silent 2-second branding post-roll, with one visual source per content scene. Treat the `Mamase Reel Hook Gate`
 as a blocking QA gate: do not proceed to image generation, TTS, or rendering until
 the hook passes. The first 1–3 seconds MUST stop scrolling with a truthful,
 scientifically defensible surprise, contradiction, or curiosity question (never
@@ -35,7 +38,10 @@ Spoken TTS must start directly with the hook (matching `hook` metadata identical
 and the first visual must reinforce the hook immediately with a colossal, dominating
 hero subject (never generic backgrounds or tiny pasted subjects). Deliver a mini-wow
 or reveal every 10–15 seconds to sustain retention without lecture format. Locked
-Mamase Reel TTS defaults: Google Gemini `Fenrir`, `th-TH`, default speed `1.05`.
+Mamase Reel TTS uses Google Gemini `Fenrir`, `th-TH`; Scene 1 automatically
+uses Hook style at `1.10`, while Scene 2 onward uses Normal style at `1.05`.
+The exact prompts, fallback order, and optional `reel_tts` contract live in
+`docs/mamase-reels-standard.md`.
 
 Key non-negotiable rules:
 
@@ -74,7 +80,7 @@ Key non-negotiable rules:
   Use "Mamase" or "Mamase REELS" only; strictly no "MAMASE PODCAST", no bilingual
   badges ("AVAILABLE IN THAI & ENGLISH"), and no flags on Reel assets.
 - Standard Mamase Reel generation output must return a machine-friendly JSON format
-  containing `topic`, `title`, `description`, `estimated_duration_seconds` (<=75s),
+  containing `topic`, `title`, `description`, `estimated_duration_seconds`,
   `hook`, `cta`, `tts` (production-ready, starting with hook and ending with cta),
   `voice` (Fenrir 1.05), and `validation` fields. Quick Reel compatibility
   (`{topic, description, tts}`) is preserved.

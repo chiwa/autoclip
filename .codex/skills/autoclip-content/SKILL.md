@@ -54,7 +54,10 @@ instead of the Mamase cinematic-documentary art direction:
 
 - Before creating JSON or a ZIP, read [references/package-contract.md](references/package-contract.md).
 - For Mamase channel identity and outro rules, read [references/brand.md](references/brand.md).
-- For a Mamase clip, reuse [assets/mamase-brand-outro.png](assets/mamase-brand-outro.png) for the final scene unless พี่พี explicitly approves a replacement. For Thai Java Zone, use only its own approved branding assets.
+- For a Mamase Reel, keep the final narrated scene as normal story artwork and
+  configure the locked Mamase asset as a separate silent top-level `outro`.
+  Never create a narrated brand-outro scene. For Thai Java Zone, use only its
+  own approved branding assets.
 
 ## Delivery check
 

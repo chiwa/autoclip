@@ -149,16 +149,20 @@
     }
 
     const filled = [];
-    const title = importedText(typeof data.title === 'string' ? data.title : data.title?.youtube);
+    const title = importedText(typeof data.title === 'string' ? data.title : data.title?.youtube)
+      || importedText(data.topic);
     if (title) {
       titleInput.value = title;
       filled.push('Title');
     }
 
     const caption = data.caption || {};
-    const descriptionParts = [caption.bilingual_intro, caption.thai, caption.english]
+    let descriptionParts = [caption.bilingual_intro, caption.thai, caption.english]
       .map(importedText)
       .filter(Boolean);
+    if (!descriptionParts.length && typeof data.description === 'string') {
+      descriptionParts = [importedText(data.description)].filter(Boolean);
+    }
     if (descriptionParts.length) {
       $('#podcastDescription').value = descriptionParts.join('\n\n');
       filled.push('Description');
@@ -171,11 +175,11 @@
       filled.push('Hashtags');
     }
 
-    const thaiTts = data.tts?.thai || {};
-    const englishTts = data.tts?.english || {};
-    const thaiScript = importedText(thaiTts.script);
+    const thaiTts = (typeof data.tts === 'object' && data.tts && data.tts.thai) ? data.tts.thai : {};
+    const englishTts = (typeof data.tts === 'object' && data.tts && data.tts.english) ? data.tts.english : {};
+    const thaiScript = importedText(thaiTts.script) || (typeof data.tts === 'string' ? importedText(data.tts) : '');
     const englishScript = importedText(englishTts.script);
-    const thaiStyle = importedText(thaiTts.style);
+    const thaiStyle = importedText(thaiTts.style) || importedText(data.voice?.style_prompt) || importedText(data.voice?.style);
     const englishStyle = importedText(englishTts.style);
     if (thaiScript) {
       scriptInput.value = thaiScript;
@@ -196,12 +200,12 @@
       filled.push('English style');
     }
 
-    const requestedVoice = thaiTts.voice || englishTts.voice || data.tts?.voice;
+    const requestedVoice = thaiTts.voice || englishTts.voice || (typeof data.tts === 'object' ? data.tts?.voice : null) || data.voice?.voice;
     if (typeof requestedVoice === 'string' && [...voiceSelect.options].some(option => option.value === requestedVoice)) {
       voiceSelect.value = requestedVoice;
       filled.push('Voice');
     }
-    const requestedSpeed = Number(thaiTts.speed ?? englishTts.speed ?? data.tts?.speed);
+    const requestedSpeed = Number(thaiTts.speed ?? englishTts.speed ?? (typeof data.tts === 'object' ? data.tts?.speed : null) ?? data.voice?.speed);
     if (Number.isFinite(requestedSpeed) && requestedSpeed >= 0.5 && requestedSpeed <= 2.0) {
       speedSlider.value = String(requestedSpeed);
       speedSlider.dispatchEvent(new Event('input'));

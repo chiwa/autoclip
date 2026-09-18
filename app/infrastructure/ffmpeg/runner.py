@@ -9,7 +9,7 @@ from app.domain.errors import AppError
 
 
 class FfmpegRunner:
-    def __init__(self, executable: str = "ffmpeg", timeout_seconds: int = 900):
+    def __init__(self, executable: str = "ffmpeg", timeout_seconds: int = 3600):
         self.executable = executable
         self.timeout_seconds = timeout_seconds
 
@@ -41,6 +41,40 @@ class FfmpegRunner:
             raise AppError(error_code, "Media processing command failed") from exc
         if result.returncode:
             raise AppError(error_code, "Media processing command failed", {"diagnostic": result.stderr[-2000:]})
+
+    def validate_video_packets(self, path: Path, error_code: str = "VIDEO_OUTPUT_CORRUPT") -> None:
+        """Scan the encoded video packets without re-encoding.
+
+        FFmpeg can occasionally exit successfully after writing a malformed H.264
+        stream. A normal metadata probe does not detect that class of failure.
+        """
+        try:
+            result = subprocess.run(
+                [
+                    self.executable,
+                    "-v", "error",
+                    "-i", str(path),
+                    "-map", "0:v:0",
+                    "-c", "copy",
+                    "-f", "null",
+                    "-",
+                ],
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=self.timeout_seconds,
+                check=False,
+            )
+        except (OSError, subprocess.TimeoutExpired, UnicodeError) as exc:
+            raise AppError(error_code, "Generated video integrity check failed") from exc
+        diagnostic = result.stderr.strip()
+        if result.returncode or diagnostic:
+            raise AppError(
+                error_code,
+                "Generated video is corrupt and was not published",
+                {"diagnostic": diagnostic[-2000:]},
+            )
 
 
 class FfprobeRunner:

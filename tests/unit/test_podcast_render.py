@@ -121,6 +121,7 @@ def test_podcast_video_render_smoke(tmp_path):
     assert v_stream["height"] == 1080
     assert a_stream["codec_name"] == "aac"
     assert abs(float(probe["format"]["duration"]) - (duration + ending_duration)) <= 0.15
+    ffmpeg.validate_video_packets(out_video)
 
 
 def test_podcast_audio_mix_filter_is_shared_for_video_and_alternate_track():

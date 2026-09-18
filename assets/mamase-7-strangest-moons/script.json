@@ -1,0 +1,100 @@
+{
+  "project": {
+    "id": "mamase-7-strangest-moons",
+    "title": "7 ดวงจันทร์สุดแปลกในระบบสุริยะ",
+    "language": "th-TH"
+  },
+  "description": "พาสำรวจ 7 ดวงจันทร์สุดแปลกในระบบสุริยะ ตั้งแต่ภูเขาไฟลาวาบนไอโอ มหาสมุทรใต้ผิวน้ำแข็งของยูโรปา ทะเลมีเทนบนไททัน ไปจนถึงหน้าผาปริศนาบนมิแรนดา โลกขนาดเล็กที่มหัศจรรย์ยิ่งกว่านิยายไซไฟ",
+  "hashtags": [
+    "#Mamase",
+    "#MamaseReels",
+    "#ดวงจันทร์",
+    "#ระบบสุริยะ",
+    "#ดาราศาสตร์",
+    "#อวกาศ",
+    "#วิทยาศาสตร์",
+    "#Io",
+    "#Europa",
+    "#Ganymede",
+    "#Callisto",
+    "#Titan",
+    "#Triton",
+    "#Miranda"
+  ],
+  "reel_tts": {
+    "hook": {
+      "voice": "Fenrir",
+      "speed": 1.05,
+      "style": "Speak in an energetic, curious Thai male voice. Deliver the opening question with immediate surprise and excitement, as if you have just discovered something unbelievable and need to tell a friend. Strongly emphasize the contrast between the surprising fact and the final mystery question. Keep the delivery conversational, playful, and spontaneous. Do not shout. Do not sound like a commercial, movie trailer, news presenter, or exaggerated YouTuber."
+    },
+    "normal": {
+      "voice": "Fenrir",
+      "speed": 1.05,
+      "style": "Speak like a charismatic Thai science storyteller with a playful personality. Sound curious, friendly, warm, and conversational, as if telling an interesting science story to a friend. Keep the delivery natural and connected, with light energy and genuine excitement when surprising facts appear. Use small natural pauses for emphasis and comedic timing when appropriate. Do not rush. Do not over-dramatize. Do not sound like a news anchor, lecturer, movie trailer, advertisement, or exaggerated YouTuber. Keep the tone playful and engaging, but still clear enough for scientific explanations."
+    }
+  },
+  "scenes": [
+    {
+      "id": "01",
+      "image": "images/01.png",
+      "role": "hook",
+      "narration": "ในระบบสุริยะเรา มีดวงจันทร์ที่มีภูเขาไฟ ทะเลมีเทน และบางดวงอาจซ่อนมหาสมุทรไว้ใต้ผิวน้ำแข็ง…นี่คือ 7 ดวงที่แปลกจนเหมือนหลุดมาจากนิยาย",
+      "motion": "slow_zoom_in",
+      "sfx": "reveal"
+    },
+    {
+      "id": "02",
+      "image": "images/02.png",
+      "narration": "เริ่มที่ไอโอ ดวงจันทร์ของดาวพฤหัสบดี ที่เต็มไปด้วยภูเขาไฟคุกรุ่น พื้นผิวของมันถูกลาวาสร้างใหม่อยู่ตลอดเวลา",
+      "motion": "slow_zoom_in"
+    },
+    {
+      "id": "03",
+      "image": "images/03.png",
+      "narration": "ยูโรปาดูเงียบกว่ามาก แต่ใต้เปลือกน้ำแข็งแตกร้าว อาจมีมหาสมุทรน้ำเค็มขนาดมหึมาซ่อนอยู่ และความร้อนจากแรงไทดัลช่วยให้มันไม่แข็งตัวทั้งหมด",
+      "motion": "pan_left_to_right"
+    },
+    {
+      "id": "04",
+      "image": "images/04.png",
+      "narration": "แกนีมีดคือดวงจันทร์ที่ใหญ่ที่สุดในระบบสุริยะ ใหญ่กว่าดาวพุธ และยังเป็นดวงจันทร์เพียงดวงเดียวที่มีสนามแม่เหล็กของตัวเอง",
+      "motion": "slow_zoom_out"
+    },
+    {
+      "id": "05",
+      "image": "images/05.png",
+      "narration": "คัลลิสโตเหมือนพิพิธภัณฑ์ของระบบสุริยะ พื้นผิวเก่าแก่มากและเต็มไปด้วยหลุมอุกกาบาต เพราะแทบไม่มีกิจกรรมทางธรณีวิทยามาคอยลบร่องรอย",
+      "motion": "pan_right_to_left"
+    },
+    {
+      "id": "06",
+      "image": "images/06.png",
+      "narration": "ไททันกลับดูคล้ายโลกอย่างประหลาด มันมีชั้นบรรยากาศหนา มีเมฆ มีฝน มีแม่น้ำและทะเลสาบ แต่ของเหลวเหล่านั้นคือมีเทนและไฮโดรคาร์บอน ไม่ใช่น้ำ",
+      "motion": "slow_zoom_in"
+    },
+    {
+      "id": "07",
+      "image": "images/07.png",
+      "narration": "ไทรทันยิ่งแปลกกว่า เพราะมันโคจรสวนทางกับการหมุนของดาวเนปจูน และแม้อากาศจะหนาวสุดขั้ว ก็ยังมีน้ำพุแก๊สพุ่งขึ้นจากพื้นผิว",
+      "motion": "slow_zoom_out"
+    },
+    {
+      "id": "08",
+      "image": "images/08.png",
+      "narration": "ส่วนมิแรนดา ดูเหมือนมีใครเอาพื้นผิวหลายโลกมาต่อเข้าด้วยกัน ทั้งรอยแตก ภูเขา และหน้าผาขนาดมหึมา จนเป็นหนึ่งในดวงจันทร์ที่หน้าตาประหลาดที่สุด",
+      "motion": "pan_left_to_right"
+    },
+    {
+      "id": "09",
+      "image": "images/09.png",
+      "narration": "และนี่คือแค่ 7 ดวงเท่านั้น ในระบบสุริยะยังมีโลกเล็ก ๆ ประหลาดอีกมากมาย ถ้าเลือกได้หนึ่งดวง…คุณอยากส่งยานไปสำรวจที่ไหนก่อน?",
+      "motion": "slow_zoom_in"
+    }
+  ],
+  "outro": {
+    "enabled": true,
+    "image": "mamase-reels-end-scence.png",
+    "duration": 2.0,
+    "bgm_fade_out": true
+  }
+}

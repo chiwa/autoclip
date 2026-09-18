@@ -335,9 +335,19 @@ class PodcastVideoRenderer:
                 str(output_path),
             ]
 
-        # Execute final composition
+        # Execute final composition into a temporary file. Never expose a
+        # partially written or malformed MP4 through the download endpoint.
+        temporary_output = output_path.with_name(f".{output_path.stem}.rendering{output_path.suffix}")
+        temporary_output.unlink(missing_ok=True)
+        cmd[-1] = str(temporary_output)
         timeout_sec = max(900, int(final_duration * 2) + 180)
-        self.ffmpeg.run(cmd, "PODCAST_RENDER_FAILED", timeout_seconds=timeout_sec)
+        try:
+            self.ffmpeg.run(cmd, "PODCAST_RENDER_FAILED", timeout_seconds=timeout_sec)
+            self.ffmpeg.validate_video_packets(temporary_output, "PODCAST_VIDEO_CORRUPT")
+            temporary_output.replace(output_path)
+        except Exception:
+            temporary_output.unlink(missing_ok=True)
+            raise
 
         elapsed = round(time.monotonic() - started_at, 2)
         if log_callback:

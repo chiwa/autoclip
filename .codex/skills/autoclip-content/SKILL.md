@@ -13,7 +13,7 @@ and Reels for **Mamase — จักรวาลของใจ** and **Thai Jav
 1. Draft the complete Thai script first. Include scene order, narration, intended visual, approximate duration, motion, and transition.
 2. Stop after the script draft and ask พี่พี to review it. Do not generate images, `script.json`, or a ZIP until explicit approval.
 3. Revise the complete script when feedback arrives and request approval again if the revision changes content materially.
-4. After approval, create diverse 9:16 scene images, then create `script.json`, validate every referenced path, and package the ZIP.
+4. After approval, search the Reusable Asset Catalog (`docs/asset-catalog.md` and `assets/reusable-library/assets-index.jsonl`) before creating new images. Copy compatible assets directly from `library_path` when topic, meaning, and brand match without topic-specific text (never reuse an old Scene 01 directly). If suitable assets do not exist, create diverse 9:16 scene images, then create `script.json`, validate every referenced path, and package the ZIP. Never bundle catalog, thumbnails, or contact sheets into ZIPs.
 5. Preserve JSON scene order exactly. Use the outro and branding belonging to
    the requested channel; never place Mamase branding in a Thai Java Zone clip
    or Thai Java Zone branding in a Mamase clip.

@@ -76,11 +76,13 @@ class QuickReelService:
         self,
         image_path: Path,
         output_path: Path,
-        fit: str = "cover",
+        fit: str = "contain",
+        target_width: int = TARGET_WIDTH,
+        target_height: int = TARGET_HEIGHT,
     ) -> Path:
-        """Processes and formats an image to 1080x1920 9:16 vertical frame.
+        """Processes and formats an image to target width/height frame.
 
-        - cover: Center-crop to fill 1080x1920 without distortion.
+        - cover: Center-crop to fill frame without distortion.
         - contain: Letterbox with dark background (18, 20, 26).
         """
         if not image_path.is_file() or image_path.suffix.lower() not in SUPPORTED_IMAGE_EXTS:
@@ -98,28 +100,28 @@ class QuickReelService:
                 else:
                     rgb_im = im.convert("RGB")
 
-                fit_mode = (fit or "cover").strip().lower()
+                fit_mode = (fit or "contain").strip().lower()
 
                 if fit_mode == "contain":
-                    scale = min(TARGET_WIDTH / orig_w, TARGET_HEIGHT / orig_h)
+                    scale = min(target_width / orig_w, target_height / orig_h)
                     new_w = max(1, int(round(orig_w * scale)))
                     new_h = max(1, int(round(orig_h * scale)))
                     scaled = rgb_im.resize((new_w, new_h), Image.Resampling.LANCZOS)
 
-                    canvas = Image.new("RGB", (TARGET_WIDTH, TARGET_HEIGHT), (18, 20, 26))
-                    left = (TARGET_WIDTH - new_w) // 2
-                    top = (TARGET_HEIGHT - new_h) // 2
+                    canvas = Image.new("RGB", (target_width, target_height), (18, 20, 26))
+                    left = (target_width - new_w) // 2
+                    top = (target_height - new_h) // 2
                     canvas.paste(scaled, (left, top))
                     result = canvas
                 else:
-                    scale = max(TARGET_WIDTH / orig_w, TARGET_HEIGHT / orig_h)
+                    scale = max(target_width / orig_w, target_height / orig_h)
                     new_w = max(1, int(round(orig_w * scale)))
                     new_h = max(1, int(round(orig_h * scale)))
                     scaled = rgb_im.resize((new_w, new_h), Image.Resampling.LANCZOS)
 
-                    left = (new_w - TARGET_WIDTH) // 2
-                    top = (new_h - TARGET_HEIGHT) // 2
-                    result = scaled.crop((left, top, left + TARGET_WIDTH, top + TARGET_HEIGHT))
+                    left = (new_w - target_width) // 2
+                    top = (new_h - target_height) // 2
+                    result = scaled.crop((left, top, left + target_width, top + target_height))
 
                 output_path.parent.mkdir(parents=True, exist_ok=True)
                 result.save(output_path, format="PNG")
@@ -136,7 +138,7 @@ class QuickReelService:
         position: str = "top",
         output_path: Path | None = None,
     ) -> Path:
-        """Overlays large mobile-readable hook text onto 1080x1920 image with stroke/shadow."""
+        """Overlays large mobile-readable hook text onto image with stroke/shadow."""
         target_path = output_path or image_path
         cleaned_text = (hook_text or "").strip()
         if not cleaned_text:
@@ -144,8 +146,11 @@ class QuickReelService:
 
         with Image.open(image_path) as im:
             base = im.convert("RGBA")
+            im_w, im_h = base.size
             overlay = Image.new("RGBA", base.size, (0, 0, 0, 0))
             draw = ImageDraw.Draw(overlay)
+
+            safe_margin_width = im_w - 160
 
             font_size = 64
             font: Any = None
@@ -165,7 +170,7 @@ class QuickReelService:
                 test_line = f"{current_line} {word}".strip()
                 bbox = draw.textbbox((0, 0), test_line, font=font)
                 line_w = bbox[2] - bbox[0]
-                if line_w <= SAFE_MARGIN_WIDTH or not current_line:
+                if line_w <= safe_margin_width or not current_line:
                     current_line = test_line
                 else:
                     lines.append(current_line)
@@ -186,15 +191,17 @@ class QuickReelService:
 
             pos = (position or "top").strip().lower()
             if pos == "center":
-                start_y = (TARGET_HEIGHT - total_text_h) // 2
+                start_y = (im_h - total_text_h) // 2
             elif pos == "bottom":
-                start_y = 1420 - total_text_h
+                # For 1920 height, bottom was 1420 (500px from bottom)
+                start_y = im_h - 500 - total_text_h
+                if start_y < 0: start_y = (im_h - total_text_h) // 2
             else:
                 start_y = 180
 
             curr_y = start_y
             for line, (lw, lh) in zip(lines, line_dimensions):
-                x = (TARGET_WIDTH - lw) // 2
+                x = (im_w - lw) // 2
                 draw.text(
                     (x, curr_y),
                     line,
@@ -218,6 +225,8 @@ class QuickReelService:
         motion: str,
         output: Path,
         image_durations: list[float] | None = None,
+        target_width: int = TARGET_WIDTH,
+        target_height: int = TARGET_HEIGHT,
     ) -> Path:
         """Render ordered images with equal screen time and visual crossfades.
 
@@ -228,7 +237,7 @@ class QuickReelService:
         if len(images) < 2:
             raise ValueError("multi-image slideshow requires at least two images")
 
-        profile = RenderProfile(1080, 1920, 30, "libx264", "yuv420p")
+        profile = RenderProfile(target_width, target_height, 30, "libx264", "yuv420p")
         renderer = SceneRenderer(self.ffmpeg, self.settings, profile)
         transition = min(
             QUICK_REEL_TRANSITION_SECONDS,
@@ -251,15 +260,32 @@ class QuickReelService:
             "pan_right_to_left",
         )
 
-        input_args: list[str] = []
-        filters: list[str] = []
+        visual_only = output.with_name("slideshow-visual.mp4")
+        temp_dir = output.parent / "slideshow-temp"
+        temp_dir.mkdir(parents=True, exist_ok=True)
+
+        # 1. Render scene parts (head, main, tail)
+        pieces = []
         for index, image in enumerate(images):
+            is_last = (index == len(images) - 1)
+            is_first = (index == 0)
             image_duration = source_durations[index]
-            selected_motion = motion_cycle[index % len(motion_cycle)] if motion != "none" else "none"
+            if motion in {"gentle_float", "cinematic_push_in", "hook_punch_in"}:
+                selected_motion = motion
+            elif motion != "none":
+                selected_motion = motion_cycle[index % len(motion_cycle)]
+            else:
+                selected_motion = "none"
+
+            input_args: list[str] = []
             if selected_motion == "none":
                 input_args.extend(["-loop", "1", "-t", f"{image_duration:.3f}", "-i", str(image)])
             else:
                 input_args.extend(["-i", str(image)])
+
+            motion_speed = "normal" if selected_motion in {"cinematic_push_in", "hook_punch_in"} else "slow"
+            motion_intensity = 0.18 if selected_motion in {"cinematic_push_in", "hook_punch_in"} else (0.12 if selected_motion == "gentle_float" else 0.04)
+
             visual_scene = Scene(
                 id=f"quick-image-{index + 1:03d}",
                 image=image.name,
@@ -267,42 +293,105 @@ class QuickReelService:
                 tts_text="visual only",
                 subtitle="",
                 motion=selected_motion,
-                motion_speed="slow",
-                motion_intensity=0.04,
+                motion_speed=motion_speed,
+                motion_intensity=motion_intensity,
                 focus="center",
                 transition="dissolve",
                 show_subtitle=False,
             )
             visual_filter = renderer.build_filter(visual_scene, image_duration, None)
-            filters.append(
-                f"[{index}:v]{visual_filter},trim=duration={image_duration:.3f},"
-                f"settb=AVTB,setpts=PTS-STARTPTS[v{index}]"
-            )
 
-        video_left = "v0"
-        elapsed = source_durations[0]
-        for index in range(1, len(images)):
-            video_out = f"vx{index}"
-            offset = elapsed - transition
-            filters.append(
-                f"[{video_left}][v{index}]xfade=transition=fade:duration={transition:.3f}:"
-                f"offset={offset:.3f}[{video_out}]"
-            )
-            video_left = video_out
-            elapsed += source_durations[index] - transition
+            head_dur = transition if not is_first else 0.0
+            tail_dur = transition if not is_last else 0.0
+            main_dur = image_duration - head_dur - tail_dur
 
-        visual_only = output.with_name("slideshow-visual.mp4")
+            splits = 1 + (1 if head_dur > 0 else 0) + (1 if tail_dur > 0 else 0)
+            full_filter = f"[0:v]{visual_filter},trim=duration={image_duration:.3f},settb=AVTB,setpts=PTS-STARTPTS[v_full];[v_full]split={splits}"
+
+            split_outs = []
+            if head_dur > 0: split_outs.append("[v_head]")
+            split_outs.append("[v_main]")
+            if tail_dur > 0: split_outs.append("[v_tail]")
+
+            full_filter += "".join(split_outs) + ";"
+
+            maps = []
+            piece_paths = {}
+
+            if head_dur > 0:
+                full_filter += f"[v_head]trim=start=0:end={head_dur:.3f},setpts=PTS-STARTPTS[out_head];"
+                head_path = temp_dir / f"head_{index:03d}.mp4"
+                maps.extend(["-map", "[out_head]", "-c:v", profile.codec, "-preset", "ultrafast", "-crf", "18", "-pix_fmt", profile.pixel_format, "-r", str(profile.fps), str(head_path)])
+                piece_paths['head'] = head_path
+
+            main_start = head_dur
+            main_end = head_dur + main_dur
+            full_filter += f"[v_main]trim=start={main_start:.3f}:end={main_end:.3f},setpts=PTS-STARTPTS[out_main];"
+            main_path = temp_dir / f"main_{index:03d}.mp4"
+            maps.extend(["-map", "[out_main]", "-c:v", profile.codec, "-preset", "veryfast", "-crf", "23", "-pix_fmt", profile.pixel_format, "-r", str(profile.fps), "-video_track_timescale", "30000", str(main_path)])
+            piece_paths['main'] = main_path
+
+            if tail_dur > 0:
+                tail_start = image_duration - tail_dur
+                full_filter += f"[v_tail]trim=start={tail_start:.3f}:end={image_duration:.3f},setpts=PTS-STARTPTS[out_tail];"
+                tail_path = temp_dir / f"tail_{index:03d}.mp4"
+                maps.extend(["-map", "[out_tail]", "-c:v", profile.codec, "-preset", "ultrafast", "-crf", "18", "-pix_fmt", profile.pixel_format, "-r", str(profile.fps), str(tail_path)])
+                piece_paths['tail'] = tail_path
+
+            full_filter = full_filter.rstrip(";")
+
+            self.ffmpeg.run(
+                [
+                    *input_args,
+                    "-filter_complex", full_filter,
+                    "-an", *maps
+                ],
+                "QUICK_REEL_SLIDESHOW_FAILED",
+            )
+            pieces.append(piece_paths)
+
+        # 2. Crossfade transitions and build concat list
+        concat_list_path = temp_dir / "concat.txt"
+        concat_lines = []
+
+        for index, p in enumerate(pieces):
+            concat_lines.append(f"file '{p['main'].name}'")
+            if 'tail' in p:
+                next_p = pieces[index + 1]
+                trans_path = temp_dir / f"trans_{index:03d}.mp4"
+                self.ffmpeg.run(
+                    [
+                        "-i", str(p['tail']),
+                        "-i", str(next_p['head']),
+                        "-filter_complex",
+                        f"[0:v]setpts=PTS-STARTPTS[v0];[1:v]setpts=PTS-STARTPTS[v1];[v0][v1]xfade=transition=fade:duration={transition:.3f}:offset=0[v]",
+                        "-map", "[v]", "-an", "-t", f"{transition:.3f}",
+                        "-c:v", profile.codec, "-preset", "veryfast", "-crf", "23",
+                        "-pix_fmt", profile.pixel_format, "-r", str(profile.fps),
+                        "-video_track_timescale", "30000",
+                        str(trans_path)
+                    ],
+                    "QUICK_REEL_SLIDESHOW_FAILED",
+                )
+                concat_lines.append(f"file '{trans_path.name}'")
+
+        # 3. Concat all parts
+        with open(concat_list_path, "w") as f:
+            f.write("\n".join(concat_lines))
+
         self.ffmpeg.run(
             [
-                *input_args,
-                "-filter_complex", ";".join(filters),
-                "-map", f"[{video_left}]", "-an", "-t", f"{audio_duration:.3f}",
-                "-c:v", profile.codec, "-preset", "veryfast", "-crf", "23",
-                "-pix_fmt", profile.pixel_format, "-r", str(profile.fps),
-                "-movflags", "+faststart", str(visual_only),
+                "-f", "concat", "-safe", "0", "-i", str(concat_list_path),
+                "-c", "copy", str(visual_only)
             ],
             "QUICK_REEL_SLIDESHOW_FAILED",
         )
+
+        try:
+            import shutil
+            shutil.rmtree(temp_dir)
+        except Exception:
+            pass
 
         final_scene = Scene(
             id="quick-reel-slideshow",
@@ -379,7 +468,7 @@ class QuickReelService:
         speed: float = 1.10,
         style_prompt: str | None = None,
         motion: str = "static",
-        fit: str = "cover",
+        fit: str = "contain",
         hook_enabled: bool = False,
         hook_text: str = "",
         hook_position: str = "top",
@@ -445,21 +534,54 @@ class QuickReelService:
 
         saved_bgm: Path | None = None
         if bgm_enabled and bgm_file:
+            import re
+            from app.services.bgm_service import SOUNDS_DIR
             if isinstance(bgm_file, Path) and bgm_file.is_file():
-                saved_bgm = workspace.source / f"bgm{bgm_file.suffix.lower()}"
+                bgm_ext = bgm_file.suffix.lower()
+                saved_bgm = workspace.source / f"bgm{bgm_ext}"
                 shutil.copy(bgm_file, saved_bgm)
+                clean_stem = re.sub(r'[^a-zA-Z0-9_\-\u0e00-\u0e7f]', '_', bgm_file.stem).strip('_') or "custom_bgm"
+                shared_file = SOUNDS_DIR / f"{clean_stem}{bgm_ext}"
+                if not shared_file.is_file():
+                    try:
+                        shutil.copy(bgm_file, shared_file)
+                    except Exception:
+                        pass
             elif hasattr(bgm_file, "file") and getattr(bgm_file, "filename", None):
                 bgm_ext = Path(bgm_file.filename).suffix.lower()
                 if bgm_ext in {".mp3", ".wav", ".m4a", ".aac", ".ogg"}:
                     saved_bgm = workspace.source / f"bgm{bgm_ext}"
                     with saved_bgm.open("wb") as out:
                         shutil.copyfileobj(bgm_file.file, out)
+                    clean_stem = re.sub(r'[^a-zA-Z0-9_\-\u0e00-\u0e7f]', '_', Path(bgm_file.filename).stem).strip('_') or "custom_bgm"
+                    shared_file = SOUNDS_DIR / f"{clean_stem}{bgm_ext}"
+                    if not shared_file.is_file():
+                        try:
+                            shutil.copy(saved_bgm, shared_file)
+                        except Exception:
+                            pass
 
         selected_voice = voice or "Iapetus"
         selected_speed = float(speed if speed is not None else 1.10)
         selected_style = (style_prompt or "").strip() or QUICK_REEL_TTS_STYLE
-        selected_motion = "slow_zoom_in" if motion in {"slow_zoom", "slow_zoom_in", "zoom"} else "none"
-        selected_fit = fit if fit in {"cover", "contain"} else "cover"
+        motion_map = {
+            "none": "none",
+            "static": "none",
+            "gentle_float": "gentle_float",
+            "cosmic_float": "gentle_float",
+            "cinematic_push_in": "cinematic_push_in",
+            "cinematic_pull_out": "cinematic_pull_out",
+            "hook_punch_in": "hook_punch_in",
+            "documentary_pan": "documentary_pan",
+            "pan_up": "pan_up",
+            "drift_diagonal": "drift_diagonal",
+            "breathing_pulse": "breathing_pulse",
+            "slow_zoom": "slow_zoom_in",
+            "slow_zoom_in": "slow_zoom_in",
+            "zoom": "slow_zoom_in",
+        }
+        selected_motion = motion_map.get(motion, "none")
+        selected_fit = fit if fit in {"cover", "contain"} else "contain"
         selected_bgm_vol = float(bgm_volume if bgm_volume is not None else 0.10)
 
         config_data = {
@@ -469,7 +591,7 @@ class QuickReelService:
             "voice": selected_voice,
             "speed": selected_speed,
             "stylePrompt": selected_style,
-            "motion": "slow_zoom" if selected_motion != "none" else "static",
+            "motion": selected_motion if selected_motion != "none" else "static",
             "fit": selected_fit,
             "hookEnabled": hook_enabled,
             "hookText": hook_text if hook_enabled else "",
@@ -583,13 +705,23 @@ class QuickReelService:
         started = time.monotonic()
         try:
             image_count = len(raw_image_paths)
-            self._progress(job_id, JobStatus.VALIDATING, 10, f"จัดขนาดภาพ {image_count} รูปเป็น 9:16")
+            target_width = TARGET_WIDTH
+            target_height = TARGET_HEIGHT
+
+            if image_count > 0:
+                with Image.open(raw_image_paths[0]) as im:
+                    orig_w, orig_h = im.size
+                    if orig_w > orig_h:
+                        target_width = 1920
+                        target_height = 1080
+
+            self._progress(job_id, JobStatus.VALIDATING, 10, f"จัดขนาดภาพ {image_count} รูปเป็น {target_width}x{target_height}")
             self._log(job_id, "INFO", f"จัดขนาดภาพ {image_count} รูปตามลำดับอัปโหลด โหมด {fit}")
 
             framed_images: list[Path] = []
             for index, raw_image_path in enumerate(raw_image_paths, 1):
                 framed_image = workspace.source / f"framed-{index:03d}.png"
-                self.prepare_image(raw_image_path, framed_image, fit=fit)
+                self.prepare_image(raw_image_path, framed_image, fit=fit, target_width=target_width, target_height=target_height)
                 if index == 1 and hook_enabled and hook_text.strip():
                     self._log(job_id, "INFO", f"ใส่ Hook Text Overlay บนภาพแรก: {hook_text.strip()[:40]}...")
                     self.apply_hook_overlay(framed_image, hook_text.strip(), position=hook_position)
@@ -634,12 +766,28 @@ class QuickReelService:
                 else:
                     SubtitleRenderer().write(script_text, audio_duration, sub_path, start_seconds=0.0, end_seconds=audio_duration)
 
-            self._progress(job_id, JobStatus.RENDERING_SCENES, 65, f"เรนเดอร์ {image_count} ภาพเป็นวิดีโอ 1080x1920")
-            motion_label = "Slow Zoom" if motion != "none" else "Static Frame"
+            self._progress(job_id, JobStatus.RENDERING_SCENES, 65, f"เรนเดอร์ {image_count} ภาพเป็นวิดีโอ {target_width}x{target_height}")
+            motion_labels = {
+                "none": "Static Frame",
+                "gentle_float": "Cosmic Float / Gentle Drift",
+                "cinematic_push_in": "Cinematic Push-in",
+                "cinematic_pull_out": "Cinematic Pull-out / Reveal",
+                "hook_punch_in": "Hook Punch-in + Slow Drift",
+                "documentary_pan": "Documentary Pan",
+                "pan_up": "Vertical Pan Up",
+                "drift_diagonal": "Diagonal Drift",
+                "breathing_pulse": "Breathing Pulse",
+                "slow_zoom_in": "Slow Zoom",
+            }
+            motion_label = motion_labels.get(motion, "Static Frame" if motion == "none" else motion)
             self._log(job_id, "INFO", f"เรนเดอร์ภาพเคลื่อนไหวแบบ {motion_label}")
 
-            render_profile = RenderProfile(1080, 1920, 30, "libx264", "yuv420p")
+            render_profile = RenderProfile(target_width, target_height, 30, "libx264", "yuv420p")
             scene_renderer = SceneRenderer(self.ffmpeg, self.settings, render_profile)
+
+            fast_motions = {"cinematic_push_in", "cinematic_pull_out", "hook_punch_in", "documentary_pan", "pan_up", "drift_diagonal"}
+            motion_speed = "normal" if motion in fast_motions else "slow"
+            motion_intensity = 0.18 if motion in {"cinematic_push_in", "hook_punch_in"} else (0.12 if motion in {"gentle_float", "breathing_pulse"} else 0.15)
 
             scene_model = Scene(
                 id="scene-01",
@@ -648,8 +796,8 @@ class QuickReelService:
                 tts_text=script_text,
                 subtitle=script_text if subtitles_enabled else "",
                 motion=motion,
-                motion_speed="slow",
-                motion_intensity=0.04,
+                motion_speed=motion_speed,
+                motion_intensity=motion_intensity,
                 focus="center",
                 transition="none",
                 show_subtitle=subtitles_enabled,
@@ -666,6 +814,7 @@ class QuickReelService:
                 self._render_multi_image_slideshow(
                     framed_images, clean_audio, sub_path if subtitles_enabled else None,
                     audio_duration, motion, scene_output, image_durations=image_durations,
+                    target_width=target_width, target_height=target_height,
                 )
             self._log(job_id, "SUCCESS", f"เรนเดอร์ภาพครบ {image_count} รูปตามลำดับแล้ว")
 
@@ -832,3 +981,209 @@ class QuickReelService:
         if root in job_dir.parents and job_dir.is_dir():
             shutil.rmtree(job_dir, ignore_errors=True)
         return {"status": "DELETED", "jobId": job_id}
+
+    def remotion_quick_reel(self, job_id: str, new_motion: str | None = None, fit: str | None = None) -> dict:
+        record = self.job_service.restore(job_id)
+        if not record:
+            raise AppError("JOB_NOT_FOUND", "ไม่พบงาน Quick Reel นี้")
+        workspace = self.job_service.workspaces.get(job_id)
+        if not workspace.root.is_dir():
+            raise AppError("WORKSPACE_NOT_FOUND", "ไม่พบ workspace ของงานนี้")
+
+        settings_file = workspace.source / "quick-reel-settings.json"
+        settings_data: dict = {}
+        if settings_file.is_file():
+            try:
+                settings_data = json.loads(settings_file.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+
+        image_count = settings_data.get("imageCount", 1)
+        if image_count > 1:
+            raise AppError("REMOTION_NOT_SUPPORTED", "ระบบ Re-Motion รองรับเฉพาะ Quick Reel แบบ 1 รูปภาพในขณะนี้")
+
+        framed_image = workspace.source / "framed-001.png"
+        target_width = TARGET_WIDTH
+        target_height = TARGET_HEIGHT
+
+        current_fit = settings_data.get("fit", "contain")
+        selected_fit = fit.strip().lower() if fit else current_fit
+        if selected_fit not in {"cover", "contain"}:
+            selected_fit = "contain"
+
+        raw_candidates = sorted(list(workspace.source.glob("image-001.*")))
+        if not raw_candidates:
+            raw_candidates = sorted(list(workspace.source.glob("*.png")) + list(workspace.source.glob("*.jpg")) + list(workspace.source.glob("*.jpeg")) + list(workspace.source.glob("*.webp")))
+
+        if raw_candidates:
+            try:
+                with Image.open(raw_candidates[0]) as im:
+                    orig_w, orig_h = im.size
+                    if orig_w > orig_h:
+                        target_width = 1920
+                        target_height = 1080
+            except Exception:
+                pass
+
+        if fit is not None or not framed_image.is_file():
+            if not raw_candidates:
+                raise AppError("IMAGE_NOT_FOUND", "ไม่พบไฟล์รูปภาพต้นฉบับ")
+            self.prepare_image(raw_candidates[0], framed_image, fit=selected_fit, target_width=target_width, target_height=target_height)
+            if settings_data.get("hookEnabled"):
+                self.apply_hook_overlay(
+                    framed_image,
+                    settings_data.get("hookText", ""),
+                    settings_data.get("hookPosition", "top"),
+                    framed_image,
+                )
+        elif framed_image.is_file():
+            try:
+                with Image.open(framed_image) as im:
+                    target_width, target_height = im.size
+            except Exception:
+                pass
+
+        settings_data["fit"] = selected_fit
+
+        clean_audio = workspace.generated_audio / "scene-01.wav"
+        if not clean_audio.is_file():
+            clean_audio = workspace.generated_audio / "quick-reel-narration.wav"
+        if not clean_audio.is_file():
+            raise AppError("AUDIO_NOT_FOUND", "ไม่พบไฟล์เสียงบรรยายเดิม")
+
+        audio_duration = self.ffprobe.duration(clean_audio)
+
+        motion_map = {
+            "none": "none",
+            "static": "none",
+            "gentle_float": "gentle_float",
+            "cosmic_float": "gentle_float",
+            "cinematic_push_in": "cinematic_push_in",
+            "cinematic_pull_out": "cinematic_pull_out",
+            "hook_punch_in": "hook_punch_in",
+            "documentary_pan": "documentary_pan",
+            "pan_up": "pan_up",
+            "drift_diagonal": "drift_diagonal",
+            "breathing_pulse": "breathing_pulse",
+            "slow_zoom": "slow_zoom_in",
+            "slow_zoom_in": "slow_zoom_in",
+            "zoom": "slow_zoom_in",
+        }
+        effective_motion = new_motion if new_motion else settings_data.get("motion", "none")
+        selected_motion = motion_map.get(effective_motion, "none")
+
+        sub_path = workspace.subtitles / "scene-01.srt"
+        has_subs = sub_path.is_file() and settings_data.get("subtitlesEnabled", True)
+
+        render_profile = RenderProfile(target_width, target_height, 30, "libx264", "yuv420p")
+        scene_renderer = SceneRenderer(self.ffmpeg, self.settings, render_profile)
+
+        fast_motions = {"cinematic_push_in", "cinematic_pull_out", "hook_punch_in", "documentary_pan", "pan_up", "drift_diagonal"}
+        motion_speed = "normal" if selected_motion in fast_motions else "slow"
+        motion_intensity = 0.18 if selected_motion in {"cinematic_push_in", "hook_punch_in"} else (0.12 if selected_motion in {"gentle_float", "breathing_pulse"} else 0.15)
+
+        script_text = settings_data.get("script", "")
+
+        scene_model = Scene(
+            id="scene-01",
+            image=framed_image.name,
+            narration=script_text,
+            tts_text=script_text,
+            subtitle=script_text if has_subs else "",
+            motion=selected_motion,
+            motion_speed=motion_speed,
+            motion_intensity=motion_intensity,
+            focus="center",
+            transition="none",
+            show_subtitle=has_subs,
+        )
+
+        scene_output = workspace.rendered_scenes / "scene-01.mp4"
+        scene_renderer.render(
+            scene_model, framed_image, clean_audio,
+            subtitle=sub_path if has_subs else None,
+            duration=audio_duration, output=scene_output,
+        )
+
+        final_output = workspace.output / "final.mp4"
+        title = settings_data.get("title", "")
+        description = settings_data.get("description", "")
+        bgm_enabled = settings_data.get("bgmEnabled", False)
+        bgm_track = settings_data.get("bgmTrack", "cosmic_drift")
+        bgm_volume = float(settings_data.get("bgmVolume", 0.10))
+
+        resolved_bgm: Path | None = None
+        if bgm_enabled:
+            custom_bgm_candidates = sorted(list(workspace.source.glob("bgm.*")))
+            if custom_bgm_candidates and custom_bgm_candidates[0].is_file():
+                resolved_bgm = custom_bgm_candidates[0]
+            else:
+                resolved_bgm = resolve_podcast_bgm(self.settings.app.workspace, bgm_track)
+
+        meta_args = build_ffmpeg_metadata_args(
+            title=title,
+            description=description or title,
+            artist="AutoClip Quick Reel",
+        )
+
+        if resolved_bgm and resolved_bgm.is_file():
+            audio_filter = (
+                f"[0:a]volume=1.0[n];[1:a]volume={bgm_volume},"
+                "afade=t=in:st=0:d=0.5[bg];[bg][n]sidechaincompress=threshold=0.02:ratio=8:attack=20:release=300[duck];"
+                "[n][duck]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-16:LRA=11:TP=-1.5[a]"
+            )
+            self.ffmpeg.run(
+                [
+                    "-y", "-i", str(scene_output),
+                    "-stream_loop", "-1", "-i", str(resolved_bgm),
+                    "-filter_complex", audio_filter,
+                    "-map", "0:v", "-map", "[a]",
+                    "-c:v", "copy", "-c:a", "aac", "-ar", "48000", "-ac", "2",
+                    "-shortest", "-movflags", "+faststart",
+                    *meta_args, str(final_output)
+                ],
+                "QUICK_REEL_COMPOSITION_FAILED",
+            )
+        else:
+            self.ffmpeg.run(
+                [
+                    "-y", "-i", str(scene_output),
+                    "-map", "0:v", "-map", "0:a",
+                    "-c", "copy",
+                    "-movflags", "+faststart",
+                    *meta_args, str(final_output)
+                ],
+                "QUICK_REEL_COMPOSITION_FAILED",
+            )
+
+        probe = self.ffprobe.probe(final_output)
+        v_stream = next(s for s in probe["streams"] if s.get("codec_type") == "video")
+        dur = round(float(probe["format"]["duration"]), 3)
+
+        settings_data["motion"] = selected_motion
+        settings_file.write_text(json.dumps(settings_data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        cur_meta = dict(record.metadata or {})
+        qr_meta = dict(cur_meta.get("quickReel") or {})
+        qr_meta["motion"] = selected_motion
+        cur_meta["quickReel"] = qr_meta
+        cur_meta["durationSeconds"] = dur
+        cur_meta["resolution"] = f"{v_stream['width']}x{v_stream['height']}"
+        cur_meta["outputFormat"] = "youtube" if v_stream['width'] > v_stream['height'] else "vertical"
+        cur_meta["fileSizeBytes"] = final_output.stat().st_size
+        record.metadata = cur_meta
+
+        self.job_service.registry.set(record)
+        if self.persistence:
+            self.persistence.upsert_job(record)
+
+        self._log(job_id, "SUCCESS", f"อัปเดต Motion เป็น {selected_motion} เรียบร้อยแล้ว")
+
+        return {
+            "jobId": job_id,
+            "motion": selected_motion,
+            "videoUrl": f"/api/jobs/{job_id}/video",
+            "durationSeconds": dur,
+            "message": f"เปลี่ยน Motion เป็น {selected_motion} สำเร็จแล้ว",
+        }
+

@@ -95,7 +95,111 @@ class GoogleGeminiTtsProvider:
         self.settings = settings
         self.style_prompt: str | None = None
 
+    @staticmethod
+    def _chunk_text(text: str, max_bytes: int = 2800) -> list[str]:
+        """Split TTS input without ever exceeding Gemini's UTF-8 byte limit.
+
+        Thai prose does not necessarily contain ASCII sentence punctuation or
+        whitespace.  The previous sentence-only splitter could therefore
+        return an unchanged 8KB paragraph.  This implementation prefers
+        paragraph/sentence/whitespace boundaries, then safely falls back to
+        Unicode character boundaries.
+        """
+        import re
+
+        cleaned = text.strip()
+        if not cleaned:
+            return []
+        if len(cleaned.encode("utf-8")) <= max_bytes:
+            return [cleaned]
+
+        units = [
+            part.strip()
+            for part in re.split(r"(?<=[.!?。！？])\s+|\n+", cleaned)
+            if part.strip()
+        ]
+        chunks: list[str] = []
+        current = ""
+
+        def flush() -> None:
+            nonlocal current
+            if current.strip():
+                chunks.append(current.strip())
+            current = ""
+
+        def append_oversized(unit: str) -> None:
+            nonlocal current
+            # Prefer whitespace boundaries where they exist.  If one token is
+            # still too large (common for Thai), consume it character by
+            # character; Python strings keep UTF-8 code points intact.
+            tokens = re.findall(r"\S+\s*", unit) or [unit]
+            for token in tokens:
+                if len(token.encode("utf-8")) > max_bytes:
+                    flush()
+                    piece = ""
+                    for char in token:
+                        if len((piece + char).encode("utf-8")) > max_bytes:
+                            if piece:
+                                chunks.append(piece.strip())
+                            piece = char
+                        else:
+                            piece += char
+                    current = piece
+                    continue
+                candidate = f"{current}{token}" if current else token
+                if len(candidate.encode("utf-8")) <= max_bytes:
+                    current = candidate
+                else:
+                    flush()
+                    current = token.lstrip()
+
+        for unit in units:
+            separator = " " if current else ""
+            candidate = f"{current}{separator}{unit}"
+            if len(candidate.encode("utf-8")) <= max_bytes:
+                current = candidate
+            else:
+                flush()
+                append_oversized(unit)
+        flush()
+        return chunks
+
     def synthesize(self, text: str, language: str, voice: str, speed: float, output_path: Path) -> Path:
+        text = text.strip()
+        if not text:
+            raise AppError("TTS_GENERATION_FAILED", "Empty text provided for TTS")
+
+        chunks = self._chunk_text(text)
+
+        if len(chunks) > 1:
+            chunk_paths = []
+            for idx, chunk in enumerate(chunks):
+                if not chunk: continue
+                cp = output_path.with_suffix(f".chunk{idx}.wav")
+                self._synthesize_chunk(chunk, language, voice, speed, cp)
+                chunk_paths.append(cp)
+
+            import wave
+            params = None
+            data = []
+            for cp in chunk_paths:
+                with wave.open(str(cp), 'rb') as wav:
+                    if params is None:
+                        params = wav.getparams()
+                    data.append(wav.readframes(wav.getnframes()))
+                cp.unlink(missing_ok=True)
+
+            if params:
+                output_path.parent.mkdir(parents=True, exist_ok=True)
+                with wave.open(str(output_path), 'wb') as out:
+                    out.setparams(params)
+                    for d in data:
+                        out.writeframes(d)
+            return output_path
+        else:
+            return self._synthesize_chunk(text, language, voice, speed, output_path)
+
+    def _synthesize_chunk(self, text: str, language: str, voice: str, speed: float, output_path: Path) -> Path:
         import time
         max_retries = 3
 

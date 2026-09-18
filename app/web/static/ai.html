@@ -1,9 +1,21 @@
 <!doctype html>
-<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AutoClip · สร้างด้วย AI</title><link rel="icon" type="image/png" href="/static/auto-clip-logo.png"><link rel="stylesheet" href="/static/style.css?v=24"></head>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AutoClip · สร้างด้วย AI</title><link rel="icon" type="image/png" href="/static/auto-clip-logo.png">  <link rel="stylesheet" href="/static/style.css?v=25"></head>
 <body><main>
 <header><a class="brand" href="/"><img class="brand-logo" src="/static/auto-clip-logo.png" alt="AutoClip Logo">AutoClip</a><nav class="app-nav"><a href="/">สร้างวิดีโอ</a><a class="active" href="/ai">สร้างด้วย AI</a><a href="/podcast">สร้าง Podcast</a><a href="/zodiac-weekly">🔮 ดวง 12 ราศี</a><a href="/antigravity">คำสั่งสร้างภาพ</a><a href="/history">History</a><a href="/tts">Thai TTS</a></nav></header>
 <section class="tool-card hero-card"><div class="hero-header"><div><span class="eyebrow">MAMASE AI PACKAGE · ANTIGRAVITY + IMAGE API</span><h1>หัวข้อ → บท → ภาพ → ZIP</h1><p class="muted">Antigravity วางบทตามมาตรฐาน Mamase แล้ว Gemini Image API สร้างภาพโดยตรงหลังพี่พีอนุมัติบท</p></div><div class="hero-logo-badge"><img src="/static/auto-clip-logo.png" alt="AutoClip Logo" class="hero-logo-img"></div></div><div class="ai-start"><label for="topic">หัวข้อ</label><input id="topic" maxlength="500" placeholder="เช่น ทำไมยานอวกาศเข้าใกล้ดวงอาทิตย์ได้ แต่ไม่ละลาย?"><label for="concept">แนวคิดหรือมุมที่อยากเล่า <span class="muted">(ไม่บังคับ)</span></label><textarea id="concept" rows="4" maxlength="4000" placeholder="เช่น Reel 50 วินาที สนุก มี hook แรง"></textarea><button id="start">1. ให้ Antigravity วางบท</button><p id="error" class="error" hidden></p></div></section>
-<section id="progressView" class="tool-card" hidden aria-live="polite"><div class="section-head"><div><span class="eyebrow">LIVE CREATION PROGRESS</span><h2 id="step">กำลังเริ่มงาน</h2></div><strong id="percent">0%</strong></div><progress id="progress" max="100" value="0"></progress><p id="state" class="muted"></p><div id="logs" class="logs technical-log"></div></section>
+<section id="progressView" class="tool-card" hidden aria-live="polite">
+  <div class="studio-layout-equal" style="align-items:start;">
+    <div>
+      <div class="section-head"><div><span class="eyebrow">LIVE CREATION PROGRESS</span><h2 id="step">กำลังเริ่มงาน</h2></div><strong id="percent">0%</strong></div>
+      <progress id="progress" max="100" value="0"></progress>
+      <p id="state" class="muted" style="margin-top:10px;"></p>
+    </div>
+    <div>
+      <div class="studio-card-head"><span class="studio-card-title">Console Output</span></div>
+      <div id="logs" class="logs technical-log" style="max-height:240px;"></div>
+    </div>
+  </div>
+</section>
 <section id="scriptReview" class="tool-card script-review-card" hidden><div class="section-head"><div><span class="eyebrow">STEP 1 · SCRIPT REVIEW</span><h2>ตรวจและแก้บทก่อนสร้างภาพ</h2></div></div><p class="muted">แก้บท, คำอ่าน และคำสั่งสร้างภาพรายซีนได้ เมื่อพร้อมแล้วจึงกดสร้างภาพ</p><div id="hookGate" class="hook-gate" hidden aria-live="polite"></div><div id="scriptScenes" class="scene-list ai-scene-list"></div><div class="preview-actions"><button id="generateImages">2. อนุมัติบทและสร้างภาพ</button></div></section>
 <section id="imageReview" class="tool-card" hidden><div class="section-head"><div><span class="eyebrow">STEP 2 · IMAGE REVIEW</span><h2>ตรวจภาพและแก้เฉพาะ scene</h2></div></div><p class="muted">บันทึกฉากที่แก้ แล้วสั่งสร้างภาพใหม่เฉพาะฉากนั้นได้</p><div id="imageScenes" class="scene-list"></div><div class="preview-actions"><button id="approve">3. อนุมัติทุก Scene และสร้าง ZIP</button></div></section>
 <section id="result" class="tool-card" hidden><span class="eyebrow">PACKAGE READY</span><h2>ZIP สร้างเสร็จแล้ว</h2><div id="summary" class="muted"></div><div class="preview-actions"><a id="download" class="button" download>ดาวน์โหลด ZIP</a></div></section>

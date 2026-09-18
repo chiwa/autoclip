@@ -1235,6 +1235,55 @@ class JobService:
     def english_audio(self, job_id: str) -> Path:
         return self.settings.app.workspace / job_id / "output" / "podcast-en.wav"
 
+    def thumbnail(self, job_id: str) -> Path | None:
+        base = self.settings.app.workspace / job_id
+        if not base.is_dir():
+            return None
+        cached = base / "source" / "thumbnail.jpg"
+        if cached.is_file():
+            return cached
+        cover = base / "source" / "cover.png"
+        if cover.is_file():
+            return cover
+        for name in ("image-001.png", "framed-001.png", "image-001.jpg", "image-001.webp"):
+            img = base / "source" / name
+            if img.is_file():
+                return img
+        for img in sorted(list((base / "source").glob("*.png")) + list((base / "source").glob("*.jpg"))):
+            if img.is_file() and not img.name.startswith("."):
+                return img
+        extracted_images = base / "extracted" / "images"
+        if extracted_images.is_dir():
+            for name in ("scene-01.png", "01.png", "scene-001.png", "scene-1.png"):
+                img = extracted_images / name
+                if img.is_file():
+                    return img
+            all_ext = sorted(list(extracted_images.glob("*.png")) + list(extracted_images.glob("*.jpg")))
+            if all_ext:
+                return all_ext[0]
+        final_mp4 = base / "output" / "final.mp4"
+        if final_mp4.is_file():
+            try:
+                import subprocess
+                out_thumb = base / "source" / "thumbnail.jpg"
+                out_thumb.parent.mkdir(parents=True, exist_ok=True)
+                cmd = [
+                    self.settings.app.ffmpeg_bin,
+                    "-y",
+                    "-ss", "00:00:00.5",
+                    "-i", str(final_mp4),
+                    "-vframes", "1",
+                    "-vf", "scale=160:-1",
+                    "-q:v", "4",
+                    str(out_thumb)
+                ]
+                subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=4)
+                if out_thumb.is_file():
+                    return out_thumb
+            except Exception:
+                pass
+        return None
+
     def retry_podcast_english_audio(self, job_id: str) -> JobRecord:
         record = self.restore(job_id)
         if not record:

@@ -206,6 +206,14 @@ KNOWN_METADATA: dict[str, dict[str, str]] = {
         "name": "🌊 enceladus-ocean.wav — Enceladus Ocean (มหาสมุทรใต้ผืนน้ำแข็ง)",
         "description": "มหาสมุทรใต้ผืนน้ำแข็ง คลื่นเสียงกังวานลุ่มลึก ชวนหลับสนิทตลอดคืน",
     },
+    "twilight_ghost_wind_60s.mp3": {
+        "name": "🌪️ Twilight Ghost Wind (เสียงลมหวีดหวิว ลึกลับ ชวนติดตาม)",
+        "description": "เสียงลมหวีดหวิวสนธยา บรรยากาศลึกลับ ตื่นเต้น น่าค้นหา เหมาะสำหรับเรื่องเล่าหรือคลิปชวนลุ้น",
+    },
+    "dark_horror_seamless_loop_60s.wav": {
+        "name": "🕯️ Dark Horror Loop (โทนลึกลับ สยองขวัญ วนลูป)",
+        "description": "เสียงดนตรีบรรยากาศลึกลับ มืดมน ดำดิ่ง ชวนระทึกขวัญ วนลูป 60 วินาทีไร้รอยต่อ",
+    },
 }
 
 

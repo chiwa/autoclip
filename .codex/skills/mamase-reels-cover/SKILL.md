@@ -17,7 +17,7 @@ The user may provide only a topic, working title, or one-sentence idea. That is 
 - Infer the strongest truthful hook, visual mystery, hero subject, contextual action, camera angle, lighting, wardrobe, protected zones, and mobile-safe layout.
 - Verify current or uncertain facts from primary or authoritative sources before fixing the visual premise.
 - Produce one Scene 01 candidate, inspect it, composite it, and present it for approval. Scene 01 approval is the only normal user decision gate.
-- Read only the named permanent references and the most recent approved cover needed to avoid repetition. Do not wander through the asset library.
+- Read only the named permanent references and the most recent approved cover needed to avoid repetition. When inspecting past covers for style reference, consult the Reusable Asset Catalog following `/Users/zengcode/projects/autoclip/docs/asset-catalog.md`. Past Scene 01 covers are strictly `reuse_as_reference`; never reuse an old Scene 01 directly for a new topic.
 - Do not create comparison thumbnails, contact sheets, multiple seeds, cutouts, use `rembg`, clone elements, or inpaint unless the user explicitly requests alternatives or repair.
 - If native image generation fails, report it. Never silently substitute a pasted collage or lower-quality fallback.
 

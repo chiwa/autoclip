@@ -9,6 +9,9 @@ Before planning or producing a Reel, read
 `/Users/zengcode/projects/autoclip/docs/mamase-reels-standard.md`. It is the
 canonical source of truth and overrides duplicated legacy timing, scene-count,
 subtitle, motion, hook, and outro guidance in this file.
+For discovering, searching, and reusing existing visual assets before generating
+new images, also read and follow
+`/Users/zengcode/projects/autoclip/docs/asset-catalog.md`.
 
 This skill governs the production of vertical short-form videos (Reels, Shorts, TikTok) for **Mamase (จักรวาลของใจ)** in `1080x1920` (9:16) format.
 
@@ -129,14 +132,30 @@ The CTA is normally the **final spoken sentence** of the Reel. There must be **n
 
 ---
 
-## 8. Natural Spoken Thai
+## 8. Reusable Asset Catalog Rules (Mandatory Before Generating New Images)
+
+Before generating new scene imagery for any package, the agent **MUST** follow `/Users/zengcode/projects/autoclip/docs/asset-catalog.md`:
+1. **Search First**: Search the catalog at `assets/reusable-library/assets-index.jsonl` (or via `scripts/search_assets.py "<query>"`) to check for suitable existing imagery.
+2. **Visual Inspection Gate**: Open and visually inspect only the shortlisted candidate images (via `view_file` or thumbnail inspection).
+3. **Direct Reuse Criteria**: An asset may be used directly (`reuse_direct`) **ONLY IF**:
+   - Topic, scientific/narrative meaning, aspect ratio (9:16), and brand (Mamase) match 100%.
+   - The image has **NO burned-in topic-specific text, headlines, or conflicting subtitles**.
+4. **Scene 01 Protection**: Scene 01 images with topic-specific titles, hooks, or character arrangements are classified as `reuse_as_reference`. **Never reuse an old Scene 01 directly for a different topic**. Use it only as reference, or generate a fresh native Scene 01 matching the permanent Mamase Scene 01 master standard.
+5. **No Blind Tag Matching**: Never reuse an image merely because tags or filenames are similar without visual inspection.
+6. **Brand Isolation**: Mamase assets must never be mixed with other brands (Thai Java Zone, 12-Zodiac), and vice-versa.
+7. **Generate When Needed**: Generate new images only when no suitable asset exists in the library.
+8. **ZIP Boundary**: When copying assets into a new package, copy directly from `library_path` into the package's `images/`. Never bundle catalog, thumbnails, or contact sheets into release ZIPs.
+
+---
+
+## 9. Natural Spoken Thai
 
 - Prefer natural Thai terms over clumsy phonetic transliterations (e.g. `ดาวอังคาร` instead of Mars, `ลมสุริยะ` instead of โซลาร์วินด์, `สนามแม่เหล็ก` instead of แมกเนติกฟิลด์).
 - For proper scientific names, spacecraft, or international designations (e.g. `Parker Solar Probe`, `JWST`, `K2-18 b`), use clear phonetic Thai in `tts_text` while preserving correct English spelling in subtitles.
 
 ---
 
-## 9. Standard Mamase Reel Output Contract
+## 10. Standard Mamase Reel Output Contract
 
 All Mamase Reel generation must return a predictable, machine-friendly output format. Do not return free-form prose only.
 
@@ -196,7 +215,7 @@ When generating a Mamase Reel, return this JSON-compatible structure:
 
 ---
 
-## 10. Optional Scene-Based Output
+## 11. Optional Scene-Based Output
 
 When the caller requests multiple images, scenes, or per-scene generation:
 
@@ -217,7 +236,7 @@ When the caller requests multiple images, scenes, or per-scene generation:
     },
     {
       "scene": 2,
-      "purpose": "setup",
+      "purpose": "context",
       "tts": "...",
       "visual_prompt": "..."
     },
@@ -259,7 +278,7 @@ Rules for scenes:
 
 ---
 
-## 11. Quick Reel Compatibility
+## 12. Quick Reel Compatibility
 
 For the existing AutoClip Quick Reel workflow, preserve compatibility with:
 
@@ -279,7 +298,7 @@ When this minimal schema is required, all Hook and CTA rules still apply:
 
 ---
 
-## 12. Output Cleanliness & Pre-Return Validation
+## 13. Output Cleanliness & Pre-Return Validation
 
 When JSON is requested:
 - Return valid JSON only.
@@ -303,7 +322,7 @@ Before returning a generated Reel, verify:
 
 ---
 
-## 13. Scene 01 Permanent Standard (Key Art)
+## 14. Scene 01 Permanent Standard (Key Art)
 
 Every Mamase Reel Cover must inspect and follow the permanent master reference at `assets/branding/mamase/reference/mamase-reels-editorial-poster-master.png`.
 

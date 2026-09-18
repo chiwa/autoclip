@@ -23,6 +23,21 @@ def test_provider_selection():
     assert caught.value.code == "TTS_GENERATION_FAILED"
 
 
+def test_google_gemini_chunker_never_exceeds_utf8_byte_limit_for_unpunctuated_thai():
+    text = "ข้อความภาษาไทยที่ไม่มีช่องว่างและไม่มีเครื่องหมายจบประโยค" * 220
+
+    chunks = GoogleGeminiTtsProvider._chunk_text(text, max_bytes=2800)
+
+    assert len(chunks) > 1
+    assert all(chunk for chunk in chunks)
+    assert all(len(chunk.encode("utf-8")) <= 2800 for chunk in chunks)
+    assert "".join(chunks) == text
+
+
+def test_google_gemini_chunker_preserves_short_text_as_one_chunk():
+    assert GoogleGeminiTtsProvider._chunk_text("บทพูดสั้น") == ["บทพูดสั้น"]
+
+
 def test_runpod_f5_provider_requires_configured_connector(tmp_path):
     settings = Settings()
     provider = create_tts_provider("runpod-f5", settings)

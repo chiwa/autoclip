@@ -1,0 +1,80 @@
+{
+  "project": {
+    "id": "mamase-reel-mars-lost-water",
+    "title": "ดาวอังคารเคยมีแม่น้ำและทะเล แล้วทุกอย่างหายไปไหน?",
+    "language": "th-TH"
+  },
+  "reel_tts": {
+    "voice": "Fenrir",
+    "hook": {
+      "speed": 1.1,
+      "style": "Speak in an energetic, curious Thai male voice. Deliver the opening question with immediate surprise and excitement, as if you have just discovered something unbelievable and need to tell a friend. Use a slightly faster pace than normal. Strongly emphasize the contrast between the surprising fact and the final mystery question. Keep the delivery conversational, playful, and spontaneous. Do not shout. Do not sound like a commercial, movie trailer, news presenter, or exaggerated YouTuber."
+    },
+    "normal": {
+      "speed": 1.05,
+      "style": "Speak like a charismatic Thai science storyteller with a playful personality. Sound curious, friendly, warm, and conversational, as if telling an interesting science story to a friend. Keep the delivery natural and connected, with light energy and genuine excitement when surprising facts appear. Use small natural pauses for emphasis and comedic timing when appropriate. Do not rush. Do not over-dramatize. Do not sound like a news anchor, lecturer, movie trailer, advertisement, or exaggerated YouTuber. Keep the tone playful and engaging, but still clear enough for scientific explanations."
+    }
+  },
+  "scenes": [
+    {
+      "id": "scene-01",
+      "image": "images/01.png",
+      "narration": "ถ้าดาวอังคารเคยมีทะเลจริง! แล้วน้ำทั้งดาว…หายไปไหนหมด?",
+      "motion": "slow_zoom_in"
+    },
+    {
+      "id": "scene-02",
+      "image": "images/02.png",
+      "narration": "หลักฐานบนพื้นผิวบอกว่า ดาวอังคารในอดีตเคยมีทั้งแม่น้ำ ทะเลสาบ และดินดอนสามเหลี่ยมปากแม่น้ำ",
+      "motion": "slow_zoom_out"
+    },
+    {
+      "id": "scene-03",
+      "image": "images/03.png",
+      "narration": "นั่นหมายความว่า ครั้งหนึ่งบรรยากาศของมันต้องแตกต่างจากดาวอังคารที่หนาวและแห้งแล้งในวันนี้มาก",
+      "motion": "slow_zoom_in"
+    },
+    {
+      "id": "scene-04",
+      "image": "images/04.png",
+      "narration": "แต่ดาวอังคารมีขนาดเล็กกว่าโลก แรงโน้มถ่วงก็น้อยกว่า ทำให้การรักษาบรรยากาศไว้เป็นเรื่องยากกว่า",
+      "motion": "slow_zoom_out"
+    },
+    {
+      "id": "scene-05",
+      "image": "images/05.png",
+      "narration": "เมื่อเวลาผ่านไป อนุภาคจากดวงอาทิตย์ช่วยพาบรรยากาศบางส่วนของดาวอังคารหลุดออกสู่อวกาศ",
+      "motion": "slow_zoom_in"
+    },
+    {
+      "id": "scene-06",
+      "image": "images/06.png",
+      "narration": "ยาน MAVEN ยังตรวจพบกระบวนการสูญเสียบรรยากาศนี้เกิดขึ้นอยู่ในปัจจุบัน แม้จะช้ากว่าในอดีตมาก",
+      "motion": "slow_zoom_out"
+    },
+    {
+      "id": "scene-07",
+      "image": "images/07.png",
+      "narration": "ส่วนน้ำไม่ได้หายออกสู่อวกาศทั้งหมด บางส่วนยังอยู่ในรูปน้ำแข็งใต้พื้นดิน และบางส่วนถูกเก็บไว้ในแร่ของดาว",
+      "motion": "slow_zoom_in"
+    },
+    {
+      "id": "scene-08",
+      "image": "images/08.png",
+      "narration": "เพราะฉะนั้น เรื่องของดาวอังคารไม่ใช่แค่น้ำหายไปไหน แต่มันคือเรื่องของดาวเคราะห์ทั้งดวงที่ค่อย ๆ เปลี่ยนสภาพ",
+      "motion": "slow_zoom_out"
+    },
+    {
+      "id": "scene-09",
+      "image": "images/09.png",
+      "narration": "และคำถามที่น่าสนใจกว่าคือ ถ้าดาวเคราะห์ที่เคยมีน้ำเปลี่ยนไปได้ขนาดนี้…โลกของเราจะเปลี่ยนได้มากแค่ไหน?",
+      "motion": "slow_zoom_in"
+    }
+  ],
+  "outro": {
+    "enabled": true,
+    "image": "mamase-reels-end-scence.png",
+    "duration": 2.0,
+    "bgm_fade_out": true
+  }
+}

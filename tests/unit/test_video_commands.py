@@ -165,3 +165,20 @@ def test_bgm_fades_across_post_roll(tmp_path):
     )
     final_filter = next(command[command.index("-filter_complex") + 1] for command in runner.commands if "-stream_loop" in command)
     assert "afade=t=out:st=5.000:d=2.000" in final_filter
+
+
+def test_scene_filter_supports_gentle_float_and_hook_punch_in():
+    runner = FfmpegRunner()
+    renderer = SceneRenderer(runner, Settings())
+
+    float_scene = Scene(id="flt", image="images/a.png", narration="ลอย", motion="gentle_float")
+    float_filter = renderer.build_filter(float_scene, 10.0)
+    assert "1.060" in float_filter
+    assert "sin((on-1)/" in float_filter
+    assert "zoompan=" in float_filter
+
+    punch_scene = Scene(id="pnch", image="images/a.png", narration="ฮุก", motion="hook_punch_in")
+    punch_filter = renderer.build_filter(punch_scene, 10.0)
+    assert "lte(on,90)" in punch_filter
+    assert "sin((on-90)" in punch_filter
+    assert "zoompan=" in punch_filter

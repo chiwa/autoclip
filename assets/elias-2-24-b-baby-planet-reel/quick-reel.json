@@ -1,0 +1,25 @@
+{
+  "topic": "elias-2-24-b-baby-planet",
+  "title": "ส่อง \"ดาวเคราะห์ทารก\" อายุน้อยที่สุดในจักรวาล…เพิ่งเกิดไม่ถึง 1 ล้านปี!",
+  "description": "นักดาราศาสตร์ค้นพบ 'Elias 2-24 b' ดาวเคราะห์ทารกที่มีอายุน้อยกว่า 1 ล้านปี กำลังดูดกลืนกลุ่มฝุ่นและก๊าซเพื่อสร้างตัวเองอยู่ท่ามกลางจานกำเนิดดาวเคราะห์ นี่คือโอกาสครั้งประวัติศาสตร์ที่เราได้เห็นดาวเคราะห์กำลังก่อตัวขึ้นจริงแบบ Real-time!\n\n#Mamase #MamaseReels #Elias224b #BabyPlanet #Exoplanet #KeckObservatory #RomanSpaceTelescope #Astronomy #Space #Universe #Science",
+  "estimated_duration_seconds": 52,
+  "hook": "ดาวเคราะห์ทั่วไปในจักรวาลมีอายุเป็นพันล้านปี แต่ล่าสุด…นักดาราศาสตร์เพิ่งถ่ายภาพ 'ดาวเคราะห์ทารก' ที่เพิ่งเกิดได้ไม่ถึงหนึ่งล้านปี!",
+  "cta": "ถ้าวันหนึ่งเราเจอดาวเคราะห์หินเกิดใหม่…คุณคิดว่าจะเจอร่องรอยของสิ่งมีชีวิตรุ่นแรกไหม?",
+  "tts": "ดาวเคราะห์ทั่วไปในจักรวาลมีอายุเป็นพันล้านปี แต่ล่าสุด…นักดาราศาสตร์เพิ่งถ่ายภาพ 'ดาวเคราะห์ทารก' ที่เพิ่งเกิดได้ไม่ถึงหนึ่งล้านปี!\n\nดาวดวงนี้ชื่อว่า Elias 2-24 b อยู่ห่างออกไป 450 ปีแสง มันมีมวลมหาศาลพอๆ กับดาวพฤหัสบดี แต่ที่น่าทึ่งคือ มันยังคงดูดกลืนกลุ่มฝุ่นและก๊าซเพื่อสร้างตัวเองอยู่เลยครับ\n\nนักดาราศาสตร์ต้องขุดข้อมูลเก่าของหอสังเกตการณ์ Keck แล้วใช้เทคนิคโคโรนากราฟ บังแสงจ้าของดาวฤกษ์แม่ จนพิสูจน์ได้ว่า จุดแสงลึกลับนี้คือดาวเคราะห์ที่กำลังก่อตัวอยู่จริง ๆ\n\nปกติแล้ว ดาวเคราะห์เกิดใหม่จะถูกฝุ่นหนาทึบกลืนหายไป นี่จึงเป็นหนึ่งในไม่กี่ครั้งที่เราได้เห็นการกำเนิดดาวเคราะห์แบบสด ๆ เหมือนได้แอบดูระบบสุริยะของเราตอนเป็นทารก!\n\nและกล้องโรมันของนาซาก็กำลังเปิดระบบเพื่อล่าดาวเคราะห์แบบนี้เพิ่ม ถ้าวันหนึ่งเราเจอดาวเคราะห์หินเกิดใหม่…คุณคิดว่าจะเจอร่องรอยของสิ่งมีชีวิตรุ่นแรกไหม?",
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.05,
+    "language": "th-TH",
+    "style": "Speak like a charismatic Thai science storyteller with a playful personality. Sound curious, friendly, warm, and conversational, as if telling an interesting science story to a friend. Keep the delivery natural and connected, with light energy and genuine excitement when surprising facts appear. Use small natural pauses for emphasis and comedic timing when appropriate. Do not rush. Do not over-dramatize. Do not sound like a news anchor, lecturer, movie trailer, advertisement, or exaggerated YouTuber. Keep the tone playful and engaging, but still clear enough for scientific explanations."
+  },
+  "motion": "gentle_float",
+  "validation": {
+    "hook_within_first_3_seconds": true,
+    "has_mini_wow_every_10_to_15_seconds": true,
+    "topic_specific_cta": true,
+    "generic_engagement_cta": false,
+    "podcast_branding_present": false,
+    "target_duration_met": true
+  }
+}

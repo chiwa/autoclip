@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>AutoClip · สร้าง YouTube Podcast</title>
   <link rel="icon" type="image/png" href="/static/auto-clip-logo.png">
-  <link rel="stylesheet" href="/static/style.css?v=24">
+  <link rel="stylesheet" href="/static/style.css?v=25">
   <link rel="stylesheet" href="/static/workspace.css?v=2">
   <style>
     .podcast-stats {
@@ -70,7 +70,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      margin-top: 14px;
+      margin-top: 10px;
       cursor: pointer;
     }
     .toggle-row input[type="checkbox"] {
@@ -81,19 +81,19 @@
     }
     .summary-spec-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
       margin-top: 14px;
     }
     .spec-item {
-      padding: 12px 14px;
+      padding: 10px 12px;
       background: #0a1322;
       border: 1px solid var(--line);
-      border-radius: 10px;
+      border-radius: 8px;
     }
     .spec-item dt {
       color: var(--muted);
-      font-size: 0.72rem;
+      font-size: 0.70rem;
       font-weight: 700;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -102,17 +102,18 @@
       margin: 4px 0 0;
       color: #fff;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     .generate-btn {
       width: 100%;
-      margin-top: 24px;
+      margin-top: 18px;
       padding: 16px;
       font-size: 1.05rem;
     }
     .bgm-mode-group {
       display: flex;
-      gap: 20px;
+      flex-direction: column;
+      gap: 10px;
       margin-top: 10px;
     }
     .bgm-mode-group label {
@@ -129,27 +130,28 @@
     .script-tabs {
       display: inline-flex;
       gap: 6px;
-      margin-top: 20px;
-      padding: 5px;
+      margin-top: 12px;
+      padding: 4px;
       border: 1px solid var(--line);
-      border-radius: 12px;
+      border-radius: 10px;
       background: #08111f;
     }
     .script-tab {
       border: 0;
       border-radius: 8px;
-      padding: 9px 18px;
+      padding: 7px 14px;
       background: transparent;
       color: var(--soft);
       cursor: pointer;
       font-weight: 700;
+      font-size: 0.85rem;
     }
     .script-tab.active {
       color: #04111a;
       background: var(--cyan);
     }
     .script-panel[hidden] { display: none; }
-    .script-panel { margin-top: 12px; }
+    .script-panel { margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -166,248 +168,271 @@
     </nav>
   </header>
 
-  <form id="podcastForm">
-    <section id="channelPicker" class="tool-card"></section>
-    <div class="tool-card hero-card">
-      <div class="hero-header">
-        <div>
-          <span class="eyebrow">YOUTUBE VISUAL PODCAST</span>
-          <h1>เปลี่ยนเรื่องเล่ายาวเป็น Visual Podcast 16:9</h1>
-          <p class="muted">
-            สร้างวิดีโอ YouTube แนวนอน Full HD (1920×1080, 30 FPS) จากภาพปก 1 ภาพและบทพูดยาว พร้อมเสียงบรรยาย Google Gemini (Iapetus), BGM คลอเบาๆ, ซับไตเติล และ Breathing Motion อัตโนมัติ
-          </p>
-        </div>
-        <div class="hero-logo-badge">
-          <img src="/static/auto-clip-logo.png" alt="AutoClip Logo" class="hero-logo-img">
-        </div>
+  <section class="tool-card hero-card">
+    <div class="hero-header">
+      <div>
+        <span class="eyebrow">YOUTUBE VISUAL PODCAST</span>
+        <h1>เปลี่ยนเรื่องเล่ายาวเป็น Visual Podcast 16:9</h1>
+        <p class="muted">
+          สร้างวิดีโอ YouTube แนวนอน Full HD (1920×1080, 30 FPS) จากภาพปก 1 ภาพและบทพูดยาว พร้อมเสียงบรรยาย Google Gemini (Iapetus), BGM คลอเบาๆ, ซับไตเติล และ Breathing Motion อัตโนมัติ
+        </p>
       </div>
+      <div class="hero-logo-badge">
+        <img src="/static/auto-clip-logo.png" alt="AutoClip Logo" class="hero-logo-img">
+      </div>
+    </div>
+  </section>
 
-      <!-- Section 1: รายละเอียด Podcast -->
-      <section class="workspace-section">
-        <h2>1. รายละเอียด Podcast & ปก</h2>
-        <p class="muted">ระบุชื่อตอน เลือกภาพปก 1 ภาพ (แนวนอน 16:9) และวางบทพูดยาวสำหรับสร้างเสียง</p>
+  <form id="podcastForm">
+    <div class="studio-layout">
+      <!-- LEFT COLUMN: Content & Script (1.15fr) -->
+      <div class="studio-column">
+        <!-- Card 1: รายละเอียด Podcast & ปก -->
+        <section class="studio-card">
+          <div class="studio-card-head">
+            <span class="studio-card-title">1. รายละเอียด Podcast & ภาพปก (16:9)</span>
+          </div>
+          <p class="muted">ระบุชื่อตอน เลือกภาพปก 1 ภาพ (แนวนอน 16:9) และข้อมูลสำหรับ YouTube</p>
 
-        <label for="podcastTitle">ชื่อตอน / หัวข้อเรื่อง (Title)</label>
-        <input id="podcastTitle" type="text" maxlength="150" required placeholder="เช่น ท่องอวกาศก่อนนอน: มหาสมุทรลับใต้ผืนน้ำแข็งเอนเซลาดัส">
+          <label for="podcastTitle">ชื่อตอน / หัวข้อเรื่อง (Title)</label>
+          <input id="podcastTitle" type="text" maxlength="150" required placeholder="เช่น ท่องอวกาศก่อนนอน: มหาสมุทรลับใต้ผืนน้ำแข็งเอนเซลาดัส">
 
-        <label for="podcastFocus">กลุ่มเนื้อหา / โทนรายการ (Podcast Focus)</label>
-        <select id="podcastFocus">
-          <option value="astronomy_science" selected>🔭 วิทยาศาสตร์ / อวกาศ / ดาราศาสตร์</option>
-          <option value="bedtime_meditation">🌙 นิทานก่อนนอน / ผ่อนคลาย / หลับสบาย</option>
-          <option value="documentary_history">🏛️ สารคดี / ประวัติศาสตร์ / ชีวประวัติ</option>
-          <option value="philosophy_mind">💡 ข้อคิด / จิตวิทยา / ปรัชญาชีวิต</option>
-          <option value="general">🎙️ เรื่องเล่าทั่วไป / เล่าข่าวเจาะลึก</option>
-        </select>
+          <label for="podcastFocus">กลุ่มเนื้อหา / โทนรายการ (Podcast Focus)</label>
+          <select id="podcastFocus">
+            <option value="astronomy_science" selected>🔭 วิทยาศาสตร์ / อวกาศ / ดาราศาสตร์</option>
+            <option value="bedtime_meditation">🌙 นิทานก่อนนอน / ผ่อนคลาย / หลับสบาย</option>
+            <option value="documentary_history">🏛️ สารคดี / ประวัติศาสตร์ / ชีวประวัติ</option>
+            <option value="philosophy_mind">💡 ข้อคิด / จิตวิทยา / ปรัชญาชีวิต</option>
+            <option value="general">🎙️ เรื่องเล่าทั่วไป / เล่าข่าวเจาะลึก</option>
+          </select>
 
-        <label class="picker" for="coverImage">
-          เลือกภาพปก (16:9 แนวนอน)
-          <input id="coverImage" type="file" accept="image/png,image/jpeg,image/webp" required>
-        </label>
-        <div id="coverInfo" class="muted">ยังไม่ได้เลือกรูปภาพ</div>
+          <label class="picker" for="coverImage" style="margin-top: 14px;">
+            เลือกภาพปก (16:9 แนวนอน)
+            <input id="coverImage" type="file" accept="image/png,image/jpeg,image/webp" required>
+          </label>
+          <div id="coverInfo" class="muted">ยังไม่ได้เลือกรูปภาพ</div>
 
-        <label for="podcastDescription">คำอธิบาย Podcast (Description) (optional)</label>
-        <textarea id="podcastDescription" rows="4" placeholder="ใส่คำอธิบายของ Podcast ที่นี่..."></textarea>
+          <div id="coverPreviewWrap" class="cover-preview-wrapper" hidden>
+            <img id="coverPreviewImg" class="cover-preview-img" alt="Cover Preview">
+            <div id="aspectRatioBadge"></div>
+          </div>
 
-        <label for="podcastHashtags">แฮชแท็ก (hashtags, คั่นด้วยช่องว่าง)</label>
-        <input id="podcastHashtags" type="text" placeholder="#tag1 #tag2 #tag3">
+          <label for="podcastDescription" style="margin-top: 14px;">คำอธิบาย Podcast (Description) (optional)</label>
+          <textarea id="podcastDescription" rows="3" placeholder="ใส่คำอธิบายของ Podcast ที่นี่..."></textarea>
 
-        <div id="coverPreviewWrap" class="cover-preview-wrapper" hidden>
-          <img id="coverPreviewImg" class="cover-preview-img" alt="Cover Preview">
-          <div id="aspectRatioBadge"></div>
-        </div>
+          <label for="podcastHashtags">แฮชแท็ก (hashtags, คั่นด้วยช่องว่าง)</label>
+          <input id="podcastHashtags" type="text" placeholder="#tag1 #tag2 #tag3">
+        </section>
 
-        <div class="script-tabs" role="tablist" aria-label="ภาษาของบท Podcast">
-          <button id="tabThaiScript" class="script-tab active" type="button" role="tab" aria-selected="true" aria-controls="panelThaiScript">ภาษาไทย · ในวิดีโอ</button>
-          <button id="tabEnglishScript" class="script-tab" type="button" role="tab" aria-selected="false" aria-controls="panelEnglishScript">English · WAV เพิ่มเติม</button>
-          <button id="tabImportJson" class="script-tab" type="button" role="tab" aria-selected="false" aria-controls="panelImportJson">Import JSON</button>
-        </div>
+        <!-- Card 2: บทพูดยาว -->
+        <section class="studio-card">
+          <div class="studio-card-head">
+            <span class="studio-card-title">2. บทพูดยาว (Script)</span>
+          </div>
+          <p class="muted">วางบทพูดยาว ระบบจะแบ่งท่อนย่อยอัตโนมัติและนำไปสังเคราะห์เสียง Google Gemini TTS</p>
 
-        <div id="panelThaiScript" class="script-panel" role="tabpanel" aria-labelledby="tabThaiScript">
-          <label for="podcastScript">บทพูดยาวภาษาไทย (เสียงหลักในวิดีโอ)</label>
-          <textarea id="podcastScript" rows="12" required placeholder="วางบทพูดยาวภาษาไทยที่นี่...
+          <div class="script-tabs" role="tablist" aria-label="ภาษาของบท Podcast">
+            <button id="tabThaiScript" class="script-tab active" type="button" role="tab" aria-selected="true" aria-controls="panelThaiScript">ภาษาไทย · ในวิดีโอ</button>
+            <button id="tabEnglishScript" class="script-tab" type="button" role="tab" aria-selected="false" aria-controls="panelEnglishScript">English · WAV เพิ่มเติม</button>
+            <button id="tabImportJson" class="script-tab" type="button" role="tab" aria-selected="false" aria-controls="panelImportJson">Import JSON</button>
+          </div>
+
+          <div id="panelThaiScript" class="script-panel" role="tabpanel" aria-labelledby="tabThaiScript">
+            <label for="podcastScript">บทพูดยาวภาษาไทย (เสียงหลักในวิดีโอ)</label>
+            <textarea id="podcastScript" rows="14" required placeholder="วางบทพูดยาวภาษาไทยที่นี่...
 ระบบจะแบ่งท่อนย่อยอัตโนมัติตามเครื่องหมายวรรคตอนและโครงสร้างประโยค โดยแต่ละท่อนไม่เกิน ~2,800 bytes และนำไปสังเคราะห์เสียง Google Gemini TTS แบบขนาน พร้อมตัดต่อเสียงต่อกันอย่างเรียบเนียนไร้รอยต่อ"></textarea>
 
-          <div class="podcast-stats">
-            <span>จำนวนตัวอักษร: <strong id="statCharCount">0</strong> ตัว</span>
-            <span>ขนาดข้อมูล: <strong id="statByteCount">0</strong> bytes</span>
-            <span>แบ่งได้ประมาณ: <strong id="statChunkCount">0</strong> ท่อน</span>
-            <span>ความยาวเสียงโดยประมาณ: <strong id="statEstDuration">0 นาที 0 วินาที</strong></span>
+            <div class="podcast-stats">
+              <span>จำนวนตัวอักษร: <strong id="statCharCount">0</strong> ตัว</span>
+              <span>ขนาดข้อมูล: <strong id="statByteCount">0</strong> bytes</span>
+              <span>แบ่งได้ประมาณ: <strong id="statChunkCount">0</strong> ท่อน</span>
+              <span>ความยาวเสียงโดยประมาณ: <strong id="statEstDuration">0 นาที 0 วินาที</strong></span>
+            </div>
           </div>
-        </div>
 
-        <div id="panelEnglishScript" class="script-panel" role="tabpanel" aria-labelledby="tabEnglishScript" hidden>
-          <label class="toggle-row" for="enableEnglishAudio">
-            <input id="enableEnglishAudio" type="checkbox">
-            <span>สร้าง English WAV เพิ่ม สำหรับอัปโหลดเป็นภาษาเพิ่มเติมใน YouTube</span>
-          </label>
-          <label for="englishPodcastScript">English Podcast Script</label>
-          <textarea id="englishPodcastScript" rows="12" placeholder="Paste the complete English narration here. AutoClip will split it safely, synthesize it with the shared Voice / Speed and the separate English Style, then match the WAV duration to the Thai video."></textarea>
-          <div class="podcast-stats">
-            <span>Characters: <strong id="statEnglishCharCount">0</strong></span>
-            <span>Estimated chunks: <strong id="statEnglishChunkCount">0</strong></span>
-            <span id="englishDurationHint">English WAV will be padded or gently accelerated to match the final video.</span>
+          <div id="panelEnglishScript" class="script-panel" role="tabpanel" aria-labelledby="tabEnglishScript" hidden>
+            <label class="toggle-row" for="enableEnglishAudio">
+              <input id="enableEnglishAudio" type="checkbox">
+              <span>สร้าง English WAV เพิ่ม สำหรับอัปโหลดเป็นภาษาเพิ่มเติมใน YouTube</span>
+            </label>
+            <label for="englishPodcastScript">English Podcast Script</label>
+            <textarea id="englishPodcastScript" rows="14" placeholder="Paste the complete English narration here. AutoClip will split it safely, synthesize it with the shared Voice / Speed and the separate English Style, then match the WAV duration to the Thai video."></textarea>
+            <div class="podcast-stats">
+              <span>Characters: <strong id="statEnglishCharCount">0</strong></span>
+              <span>Estimated chunks: <strong id="statEnglishChunkCount">0</strong></span>
+              <span id="englishDurationHint">English WAV will be padded or gently accelerated to match the final video.</span>
+            </div>
           </div>
-        </div>
 
-        <div id="panelImportJson" class="script-panel" role="tabpanel" aria-labelledby="tabImportJson" hidden>
-          <label for="podcastJsonInput">Podcast JSON</label>
-          <textarea id="podcastJsonInput" rows="12" spellcheck="false" placeholder='วาง JSON ที่มี title, caption, hashtags, tts.thai, tts.english และ audio ที่นี่'></textarea>
-          <div class="actions" style="margin-top: 12px;">
-            <button id="btnApplyPodcastJson" type="button" class="button secondary">Auto Fill จาก JSON</button>
-            <button id="btnClearPodcastJson" type="button" class="button secondary">ล้าง JSON</button>
+          <div id="panelImportJson" class="script-panel" role="tabpanel" aria-labelledby="tabImportJson" hidden>
+            <label for="podcastJsonInput">Podcast JSON</label>
+            <textarea id="podcastJsonInput" rows="12" spellcheck="false" placeholder='วาง JSON ที่มี title, caption, hashtags, tts.thai, tts.english และ audio ที่นี่'></textarea>
+            <div class="actions" style="margin-top: 12px;">
+              <button id="btnApplyPodcastJson" type="button" class="button secondary">Auto Fill จาก JSON</button>
+              <button id="btnClearPodcastJson" type="button" class="button secondary">ล้าง JSON</button>
+            </div>
+            <p id="podcastJsonStatus" class="muted" role="status">ระบบจะเติมเฉพาะข้อมูลในฟอร์ม ไม่อัปโหลดภาพปกหรือไฟล์ BGM</p>
           </div>
-          <p id="podcastJsonStatus" class="muted" role="status">ระบบจะเติมเฉพาะข้อมูลในฟอร์ม ไม่อัปโหลดภาพปกหรือไฟล์ BGM</p>
-        </div>
-      </section>
+        </section>
+      </div>
 
-      <!-- Section 2: เสียงบรรยาย (TTS Settings) -->
-      <section class="workspace-section">
-        <h2>2. เสียงบรรยาย (Google Gemini TTS)</h2>
-        <p class="muted">ใช้เสียง Google Gemini Iapetus พร้อมสไตล์พูดลื่นไหลและเชื่อมประโยคอย่างเป็นธรรมชาติเป็นค่าเริ่มต้น</p>
+      <!-- RIGHT COLUMN: Settings & Generation (0.85fr) -->
+      <div class="studio-column">
+        <!-- Channel Picker -->
+        <section id="channelPicker" class="studio-card"></section>
 
-        <label for="podcastVoice">เสียงผู้บรรยาย</label>
-        <select id="podcastVoice">
-          <optgroup label="เสียงผู้ชาย (Male)">
-            <option value="Enceladus">Enceladus (นุ่ม อบอุ่น ฟังสบาย)</option>
-            <option value="Fenrir">Fenrir (Mamase Reel default · มีชีวิตชีวา ขี้เล่น)</option>
-            <option value="Alnilam">Alnilam</option>
-            <option value="Charon">Charon</option>
-            <option value="Iapetus" selected>Iapetus (แนะนำ · ค่าเริ่มต้น Podcast — พูดลื่นไหล)</option>
-            <option value="Orus">Orus</option>
-          </optgroup>
-          <optgroup label="เสียงผู้หญิง (Female)">
-            <option value="Achernar">Achernar</option>
-            <option value="Aoede">Aoede</option>
-            <option value="Autonoe">Autonoe</option>
-            <option value="Callirrhoe">Callirrhoe</option>
-            <option value="Despina">Despina</option>
-            <option value="Erinome">Erinome</option>
-            <option value="Gacrux">Gacrux</option>
-            <option value="Kore">Kore</option>
-            <option value="Leda">Leda</option>
-          </optgroup>
-        </select>
+        <!-- Card 3: เสียงบรรยาย (TTS Settings) -->
+        <section class="studio-card">
+          <div class="studio-card-head">
+            <span class="studio-card-title">3. เสียงบรรยาย (Google Gemini TTS)</span>
+          </div>
+          <p class="muted">ใช้เสียง Google Gemini Iapetus พร้อมสไตล์พูดลื่นไหลเป็นค่าเริ่มต้น</p>
 
-        <label for="podcastSpeed">ความเร็วเสียง (Speed) <output id="podcastSpeedValue">0.90</output></label>
-        <input id="podcastSpeed" type="range" min="0.5" max="2.0" step="0.05" value="0.90">
-
-        <div class="script-tabs" role="tablist" aria-label="ภาษาของ Style Prompt">
-          <button id="tabThaiStyle" class="script-tab active" type="button" role="tab" aria-selected="true" aria-controls="panelThaiStyle">Thai Style</button>
-          <button id="tabEnglishStyle" class="script-tab" type="button" role="tab" aria-selected="false" aria-controls="panelEnglishStyle">English Style</button>
-        </div>
-        <div id="panelThaiStyle" class="script-panel" role="tabpanel" aria-labelledby="tabThaiStyle">
-          <label for="podcastStyle">Thai Style Prompt (สไตล์เสียงภาษาไทย)</label>
-          <textarea id="podcastStyle" rows="8"></textarea>
-        </div>
-        <div id="panelEnglishStyle" class="script-panel" role="tabpanel" aria-labelledby="tabEnglishStyle" hidden>
-          <label for="englishPodcastStyle">English Style Prompt</label>
-          <textarea id="englishPodcastStyle" rows="8"></textarea>
-        </div>
-
-        <div class="tts-preview-controls">
-          <button id="btnSavePodcastDefaults" type="button" class="button">บันทึกค่าปัจจุบันเป็นค่าเริ่มต้น</button>
-          <button id="btnRestorePodcastDefaults" type="button" class="secondary">คืนค่าระบบ</button>
-          <button id="btnResetPodcastStyle" type="button" class="secondary">คืนค่า Thai Style</button>
-          <button id="btnResetEnglishPodcastStyle" type="button" class="secondary">Reset English Style</button>
-          <button id="btnPreviewAudio" type="button" class="secondary">ฟังตัวอย่างภาษาไทย</button>
-          <button id="btnPreviewEnglishAudio" type="button" class="secondary">Preview English Voice</button>
-          <audio id="audioSample" controls preload="none" hidden></audio>
-          <span id="audioSampleStatus" class="muted" role="status"></span>
-        </div>
-      </section>
-
-      <!-- Section 3: ซับไตเติล (Subtitles) -->
-      <section class="workspace-section">
-        <h2>3. ซับไตเติล (Subtitles)</h2>
-        <p class="muted">สร้างซับไตเติล 16:9 สไตล์ Bedtime Podcast จัดวางตรงกลางด้านล่าง พร้อมพื้นหลังโปร่งแสงนุ่มนวล</p>
-
-        <label class="toggle-row" for="enableSubtitles">
-          <input id="enableSubtitles" type="checkbox" checked>
-          <span>เปิดใช้งาน Subtitles ในวิดีโอ (16:9 Bedtime Subtitles)</span>
-        </label>
-      </section>
-
-      <!-- Section 4: ดนตรีประกอบ (Background Music) -->
-      <section class="workspace-section">
-        <h2>4. ดนตรีประกอบ (Background Music)</h2>
-        <p class="muted">ระบบจะปรับระดับเสียงอัตโนมัติ (Audio Ducking) ให้เสียงเพลงเบาลงขณะมีเสียงพูด</p>
-
-        <div class="bgm-mode-group">
-          <label>
-            <input type="radio" name="bgmMode" value="system" checked>
-            BGM ผ่อนคลายของระบบ (Space Ambient)
-          </label>
-          <label>
-            <input type="radio" name="bgmMode" value="custom">
-            อัปโหลดไฟล์เพลงของตัวเอง (MP3/WAV/AAC)
-          </label>
-        </div>
-
-        <div id="systemBgmWrapper" style="margin-top: 14px;">
-          <label for="bgmTrack">เลือกเพลงประกอบ (BGM Track)</label>
-          <select id="bgmTrack">
-            <optgroup label="ไฟล์จาก /assets/sounds">
-              <option value="mamase-podcast-bg.mp3" selected>🎧 Mamase Podcast BGM (ค่าเริ่มต้นใหม่)</option>
-              <option value="space.mp3">🌌 space.mp3 (เพลงเดิม)</option>
+          <label for="podcastVoice">เสียงผู้บรรยาย</label>
+          <select id="podcastVoice">
+            <optgroup label="เสียงผู้ชาย (Male)">
+              <option value="Enceladus">Enceladus (นุ่ม อบอุ่น ฟังสบาย)</option>
+              <option value="Fenrir">Fenrir (Mamase Reel default · มีชีวิตชีวา ขี้เล่น)</option>
+              <option value="Alnilam">Alnilam</option>
+              <option value="Charon">Charon</option>
+              <option value="Iapetus" selected>Iapetus (แนะนำ · ค่าเริ่มต้น Podcast — พูดลื่นไหล)</option>
+              <option value="Orus">Orus</option>
             </optgroup>
-            <optgroup label="เพลงบรรยากาศ Space Ambient (ระบบ)">
-              <option value="cosmic_drift">🌌 Cosmic Drift (ล่องลอยในความเงียบงัน)</option>
-              <option value="starlight_lullaby">✨ Starlight Lullaby (แสงดาวกล่อมนอน)</option>
-              <option value="deep_nebula">🪐 Deep Nebula (เนบิวลาลึกภวังค์)</option>
-              <option value="interstellar_voyage">🚀 Interstellar Voyage (การเดินทางข้ามกาแล็กซี)</option>
-              <option value="enceladus_ocean">🌊 Enceladus Ocean (มหาสมุทรใต้ผืนน้ำแข็ง)</option>
+            <optgroup label="เสียงผู้หญิง (Female)">
+              <option value="Achernar">Achernar</option>
+              <option value="Aoede">Aoede</option>
+              <option value="Autonoe">Autonoe</option>
+              <option value="Callirrhoe">Callirrhoe</option>
+              <option value="Despina">Despina</option>
+              <option value="Erinome">Erinome</option>
+              <option value="Gacrux">Gacrux</option>
+              <option value="Kore">Kore</option>
+              <option value="Leda">Leda</option>
             </optgroup>
           </select>
-          <p id="bgmTrackDesc" class="muted" style="margin-top: 6px; font-size: 0.82rem;">
-            เพลงประกอบ Podcast หลักของ Mamase จากไฟล์ที่พี่พีเลือก
-          </p>
-        </div>
 
-        <div id="customBgmWrapper" hidden>
-          <label class="picker" for="customBgmFile">
-            เลือกไฟล์เพลง BGM
-            <input id="customBgmFile" type="file" accept="audio/mp3,audio/wav,audio/aac,audio/m4a,audio/ogg">
+          <label for="podcastSpeed">ความเร็วเสียง (Speed) <output id="podcastSpeedValue">0.90</output></label>
+          <input id="podcastSpeed" type="range" min="0.5" max="2.0" step="0.05" value="0.90">
+
+          <div class="script-tabs" role="tablist" aria-label="ภาษาของ Style Prompt">
+            <button id="tabThaiStyle" class="script-tab active" type="button" role="tab" aria-selected="true" aria-controls="panelThaiStyle">Thai Style</button>
+            <button id="tabEnglishStyle" class="script-tab" type="button" role="tab" aria-selected="false" aria-controls="panelEnglishStyle">English Style</button>
+          </div>
+          <div id="panelThaiStyle" class="script-panel" role="tabpanel" aria-labelledby="tabThaiStyle">
+            <label for="podcastStyle">Thai Style Prompt (สไตล์เสียงภาษาไทย)</label>
+            <textarea id="podcastStyle" rows="5"></textarea>
+          </div>
+          <div id="panelEnglishStyle" class="script-panel" role="tabpanel" aria-labelledby="tabEnglishStyle" hidden>
+            <label for="englishPodcastStyle">English Style Prompt</label>
+            <textarea id="englishPodcastStyle" rows="5"></textarea>
+          </div>
+
+          <div class="tts-preview-controls" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+            <button id="btnSavePodcastDefaults" type="button" class="button small">บันทึกเป็นค่าเริ่มต้น</button>
+            <button id="btnRestorePodcastDefaults" type="button" class="secondary small">คืนค่าระบบ</button>
+            <button id="btnResetPodcastStyle" type="button" class="secondary small">คืนค่า Thai Style</button>
+            <button id="btnResetEnglishPodcastStyle" type="button" class="secondary small">Reset English Style</button>
+            <button id="btnPreviewAudio" type="button" class="secondary small">ฟังตัวอย่างภาษาไทย</button>
+            <button id="btnPreviewEnglishAudio" type="button" class="secondary small">Preview English</button>
+            <audio id="audioSample" controls preload="none" hidden style="width: 100%; margin-top: 8px;"></audio>
+            <span id="audioSampleStatus" class="muted" role="status"></span>
+          </div>
+        </section>
+
+        <!-- Card 4: ซับไตเติล & BGM -->
+        <section class="studio-card">
+          <div class="studio-card-head">
+            <span class="studio-card-title">4. ซับไตเติล & ดนตรีประกอบ (BGM)</span>
+          </div>
+
+          <label class="toggle-row" for="enableSubtitles">
+            <input id="enableSubtitles" type="checkbox" checked>
+            <span>เปิดใช้งาน Subtitles ในวิดีโอ (16:9 Bedtime Subtitles)</span>
           </label>
-          <div id="customBgmInfo" class="muted">ยังไม่ได้เลือกไฟล์เพลง</div>
-        </div>
 
-        <label for="bgmVolume">ระดับเสียงดนตรีประกอบ (BGM Volume) <output id="bgmVolumeValue">0.08 (8%)</output></label>
-        <input id="bgmVolume" type="range" min="0.0" max="0.5" step="0.01" value="0.08">
+          <hr style="border: 0; border-top: 1px solid var(--line); margin: 16px 0;">
 
-        <div class="bgm-preview">
-          <button id="btnPreviewBgm" type="button" class="secondary">ฟังเสียงเพลงประกอบ</button>
-          <audio id="audioBgm" controls preload="none" hidden></audio>
-          <span id="bgmStatus" class="muted"></span>
-        </div>
-      </section>
+          <div class="bgm-mode-group">
+            <label>
+              <input type="radio" name="bgmMode" value="system" checked>
+              BGM ผ่อนคลายของระบบ (Space Ambient)
+            </label>
+            <label>
+              <input type="radio" name="bgmMode" value="custom">
+              อัปโหลดไฟล์เพลงของตัวเอง (MP3/WAV/AAC)
+            </label>
+          </div>
 
-      <!-- Section 5: ข้อมูลสเปกและปุ่มสร้าง -->
-      <section class="workspace-section">
-        <h2>5. สรุปคุณสมบัติวิดีโอ YouTube Podcast</h2>
-        <div class="summary-spec-grid">
-          <div class="spec-item">
-            <dt>ความละเอียด (Resolution)</dt>
-            <dd>1920×1080 (16:9 Full HD)</dd>
+          <div id="systemBgmWrapper" style="margin-top: 14px;">
+            <label for="bgmTrack">เลือกเพลงประกอบ (BGM Track)</label>
+            <select id="bgmTrack">
+              <optgroup label="ไฟล์จาก /assets/sounds">
+                <option value="mamase-podcast-bg.mp3" selected>🎧 Mamase Podcast BGM (ค่าเริ่มต้นใหม่)</option>
+                <option value="twilight_ghost_wind_60s.mp3">🌪️ Twilight Ghost Wind (เสียงลมหวีดหวิว ลึกลับ)</option>
+                <option value="dark_horror_seamless_loop_60s.wav">🕯️ Dark Horror Loop (โทนลึกลับ สยองขวัญ)</option>
+                <option value="space.mp3">🌌 space.mp3 (เพลงเดิม)</option>
+              </optgroup>
+              <optgroup label="เพลงบรรยากาศ Space Ambient (ระบบ)">
+                <option value="cosmic_drift">🌌 Cosmic Drift (ล่องลอยในความเงียบงัน)</option>
+                <option value="starlight_lullaby">✨ Starlight Lullaby (แสงดาวกล่อมนอน)</option>
+                <option value="deep_nebula">🪐 Deep Nebula (เนบิวลาลึกภวังค์)</option>
+                <option value="interstellar_voyage">🚀 Interstellar Voyage (การเดินทางข้ามกาแล็กซี)</option>
+                <option value="enceladus_ocean">🌊 Enceladus Ocean (มหาสมุทรใต้ผืนน้ำแข็ง)</option>
+              </optgroup>
+            </select>
+            <p id="bgmTrackDesc" class="muted" style="margin-top: 6px; font-size: 0.82rem;">
+              เพลงประกอบ Podcast หลักของ Mamase จากไฟล์ที่พี่พีเลือก
+            </p>
           </div>
-          <div class="spec-item">
-            <dt>เฟรมเรต (FPS)</dt>
-            <dd>30 FPS</dd>
-          </div>
-          <div class="spec-item">
-            <dt>การเคลื่อนไหว (Motion)</dt>
-            <dd>6-Stage Gentle Breathing Cycle</dd>
-          </div>
-          <div class="spec-item">
-            <dt>การมิกซ์เสียง (Audio Ducking)</dt>
-            <dd>Sidechain Ducking + Fade Out</dd>
-          </div>
-        </div>
 
-        <button id="btnSubmitPodcast" type="submit" class="button generate-btn">
-          🎙️ สร้าง YouTube Podcast (Generate Video)
-        </button>
-        <div id="podcastSubmitError" class="error" hidden></div>
-      </section>
+          <div id="customBgmWrapper" hidden style="margin-top: 14px;">
+            <label class="picker" for="customBgmFile">
+              เลือกไฟล์เพลง BGM
+              <input id="customBgmFile" type="file" accept="audio/mp3,audio/wav,audio/aac,audio/m4a,audio/ogg">
+            </label>
+            <div id="customBgmInfo" class="muted">ยังไม่ได้เลือกไฟล์เพลง</div>
+          </div>
+
+          <label for="bgmVolume" style="margin-top: 14px;">ระดับเสียงดนตรีประกอบ (BGM Volume) <output id="bgmVolumeValue">0.08 (8%)</output></label>
+          <input id="bgmVolume" type="range" min="0.0" max="0.5" step="0.01" value="0.08">
+
+          <div class="bgm-preview" style="margin-top: 10px;">
+            <button id="btnPreviewBgm" type="button" class="secondary small">ฟังเสียงเพลงประกอบ</button>
+            <audio id="audioBgm" controls preload="none" hidden style="width: 100%; margin-top: 8px;"></audio>
+            <span id="bgmStatus" class="muted" style="font-size: 0.82rem; margin-left: 8px;"></span>
+          </div>
+        </section>
+
+        <!-- Card 5: ข้อมูลสเปกและปุ่มสร้าง (Sticky) -->
+        <section class="studio-card studio-sticky">
+          <div class="studio-card-head">
+            <span class="studio-card-title">5. สรุปคุณสมบัติ & สั่งสร้าง</span>
+          </div>
+          <div class="summary-spec-grid">
+            <div class="spec-item">
+              <dt>ความละเอียด</dt>
+              <dd>1920×1080 (16:9)</dd>
+            </div>
+            <div class="spec-item">
+              <dt>เฟรมเรต</dt>
+              <dd>30 FPS</dd>
+            </div>
+            <div class="spec-item">
+              <dt>การเคลื่อนไหว</dt>
+              <dd>Breathing Cycle</dd>
+            </div>
+            <div class="spec-item">
+              <dt>Audio Ducking</dt>
+              <dd>Sidechain Ducking</dd>
+            </div>
+          </div>
+
+          <button id="btnSubmitPodcast" type="submit" class="button studio-btn-primary generate-btn">
+            🎙️ สร้าง YouTube Podcast (Generate Video)
+          </button>
+          <div id="podcastSubmitError" class="error" hidden style="margin-top: 10px;"></div>
+        </section>
+      </div>
     </div>
   </form>
 </main>
@@ -415,6 +440,6 @@
 <script src="/static/nav.js?v=5"></script>
 <script src="/static/channels.js?v=1"></script>
 <script>AutoClipChannels.mount('#channelPicker');</script>
-<script src="/static/podcast.js?v=4"></script>
+<script src="/static/podcast.js?v=5"></script>
 </body>
 </html>

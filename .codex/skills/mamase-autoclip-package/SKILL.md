@@ -8,6 +8,9 @@ description: Create review-ready AutoClip ZIP packages for Mamase จักร�
 For Reel/Short/TikTok packages, first read
 `/Users/zengcode/projects/autoclip/docs/mamase-reels-standard.md`. It is the
 canonical timing, scene, subtitle, motion, hook, outro, and compatibility rule.
+Before generating new scene imagery, read and follow
+`/Users/zengcode/projects/autoclip/docs/asset-catalog.md` to search and reuse
+clean assets from the Reusable Asset Library.
 
 Use this skill when creating or revising a Mamase short-form video ZIP. Do not
 use it to change AutoClip application code or RunPod setup.
@@ -110,6 +113,20 @@ The visual must show the central subject, setting, action, or evidence stated
 in the line so a viewer can understand it before reading subtitles. Avoid
 generic decorative b-roll whenever the narration calls for a specific animal,
 place, process, object, or scientific detail.
+
+## Reusable Asset Catalog Rules (Before Generating New Images)
+
+Before planning or generating new imagery for any package, the agent **MUST** follow `/Users/zengcode/projects/autoclip/docs/asset-catalog.md`:
+1. **Search First**: Search the permanent Reusable Asset Catalog at `assets/reusable-library/assets-index.jsonl` (or via `.venv/bin/python scripts/search_assets.py "<query>"`) to check for suitable existing imagery.
+2. **Visual Inspection Gate**: Open and visually inspect only the shortlisted candidate images (via `view_file` or thumbnail inspection).
+3. **Direct Reuse Criteria**: An asset may be used directly (`reuse_direct`) **ONLY IF**:
+   - Topic, scientific/narrative meaning, aspect ratio (9:16 vertical), and brand (Mamase) match 100%.
+   - The image has **NO burned-in topic-specific text, headlines, or conflicting subtitles**.
+4. **Scene 01 Protection**: Scene 01 images with topic-specific titles, hooks, or character arrangements are classified as `reuse_as_reference`. **Never reuse an old Scene 01 directly for a different topic**. Use it only as reference, or generate a fresh native Scene 01 matching the permanent Mamase Scene 01 master standard.
+5. **No Blind Tag Matching**: Never reuse an image merely because tags or filenames are similar without visual inspection.
+6. **Brand Isolation**: Mamase assets must never be mixed with other brands (Thai Java Zone, 12-Zodiac), and vice-versa.
+7. **Generate When Needed**: Generate new images only when no suitable asset exists in the library.
+8. **ZIP Boundary**: When copying assets into a new package, copy directly from `library_path` into the package's `images/`. Never bundle catalog, thumbnails, or contact sheets into release ZIPs.
 
 ## Visual quality gate — cinematic, not placeholder art
 

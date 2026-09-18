@@ -70,8 +70,12 @@ class SceneRenderer:
     MOTION_DEFAULT_INTENSITY = {
         "slow_zoom_in": 0.10, "slow_zoom_out": 0.10,
         "zoom_in": 0.18, "zoom_out": 0.16,
-        "cinematic_push_in": 0.14, "cinematic_pull_out": 0.12,
-        "gentle_float": 0.08, "documentary_pan": 0.10,
+        "cinematic_push_in": 0.18, "cinematic_pull_out": 0.16,
+        "gentle_float": 0.12, "documentary_pan": 0.15,
+        "hook_punch_in": 0.18,
+        "drift_diagonal": 0.15,
+        "breathing_pulse": 0.12,
+        "pan_up": 0.15,
     }
     SPEED_FACTOR = {"slow": 0.9, "normal": 1.2, "fast": 1.5}
     def __init__(self, ffmpeg: FfmpegRunner, settings: Settings, profile: RenderProfile | None = None):
@@ -135,8 +139,48 @@ class SceneRenderer:
             elif motion in {"pan_down", "pan_down_zoom_in", "drift_bottom_left", "drift_bottom_right"}: pan_y = f"(ih-ih/zoom)*{pan_travel:.4f}*on/{max(1, frames-1)}"
             else: pan_y = f"(ih-ih/zoom)*{focus[1]}"
             if motion == "gentle_float":
-                pan_x = f"(iw-iw/zoom)*(0.5+0.10*sin(on/{max(1, frames-1)}*PI))"
-                pan_y = f"(ih-ih/zoom)*(0.5+0.10*cos(on/{max(1, frames-1)}*PI))"
+                base_zoom = 1.06
+                # Time-based zero-gravity orbital float (7.5s period for X, 11.5s for Y)
+                # plus continuous steady forward push, clearly visible regardless of video duration
+                zoom = f"min({base_zoom:.3f}+0.005*(on/{fps}),1.25)"
+                pan_x = f"(iw-iw/zoom)*(0.5+0.18*sin((on-1)/{fps}*2*PI/7.5))"
+                pan_y = f"(ih-ih/zoom)*(0.5+0.16*sin((on-1)/{fps}*2*PI/11.5))"
+            elif motion == "hook_punch_in":
+                hook_duration = min(duration, 3.0)
+                hook_frames = max(1, round(hook_duration * fps))
+                # 3-second rapid punch-in (+12%) followed by steady forward drift and cosmic float
+                zoom = (
+                    f"if(lte(on,{hook_frames}),"
+                    f"1.0+0.12*(on/{hook_frames}),"
+                    f"min(1.12+0.004*((on-{hook_frames})/{fps}),1.28))"
+                )
+                pan_x = f"(iw-iw/zoom)*(0.5+if(lte(on,{hook_frames}),0,0.18*sin((on-{hook_frames})/{fps}*2*PI/7.5)))"
+                pan_y = f"(ih-ih/zoom)*(0.5+if(lte(on,{hook_frames}),0,0.16*sin((on-{hook_frames})/{fps}*2*PI/11.5)))"
+            elif motion == "cinematic_pull_out":
+                # Start close (1.25) and smoothly pull back to reveal wider context
+                zoom = f"max(1.05,1.25-0.005*(on/{fps}))"
+                pan_x = f"(iw-iw/zoom)*0.5"
+                pan_y = f"(ih-ih/zoom)*0.5"
+            elif motion == "documentary_pan":
+                # Smooth slow horizontal sweep across the scenery with subtle zoom
+                zoom = f"min(1.08+0.003*(on/{fps}),1.20)"
+                pan_x = f"(iw-iw/zoom)*(0.15+0.70*(on/{max(1, frames-1)}))"
+                pan_y = f"(ih-ih/zoom)*0.5"
+            elif motion == "pan_up":
+                # Vertical upward sweep from bottom to top
+                zoom = f"min(1.08+0.003*(on/{fps}),1.20)"
+                pan_x = f"(iw-iw/zoom)*0.5"
+                pan_y = f"(ih-ih/zoom)*(0.85-0.70*(on/{max(1, frames-1)}))"
+            elif motion == "drift_diagonal":
+                # Diagonal drift from bottom-left towards top-right with depth
+                zoom = f"min(1.06+0.004*(on/{fps}),1.22)"
+                pan_x = f"(iw-iw/zoom)*(0.20+0.60*(on/{max(1, frames-1)}))"
+                pan_y = f"(ih-ih/zoom)*(0.80-0.60*(on/{max(1, frames-1)}))"
+            elif motion == "breathing_pulse":
+                # Gentle rhythmic in-out breathing zoom with subtle float
+                zoom = f"1.08+0.06*0.5*(1-cos((on-1)/{fps}*2*PI/6.0))"
+                pan_x = f"(iw-iw/zoom)*(0.5+0.08*sin((on-1)/{fps}*2*PI/12.0))"
+                pan_y = f"(ih-ih/zoom)*(0.5+0.08*cos((on-1)/{fps}*2*PI/12.0))"
             # Use the oversized canvas for all animated presets; the existing
             # zoompan expression below then crops it back to the output size.
             base = motion_base

@@ -88,6 +88,14 @@ Key non-negotiable rules:
   `assets/parker_solar_probe_reel/visual-reference.md` and use
   `assets/tianwen-2-quasi-satellite-reel/images/` as the successful autonomous
   master-image workflow example. Reuse the method, not its subject matter.
+- Before generating new images for any package, search the Reusable Asset Catalog
+  (`assets/reusable-library/assets-index.jsonl` or `scripts/search_assets.py`)
+  following `docs/asset-catalog.md`. Inspect shortlisted images visually; copy
+  directly from `library_path` only when topic, semantic meaning, aspect ratio,
+  brand, and text match 100%. If an asset has topic-specific text or is an old
+  Scene 01, use it as reference or generate new; never reuse directly. Never
+  bundle catalog, thumbnails, or contact-sheets into release ZIPs. Generate new
+  imagery only when no suitable asset exists in the library.
 - A request shaped as `read start.md and create images for <topic>` authorizes
   autonomous master-image production only. Derive the visual story, shot list,
   and per-scene prompts without asking the user to write them; generate,

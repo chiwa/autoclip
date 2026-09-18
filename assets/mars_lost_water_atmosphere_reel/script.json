@@ -1,0 +1,171 @@
+{
+  "project": {
+    "id": "mamase-mars-lost-water-atmosphere-reel-v1",
+    "title": "ดาวอังคารเคยมีแม่น้ำและทะเล แล้วทุกอย่างหายไปไหน?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.05,
+    "language": "th-TH",
+    "style_prompt": "Read aloud in a natural, curious, thought-provoking conversational Thai voice. Sound relaxed, confident, and deeply intriguing, like casually unraveling profound mysteries of the universe with a close friend. Keep the delivery spontaneous, human, and engaging — never formal, lecture-like, or robotic. Add subtle pauses before deep realizations. Pace should be medium to energetic, crisp and clear."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "role": "hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ดาวอังคารที่เราเห็นเป็นทะเลทรายแดงวันนี้…เคยมีแม่น้ำและทะเลจริง ๆ แล้วน้ำทั้งหมดหายไปไหน?",
+      "tts_text": "ดาวอังคารที่เราเห็นเป็นทะเลทรายแดงวันนี้…เคยมีแม่น้ำและทะเลจริง ๆ แล้วน้ำทั้งหมดหายไปไหน?",
+      "subtitle": "ดาวอังคารเคยมีแม่น้ำและทะเลจริง ๆ\nแล้วน้ำทั้งหมด 'หายไปไหน'?",
+      "keywords": [
+        "ดาวอังคาร",
+        "แม่น้ำ",
+        "ทะเล"
+      ],
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-02-sediment-valley",
+      "image": "images/scene-02-sediment-valley.png",
+      "narration": "ร่องรอยจากหุบเขา ชั้นตะกอน และแร่บางชนิด บอกเราว่าเมื่อหลายพันล้านปีก่อน น้ำเคยไหลอยู่บนพื้นผิวจริง",
+      "tts_text": "ร่องรอยจากหุบเขา ชั้นตะกอน และแร่บางชนิด บอกเราว่าเมื่อหลายพันล้านปีก่อน น้ำเคยไหลอยู่บนพื้นผิวจริง",
+      "subtitle": "ร่องรอยหุบเขา ชั้นตะกอน และแร่ธาตุ\nยืนยันว่า 'น้ำเคยไหลบนพื้นผิวจริง'",
+      "keywords": [
+        "ชั้นตะกอน",
+        "แร่",
+        "น้ำไหล"
+      ],
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-ancient-atmosphere",
+      "image": "images/scene-03-ancient-atmosphere.png",
+      "narration": "แปลว่า Mars ในอดีตอาจมีบรรยากาศหนากว่า และอุ่นพอให้น้ำเหลวอยู่ได้อย่างน้อยเป็นช่วง ๆ",
+      "tts_text": "แปลว่า มาร์ส ในอดีตอาจมีบรรยากาศหนากว่า และอุ่นพอให้น้ำเหลวอยู่ได้อย่างน้อยเป็นช่วง ๆ",
+      "subtitle": "ดาวอังคารในอดีตเคยมีบรรยากาศหนา\nและอบอุ่นพอให้น้ำคงสถานะของเหลวได้",
+      "keywords": [
+        "บรรยากาศ",
+        "น้ำเหลว"
+      ],
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-04-atmosphere-escaping",
+      "image": "images/scene-04-atmosphere-escaping.png",
+      "narration": "ต่อมา ดาวอังคารค่อย ๆ สูญเสียบรรยากาศออกสู่อวกาศ และผิวดาวก็เย็นลงเรื่อย ๆ",
+      "tts_text": "ต่อมา ดาวอังคารค่อย ๆ สูญเสียบรรยากาศออกสู่อวกาศ และผิวดาวก็เย็นลงเรื่อย ๆ",
+      "subtitle": "ต่อมา ดาวอังคารค่อย ๆ สูญเสียบรรยากาศ\nจนพื้นผิวเย็นยะเยือกกลายเป็นทะเลทราย",
+      "keywords": [
+        "บรรยากาศหาย",
+        "อวกาศ"
+      ],
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-05-not-just-magnetic-field",
+      "role": "reveal",
+      "image": "images/scene-05-not-just-magnetic-field.png",
+      "narration": "แต่เรื่องนี้ไม่ใช่แค่ ‘สนามแม่เหล็กหายแล้ว Mars ตาย’ เพราะกระบวนการจริงซับซ้อนกว่านั้นมาก",
+      "tts_text": "แต่เรื่องนี้ไม่ใช่แค่ สนามแม่เหล็กหายแล้ว มาร์ส ตาย เพราะกระบวนการจริงซับซ้อนกว่านั้นมาก",
+      "subtitle": "ไม่ใช่แค่ 'สนามแม่เหล็กหาย'\nแต่กระบวนการจริงซับซ้อนกว่านั้นมาก",
+      "keywords": [
+        "ไม่ง่ายขนาดนั้น",
+        "หลายปัจจัย"
+      ],
+      "sfx": "reveal",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-06-maven-orbit-mars",
+      "image": "images/scene-06-maven-orbit-mars.png",
+      "narration": "ภารกิจ MAVEN ของ NASA ช่วยยืนยันว่า บรรยากาศของ Mars ยังถูกพัดออกสู่อวกาศอยู่จนถึงทุกวันนี้",
+      "tts_text": "ภารกิจ เมเวน ของ นาซา ช่วยยืนยันว่า บรรยากาศของ มาร์ส ยังถูกพัดออกสู่อวกาศอยู่จนถึงทุกวันนี้",
+      "subtitle": "ยาน MAVEN ของ NASA ยืนยันว่า\nบรรยากาศยังคงถูกลมสุริยะพัดสู่อวกาศจนถึงวันนี้",
+      "keywords": [
+        "MAVEN",
+        "NASA"
+      ],
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-07-subsurface-ice-minerals",
+      "image": "images/scene-07-subsurface-ice-minerals.png",
+      "narration": "แล้วน้ำหายไปไหน? บางส่วนหนีออกสู่อวกาศ แต่บางส่วนอาจยังซ่อนอยู่ในน้ำแข็งใต้พื้นดิน และอยู่ในแร่ของดาวอังคาร",
+      "tts_text": "แล้วน้ำหายไปไหน? บางส่วนหนีออกสู่อวกาศ แต่บางส่วนอาจยังซ่อนอยู่ในน้ำแข็งใต้พื้นดิน และอยู่ในแร่ของดาวอังคาร",
+      "subtitle": "น้ำส่วนหนึ่งหนีสู่อวกาศ\nแต่อีกส่วนยังซ่อนอยู่ใน 'น้ำแข็งใต้ดินและแร่ธาตุ'",
+      "keywords": [
+        "น้ำแข็งใต้ดิน",
+        "แร่",
+        "สู่อวกาศ"
+      ],
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-08-world-transformed",
+      "image": "images/scene-08-world-transformed.png",
+      "narration": "เพราะฉะนั้น Mars ไม่ได้แค่สูญเสียน้ำ แต่มันเหมือนโลกอีกใบที่ค่อย ๆ เปลี่ยนจากชื้น…ไปเป็นแห้งและหนาว",
+      "tts_text": "เพราะฉะนั้น มาร์ส ไม่ได้แค่สูญเสียน้ำ แต่มันเหมือนโลกอีกใบที่ค่อย ๆ เปลี่ยนจากชื้น…ไปเป็นแห้งและหนาว",
+      "subtitle": "ดาวอังคารคือโลกอีกใบ\nที่ค่อย ๆ เปลี่ยนจากชุ่มชื้น สู่ความแห้งแล้งหนาวเหน็บ",
+      "keywords": [
+        "โลกที่เปลี่ยนไป",
+        "อดีตกับปัจจุบัน"
+      ],
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-09-brand-outro",
+      "role": "payoff",
+      "image": "images/scene-09-brand-outro.png",
+      "narration": "คำถามที่น่ากลัวกว่าคือ ถ้าดาวเคราะห์หนึ่งเคยเปลี่ยนไปได้ขนาดนี้…เรารู้จักอนาคตของโลกตัวเองดีพอแล้วหรือยัง?",
+      "tts_text": "คำถามที่น่ากลัวกว่าคือ ถ้าดาวเคราะห์หนึ่งเคยเปลี่ยนไปได้ขนาดนี้…เรารู้จักอนาคตของโลกตัวเองดีพอแล้วหรือยัง?",
+      "subtitle": "ถ้าดาวดวงหนึ่งเปลี่ยนไปได้ขนาดนี้…\nเรารู้จัก 'อนาคตของโลกเรา' ดีพอแล้วหรือยัง?",
+      "keywords": [
+        "Mars",
+        "Earth",
+        "อนาคต"
+      ],
+      "show_subtitle": true,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

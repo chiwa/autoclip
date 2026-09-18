@@ -170,3 +170,8 @@ def test_retry_non_failed_job():
     response = client.post("/api/jobs/running-job/retry")
     assert response.status_code == 400
     assert response.json()["detail"]["code"] == "JOB_NOT_RETRYABLE"
+
+
+def test_job_thumbnail_missing_returns_404():
+    response = client.get("/api/jobs/non-existent-job/thumbnail")
+    assert response.status_code == 404

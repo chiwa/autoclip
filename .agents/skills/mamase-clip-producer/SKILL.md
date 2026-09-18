@@ -33,15 +33,16 @@ For full details, reference files, and validation scripts, see also [`../mamase-
 5. Obtain approval before generating images or JSON.
 
 ### Step 2: Autonomous Master Image Generation (Real Science + Cinematic Documentary)
-1. **Benchmark**: Follow [`assets/parker_solar_probe_reel/visual-reference.md`](file:///Users/zengcode/projects/autoclip/assets/parker_solar_probe_reel/visual-reference.md) and [`assets/tianwen-2-quasi-satellite-reel/images/`](file:///Users/zengcode/projects/autoclip/assets/tianwen-2-quasi-satellite-reel/images/).
-2. **Quality Standards**:
+1. **Search Reusable Asset Catalog**: Before generating new images, follow [`docs/asset-catalog.md`](file:///Users/zengcode/projects/autoclip/docs/asset-catalog.md). Search `assets/reusable-library/assets-index.jsonl` (or via `scripts/search_assets.py`). Inspect shortlisted candidates visually. Copy directly from `library_path` only when meaning, aspect ratio, and brand match 100% without topic-specific text. Never reuse an old Scene 01 directly. Generate new images only when no suitable asset exists.
+2. **Benchmark**: Follow [`assets/parker_solar_probe_reel/visual-reference.md`](file:///Users/zengcode/projects/autoclip/assets/parker_solar_probe_reel/visual-reference.md) and [`assets/tianwen-2-quasi-satellite-reel/images/`](file:///Users/zengcode/projects/autoclip/assets/tianwen-2-quasi-satellite-reel/images/).
+3. **Quality Standards**:
    - Resolution: strictly **1080x1920 PNG** (9:16 vertical).
    - Use authentic astronomy/spacecraft data from NASA, JWST, ESO, Hubble, ESA.
    - Active composition fills **70–80%** of the frame (Foreground + Midground + Background depth).
    - Subtitle safe area (**y: 1380–1920**) is clean, calm, and dark.
    - Scene 01: Narrative Key Art following `mamase-reels-cover`. Never include "MAMASE PODCAST", bilingual badges, or flags.
    - Scenes 02+: 100% clean documentary visuals with ZERO in-image text/HUD/logos/watermarks.
-3. Save durable master images in `assets/<topic_reel>/`. Never rely on `dist/` as durable reference.
+4. Save durable master images in `assets/<topic_reel>/`. Never rely on `dist/` as durable reference.
 
 ### Step 3: JSON & ZIP Package Assembly
 1. Create `script.json` adhering strictly to the JSON contract:

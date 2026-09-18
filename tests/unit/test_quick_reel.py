@@ -70,6 +70,11 @@ def test_quick_reel_page_route():
     assert "autoclip.quickReel.voice.v1" in response.text
     assert "formData.append('style_prompt'" in response.text
     assert "normalizeImportedTts" in response.text
+    assert "applyImportedVoiceConfig" in response.text
+    assert "applyImportedVoiceConfig(data.voice)" in response.text
+    assert "if (!value || typeof value !== 'object'" in response.text
+    assert "value.style_prompt" in response.text
+    assert "value.speed !== undefined" in response.text
     assert ".join('\\n\\n')" in response.text
     assert '"tts": ["บทพูดช่วงแรก", "บทพูดช่วงถัดไป"]' in response.text
     assert "Iapetus" in response.text
@@ -77,6 +82,10 @@ def test_quick_reel_page_route():
     assert "chkHookOverlay" in response.text
     assert "btnFitCover" in response.text
     assert "btnFitContain" in response.text
+    assert "motionSelect" in response.text
+    assert "gentle_float" in response.text
+    assert "cinematic_push_in" in response.text
+    assert "hook_punch_in" in response.text
 
 
 def test_quick_reel_history_page_route():
@@ -252,13 +261,20 @@ def test_multi_image_slideshow_keeps_narration_out_of_xfade(tmp_path: Path):
         images, narration, None, 10.0, "none", tmp_path / "scene.mp4"
     )
 
-    assert ffmpeg.run.call_count == 2
-    visual_args = ffmpeg.run.call_args_list[0].args[0]
-    final_args = ffmpeg.run.call_args_list[1].args[0]
-    visual_filter = visual_args[visual_args.index("-filter_complex") + 1]
-    assert "xfade=transition=fade:duration=0.400" in visual_filter
-    assert "acrossfade" not in visual_filter
-    assert str(narration) not in visual_args
+    assert ffmpeg.run.call_count == 5
+    first_scene_args = ffmpeg.run.call_args_list[0].args[0]
+    second_scene_args = ffmpeg.run.call_args_list[1].args[0]
+    transition_args = ffmpeg.run.call_args_list[2].args[0]
+    final_args = ffmpeg.run.call_args_list[-1].args[0]
+    first_scene_filter = first_scene_args[first_scene_args.index("-filter_complex") + 1]
+    transition_filter = transition_args[transition_args.index("-filter_complex") + 1]
+    assert "split=2" in first_scene_filter
+    assert "xfade=transition=fade:duration=0.400" in transition_filter
+    assert "acrossfade" not in transition_filter
+    assert str(narration) not in first_scene_args
+    assert str(narration) not in second_scene_args
+    assert sum(str(images[0]) in arg for call in ffmpeg.run.call_args_list for arg in call.args[0]) == 1
+    assert sum(str(images[1]) in arg for call in ffmpeg.run.call_args_list for arg in call.args[0]) == 1
     assert final_args[final_args.index("-i", 2) + 1] == str(narration)
 
 
@@ -279,11 +295,14 @@ def test_multi_image_slideshow_uses_tts_duration_for_matching_image(tmp_path: Pa
         image_durations=[3.0, 7.0],
     )
 
-    visual_args = ffmpeg.run.call_args_list[0].args[0]
-    visual_filter = visual_args[visual_args.index("-filter_complex") + 1]
-    assert "trim=duration=3.400" in visual_filter
-    assert "trim=duration=7.000" in visual_filter
-    assert "offset=3.000" in visual_filter
+    first_args = ffmpeg.run.call_args_list[0].args[0]
+    second_args = ffmpeg.run.call_args_list[1].args[0]
+    first_filter = first_args[first_args.index("-filter_complex") + 1]
+    second_filter = second_args[second_args.index("-filter_complex") + 1]
+    assert "trim=duration=3.400" in first_filter
+    assert "trim=start=0.000:end=3.000" in first_filter
+    assert "trim=duration=7.000" in second_filter
+    assert "trim=start=0.400:end=7.000" in second_filter
 
 
 def test_segment_subtitles_follow_tts_boundaries(tmp_path: Path):
@@ -308,3 +327,46 @@ def test_quick_reel_delete_job(tmp_path: Path):
     response = client.delete(f"/api/quick-reel/{record.job_id}")
     assert response.status_code == 200
     assert response.json()["status"] == "DELETED"
+
+
+def test_quick_reel_submit_supports_all_motion_presets():
+    img = Image.new("RGB", (1080, 1920), color="blue")
+    buf = BytesIO()
+    img.save(buf, format="PNG")
+    img_bytes = buf.getvalue()
+
+    presets = ["static", "gentle_float", "cinematic_push_in", "hook_punch_in"]
+    for preset in presets:
+        with patch.object(app.state.quick_reel_service, "submit_quick_reel") as mock_submit:
+            record = app.state.job_service.registry.create(f"test-qr-{preset}")
+            mock_submit.return_value = record
+            response = client.post(
+                "/api/quick-reel",
+                data={
+                    "script": f"ทดสอบ motion {preset}",
+                    "motion": preset,
+                },
+                files={"image": ("photo.png", img_bytes, "image/png")},
+            )
+            assert response.status_code == 200
+            assert mock_submit.call_args.kwargs["motion"] == preset
+
+
+def test_quick_reel_remotion_endpoint():
+    with patch.object(app.state.quick_reel_service, "remotion_quick_reel") as mock_remotion:
+        mock_remotion.return_value = {
+            "jobId": "test-qr-remotion",
+            "motion": "gentle_float",
+            "videoUrl": "/api/jobs/test-qr-remotion/video",
+            "durationSeconds": 15.0,
+            "message": "เปลี่ยน Motion เป็น gentle_float สำเร็จแล้ว",
+        }
+        response = client.post(
+            "/api/quick-reel/test-qr-remotion/remotion",
+            json={"motion": "gentle_float"},
+        )
+        assert response.status_code == 200
+        data = response.json()
+        assert data["motion"] == "gentle_float"
+        assert mock_remotion.call_args[0] == ("test-qr-remotion", "gentle_float")
+

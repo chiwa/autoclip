@@ -1,0 +1,107 @@
+{
+  "project": {
+    "id": "mamase-reel-fermi-paradox-v1",
+    "title": "ถ้าจักรวาลมีดาวเคราะห์เป็นพันล้านโลก…แล้วทุกคนหายไปไหน?",
+    "language": "th-TH"
+  },
+  "description": "จักรวาลมีดาวฤกษ์และดาวเคราะห์มากมายมหาศาล แล้วถ้าชีวิตไม่ได้เกิดขึ้นแค่บนโลก ทำไมจนถึงวันนี้เรายังไม่เคยพบใครเลย? มาทำความรู้จัก Fermi Paradox พร้อมแนวคิด Zoo Hypothesis, Great Filter และการค้นหา Technosignatures แบบวิทยาศาสตร์",
+  "hashtags": [
+    "#Mamase",
+    "#MamaseReels",
+    "#FermiParadox",
+    "#GreatFilter",
+    "#ZooHypothesis",
+    "#SETI",
+    "#Technosignatures",
+    "#ExtraterrestrialLife",
+    "#Astronomy",
+    "#Space",
+    "#Universe",
+    "#Science"
+  ],
+  "reel_tts": {
+    "voice": "Fenrir",
+    "hook": {
+      "speed": 1.05,
+      "style": "Speak in an energetic, curious Thai male voice. Deliver the opening question with immediate surprise and excitement, as if you have just discovered something unbelievable and need to tell a friend. Strongly emphasize the contrast between the surprising fact and the final mystery question. Keep the delivery conversational, playful, and spontaneous. Do not shout. Do not sound like a commercial, movie trailer, news presenter, or exaggerated YouTuber."
+    },
+    "normal": {
+      "speed": 1.05,
+      "style": "Speak like a charismatic Thai science storyteller with a playful personality. Sound curious, friendly, warm, and conversational, as if telling an interesting science story to a friend. Keep the delivery natural and connected, with light energy and genuine excitement when surprising facts appear. Use small natural pauses for emphasis and comedic timing when appropriate. Do not rush. Do not over-dramatize. Do not sound like a news anchor, lecturer, movie trailer, advertisement, or exaggerated YouTuber. Keep the tone playful and engaging, but still clear enough for scientific explanations."
+    }
+  },
+  "scenes": [
+    {
+      "id": "scene-01",
+      "image": "images/01.png",
+      "narration": "ถ้าจักรวาลมีดาวเคราะห์เป็นพันล้านโลก…แล้วทุกคนหายไปไหน?",
+      "motion": "slow_zoom_in"
+    },
+    {
+      "id": "scene-02a",
+      "image": "images/02.png",
+      "narration": "วันนี้เรารู้แล้วว่า ดาวเคราะห์ไม่ได้หายากเลย มันมีอยู่รอบดาวฤกษ์มากมายทั่วกาแล็กซี",
+      "motion": "slow_zoom_out"
+    },
+    {
+      "id": "scene-02b",
+      "image": "images/02.png",
+      "narration": "บางโลกก็อยู่ในบริเวณที่อุณหภูมิอาจเหมาะกับน้ำในสถานะของเหลว",
+      "motion": "pan_left_to_right"
+    },
+    {
+      "id": "scene-03",
+      "image": "images/03.png",
+      "narration": "ตรงนี้เองที่เกิดคำถามดังของเอนริโก แฟร์มีขึ้นมา…ถ้ามีโอกาสมากขนาดนั้น แล้วทุกคนอยู่ไหน?",
+      "motion": "slow_zoom_in"
+    },
+    {
+      "id": "scene-04a",
+      "image": "images/04.png",
+      "narration": "คำตอบหนึ่งอาจง่ายกว่าที่คิด เพราะอวกาศกว้างมหาศาล และสัญญาณต้องใช้เวลาเดินทาง",
+      "motion": "slow_zoom_out"
+    },
+    {
+      "id": "scene-04b",
+      "image": "images/04.png",
+      "narration": "อารยธรรมสองแห่งอาจมีอยู่จริง แต่เกิดคนละยุค หรือไกลเกินกว่าจะได้ยินกัน",
+      "motion": "pan_right_to_left"
+    },
+    {
+      "id": "scene-05",
+      "image": "images/05.png",
+      "narration": "หรืออาจเป็น Zoo Hypothesis…พวกเขารู้ว่าเราอยู่ตรงนี้ แต่จงใจไม่เข้ามายุ่งกับเรา",
+      "motion": "slow_zoom_in"
+    },
+    {
+      "id": "scene-06a",
+      "image": "images/06.png",
+      "narration": "อีกแนวคิดหนึ่งน่ากลัวกว่า เรียกว่า Great Filter…อาจมีบางขั้นตอนที่ทำให้อารยธรรมส่วนใหญ่ไปต่อไม่ได้",
+      "motion": "slow_zoom_out"
+    },
+    {
+      "id": "scene-06b",
+      "image": "images/06.png",
+      "narration": "แต่เราไม่รู้เลยว่า Filter นั้นผ่านเราไปแล้ว…หรือกำลังรออยู่ข้างหน้า",
+      "motion": "pan_left_to_right"
+    },
+    {
+      "id": "scene-07",
+      "image": "images/07.png",
+      "narration": "นักวิทยาศาสตร์จึงไม่ได้มองหาแค่วิทยุ แต่ยังหาเลเซอร์ มลพิษในบรรยากาศ และความร้อนจากเทคโนโลยีด้วย",
+      "motion": "slow_zoom_in"
+    },
+    {
+      "id": "scene-08",
+      "image": "images/08.png",
+      "narration": "จนถึงวันนี้ ความเงียบของจักรวาลยังไม่ได้พิสูจน์ว่าไม่มีใครอยู่…บางทีเราอาจแค่ยังมองไม่ถูกที่ หรือมองไม่ถูกวิธี",
+      "motion": "slow_zoom_out"
+    }
+  ],
+  "outro": {
+    "enabled": true,
+    "image": "mamase-reels-end-scence.png",
+    "duration": 2.0,
+    "bgm_fade_out": true
+  }
+}

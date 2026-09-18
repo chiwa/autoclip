@@ -155,23 +155,27 @@ fields, warnings, and backward compatibility.
 1. ตรวจข้อเท็จจริงและวางลำดับเรื่องก่อนสร้างภาพ
 2. เขียน narration, `tts_text`, subtitle และ shot plan ให้แต่ละซีนมีแนวคิด
    ภาพที่แตกต่างกันและตรงกับบท
-3. สร้าง Scene 01 ก่อน และใช้ภาพที่ผ่านเป็น **visual anchor** สำหรับ palette,
+3. ค้นหาภาพในคลัง Reusable Asset Library (`scripts/search_assets.py` หรือ
+   `assets/reusable-library/assets-index.jsonl`) ตามกฎใน `docs/asset-catalog.md` เสมอ
+   หากพบภาพเนื้อหาที่ตรงบท สเกล แบรนด์ และไม่มีข้อความเฉพาะเรื่องเดิม ให้คัดลอก
+   จาก `library_path` มาใช้ หากไม่มีภาพที่เหมาะสมจึงวางแผนสร้างใหม่
+4. สร้าง Scene 01 ก่อน และใช้ภาพที่ผ่านเป็น **visual anchor** สำหรับ palette,
    lighting, contrast, texture และระดับรายละเอียดของทั้งชุด
-4. หากผู้ใช้ไม่ได้อนุมัติให้ทำเองทั้งหมด ให้หยุดรอรีวิว Scene 01; หากผู้ใช้
+5. หากผู้ใช้ไม่ได้อนุมัติให้ทำเองทั้งหมด ให้หยุดรอรีวิว Scene 01; หากผู้ใช้
    อนุมัติ autonomous execution แล้ว ให้ Agent ตรวจและตัดสินตามมาตรฐานนี้เอง
-5. สร้างภาพที่เหลือเป็น batch ละไม่เกิน 3 ภาพ เพื่อให้ตรวจพบ style drift,
+6. สร้างภาพที่เหลือเป็น batch ละไม่เกิน 3 ภาพ เพื่อให้ตรวจพบ style drift,
    ตัวละครผิด หรือคุณภาพตกได้เร็ว
-6. เปิดตรวจภาพจริงทุกภาพ ทั้งเต็มเฟรมและขนาดย่อบนจอมือถือ ห้ามรับรองจาก
+7. เปิดตรวจภาพจริงทุกภาพ ทั้งเต็มเฟรมและขนาดย่อบนจอมือถือ ห้ามรับรองจาก
    prompt, metadata, resolution หรือรายงานของ generator
-7. ภาพที่ไม่ตรงบท, generic, โล่ง, แบน, แสงไม่ต่อเนื่อง, มีโลโก้/ลายน้ำ,
+8. ภาพที่ไม่ตรงบท, generic, โล่ง, แบน, แสงไม่ต่อเนื่อง, มีโลโก้/ลายน้ำ,
    ข้อความผิด, anatomy/hardware ผิด หรือคุณภาพต่ำกว่า baseline ต้องสร้างใหม่
    เฉพาะซีนทันที ห้ามเก็บไว้เพียงเพื่อให้จำนวนครบ
-8. Scene 02 เป็นต้นไปต้องไม่มี presenter, generated text, subtitle, watermark,
+9. Scene 02 เป็นต้นไปต้องไม่มี presenter, generated text, subtitle, watermark,
    ธงหรือตราหน่วยงาน สำหรับ Mamase Reel ให้ composite โลโก้จริงจาก
    `assets/branding/mamase/logo.png` หลังสร้างภาพตาม skill `mamase-reels`
-9. เมื่อทุกภาพผ่านแล้วจึงสร้าง `script.json`, `video-metadata.json` และ ZIP;
-   ห้ามประกาศว่างานเสร็จก่อนตรวจ package ด้วย AutoClip `PackageService`
-10. รายงานชื่อและตำแหน่ง ZIP, จำนวนซีน, จำนวน Wan scenes, resolution,
+10. เมื่อทุกภาพผ่านแล้วจึงสร้าง `script.json`, `video-metadata.json` และ ZIP;
+    ห้ามประกาศว่างานเสร็จก่อนตรวจ package ด้วย AutoClip `PackageService`
+11. รายงานชื่อและตำแหน่ง ZIP, จำนวนซีน, จำนวน Wan scenes, resolution,
     package validation และข้อจำกัดของภาพตามจริง
 
 ### คำสั่ง “โหมดประหยัดเครดิต”

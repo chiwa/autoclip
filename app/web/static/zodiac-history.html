@@ -130,15 +130,24 @@ function toggleViewAll(batch,card,btn){
     descRow.style.display = 'flex';
     descRow.style.justifyContent = 'space-between';
     descRow.style.alignItems = 'center';
-    descRow.style.marginTop = '12px';
+    descRow.style.marginTop = '6px';
     const copyDescBtn = document.createElement('button');
     copyDescBtn.className = 'button small secondary';
     copyDescBtn.textContent = 'Copy Caption';
     copyDescBtn.onclick = () => { navigator.clipboard.writeText(mDesc); copyDescBtn.textContent = 'Copied!'; setTimeout(()=>copyDescBtn.textContent='Copy Caption', 2000); };
-    descRow.append(document.createElement('div'), copyDescBtn);
+    const expandBtn = document.createElement('button');
+    expandBtn.type = 'button';
+    expandBtn.className = 'btn-expand-chip';
+    expandBtn.textContent = '▼ ขยายดูเต็ม';
+    descRow.append(expandBtn, copyDescBtn);
 
     const pre = document.createElement('pre');
+    pre.className = 'zodiac-desc-pre';
     pre.textContent = mDesc;
+    expandBtn.onclick = () => {
+      pre.classList.toggle('expanded');
+      expandBtn.textContent = pre.classList.contains('expanded') ? '▲ ย่อข้อความ' : '▼ ขยายดูเต็ม';
+    };
     
     metaDiv.append(titleRow, pre, descRow);
 

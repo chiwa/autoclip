@@ -1,0 +1,4135 @@
+{
+  "files": {
+    "assets/12ราศี/กรกฎ.png": {
+      "mtime": 1789345218.815963,
+      "size": 2626131,
+      "sha256": "f5490a270f0f7209278da0d8da626327a602b7167f228d31bd333055ac96668c"
+    },
+    "assets/12ราศี/กันย์.png": {
+      "mtime": 1789345379.111633,
+      "size": 2515219,
+      "sha256": "5478c6c02082c6f3007e6171452978dff9188a7916e21593648768fa645b21af"
+    },
+    "assets/12ราศี/กุมภ์.png": {
+      "mtime": 1789344731.6879835,
+      "size": 2727872,
+      "sha256": "c21e308edb6ae4a2477aea4c783025e3bc73c78867dc69eccd4597fe0e4ea737"
+    },
+    "assets/12ราศี/ตุลย์.png": {
+      "mtime": 1789345469.398144,
+      "size": 2482651,
+      "sha256": "fedb76e3957d0e34c971f5c58a61e588df694de37712adee045a9a2f98bb8759"
+    },
+    "assets/12ราศี/ธนู.png": {
+      "mtime": 1789345687.5011964,
+      "size": 2536885,
+      "sha256": "8ab3b9853f54c6d02362067daba56d53f9cac9ff08abaab5c13d60ae75ebea5e"
+    },
+    "assets/12ราศี/พฤษภ.png": {
+      "mtime": 1789345017.9921358,
+      "size": 2515723,
+      "sha256": "629bda41577b614ebf3e780bc4b630f7ebcf92d9b673d8aded34085ee5555e08"
+    },
+    "assets/12ราศี/พิจิก.png": {
+      "mtime": 1789345548.024133,
+      "size": 2434268,
+      "sha256": "dec9edbbe3eb513306f7c3511906c20245d3ec6b9c43f1611f657efa3cff91cc"
+    },
+    "assets/12ราศี/มังกร.png": {
+      "mtime": 1789346496.742144,
+      "size": 2516466,
+      "sha256": "c6c0a7031be0200872c9d5186c32d0f137218ee82cecdc6c9aecfdbddb3dedd0"
+    },
+    "assets/12ราศี/มีน.png": {
+      "mtime": 1789344823.5585551,
+      "size": 2775361,
+      "sha256": "172be8ec402056e1fed0f61f7ab3f66193df1f5a19a3967228f9c3e3b6846c77"
+    },
+    "assets/12ราศี/สิงห์.png": {
+      "mtime": 1789345306.627145,
+      "size": 2455917,
+      "sha256": "bf30be991af7dc408c89407ab6b4e641f05dcc65a60893d7980b468398264f5a"
+    },
+    "assets/12ราศี/เมถุน.png": {
+      "mtime": 1789345116.2943163,
+      "size": 2492051,
+      "sha256": "e6e59c0e77281576fada53c7c6138674a03897f6c63b2612e92722ae2f6cb3a7"
+    },
+    "assets/12ราศี/เมษ.png": {
+      "mtime": 1789344944.9491403,
+      "size": 2580734,
+      "sha256": "e51aa8808fd03c56658013126e3bfeaee25b3e4d5a3d7d1d00f20ffac7b42b6a"
+    },
+    "assets/3i_atlas_message_reel/images/scene-01-hook.png": {
+      "mtime": 1788825326.4547102,
+      "size": 3402836,
+      "sha256": "15777eaea59e231a3a93b492b7f120775212b73425a9d39564583862e621d295"
+    },
+    "assets/3i_atlas_message_reel/images/scene-02-third-visitor.png": {
+      "mtime": 1788825326.6704803,
+      "size": 3060051,
+      "sha256": "bc183ec08513b1ab32b0005147539fc473a5fcaab0cc5a2e5c37af09dc7c72d2"
+    },
+    "assets/3i_atlas_message_reel/images/scene-03-hyperbolic-path.png": {
+      "mtime": 1788825326.8789892,
+      "size": 2868828,
+      "sha256": "cd095441522bec6b9085d80366394751ad00848bb51ebf50e247e4298b19a307"
+    },
+    "assets/3i_atlas_message_reel/images/scene-04-safe-distance.png": {
+      "mtime": 1788825327.081765,
+      "size": 3040965,
+      "sha256": "95c32617593cacf18d4f092ba96a2c4d757f4b6b0cab671fdd9fecd44a6acdc9"
+    },
+    "assets/3i_atlas_message_reel/images/scene-05-observatory-network.png": {
+      "mtime": 1788825327.2874463,
+      "size": 2615861,
+      "sha256": "de30c055187743aa13f65f485a3367ae2be86ba2b11a9e79743f321a2e072ee5"
+    },
+    "assets/3i_atlas_message_reel/images/scene-06-infrared-chemistry.png": {
+      "mtime": 1788825327.49522,
+      "size": 2938001,
+      "sha256": "8b363157a1d939e27f688cc80472f6dcb8f8d8f3537ae8257d2598beb02f33ce"
+    },
+    "assets/3i_atlas_message_reel/images/scene-07-buried-methane.png": {
+      "mtime": 1788825327.7131753,
+      "size": 3379505,
+      "sha256": "796c10cc537e23ec763e0d4c86af9961851c9fc8f67cb2f6aaf4720f32624f43"
+    },
+    "assets/3i_atlas_message_reel/images/scene-08-distant-origin.png": {
+      "mtime": 1788825327.932661,
+      "size": 3165990,
+      "sha256": "f60d72c402c8f9ad169d045b8a1b3097a4cac8dafa88541d1e56c2db97d3ceda"
+    },
+    "assets/3i_atlas_message_reel/images/scene-09-farewell.png": {
+      "mtime": 1788825328.14275,
+      "size": 2783739,
+      "sha256": "483bf7efe057f8f630633846d45fcc014edce46be718f264a7cdb6124b3f6113"
+    },
+    "assets/3i_atlas_message_reel/images/scene-10-brand-outro.png": {
+      "mtime": 1788825326.1641076,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/alpha_centauri_reel/images/scene-01-hook.png": {
+      "mtime": 1789395560.9100466,
+      "size": 2955952,
+      "sha256": "29ab5d481c230efe2f4ec3dd0fd72de83d4353a75d771b35c9aecb523d638e69"
+    },
+    "assets/alpha_centauri_reel/images/scene-02-triple-star-system.png": {
+      "mtime": 1789391737.3391469,
+      "size": 3198533,
+      "sha256": "bee38985f3c4ba5e498cb1d3a77b797d57e038ecf1fb0d4a77ff07c65934efb7"
+    },
+    "assets/alpha_centauri_reel/images/scene-03-proxima-b-exoplanet.png": {
+      "mtime": 1789391747.6921256,
+      "size": 2172360,
+      "sha256": "40d34ec31f3ddec58ddbbd7af0f17451ed3b456fd84dc3dc913da58f5cdd356f"
+    },
+    "assets/alpha_centauri_reel/images/scene-04-voyager-distance-void.png": {
+      "mtime": 1789391758.2763948,
+      "size": 1874823,
+      "sha256": "e3597cf6914f42d9c3ebd0659e11c081e59fbb14da4592cbba787fd77a992daa"
+    },
+    "assets/alpha_centauri_reel/images/scene-05-breakthrough-starshot.png": {
+      "mtime": 1789391767.556509,
+      "size": 2056776,
+      "sha256": "e88c13ec76942e3353d09f5b9d9d8048be01081c08957c05e3490992e0d0a7d1"
+    },
+    "assets/alpha_centauri_reel/images/scene-06-arrival-20-years.png": {
+      "mtime": 1789391809.977697,
+      "size": 2109474,
+      "sha256": "16cbdd241c2a9601a93ea0f9419ac0837644a750b76f29ac2f8e00d0fd11cd34"
+    },
+    "assets/alpha_centauri_reel/images/scene-07-humanity-second-home.png": {
+      "mtime": 1789391790.3180454,
+      "size": 2524409,
+      "sha256": "b91b8b3b53ae84e8fdbdb8622c1adcd028f2def5a772524cb2c0d34f3fb67b9e"
+    },
+    "assets/alpha_centauri_reel/images/scene-08-brand-outro.png": {
+      "mtime": 1789391791.2138355,
+      "size": 2777765,
+      "sha256": "552c33d9510de684b13c1b706fab9e701a620efa0f4f41d9a91010e71463c887"
+    },
+    "assets/alpha_centauri_reel/raw/alpha_centauri_ab.png": {
+      "mtime": 1789383054.7178178,
+      "size": 1175859,
+      "sha256": "6d9fdac4c1e19f3fedc87533e50d13dfcc8f56006fe2853a93f5c21b85d77d42"
+    },
+    "assets/alpha_centauri_reel/raw/alpha_centauri_ab_eso.jpg": {
+      "mtime": 1789383053.1285083,
+      "size": 335570,
+      "sha256": "d5ebf5b64bf9ec1b7b934bf8f1e3a663ea48c2e0a113201df4e1bb14e9f8475b"
+    },
+    "assets/alpha_centauri_reel/raw/paranal_vertical_sky.jpg": {
+      "mtime": 1789383084.21062,
+      "size": 9679238,
+      "sha256": "241311ba31f043d84183996a2e99f439c923bc783c09d80208a41edcfcc4025c"
+    },
+    "assets/alpha_centauri_reel/raw/proxima_hubble.jpg": {
+      "mtime": 1789383037.5490682,
+      "size": 69750,
+      "sha256": "70485c58e3c2728cd05dc7f5c4891a3c4a09c04d02e8a06f1980e3bcfd0a90e0"
+    },
+    "assets/alpha_centauri_reel/raw/scene-01-hook-raw.png": {
+      "mtime": 1789394740.9411407,
+      "size": 2697923,
+      "sha256": "c918ce793ccc220725ab7e41e1f5ecb079a4ab6de599d8decc5da3fa0180746c"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-01.png": {
+      "mtime": 1788858026.7369182,
+      "size": 497161,
+      "sha256": "cbffeab780cb884eb892817dc743d3b763b657a73af02e5e31b5b46418c1c25d"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-01_premium.png": {
+      "mtime": 1788857981.3672407,
+      "size": 497161,
+      "sha256": "cbffeab780cb884eb892817dc743d3b763b657a73af02e5e31b5b46418c1c25d"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-01_temp.png": {
+      "mtime": 1788857851.548965,
+      "size": 41504,
+      "sha256": "1f5feb4f39695d0cbd9235f9f1cfa0b18f94bfe32c626aaa477af7b91be17ebd"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-02.png": {
+      "mtime": 1788855228.0823188,
+      "size": 57132,
+      "sha256": "a477d24078eccf59b96e46c6a039dd0931530b499ae4cbec68c0c05e8cea6a49"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-03.png": {
+      "mtime": 1788855273.2984865,
+      "size": 273956,
+      "sha256": "589ad69d5ca337824fcc3a041c89fc90e85a0ddbf8fc01407aad0e1341eaea4b"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-04.png": {
+      "mtime": 1788855317.7211661,
+      "size": 548990,
+      "sha256": "adabd30bd300b88a6af56b16d1c87b8c00e16755ea9e1fe0e3b1641aa0772174"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-05.png": {
+      "mtime": 1788855362.8672373,
+      "size": 355712,
+      "sha256": "b9c3ee8c0fd77a406412d8fd20687bcd59e8a79b80ba00777d842e9581119632"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-06.png": {
+      "mtime": 1788855810.4776103,
+      "size": 548990,
+      "sha256": "adabd30bd300b88a6af56b16d1c87b8c00e16755ea9e1fe0e3b1641aa0772174"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-07.png": {
+      "mtime": 1788855810.4815545,
+      "size": 355712,
+      "sha256": "b9c3ee8c0fd77a406412d8fd20687bcd59e8a79b80ba00777d842e9581119632"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-08.png": {
+      "mtime": 1788855810.4843066,
+      "size": 243139,
+      "sha256": "16a51c09a35e0515d6cf849018fd23e5927b41ec63e5238d8577401a5b906902"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-09.png": {
+      "mtime": 1788855453.3075414,
+      "size": 243139,
+      "sha256": "16a51c09a35e0515d6cf849018fd23e5927b41ec63e5238d8577401a5b906902"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-10.png": {
+      "mtime": 1788855498.4295497,
+      "size": 368499,
+      "sha256": "13ea90c310d2188453afdea4a0d4dadce01899b9aed90c18d26edd28ddef43bd"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-11.png": {
+      "mtime": 1788855810.487278,
+      "size": 368499,
+      "sha256": "13ea90c310d2188453afdea4a0d4dadce01899b9aed90c18d26edd28ddef43bd"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-12.png": {
+      "mtime": 1788855810.490008,
+      "size": 477717,
+      "sha256": "11cc5596433b5e976cf65634bbf5977db320f869123a9560ea161ede9be1b119"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-13.png": {
+      "mtime": 1788855543.4504669,
+      "size": 477717,
+      "sha256": "11cc5596433b5e976cf65634bbf5977db320f869123a9560ea161ede9be1b119"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-14.png": {
+      "mtime": 1788855587.922941,
+      "size": 422700,
+      "sha256": "21919f1a2a359b9d7ce2a006a5f244fa56d74d7b86fd742f033d30c1084e6487"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-15.png": {
+      "mtime": 1788855632.9401097,
+      "size": 418222,
+      "sha256": "f679208a2bbfd71f30c589d4fee57a1a3008b585bcdd7177f9a2c16fc62de568"
+    },
+    "assets/angkor_cinematic_documentary/images/scene-16.png": {
+      "mtime": 1788855683.859444,
+      "size": 226620,
+      "sha256": "887af6ca41d802b8470ab5bf6fc55eb52587a565a0620ff6ee93e0c0ccf4afdc"
+    },
+    "assets/artemis_ii_far_side_reel/images/scene-01-hook.png": {
+      "mtime": 1788689809.084283,
+      "size": 3410757,
+      "sha256": "81552e0acc569446a5fa1fa18241658146665c5069e6a3b8bc39c2d0b41d4fc8"
+    },
+    "assets/artemis_ii_far_side_reel/images/scene-02-launch.png": {
+      "mtime": 1788689809.3151171,
+      "size": 3222087,
+      "sha256": "0e8adcb516b4c146e9e38f2e2b18c2fef7add479665ad46c77ccfb6fe3c34523"
+    },
+    "assets/artemis_ii_far_side_reel/images/scene-03-crew.png": {
+      "mtime": 1788689999.591506,
+      "size": 2647504,
+      "sha256": "5694dccbc4b9e18fbe9eed2721c7a3b099113571055817ef78be35299cf080eb"
+    },
+    "assets/artemis_ii_far_side_reel/images/scene-04-outbound.png": {
+      "mtime": 1788689809.7303693,
+      "size": 2722350,
+      "sha256": "de1a6b536aa00ab55822138219688f0395920503ed772c61067d3847fb99c486"
+    },
+    "assets/artemis_ii_far_side_reel/images/scene-05-far-side-blackout.png": {
+      "mtime": 1788689809.932675,
+      "size": 2778692,
+      "sha256": "8cb49c7ce662dfd2829daf04c59ac9213ea1d9f58b17ca629c16d48955c7e7a6"
+    },
+    "assets/artemis_ii_far_side_reel/images/scene-06-lunar-observation.png": {
+      "mtime": 1788689999.7263346,
+      "size": 2942641,
+      "sha256": "a5e150b4662eedb95727b8e752ae091f998c1d4546d280c8e754911981b8112f"
+    },
+    "assets/artemis_ii_far_side_reel/images/scene-07-free-return.png": {
+      "mtime": 1788689810.381616,
+      "size": 3067749,
+      "sha256": "9fa3581ffe771227c4ced11efea4ab9866e11ceb40e80810cac5ccde255dbe9e"
+    },
+    "assets/artemis_ii_far_side_reel/images/scene-08-reentry.png": {
+      "mtime": 1788689810.5902364,
+      "size": 2850651,
+      "sha256": "2f5809b64230d9a441c56712b3cd1c8c4b1e7d5f2124cdab0965562da1518fe3"
+    },
+    "assets/artemis_ii_far_side_reel/images/scene-09-splashdown.png": {
+      "mtime": 1788689810.8157384,
+      "size": 3153441,
+      "sha256": "5897b7065c829a71bff834b2455ef89f1ee72120347445596fee84788ef78f5e"
+    },
+    "assets/artemis_ii_far_side_reel/images/scene-10-mamase-outro.png": {
+      "mtime": 1788689808.788529,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/artemis_reel/images/scene-01-hook.png": {
+      "mtime": 1789221917.303654,
+      "size": 2792571,
+      "sha256": "7db4708ff34a4e0929544c04a2ee934c1ea43ae5129c5f588cbbc2d0020f33bd"
+    },
+    "assets/artemis_reel/images/scene-02-artemis-1.png": {
+      "mtime": 1789221917.4574249,
+      "size": 2954006,
+      "sha256": "3b6c7e31434d2e5593cb6cdffe508f7ab6ccb7e14c8c8dc1fec6dfe98235005f"
+    },
+    "assets/artemis_reel/images/scene-03-artemis-2.png": {
+      "mtime": 1789221917.611842,
+      "size": 2734519,
+      "sha256": "acdbb6ed4ed84b51a71d884d0c43783a1d4b418aec5e1d68014f9c13cb544aa9"
+    },
+    "assets/artemis_reel/images/scene-04-artemis-3.png": {
+      "mtime": 1789221917.7571027,
+      "size": 2801258,
+      "sha256": "8ae5b166555aae8aa617aa42aab8ed2654f292a11da02ce9b96a76e48a7c97e7"
+    },
+    "assets/artemis_reel/images/scene-05-artemis-4.png": {
+      "mtime": 1789221917.9008975,
+      "size": 2904790,
+      "sha256": "45164271033fc87a82b0d40e9196f6b60c988a6817edcfffaa4a532158de517d"
+    },
+    "assets/artemis_reel/images/scene-06-artemis-5.png": {
+      "mtime": 1789221918.0422523,
+      "size": 2590226,
+      "sha256": "f47999d3ebede250398c0647e86ee1eae62b4fde88ce539f7a5f36d7bd018231"
+    },
+    "assets/artemis_reel/images/scene-07-moon-to-mars.png": {
+      "mtime": 1789221918.1070292,
+      "size": 1361486,
+      "sha256": "15e93b317125686a1366291a7fcd03b8bea1048d3f22c8a602d4787308e3f185"
+    },
+    "assets/artemis_reel/images/scene-08-new-era-climax.png": {
+      "mtime": 1789221918.263487,
+      "size": 2555537,
+      "sha256": "b119e3bd7f298567ab9507f69addde54c8d3b607ea9755bb971edcdc88d7a923"
+    },
+    "assets/artemis_reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1789221918.265736,
+      "size": 2308379,
+      "sha256": "50525dd0bb5f75656eb832bf2959e73ff803ef006e1dbc7eeb02ad5e19ab1ed8"
+    },
+    "assets/before_big_bang_podcast/before-big-bang-cover-1920x1080.png": {
+      "mtime": 1788697854.8802235,
+      "size": 3164246,
+      "sha256": "390f4ae256b085d64cc749e9219208c6aeb4d0bea0afa509b5e1948b40032a27"
+    },
+    "assets/before_big_bang_podcast/before-big-bang-cover-native.png": {
+      "mtime": 1788697854.616964,
+      "size": 2421411,
+      "sha256": "271d8330a3f1ba18753d79bcc433c9ab824889e118342632be5a3d6be5131953"
+    },
+    "assets/bepicolombo_extreme_mercury_reel/scene-01-hook.png": {
+      "mtime": 1788590983.1227558,
+      "size": 2108685,
+      "sha256": "54a39845e2af8e44c03053b6be514cd2062cad89df012f266ba54d943434b27d"
+    },
+    "assets/bepicolombo_extreme_mercury_reel/scene-02-only-three-missions.png": {
+      "mtime": 1788590983.6348305,
+      "size": 419493,
+      "sha256": "a2b7e56adbde8b008b707452eef9a17a820caa8de01afaab9b5d9cebfddce050"
+    },
+    "assets/bepicolombo_extreme_mercury_reel/scene-03-solar-furnace.png": {
+      "mtime": 1788590984.2811806,
+      "size": 1682625,
+      "sha256": "19207c8fa4241c59296d1f6c1d10046bfc4e4c5f2c386ce6a0da07dc760ce8a4"
+    },
+    "assets/bepicolombo_extreme_mercury_reel/scene-04-ceramic-heat-shield.png": {
+      "mtime": 1788590984.7610974,
+      "size": 2133263,
+      "sha256": "ee2c01d0ab0c9f0bbc2e7b8d47435b8d05fc2533d38324909754b82e1dc42b60"
+    },
+    "assets/bepicolombo_extreme_mercury_reel/scene-05-tilted-solar-arrays.png": {
+      "mtime": 1788590985.5905068,
+      "size": 1573494,
+      "sha256": "85ec1c291fc74d915c64c96e2964ee4e8b8ea41ed38b0af38aa84c0809d6ccd1"
+    },
+    "assets/bepicolombo_extreme_mercury_reel/scene-06-no-atmosphere-airbrakes.png": {
+      "mtime": 1788590985.9638195,
+      "size": 1028973,
+      "sha256": "aa053f09cf8d91fa36c2bbbdad54da8087aedb2c590c9a9acba34cb3143f8c59"
+    },
+    "assets/bepicolombo_extreme_mercury_reel/scene-07-planetary-arrival.png": {
+      "mtime": 1788590986.2406867,
+      "size": 664303,
+      "sha256": "f8fd076b70f827be4057ed2f537cce4b929a49c5508f63e3e06359ccb70d6652"
+    },
+    "assets/bepicolombo_extreme_mercury_reel/scene-08-philosophical-climax.png": {
+      "mtime": 1788590986.7473137,
+      "size": 645720,
+      "sha256": "0fe11a0c580b60f30b9364fd780f676e43f65fc16c3f2742ef011e40cd882f0d"
+    },
+    "assets/bepicolombo_extreme_mercury_reel/scene-09-mamase-outro.png": {
+      "mtime": 1788590986.7495444,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/bepicolombo_mercury_reel/scene-01-hook.png": {
+      "mtime": 1788579434.882674,
+      "size": 676933,
+      "sha256": "82d1b3166e3bcc488df7e1058a14838c6e521195965358031d61c45acc496f68"
+    },
+    "assets/bepicolombo_mercury_reel/scene-02-gravity-well-paradox.png": {
+      "mtime": 1788579434.9514587,
+      "size": 64438,
+      "sha256": "aecc9b803c24110c43dc02ad91e327f1325a70ff89015e72834733b8dbf248d5"
+    },
+    "assets/bepicolombo_mercury_reel/scene-03-celestial-billiards.png": {
+      "mtime": 1788579435.368463,
+      "size": 256240,
+      "sha256": "4de1b3bb67117b0c60230790cddc34ada20cadeab203bb57f0524c478b411f17"
+    },
+    "assets/bepicolombo_mercury_reel/scene-04-ion-thrusters.png": {
+      "mtime": 1788579435.635997,
+      "size": 1421711,
+      "sha256": "5d3e0b27f60c28f8199d41f562833135791c6e27c3b338b41ef3dac40892e6f4"
+    },
+    "assets/bepicolombo_mercury_reel/scene-05-mtm-separation.png": {
+      "mtime": 1788579436.4924767,
+      "size": 1530649,
+      "sha256": "204f590da83a80de75b30ee14006afbb9b90eada0cbf4a977e38ac9994483ff6"
+    },
+    "assets/bepicolombo_mercury_reel/scene-06-twin-orbiters.png": {
+      "mtime": 1788579436.8836527,
+      "size": 566282,
+      "sha256": "2c196053496e076141b22d9ead9ab62d81171f303c7fcaab941a3cc6a0bbc27c"
+    },
+    "assets/bepicolombo_mercury_reel/scene-07-extreme-mercury.png": {
+      "mtime": 1788579437.102753,
+      "size": 886896,
+      "sha256": "0d91366ef65b5df15400b038613fc64ba16cc23c11988283f0b15dbffb66eb7f"
+    },
+    "assets/bepicolombo_mercury_reel/scene-08-philosophical-climax.png": {
+      "mtime": 1788579437.3852918,
+      "size": 858044,
+      "sha256": "cea9d7b48e18d8ae62c558ecc07678977abd020ec02183a1be2652b1b1e0f66f"
+    },
+    "assets/bepicolombo_mercury_reel/scene-09-mamase-outro.png": {
+      "mtime": 1788579437.3882413,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/bermuda_triangle_reel/images/scene-01-hook.png": {
+      "mtime": 1789053431.949745,
+      "size": 3341884,
+      "sha256": "d4dda6c0dd7f9b145d090bc4600726a977101758a635f1c40488472457db8167"
+    },
+    "assets/bermuda_triangle_reel/images/scene-02-location.png": {
+      "mtime": 1789053432.533568,
+      "size": 3207383,
+      "sha256": "1e59449583cad602efa3fa1f1a3c827a8640473df482ce37cdaf7689e36fed3e"
+    },
+    "assets/bermuda_triangle_reel/images/scene-03-flight-19.png": {
+      "mtime": 1789053433.2251472,
+      "size": 2606379,
+      "sha256": "d559abaef1e8474176576bfad313b70d208aae77bb50f7f57e9793e19f7dd230"
+    },
+    "assets/bermuda_triangle_reel/images/scene-04-cyclops.png": {
+      "mtime": 1789053433.911478,
+      "size": 2620144,
+      "sha256": "123f6b70b9fae52b0853020fbfbd5ffa05e842057c2e6f25cc8e8b310aea3c36"
+    },
+    "assets/bermuda_triangle_reel/images/scene-05-legend.png": {
+      "mtime": 1789053516.784334,
+      "size": 2802116,
+      "sha256": "7a1b92dbc45555cb6a675481262b2a2103c7153319f8f44148ff4d0190a330d9"
+    },
+    "assets/bermuda_triangle_reel/images/scene-06-weather.png": {
+      "mtime": 1789053434.5178242,
+      "size": 2931529,
+      "sha256": "2287a3f51fc957d8e1c99c5a76384a2539a4976f4a7eec57aacc38918f817056"
+    },
+    "assets/bermuda_triangle_reel/images/scene-07-gulf-stream.png": {
+      "mtime": 1789053435.0238836,
+      "size": 3484385,
+      "sha256": "26854cee6046cea747d30f67e31b844758c80eabb0f1515d28d16dca713297bd"
+    },
+    "assets/bermuda_triangle_reel/images/scene-08-navigation.png": {
+      "mtime": 1789053435.6541948,
+      "size": 2562207,
+      "sha256": "285d738f829da8bd02ba94a9dc5efe38970c45ff26d1b11fc1609c9b2d4e7a1c"
+    },
+    "assets/bermuda_triangle_reel/images/scene-09-conclusion.png": {
+      "mtime": 1789053436.200059,
+      "size": 3255910,
+      "sha256": "31af41781de9f994cd5a1fe45dbbbbdaed4072156357387d0f29f63d3a55d79c"
+    },
+    "assets/bermuda_triangle_reel/images/scene-10-outro.png": {
+      "mtime": 1789053436.9053593,
+      "size": 1685492,
+      "sha256": "577c074a9551388cd4ca9551fca5a8a0a0e95c285a07aadcdf0dbcc87918d76e"
+    },
+    "assets/betelgeuse_supernova_reel/images/scene-01-hook.png": {
+      "mtime": 1788935980.5317528,
+      "size": 1579215,
+      "sha256": "d3804a07e729d63ed1255166c827dfb9e675058783e2e4b2640e055ad1844def"
+    },
+    "assets/betelgeuse_supernova_reel/images/scene-02-dying-giant.png": {
+      "mtime": 1788936528.6041963,
+      "size": 2469862,
+      "sha256": "499c44f6170c5906481bf2ff287a8581b4d1da76c91d62aa42908a591291e35e"
+    },
+    "assets/betelgeuse_supernova_reel/images/scene-03-supernova-explosion.png": {
+      "mtime": 1788936528.608242,
+      "size": 2435855,
+      "sha256": "e31daf46d2739836ce41f4e954cc7650a540d816eb73e36ad32717d54f0db625"
+    },
+    "assets/betelgeuse_supernova_reel/images/scene-04-two-moons-night-sky.png": {
+      "mtime": 1788936528.7316086,
+      "size": 1793678,
+      "sha256": "30eb2a5c333543be14f24bce24946c8f2d1160963f66f4a4666bc4e59f5d9bbd"
+    },
+    "assets/betelgeuse_supernova_reel/images/scene-05-safe-distance.png": {
+      "mtime": 1788936528.7353468,
+      "size": 2386038,
+      "sha256": "29ed1264706a20a9b097bf26a17e14026e12390792a64594bc34b9a20a40adbb"
+    },
+    "assets/betelgeuse_supernova_reel/images/scene-06-cosmic-forge.png": {
+      "mtime": 1788936528.7382097,
+      "size": 3382579,
+      "sha256": "84e34c29f623e466534e03cedb277a6d4a56560637f1fce8431791cc3d6d320b"
+    },
+    "assets/betelgeuse_supernova_reel/images/scene-07-we-are-stardust.png": {
+      "mtime": 1788936528.7410705,
+      "size": 3723746,
+      "sha256": "4c13e55a55b8cf631add9bb684a9f37a54fd842f765dff20060d4debcd7e107a"
+    },
+    "assets/betelgeuse_supernova_reel/images/scene-08-philosophical-insight.png": {
+      "mtime": 1788936528.745057,
+      "size": 4289885,
+      "sha256": "232da75573a40a583c0e742ae0e9d5a2a58584b69951be1e8b833b92e1b0819c"
+    },
+    "assets/betelgeuse_supernova_reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1788936528.7478535,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/black_hole_before_galaxy_reel/images/scene-01-hook.png": {
+      "mtime": 1788847086.1163461,
+      "size": 3119245,
+      "sha256": "25fa8dde329e609870531a3b70a37b557eb54a3f11726e6f876146a0c13875a6"
+    },
+    "assets/black_hole_before_galaxy_reel/images/scene-02-classical-formation.png": {
+      "mtime": 1788847087.9957216,
+      "size": 3104158,
+      "sha256": "106f9d41634fc0c20dbeb70cc448ca97ec2bd8c9f4c19654459a2958c347fc4a"
+    },
+    "assets/black_hole_before_galaxy_reel/images/scene-02-classical-sequence.png": {
+      "mtime": 1788847087.1542823,
+      "size": 3104158,
+      "sha256": "106f9d41634fc0c20dbeb70cc448ca97ec2bd8c9f4c19654459a2958c347fc4a"
+    },
+    "assets/black_hole_before_galaxy_reel/images/scene-03-early-monster.png": {
+      "mtime": 1788847087.9176166,
+      "size": 2764111,
+      "sha256": "3e0dd6312225c5bddba6e7fb5f131bbe60edcfd6269b48639c821db2a278e144"
+    },
+    "assets/black_hole_before_galaxy_reel/images/scene-04-little-red-dot.png": {
+      "mtime": 1788847088.07283,
+      "size": 2615579,
+      "sha256": "79ea282035c158f6c2eb3073e16a5859136dd993595d914bd1dab0e860a3bd14"
+    },
+    "assets/black_hole_before_galaxy_reel/images/scene-04-qso1-lensing.png": {
+      "mtime": 1788847087.3570929,
+      "size": 2615579,
+      "sha256": "79ea282035c158f6c2eb3073e16a5859136dd993595d914bd1dab0e860a3bd14"
+    },
+    "assets/black_hole_before_galaxy_reel/images/scene-05-ancient-light-jwst.png": {
+      "mtime": 1788847087.6380553,
+      "size": 3039787,
+      "sha256": "f7e3478037da231f66afe3af654aa43927527b0fc7a4e86d6ac1b10fce608b76"
+    },
+    "assets/black_hole_before_galaxy_reel/images/scene-06-orbiting-gas.png": {
+      "mtime": 1788847086.725739,
+      "size": 3106843,
+      "sha256": "016c0cb8504ca6918c2d66ac8f460c6ab50944070701e54fb5fc49ca8799424f"
+    },
+    "assets/black_hole_before_galaxy_reel/images/scene-07-mass-imbalance.png": {
+      "mtime": 1788847087.5588987,
+      "size": 2716848,
+      "sha256": "1e7d5daac62fdd1e37cbc0f27401d197c8a991a1c2aa5e087abee0669d836b21"
+    },
+    "assets/black_hole_before_galaxy_reel/images/scene-07-mass-well.png": {
+      "mtime": 1788847086.3230627,
+      "size": 2716848,
+      "sha256": "1e7d5daac62fdd1e37cbc0f27401d197c8a991a1c2aa5e087abee0669d836b21"
+    },
+    "assets/black_hole_before_galaxy_reel/images/scene-08-primordial-gas.png": {
+      "mtime": 1788847086.9285147,
+      "size": 2807649,
+      "sha256": "0f5f0dd08e8145d84b8398786077cfaa57497471b5ef0c3c2e49989253194539"
+    },
+    "assets/black_hole_before_galaxy_reel/images/scene-09-direct-collapse.png": {
+      "mtime": 1788847085.825549,
+      "size": 2956030,
+      "sha256": "ac0b07f84370a03f322aac57c329bcdce41c690da0c497a435f023ee89596b80"
+    },
+    "assets/black_hole_before_galaxy_reel/images/scene-10-search-for-more.png": {
+      "mtime": 1788847087.8412585,
+      "size": 2803323,
+      "sha256": "48a93f9da9bfadb5e8d64ee904985ad09863b4e1d0251d1094dffea97e125d86"
+    },
+    "assets/black_hole_before_galaxy_reel/images/scene-10-searching-evidence.png": {
+      "mtime": 1788847086.0358095,
+      "size": 2803323,
+      "sha256": "48a93f9da9bfadb5e8d64ee904985ad09863b4e1d0251d1094dffea97e125d86"
+    },
+    "assets/black_hole_before_galaxy_reel/images/scene-11-mamase-outro.png": {
+      "mtime": 1788847086.5195842,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/branding/mamase/logo.png": {
+      "mtime": 1789088984.2837324,
+      "size": 2273720,
+      "sha256": "5667bda99be08eb972c31b3155de1671745b0f45b1e2c4f02011bfdc1d744443"
+    },
+    "assets/branding/mamase/mamase_podcast_header.png": {
+      "mtime": 1789259547.8756626,
+      "size": 48263,
+      "sha256": "21bae4c441e834c8e611612b7cf45fdcf3779c0f0672aefe50b94e1ed2c69399"
+    },
+    "assets/branding/mamase/reels-end-scene.png": {
+      "mtime": 1789088984.2783322,
+      "size": 2308379,
+      "sha256": "50525dd0bb5f75656eb832bf2959e73ff803ef006e1dbc7eeb02ad5e19ab1ed8"
+    },
+    "assets/branding/mamase/reference/eris-master-reels-visual-reference.jpg": {
+      "mtime": 1789216806.6213207,
+      "size": 402010,
+      "sha256": "c1250a03b6613f5d23ade9f0efa52d9337b74a8d1231207df3e5df5328571575"
+    },
+    "assets/branding/mamase/reference/mamase-reels-editorial-poster-master.png": {
+      "mtime": 1789393790.6815624,
+      "size": 2333634,
+      "sha256": "6bb368ea81f2434a48fe95cab24aab90582d749d9dcfadb5f22e56fc1f0a684c"
+    },
+    "assets/characters/mamase-presenter-cutout.png": {
+      "mtime": 1788935963.793267,
+      "size": 819837,
+      "sha256": "d92a8e028899f0e0c3672a0946d2b55fe475eb74834b4b405506084b96d10a56"
+    },
+    "assets/characters/mamase-presenter-v1.png": {
+      "mtime": 1788424588.5556293,
+      "size": 2525984,
+      "sha256": "e14ad0a79c9eb7afd657d149f105f42f9f5914c225228d78caeccb85a276c560"
+    },
+    "assets/cislunar_c3_constellation_reel/scene-01-hook.png": {
+      "mtime": 1788596257.6905913,
+      "size": 2551164,
+      "sha256": "292a653d20f02dabc7bf29e08621b804fa1d4a7d3143f6c3f112bb4631454420"
+    },
+    "assets/cislunar_c3_constellation_reel/scene-02-cislunar-frontier.png": {
+      "mtime": 1788596258.5739038,
+      "size": 1691461,
+      "sha256": "b45ebe5ede1d878f9b405850932c58c2a62526c6c98453ac6eaa9570bfa53842"
+    },
+    "assets/cislunar_c3_constellation_reel/scene-03-invisible-dangers.png": {
+      "mtime": 1788596259.2199063,
+      "size": 2718055,
+      "sha256": "71840b4a7fa80fb3573cf48fa268d26baa23b0a5eb64bda1a521369efab29db5"
+    },
+    "assets/cislunar_c3_constellation_reel/scene-04-cubesat-swarm.png": {
+      "mtime": 1788596259.7738087,
+      "size": 1800564,
+      "sha256": "10b4eba345db6e6bbf96b7b72765cdcdc190ab20eb61e397902ee8e3dfba2156"
+    },
+    "assets/cislunar_c3_constellation_reel/scene-05-lunar-base-support.png": {
+      "mtime": 1788596260.0074844,
+      "size": 905438,
+      "sha256": "d23f6427d34b7ecfd170886357bb9db176af6565437ea3f30313116ad1518fa8"
+    },
+    "assets/cislunar_c3_constellation_reel/scene-06-thailand-global-partnership.png": {
+      "mtime": 1788596260.7889915,
+      "size": 1885799,
+      "sha256": "d94a0c38dd166fa4804f97421da9233ae7d9af116ba07ff55dd08cf56f91695a"
+    },
+    "assets/cislunar_c3_constellation_reel/scene-07-gamma-ray-discovery.png": {
+      "mtime": 1788596261.5127118,
+      "size": 2600811,
+      "sha256": "a29887984c5aa1fa838b0ffa8b2ad6abc529d02ac8bff2f971f46352fc621f39"
+    },
+    "assets/cislunar_c3_constellation_reel/scene-08-philosophical-climax.png": {
+      "mtime": 1788596262.2194197,
+      "size": 2789792,
+      "sha256": "ec08f71f5a22fe32fbd672be17ce7aa0c2d4182fdb9eb25e0ca8e172102af45f"
+    },
+    "assets/cislunar_c3_constellation_reel/scene-09-mamase-outro.png": {
+      "mtime": 1788596262.222331,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/comets_reel/images/scene-01-hook.png": {
+      "mtime": 1789206956.5914624,
+      "size": 2739903,
+      "sha256": "0575bf360f8c5be6bd16798af66b1740629c8789625b24416c363a4d75482e24"
+    },
+    "assets/comets_reel/images/scene-02-solar-wind-direction.png": {
+      "mtime": 1789206956.7535074,
+      "size": 2729364,
+      "sha256": "68ecf996e7cb7fb4e5b1cef89fd07607ed93bb2d542b31787ccf3eadaefdea3f"
+    },
+    "assets/comets_reel/images/scene-03-tail-first-flight.png": {
+      "mtime": 1789206956.9165854,
+      "size": 2634109,
+      "sha256": "8dc6ffaf16bd4fdecf8f7e8105eb00b2a82b54b1810b4488c50aaa7a048d235b"
+    },
+    "assets/comets_reel/images/scene-04-two-tails-anatomy.png": {
+      "mtime": 1789206957.072295,
+      "size": 2891942,
+      "sha256": "0a853ce9179cc1e01fc9cbbbfcc6f754573aa01931bd4352aff0314a9751653f"
+    },
+    "assets/comets_reel/images/scene-05-nucleus-jets.png": {
+      "mtime": 1789206957.2246647,
+      "size": 3241452,
+      "sha256": "1793f19aae2e37057fb7b2a0ce760c45d64d89b82727bc4117ab6ed56fce9b6b"
+    },
+    "assets/comets_reel/images/scene-06-origin-from-edge.png": {
+      "mtime": 1789206957.3773794,
+      "size": 2982266,
+      "sha256": "835928c23f2442201873e23d99b04fb75b5ef5c2696906798e215ddd33d2f9cf"
+    },
+    "assets/comets_reel/images/scene-07-seeders-of-life.png": {
+      "mtime": 1789206957.5273004,
+      "size": 2920369,
+      "sha256": "d051f920df42e3e4e8ecd6492bfeffbd13fbf4293de9af3392c527960ceaac18"
+    },
+    "assets/comets_reel/images/scene-08-cosmic-connection.png": {
+      "mtime": 1789206957.849282,
+      "size": 1923539,
+      "sha256": "edb2d3d946855137c6a21ec2e8e32dafab99110e542e5a2be7be54122ed0d031"
+    },
+    "assets/comets_reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1789206958.0109644,
+      "size": 2915280,
+      "sha256": "de4d3b1a3390580c1ac8bafd7cf657b750c2f353ede1cc38fd34c844ae8c4972"
+    },
+    "assets/crew13_oxidizer_leak_reel/scene-01-hook.png": {
+      "mtime": 1788600110.243079,
+      "size": 2695850,
+      "sha256": "4147864fd1e8fc0a2a5c0f03691afe65699bb94e13002b160cd6ef355cf0cf2c"
+    },
+    "assets/crew13_oxidizer_leak_reel/scene-02-crew-13-scrub.png": {
+      "mtime": 1788600122.1609712,
+      "size": 1623112,
+      "sha256": "7aa0d482b24af8eae28bcd0b7c1e1d5c4d0f939f421bd7c167a6863a2149e6fd"
+    },
+    "assets/crew13_oxidizer_leak_reel/scene-03-what-is-oxidizer.png": {
+      "mtime": 1788601446.8671954,
+      "size": 2337234,
+      "sha256": "9fdc53252c749559ca432e589b56f18a6e7fb0ab45d5b48e8ec30cd717630346"
+    },
+    "assets/crew13_oxidizer_leak_reel/scene-04-hypergolic-ignition.png": {
+      "mtime": 1788600154.8207166,
+      "size": 2306126,
+      "sha256": "a42e4e71f6d97b915645f0ebad6b73b64d7ecfbbe6f6382024c3885979394735"
+    },
+    "assets/crew13_oxidizer_leak_reel/scene-05-leak-consequences.png": {
+      "mtime": 1788602392.7846794,
+      "size": 1677091,
+      "sha256": "5be8a8eb5670767064c395a7d38465457556331f4b44ba9c568fcfdcf7d249f1"
+    },
+    "assets/crew13_oxidizer_leak_reel/scene-06-astronaut-safety.png": {
+      "mtime": 1788601178.9678102,
+      "size": 941948,
+      "sha256": "a8dcb06482840ab880f6f6c868a8305cdd905b29060e3aec5142f9e04abea853"
+    },
+    "assets/crew13_oxidizer_leak_reel/scene-07-cleanroom-inspection.png": {
+      "mtime": 1788601448.3746116,
+      "size": 2157524,
+      "sha256": "4bc408c4739cc08bfd348683232789b2ed11da0123385d6fd65668b6b5d6e3ee"
+    },
+    "assets/crew13_oxidizer_leak_reel/scene-08-philosophical-climax.png": {
+      "mtime": 1788601337.9450016,
+      "size": 1812602,
+      "sha256": "316dd0d65608d5467f10e0885b68061951b68e5e59ab93fc860578c9f44ff8c1"
+    },
+    "assets/crew13_oxidizer_leak_reel/scene-09-mamase-outro.png": {
+      "mtime": 1788602392.7893896,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/dead_stars_night_sky_reel/images/scene-01-hook.png": {
+      "mtime": 1789453476.046925,
+      "size": 2944096,
+      "sha256": "977a15e99fb4e19ac421f046712d82fe4517aa62ac01f4399893533ab97d3048"
+    },
+    "assets/dead_stars_night_sky_reel/images/scene-02-light-time-machine.png": {
+      "mtime": 1789454652.0841048,
+      "size": 3342354,
+      "sha256": "8e1dc49ff8f93466ce9e846b42e20a4f07a47775675b25182ad06b726e2e4b92"
+    },
+    "assets/dead_stars_night_sky_reel/images/scene-03-twist-almost-all-alive.png": {
+      "mtime": 1789454652.3831804,
+      "size": 3365153,
+      "sha256": "b4f534bc46b4b103861b6ea0b8e2448d4f31a486854f5650f31fbefefa14d7e0"
+    },
+    "assets/dead_stars_night_sky_reel/images/scene-04-lifespan-vs-distance.png": {
+      "mtime": 1789454652.574643,
+      "size": 2620853,
+      "sha256": "bf5c8df0f33fbe3b56e948f88d071c906d1acab232539c58c71ddc116d9a5cc9"
+    },
+    "assets/dead_stars_night_sky_reel/images/scene-05-exception-betelgeuse.png": {
+      "mtime": 1789454652.7752118,
+      "size": 2271233,
+      "sha256": "e1f1b92e1feb82fadfc6071838089b609cea4e7b202bba4a3ec330b2f4cde4aa"
+    },
+    "assets/dead_stars_night_sky_reel/images/scene-06-deep-void-true-graveyard.png": {
+      "mtime": 1789454652.9242456,
+      "size": 1842593,
+      "sha256": "478ced9a7e78d69ac1dd4144d272c3fc8666b833aa893e347ebc57c8761d63ad"
+    },
+    "assets/dead_stars_night_sky_reel/images/scene-07-meaning-eternal-light.png": {
+      "mtime": 1789454653.0948153,
+      "size": 2880678,
+      "sha256": "c57e9a6d8e2b843259ad44135f1b95589c575e2355c2673b753e03f54fd8adfb"
+    },
+    "assets/dead_stars_night_sky_reel/images/scene-08-brand-outro.png": {
+      "mtime": 1789454653.2967525,
+      "size": 2915280,
+      "sha256": "de4d3b1a3390580c1ac8bafd7cf657b750c2f353ede1cc38fd34c844ae8c4972"
+    },
+    "assets/dragonfly_titan_reel/images/scene-01-hook.png": {
+      "mtime": 1789051028.8638005,
+      "size": 3253176,
+      "sha256": "326f57eba741259ef1f07344290bc4b60a2c54922068f70954e28984fedeb609"
+    },
+    "assets/dragonfly_titan_reel/images/scene-02-titan-world.png": {
+      "mtime": 1789051029.08046,
+      "size": 2839436,
+      "sha256": "eacbce7b2733c99f63381f772448b7578bf79bb6ee7698ca5c996e97cd45d82c"
+    },
+    "assets/dragonfly_titan_reel/images/scene-03-flight.png": {
+      "mtime": 1789051029.2931912,
+      "size": 2840893,
+      "sha256": "eaadd972232d2be6f4b5273a7ee5782fa4f34696637389a541bba5e801e41a59"
+    },
+    "assets/dragonfly_titan_reel/images/scene-04-exploration.png": {
+      "mtime": 1789051029.5045738,
+      "size": 2998337,
+      "sha256": "5ba34672f6a4b12714f39315904c78757b3b71f3e825e164ca0dd66c363b5916"
+    },
+    "assets/dragonfly_titan_reel/images/scene-05-science.png": {
+      "mtime": 1789051029.726149,
+      "size": 2873160,
+      "sha256": "3c47431c0f57d9f1b91c0f73116d6442e8b45685a94287ce312f17c9da8bc003"
+    },
+    "assets/dragonfly_titan_reel/images/scene-06-prebiotic-chemistry.png": {
+      "mtime": 1789051029.9366415,
+      "size": 3102086,
+      "sha256": "d90a25a503a914e83cee712670d07c0b39b7882eeba6635a270adb91b6093227"
+    },
+    "assets/dragonfly_titan_reel/images/scene-07-sampling.png": {
+      "mtime": 1789051030.1464703,
+      "size": 2987276,
+      "sha256": "cd2ccac13e2eb0177701351c81cf2c50eb51e8a4433d8e38b06f69cfed011ed9"
+    },
+    "assets/dragonfly_titan_reel/images/scene-08-selk-crater.png": {
+      "mtime": 1789051030.358566,
+      "size": 3188551,
+      "sha256": "1a6d325974584cd0865301b2188c63ca4b399977e3b19677c32122b9f602c16a"
+    },
+    "assets/dragonfly_titan_reel/images/scene-09-big-question.png": {
+      "mtime": 1789051030.5609756,
+      "size": 2630889,
+      "sha256": "f14116cc6e47469036488343df0107d369f499b3b2f3ad11ca0646caa5a680f5"
+    },
+    "assets/dragonfly_titan_reel/images/scene-10-outro.png": {
+      "mtime": 1789051030.7844574,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/dyatlov_pass_part2_reel/images/scene-01-hook.png": {
+      "mtime": 1789090250.5216298,
+      "size": 4191613,
+      "sha256": "3d9f1b70a2ca60231c7dfe6b3f35453b0d8433a0356e49e7f8c6bf98fa1f3292"
+    },
+    "assets/dyatlov_pass_part2_reel/images/scene-02-1959-expedition.png": {
+      "mtime": 1789090251.2646234,
+      "size": 3632177,
+      "sha256": "5cbde99548f6e2710b81d48267a9fd0f4e390410686ee4dc861bdbd9547019cb"
+    },
+    "assets/dyatlov_pass_part2_reel/images/scene-03-abandoned-camp.png": {
+      "mtime": 1789090251.9901357,
+      "size": 3466322,
+      "sha256": "93e7d22c9ab60fa94da163881594561deb97fcaf51603c596b5bfc2a3209fc92"
+    },
+    "assets/dyatlov_pass_part2_reel/images/scene-04-theories.png": {
+      "mtime": 1789090252.7818527,
+      "size": 2741853,
+      "sha256": "8254cee23e44ef9b14684422f1d9181e3e6d4e6eb8f6376b5a5faec0f739775d"
+    },
+    "assets/dyatlov_pass_part2_reel/images/scene-05-model.png": {
+      "mtime": 1789090253.4971633,
+      "size": 3592061,
+      "sha256": "7d4d4c98b265a3922b001248946918fbb9159abfb6e80d575ff1c70281b31b27"
+    },
+    "assets/dyatlov_pass_part2_reel/images/scene-06-slab.png": {
+      "mtime": 1789090254.2499697,
+      "size": 2964047,
+      "sha256": "7ff0e078be750e3dfe2574bbb1c4ae9259c707edc83631b0cbaa36e1261a8804"
+    },
+    "assets/dyatlov_pass_part2_reel/images/scene-07-payoff.png": {
+      "mtime": 1789090255.0102978,
+      "size": 3295445,
+      "sha256": "14c9e3f8e6eff26a03e3726cc95ee98b63f4896b913f88049bc70ac1c5185207"
+    },
+    "assets/dyatlov_pass_part2_reel/images/scene-08-mamase-end.png": {
+      "mtime": 1789090255.018225,
+      "size": 2308379,
+      "sha256": "50525dd0bb5f75656eb832bf2959e73ff803ef006e1dbc7eeb02ad5e19ab1ed8"
+    },
+    "assets/dyatlov_pass_part2_reel/raw/scene-01-hook.png": {
+      "mtime": 1789090148.4498153,
+      "size": 3051195,
+      "sha256": "c58a27b0b1f7fc82e198c873322801799e3db900daea8f77fea50cb8949ba042"
+    },
+    "assets/dyatlov_pass_part2_reel/raw/scene-02-1959-expedition.png": {
+      "mtime": 1789090148.4556932,
+      "size": 2639930,
+      "sha256": "faf948e978cd1a14ef85c7327370899ab129954e74f670db0b65df6a3b57fe8e"
+    },
+    "assets/dyatlov_pass_part2_reel/raw/scene-03-abandoned-camp.png": {
+      "mtime": 1789090148.4613833,
+      "size": 2507882,
+      "sha256": "5e454623db94ed5b8bde83aec75d1e000febbd0607fc98d0a01b197b826833ea"
+    },
+    "assets/dyatlov_pass_part2_reel/raw/scene-04-theories.png": {
+      "mtime": 1789090249.8004017,
+      "size": 1937084,
+      "sha256": "18eddede299b3440615e3dc5ed2243beb4151fb04ff391a2a089ae8c7478adeb"
+    },
+    "assets/dyatlov_pass_part2_reel/raw/scene-05-model.png": {
+      "mtime": 1789090148.470672,
+      "size": 2639777,
+      "sha256": "2442ee08606ed77a53189bf4502a9133379fcf56a89444fcf2f012e02a4410dd"
+    },
+    "assets/dyatlov_pass_part2_reel/raw/scene-06-slab.png": {
+      "mtime": 1789090148.4752953,
+      "size": 2145865,
+      "sha256": "abdf4a57790ae906c101ef34164a7be7fd70c219a769e8442bcef173b549f701"
+    },
+    "assets/dyatlov_pass_part2_reel/raw/scene-07-payoff.png": {
+      "mtime": 1789090148.4802294,
+      "size": 2357154,
+      "sha256": "d41595c082b5c955218c20277cb3dd0208b3010651f64121221290ab837e6be9"
+    },
+    "assets/dyson_sphere_civilization_energy_reel/images/scene-01-hook.png": {
+      "mtime": 1789483031.3205175,
+      "size": 2883760,
+      "sha256": "00cf2c934555d3af2ffd4204697263d19e8eb0881cead3b34f9bfe0b266db8fe"
+    },
+    "assets/dyson_sphere_civilization_energy_reel/images/scene-02-not-solid-ball.png": {
+      "mtime": 1789483031.7858026,
+      "size": 3387849,
+      "sha256": "6a7e113351cd48958b487847bdb722091429afefbca07950b572bd1f7a8f559e"
+    },
+    "assets/dyson_sphere_civilization_energy_reel/images/scene-03-dyson-swarm.png": {
+      "mtime": 1789483032.4768155,
+      "size": 3106539,
+      "sha256": "cc24efe0a44a672d53557d1570aaf767d7e24c08c240db8e185067f7077b6cb8"
+    },
+    "assets/dyson_sphere_civilization_energy_reel/images/scene-04-kardashev-type-two.png": {
+      "mtime": 1789483033.4572701,
+      "size": 2708395,
+      "sha256": "eefbfb501a6ba69397d47b48740c498f0df7cc6f1efb66c19d8383b2ce3aa0b6"
+    },
+    "assets/dyson_sphere_civilization_energy_reel/images/scene-05-thermodynamics-waste-heat.png": {
+      "mtime": 1789483034.4498904,
+      "size": 2411021,
+      "sha256": "af570174d83c32fb256c742e8a7ea9a294f685807591f32d65fce51936d420aa"
+    },
+    "assets/dyson_sphere_civilization_energy_reel/images/scene-06-infrared-technosignature.png": {
+      "mtime": 1789483035.1054502,
+      "size": 2752819,
+      "sha256": "705e65bc7171d0f162339320641bb8efbdda7e7d886b3dd7f268e84141a29b86"
+    },
+    "assets/dyson_sphere_civilization_energy_reel/images/scene-07-dust-and-false-positives.png": {
+      "mtime": 1789483035.7603862,
+      "size": 2909878,
+      "sha256": "1ccfd54c5f50bd9f8bca3475d48d51d6715d61df92093bce19f9b60f49652caf"
+    },
+    "assets/dyson_sphere_civilization_energy_reel/images/scene-08-payoff-search-for-heat.png": {
+      "mtime": 1789483036.0275576,
+      "size": 4279687,
+      "sha256": "5e8e9a990c33424fbab8c1b176521389c665e9970950789eeb386a2466b89a7e"
+    },
+    "assets/dyson_sphere_civilization_energy_reel/images/scene-09-brand-outro.png": {
+      "mtime": 1789483036.9043705,
+      "size": 2777765,
+      "sha256": "552c33d9510de684b13c1b706fab9e701a620efa0f4f41d9a91010e71463c887"
+    },
+    "assets/edge_of_universe_reel/images/scene-01-hook.png": {
+      "mtime": 1789112855.1304357,
+      "size": 2684095,
+      "sha256": "e4912d08a69c826a4f02d9e9c348daef482783d182b3105db0ba501383500164"
+    },
+    "assets/edge_of_universe_reel/images/scene-02-cosmic-horizon.png": {
+      "mtime": 1789113477.0314054,
+      "size": 2747813,
+      "sha256": "5aef67dc1995e295de8a2d78a63b9af611148ff1316b7367e846182703fb91a2"
+    },
+    "assets/edge_of_universe_reel/images/scene-03-46-billion-ly.png": {
+      "mtime": 1789113477.1641572,
+      "size": 3321672,
+      "sha256": "7e5d3b6e4bcabe42793776e43a70f4c2283691c297dbb9fc60a50aaf89193e6d"
+    },
+    "assets/edge_of_universe_reel/images/scene-04-infinite-universe.png": {
+      "mtime": 1789113477.300941,
+      "size": 2427058,
+      "sha256": "3f6e91b906f9d3e430b0e09383eb24f6d95dacfdba9378f2ee9fc39fc0b0e1f7"
+    },
+    "assets/edge_of_universe_reel/images/scene-05-flying-across-edge.png": {
+      "mtime": 1789113477.4347062,
+      "size": 2889009,
+      "sha256": "1c2f1e38d203752b6c82572bd003a61d331bc7898d57218ebe69acaadceb3ea0"
+    },
+    "assets/edge_of_universe_reel/images/scene-06-observer-centers.png": {
+      "mtime": 1789113477.5609848,
+      "size": 2970799,
+      "sha256": "33e10323bd935fc1970f7b69095c259e388f01d95a3cc844ed3a79e6f1c9f659"
+    },
+    "assets/edge_of_universe_reel/images/scene-07-expanding-spacetime.png": {
+      "mtime": 1789113477.6901238,
+      "size": 2924486,
+      "sha256": "f2889c35fc1f6dd991215f3f035d36f44eed728f9a077449e31c493849b2f521"
+    },
+    "assets/edge_of_universe_reel/images/scene-08-philosophical-climax.png": {
+      "mtime": 1789113477.812739,
+      "size": 3156975,
+      "sha256": "b4a51c6a391fd60b948fd2afb7b589a7c4acd5cee1185fcdae83fea8c77e793b"
+    },
+    "assets/edge_of_universe_reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1789113477.9730017,
+      "size": 2915280,
+      "sha256": "de4d3b1a3390580c1ac8bafd7cf657b750c2f353ede1cc38fd34c844ae8c4972"
+    },
+    "assets/eris_reel/images/eris-cover-square-1x1.png": {
+      "mtime": 1789218318.8267555,
+      "size": 1782456,
+      "sha256": "cb4fab320a06489674ad4d0096418fcfe9802b6102e912a901f686415c4a58c0"
+    },
+    "assets/eris_reel/images/eris-reels-cover-9x16.png": {
+      "mtime": 1789218160.0605474,
+      "size": 2834662,
+      "sha256": "a81e355374aab3b370beb914bcb6e8c0582d1c549842f8bb6610dc5a28db5326"
+    },
+    "assets/eris_reel/images/scene-01-hook.png": {
+      "mtime": 1789218159.917924,
+      "size": 2834662,
+      "sha256": "a81e355374aab3b370beb914bcb6e8c0582d1c549842f8bb6610dc5a28db5326"
+    },
+    "assets/eris_reel/images/scene-02-planet-killer-pluto.png": {
+      "mtime": 1789215030.418781,
+      "size": 2824514,
+      "sha256": "1df5d1fe9350ab7f088302110eabd2e8bd509e765daa4f4d7b947f20e0494944"
+    },
+    "assets/eris_reel/images/scene-03-twin-sizes-dysnomia.png": {
+      "mtime": 1789215030.5596385,
+      "size": 3237010,
+      "sha256": "ec3db06e1390c8acd1c022e398a13bc6002bb812c940874d04d3417c1681ce66"
+    },
+    "assets/eris_reel/images/scene-04-cosmic-mirror.png": {
+      "mtime": 1789215030.6958048,
+      "size": 3661191,
+      "sha256": "8679ed2f201ad4e995179a39e7709b0ae1703f85e3438dae67d5380f87b27c15"
+    },
+    "assets/eris_reel/images/scene-05-atmospheric-collapse.png": {
+      "mtime": 1789215030.8371482,
+      "size": 3036851,
+      "sha256": "dd7f094734907f02bd39fae3e78241b47dbb5239e8efbc5e1e14220e53ddca80"
+    },
+    "assets/eris_reel/images/scene-06-breathing-world-orbit.png": {
+      "mtime": 1789215030.9780533,
+      "size": 2992636,
+      "sha256": "cb37307aac16d523126eb7582f4f7d904cdc7293c83dd53025d650c4244be9c1"
+    },
+    "assets/eris_reel/images/scene-07-unreached-observatory.png": {
+      "mtime": 1789215031.1456301,
+      "size": 4186936,
+      "sha256": "51a359ed6693a7be9ef6174a75fd464d59bb414f535a5d9b0cf5896c87737d5a"
+    },
+    "assets/eris_reel/images/scene-08-mamase-frontier-payoff.png": {
+      "mtime": 1789215432.6159015,
+      "size": 3703738,
+      "sha256": "480f52971117957e771e3975771f75e04fb13a32ca63cd9101d321af2d478f3a"
+    },
+    "assets/eris_reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1789215031.4482212,
+      "size": 2915280,
+      "sha256": "de4d3b1a3390580c1ac8bafd7cf657b750c2f353ede1cc38fd34c844ae8c4972"
+    },
+    "assets/europa_clipper_reel/scene-01-hook.png": {
+      "mtime": 1788588478.0993066,
+      "size": 1176627,
+      "sha256": "8387d2efa6c77bc902b34e95866d5dd107681feddc8cb5954b1c8987cddf9efc"
+    },
+    "assets/europa_clipper_reel/scene-02-ocean-paradox.png": {
+      "mtime": 1788588478.2332506,
+      "size": 452843,
+      "sha256": "a0e39997b7aeba88ff370e2f1ee88b79756504a48e7469a5e83e0a9e8f48de88"
+    },
+    "assets/europa_clipper_reel/scene-03-tidal-heating.png": {
+      "mtime": 1788588478.3588297,
+      "size": 817671,
+      "sha256": "3ef9f1df5f956aa64dabdfb85a64597b4958244c928a9524db340cd4a009bbe0"
+    },
+    "assets/europa_clipper_reel/scene-04-hydrothermal-vents.png": {
+      "mtime": 1788588478.5954497,
+      "size": 512958,
+      "sha256": "fb735d0d23d2d43d8a09a683fcbbc0a452ff6f78cd715d7442666f1abbaeae16"
+    },
+    "assets/europa_clipper_reel/scene-05-water-plumes.png": {
+      "mtime": 1788588479.0583754,
+      "size": 2073278,
+      "sha256": "f20884af6c0cab492d44f3278e033718229d5351af7e7377d47a6556f04f7657"
+    },
+    "assets/europa_clipper_reel/scene-06-europa-clipper.png": {
+      "mtime": 1788588479.2650607,
+      "size": 753743,
+      "sha256": "a00f1af2a17eeb4c3ecaccf21641fc4a6b45352214c9ea47823caf4ba2ae9259"
+    },
+    "assets/europa_clipper_reel/scene-07-tasting-plumes.png": {
+      "mtime": 1788588479.401756,
+      "size": 884341,
+      "sha256": "da8d35f8f84bab172b09604ace2e3bef76b5872e8ead6ea486ac46b55ebf8965"
+    },
+    "assets/europa_clipper_reel/scene-08-philosophical-climax.png": {
+      "mtime": 1788588479.6335306,
+      "size": 466703,
+      "sha256": "7602ebd12535d5f0ee16773a4d6ae4517e8ffaac4194d7752bda6d128f72643d"
+    },
+    "assets/europa_clipper_reel/scene-09-mamase-outro.png": {
+      "mtime": 1788588479.6358652,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/forever_young_story/draft/brand-outro-vertical.png": {
+      "mtime": 1788842875.9509857,
+      "size": 2712375,
+      "sha256": "81c2a2c85e95603c98f4772241ae4b019a5b68d42f053f8b08fd96552384532e"
+    },
+    "assets/forever_young_story/draft/logo-square.png": {
+      "mtime": 1788842875.550724,
+      "size": 1309951,
+      "sha256": "4766914b8f07d6bcac3cb6d684c44872471f389e5466cd3cf575ad43866ba7d6"
+    },
+    "assets/forever_young_story/draft/presenter-candidate-a.png": {
+      "mtime": 1788842875.7533965,
+      "size": 2753259,
+      "sha256": "99ccc14e07db1f39a877238a674838f25d040e9f53b81f40d8714cb222b3b776"
+    },
+    "assets/forever_young_story/draft/presenter-candidate-b-active-male.png": {
+      "mtime": 1788844401.6658292,
+      "size": 2810176,
+      "sha256": "655dcba061f3aac1519f296349247fd1c5ec1a2df40837d39193aa0efad083da"
+    },
+    "assets/google-maps-universe-reel/images/scene-01-hook.png": {
+      "mtime": 1788865938.1509898,
+      "size": 1595657,
+      "sha256": "4ce7b1e75467f2d0262bd684d320e576b8606570a23f016524a131a5537ef7a4"
+    },
+    "assets/google-maps-universe-reel/images/scene-02-scale-4-billion.png": {
+      "mtime": 1788866983.3281755,
+      "size": 3508629,
+      "sha256": "cb2389dfbfc76ee6f3cdcd1e812e4a1cc011c22d81d5faba6edce57066c8cf06"
+    },
+    "assets/google-maps-universe-reel/images/scene-03-cosmic-web.png": {
+      "mtime": 1788866983.3319492,
+      "size": 3035480,
+      "sha256": "17854bf04ed8f800a5386b12a8510d54b147bee466a9abae45221d84e3002044"
+    },
+    "assets/google-maps-universe-reel/images/scene-04-empty-voids.png": {
+      "mtime": 1788866983.3359118,
+      "size": 4289885,
+      "sha256": "232da75573a40a583c0e742ae0e9d5a2a58584b69951be1e8b833b92e1b0819c"
+    },
+    "assets/google-maps-universe-reel/images/scene-05-dark-energy.png": {
+      "mtime": 1788866983.3394501,
+      "size": 2810670,
+      "sha256": "ba46b1fe36cf054034c9cd804eb8711fdd91f7145ae6edf6daa2b3cdfba01c49"
+    },
+    "assets/google-maps-universe-reel/images/scene-06-cosmic-time-machine.png": {
+      "mtime": 1788866983.3448112,
+      "size": 3000321,
+      "sha256": "652fd443f19b10b26018a6e8008f9957253c0aa68a482762dfd8dc44e7badfc4"
+    },
+    "assets/google-maps-universe-reel/images/scene-07-future-physics.png": {
+      "mtime": 1788866983.3476114,
+      "size": 3044842,
+      "sha256": "ce44e2fc83ec9eb4adc0b7896cb213d7707536e0469b156d1fc5fff2602a4490"
+    },
+    "assets/google-maps-universe-reel/images/scene-08-human-perspective.png": {
+      "mtime": 1788866272.0186887,
+      "size": 1626020,
+      "sha256": "34c66d7ac4b89b81f3f860fd6dfe25644f05d22d68345e955e0f3dc7b368ada5"
+    },
+    "assets/google-maps-universe-reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1788865938.157129,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/ice-cold-earth/scene-01-hook.png": {
+      "mtime": 1788833399.0960305,
+      "size": 1395662,
+      "sha256": "75598698a01a91bf8a35def809b335df579ad5b83c7e662e4daa5f8a83c67bdf"
+    },
+    "assets/ice-cold-earth/scene-02-kepler-transit.png": {
+      "mtime": 1788833399.2990012,
+      "size": 999554,
+      "sha256": "47aeaed59236554e66a475ba989733957cc523608ac65d22294c3f3e44059395"
+    },
+    "assets/ice-cold-earth/scene-03-twin-comparison.png": {
+      "mtime": 1788833399.8519387,
+      "size": 1096297,
+      "sha256": "b864bf78b63d18a098608a0ec22ed008b45fd8635377df51b7bdab55a2ebdf40"
+    },
+    "assets/ice-cold-earth/scene-04-dim-orange-star.png": {
+      "mtime": 1788833400.4483674,
+      "size": 1434587,
+      "sha256": "cfe811dca2da11e9dd0b49b30632d58c86449508943bac94b4bd53acca047393"
+    },
+    "assets/ice-cold-earth/scene-05-deep-freeze-surface.png": {
+      "mtime": 1788833400.8798363,
+      "size": 2290205,
+      "sha256": "2cee03117823abdf9417577826c5192beefa0cada25739c0397dac6c52aa212d"
+    },
+    "assets/ice-cold-earth/scene-06-habitable-zone-edge.png": {
+      "mtime": 1788833401.4119222,
+      "size": 686992,
+      "sha256": "cf0b4bbb9b915f8b5e13a55f61d4681cbec92569375c901249db4c0252e32cf9"
+    },
+    "assets/ice-cold-earth/scene-07-greenhouse-atmosphere.png": {
+      "mtime": 1788833401.6988776,
+      "size": 3063442,
+      "sha256": "2cf5184d7438031c369e0232a511ebd5b4f9994d91dfe29b6dcabb06906597c7"
+    },
+    "assets/ice-cold-earth/scene-08-subsurface-ocean.png": {
+      "mtime": 1788833402.032984,
+      "size": 2348168,
+      "sha256": "14859452e6f399f478ee2e93d81febc4d42bcfcd09cb8787fedd1bf8999b1952"
+    },
+    "assets/ice-cold-earth/scene-09-future-eyes-wonder.png": {
+      "mtime": 1788833402.4262116,
+      "size": 5018471,
+      "sha256": "34a9e443904955c7f669312238da5385d7fb27ac1077442492aa43711b8b2ffa"
+    },
+    "assets/ice-cold-earth/scene-10-mamase-outro.png": {
+      "mtime": 1788825066.1558425,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/images/end-of-scence.png": {
+      "mtime": 1789044177.7322252,
+      "size": 2323069,
+      "sha256": "7d92f704f98ccc283ca9bc53c6ce673e434d5151f19667a83042106083193f87"
+    },
+    "assets/interstellar_space_reel/images/scene-01-hook.png": {
+      "mtime": 1789197345.4341142,
+      "size": 2928941,
+      "sha256": "4df89285a673b5a3ad8191a2d2ad7aa02f2f8ba72a1954fe830ab429f8bb9786"
+    },
+    "assets/interstellar_space_reel/images/scene-02-heliopause.png": {
+      "mtime": 1789197345.571413,
+      "size": 3128973,
+      "sha256": "81f21a1ab8c0b69943422a4dfd8122b0de0d376fecd466afd691a3f1ae36ae06"
+    },
+    "assets/interstellar_space_reel/images/scene-03-cosmic-rays.png": {
+      "mtime": 1789197345.7086835,
+      "size": 3318149,
+      "sha256": "fb18c7a4b400c22b517fd58807397957c65672d8dca6f76e6776971f4e410ab1"
+    },
+    "assets/interstellar_space_reel/images/scene-04-plasma-ism.png": {
+      "mtime": 1789197345.846819,
+      "size": 3417131,
+      "sha256": "dba821b256847f9559faacaa4146ede8fe058ea1a2dde2c67120f9dfd550aecc"
+    },
+    "assets/interstellar_space_reel/images/scene-05-cosmic-dust.png": {
+      "mtime": 1789197345.9890711,
+      "size": 3150874,
+      "sha256": "9e0a11fa986485fe1217b5aadb2d4ddc44f9efbf75654a9b02822936237bd287"
+    },
+    "assets/interstellar_space_reel/images/scene-06-local-cloud.png": {
+      "mtime": 1789197346.1404824,
+      "size": 2634953,
+      "sha256": "d7199db093a3ed9eda0f03175d9d99dbb777f6ff936cc1ff801d7413cdb57ed7"
+    },
+    "assets/interstellar_space_reel/images/scene-07-magnetic-fields.png": {
+      "mtime": 1789197346.269225,
+      "size": 3918631,
+      "sha256": "386567dc40670e3eb305c9ce1d17c8acbf61416a302f71f9ecfa3ec6e3c1b8ef"
+    },
+    "assets/interstellar_space_reel/images/scene-08-cosmic-cradle.png": {
+      "mtime": 1789197346.3975441,
+      "size": 3363077,
+      "sha256": "5452c858043d2b068682fc1953d08ab3be156be306209a117f759cb8beed9ffa"
+    },
+    "assets/interstellar_space_reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1789197346.5640488,
+      "size": 2915280,
+      "sha256": "de4d3b1a3390580c1ac8bafd7cf657b750c2f353ede1cc38fd34c844ae8c4972"
+    },
+    "assets/iss_why_not_fall_reel/images/scene-01-hook-base.png": {
+      "mtime": 1789303471.251026,
+      "size": 3393162,
+      "sha256": "8f775b882dfc6d8ce6b34cc8ec9c85c50ee6b4d6b485e086a51cbfd266cee73a"
+    },
+    "assets/iss_why_not_fall_reel/images/scene-01-hook.png": {
+      "mtime": 1789303970.3259451,
+      "size": 3009560,
+      "sha256": "36f6807e35f622897ee5447548adaede5e578772edf8b92ebcc5cc1b4bb7730b"
+    },
+    "assets/iss_why_not_fall_reel/images/scene-02-gravity.png": {
+      "mtime": 1789303970.5069685,
+      "size": 3252820,
+      "sha256": "97a08e780c3dc1d029358dcfec30ff6e4566fb5002219fbb7e3e749703d04389"
+    },
+    "assets/iss_why_not_fall_reel/images/scene-03-orbital-speed.png": {
+      "mtime": 1789303970.6439915,
+      "size": 3142005,
+      "sha256": "f7aeeff6e39b13134ef646b23a79dee950d66808c00e846aba9d021c08485ebe"
+    },
+    "assets/iss_why_not_fall_reel/images/scene-04-falling-around-earth.png": {
+      "mtime": 1789303970.7785444,
+      "size": 2880704,
+      "sha256": "9a71012ef2943ed1e1436ac5dedcd3f0335db8446abc7bd602a3d3d7c63ef5df"
+    },
+    "assets/iss_why_not_fall_reel/images/scene-05-free-fall.png": {
+      "mtime": 1789303970.929374,
+      "size": 3394064,
+      "sha256": "c28c0ccb2f1c3013bce08cb6da2291422bc8147571329aaa4bccd7b4a3c08e26"
+    },
+    "assets/iss_why_not_fall_reel/images/scene-06-reboost.png": {
+      "mtime": 1789303971.067406,
+      "size": 3037787,
+      "sha256": "1129e02a900393978a61ecf8311754cb00208194be919e42eb7175bf6cc7bd63"
+    },
+    "assets/iss_why_not_fall_reel/images/scene-07-final-payoff.png": {
+      "mtime": 1789303971.2089775,
+      "size": 3050814,
+      "sha256": "da24a872b657e8e0771d8e0ec801ba90fbba30f797a3ae3234586ec905632e06"
+    },
+    "assets/iss_why_not_fall_reel/images/scene-08-brand-outro.png": {
+      "mtime": 1789304650.300238,
+      "size": 3044476,
+      "sha256": "cc89ae86961ded089cd7744d3b68ffd5ffd32797b39ff13435bbabfe1aafd978"
+    },
+    "assets/james_webb_time_machine_reel/scene-01-hook.png": {
+      "mtime": 1788566236.1988318,
+      "size": 2762301,
+      "sha256": "3015c7abf4ec20a63c5cec1b811e7359ac760b2794bc0c7084e7d420764154f5"
+    },
+    "assets/james_webb_time_machine_reel/scene-02-looking-back-in-time.png": {
+      "mtime": 1788566236.348928,
+      "size": 2668805,
+      "sha256": "3f6f51c20fded3a8ae4a2e4a917f56837c07fe590dfed46974932077ad168795"
+    },
+    "assets/james_webb_time_machine_reel/scene-03-moonlight-delay.png": {
+      "mtime": 1788566236.4831557,
+      "size": 2862294,
+      "sha256": "4045702617f9d7f018423224035751974cdc6f0f413da9b233a266f6b5f029d3"
+    },
+    "assets/james_webb_time_machine_reel/scene-04-distant-galaxy-past.png": {
+      "mtime": 1788566236.6159062,
+      "size": 2847530,
+      "sha256": "a94acb007bf78fd75b2c651898a94213a2a1e400cc2a08949df81205e3b07706"
+    },
+    "assets/james_webb_time_machine_reel/scene-05-jwst-observatory.png": {
+      "mtime": 1788566236.7491086,
+      "size": 2892476,
+      "sha256": "c83d5ff4345b51e7e3e54a340ffee82a4ec5a69cad5b5af7b49eea7b8ae948f7"
+    },
+    "assets/james_webb_time_machine_reel/scene-06-expanding-universe-redshift.png": {
+      "mtime": 1788566236.890678,
+      "size": 2657250,
+      "sha256": "8bde0db48992c671bb20669ae43a0b733aa6f1dbbee0540a1638587d68e8e74b"
+    },
+    "assets/james_webb_time_machine_reel/scene-07-infrared-hidden-light.png": {
+      "mtime": 1788566237.044973,
+      "size": 2509788,
+      "sha256": "8f1f019113cfae9d7e063dbe12efd54c454293763bef62ca61a00db7fe558eba"
+    },
+    "assets/james_webb_time_machine_reel/scene-08-cosmic-dawn.png": {
+      "mtime": 1788566237.1661928,
+      "size": 3244623,
+      "sha256": "ff18def125676c1024c9b444dbbfb650e2180bab00e5df8af9adec7c8cbc7878"
+    },
+    "assets/james_webb_time_machine_reel/scene-09-early-galaxies-surprise.png": {
+      "mtime": 1788566237.2942755,
+      "size": 3000321,
+      "sha256": "652fd443f19b10b26018a6e8008f9957253c0aa68a482762dfd8dc44e7badfc4"
+    },
+    "assets/james_webb_time_machine_reel/scene-10-letter-from-the-past.png": {
+      "mtime": 1788566237.428248,
+      "size": 2959020,
+      "sha256": "6493f45980c77ddab10fc501f3027b99412e5c12ce4980463604edb3c4a6a0a5"
+    },
+    "assets/jupiter_as_a_star_reel/images/jupiter-cover-square-1x1.png": {
+      "mtime": 1789304934.5464451,
+      "size": 1309665,
+      "sha256": "a46809c3ffdd9a9d517e2342be1bd65f3b6391f16c0374903b66732c03d0f020"
+    },
+    "assets/jupiter_as_a_star_reel/images/jupiter-reels-cover-9x16.png": {
+      "mtime": 1789304934.547522,
+      "size": 2162716,
+      "sha256": "a6364e38a9d899673f05053960bc483eb60055bfa2a96d71764425f149cfc0f5"
+    },
+    "assets/jupiter_as_a_star_reel/images/scene-01-hook.png": {
+      "mtime": 1789304934.485196,
+      "size": 2162716,
+      "sha256": "a6364e38a9d899673f05053960bc483eb60055bfa2a96d71764425f149cfc0f5"
+    },
+    "assets/jupiter_as_a_star_reel/images/scene-02-chemical-composition.png": {
+      "mtime": 1789307017.5447114,
+      "size": 2608580,
+      "sha256": "ec0d9e741f32781f43ddf54aa99bb9dd390dc955c9baa5c4798c224227a6ae57"
+    },
+    "assets/jupiter_as_a_star_reel/images/scene-03-mass-reality-check.png": {
+      "mtime": 1789307017.6835835,
+      "size": 3109562,
+      "sha256": "82dbacd054c8e4be1fa22de0de0084ff3e2de0296318ccbc72659cec519f6082"
+    },
+    "assets/jupiter_as_a_star_reel/images/scene-04-brown-dwarf-threshold.png": {
+      "mtime": 1789306630.3477232,
+      "size": 1961886,
+      "sha256": "c1bc3e31e14c43528ae0cab95351792c6f88cb9f57a8a0309098ebe4b4ffa0a2"
+    },
+    "assets/jupiter_as_a_star_reel/images/scene-05-true-star-limit.png": {
+      "mtime": 1789307017.9348924,
+      "size": 2620838,
+      "sha256": "a6798802b5e82b5e9bcd840cd259086ae61ab20f83f70e28d4586f2603007e8b"
+    },
+    "assets/jupiter_as_a_star_reel/images/scene-06-earth-orbit-chaos.png": {
+      "mtime": 1789307018.0736938,
+      "size": 2956071,
+      "sha256": "e148c29dd2b016c7f64ae051a3b0b2cdb4b65cfe70a28b5c1c6010bb866a4259"
+    },
+    "assets/jupiter_as_a_star_reel/images/scene-07-guardian-shield-payoff.png": {
+      "mtime": 1789307018.2463186,
+      "size": 3100349,
+      "sha256": "c16681c921093ecb0219c37b6593293c357471513b7e04caf92bc6d6a55f4f11"
+    },
+    "assets/jupiter_as_a_star_reel/images/scene-08-brand-outro.png": {
+      "mtime": 1789306630.8439815,
+      "size": 2915280,
+      "sha256": "de4d3b1a3390580c1ac8bafd7cf657b750c2f353ede1cc38fd34c844ae8c4972"
+    },
+    "assets/jupiter_as_a_star_reel/raw/brown_dwarf_spitzer.jpg": {
+      "mtime": 1789301909.740876,
+      "size": 1722880,
+      "sha256": "5b51c070a33037eda5dd5720563c933964a064b18ca663f623751083eafd4079"
+    },
+    "assets/jupiter_as_a_star_reel/raw/jupiter_cassini_portrait.jpg": {
+      "mtime": 1789301908.1292405,
+      "size": 1163231,
+      "sha256": "c0538b43b2a84b0b0caee667b17aa8d311300efd56252d972b6ce20bde6dd758"
+    },
+    "assets/jupiter_as_a_star_reel/raw/jupiter_clean_crater_base.png": {
+      "mtime": 1789302366.654696,
+      "size": 3243987,
+      "sha256": "4cb0553bfe7c08afc46664ec15ed00bae14474ec0e7d6a6278709fc73370a436"
+    },
+    "assets/jupiter_as_a_star_reel/raw/jupiter_cover_base_v1.png": {
+      "mtime": 1789302252.4592383,
+      "size": 1333411,
+      "sha256": "25edfea1579bd1e05db34896a6fbe086de38b19f789cb12a7526c333798291ee"
+    },
+    "assets/jupiter_as_a_star_reel/raw/jupiter_eris_style_base.png": {
+      "mtime": 1789302340.907839,
+      "size": 2595624,
+      "sha256": "fa0963c1f3edccd18cb3049218492a800ab2c0dadbe71f65a13d4e452a8dfc37"
+    },
+    "assets/jupiter_as_a_star_reel/raw/jupiter_hubble_portrait.png": {
+      "mtime": 1789301907.808586,
+      "size": 2492749,
+      "sha256": "9c9c4ac0195955721334dd990bbb84b10e0143fd070ab2a5c05f72f74fc7cd9f"
+    },
+    "assets/jupiter_as_a_star_reel/raw/jupiter_master_base_occluded.png": {
+      "mtime": 1789302312.5305166,
+      "size": 2985879,
+      "sha256": "36100d7a05c4e6867c42cf9efc0258ce648c2564c4f406d5d7a1e60ceb4c930a"
+    },
+    "assets/jupiter_as_a_star_reel/raw/jupiter_mountain_star_base.png": {
+      "mtime": 1789303904.664279,
+      "size": 2200730,
+      "sha256": "fe190d5fdfd3dc7e9b2fdb0999c9dcaefe61ce202d8e3f77a5253e7fe489f3e5"
+    },
+    "assets/jupiter_as_a_star_reel/raw/jupiter_summit_master_base.png": {
+      "mtime": 1789304772.395572,
+      "size": 2593708,
+      "sha256": "8c22636616fa9d580af1632c42b5bcc3593e2e288637ba729bd222fd5889e431"
+    },
+    "assets/jupiter_as_a_star_reel/raw/scene-01-hook-raw.png": {
+      "mtime": 1789313041.6496494,
+      "size": 2415726,
+      "sha256": "51b5e1ad0a275c93e1f0d9d44f0a06cb24af69be31596fc479e79858ec89fa94"
+    },
+    "assets/jupiter_as_a_star_reel/raw/test_jupiter_crater_base.png": {
+      "mtime": 1789302276.1819518,
+      "size": 2903661,
+      "sha256": "8e46cbb0ca2705d8474cdfa7eee482e833cde912de58fd8f92c16e7d8e3e3d1a"
+    },
+    "assets/last_star_heat_death_reel/images/scene-01-hook.png": {
+      "mtime": 1789462156.2724876,
+      "size": 2407966,
+      "sha256": "84cbdab4ae41b3e1dea826dcd6421bf009567e557dbb16ae3a245a33c1db5fb7"
+    },
+    "assets/last_star_heat_death_reel/images/scene-02-red-to-black-dwarf.png": {
+      "mtime": 1789307017.9348924,
+      "size": 2620838,
+      "sha256": "a6798802b5e82b5e9bcd840cd259086ae61ab20f83f70e28d4586f2603007e8b"
+    },
+    "assets/last_star_heat_death_reel/images/scene-03-degenerate-era-graveyard.png": {
+      "mtime": 1789454652.9242456,
+      "size": 1842593,
+      "sha256": "478ced9a7e78d69ac1dd4144d272c3fc8666b833aa893e347ebc57c8761d63ad"
+    },
+    "assets/last_star_heat_death_reel/images/scene-04-proton-decay-dissolution.png": {
+      "mtime": 1789197345.9890711,
+      "size": 3150874,
+      "sha256": "9e0a11fa986485fe1217b5aadb2d4ddc44f9efbf75654a9b02822936237bd287"
+    },
+    "assets/last_star_heat_death_reel/images/scene-05-black-hole-era-monolith.png": {
+      "mtime": 1789463813.4219987,
+      "size": 2810183,
+      "sha256": "882049b645dd17198ef4609c5f9a2e3660d10575a95361834e275184b5de5f40"
+    },
+    "assets/last_star_heat_death_reel/images/scene-06-hawking-radiation-flash.png": {
+      "mtime": 1789428726.2523873,
+      "size": 2743613,
+      "sha256": "9bbd99f0bb95a804b19b10ce38befedb0799a61509e50315165aafcf43551623"
+    },
+    "assets/last_star_heat_death_reel/images/scene-07-dark-era-eternal-warmth.png": {
+      "mtime": 1789463815.3153949,
+      "size": 3087721,
+      "sha256": "ab4575dd92305b746321fdb00eb67a7029f1a6e9e42754eee9775e6277c3f75c"
+    },
+    "assets/last_star_heat_death_reel/images/scene-08-brand-outro.png": {
+      "mtime": 1789463883.429166,
+      "size": 2777765,
+      "sha256": "552c33d9510de684b13c1b706fab9e701a620efa0f4f41d9a91010e71463c887"
+    },
+    "assets/ldn_1295_giraffe_nebula_reel/apod_ldn1295_hd.jpg": {
+      "mtime": 1789100448.6429303,
+      "size": 1123040,
+      "sha256": "4967040b9eeb917a54d84cad083d5a2808593a70ee2ad79392682d035a984df5"
+    },
+    "assets/ldn_1295_giraffe_nebula_reel/images/scene-01-hook.png": {
+      "mtime": 1789100494.2440333,
+      "size": 2282245,
+      "sha256": "cbbce41b03375ce201fe7b0c00c720669351e5fe20743fe40b002f7f0cb34e3b"
+    },
+    "assets/ldn_1295_giraffe_nebula_reel/images/scene-02-dark-silhouette.png": {
+      "mtime": 1789101315.9721298,
+      "size": 1992832,
+      "sha256": "05c60840d5706def4b7d5c01cfa66107b42912b4d30716d2c83f1145f273ec09"
+    },
+    "assets/ldn_1295_giraffe_nebula_reel/images/scene-03-beverly-lynds-catalog.png": {
+      "mtime": 1789101325.9685776,
+      "size": 2472227,
+      "sha256": "63b5064d7e3c23fb6a88d27fd32ddbf8f786c20623c55dfbb13d1f99546826b1"
+    },
+    "assets/ldn_1295_giraffe_nebula_reel/images/scene-04-pareidolia-pattern.png": {
+      "mtime": 1789101326.089097,
+      "size": 3425274,
+      "sha256": "ca0f1b5278321c768d69b62da148ef9b7109b4e1d383aa67987731c00c11e337"
+    },
+    "assets/ldn_1295_giraffe_nebula_reel/images/scene-05-cold-molecular-dust.png": {
+      "mtime": 1789101326.2267187,
+      "size": 2537273,
+      "sha256": "2aa6415458938b7628ed8515c19bc1892080eb02b737cca2e51b9034cc10124a"
+    },
+    "assets/ldn_1295_giraffe_nebula_reel/images/scene-06-infrared-penetration.png": {
+      "mtime": 1789101404.5243583,
+      "size": 3076664,
+      "sha256": "25faa36ca1cd0ce5997d3441cff720e46c03f9bbd437e144556ec63ebb6b9b93"
+    },
+    "assets/ldn_1295_giraffe_nebula_reel/images/scene-07-star-nursery.png": {
+      "mtime": 1789101404.7066753,
+      "size": 2845826,
+      "sha256": "22fc549c4f21a14e8c41e403efa9309a3e9e59caeed005d557339fc98a84ce88"
+    },
+    "assets/ldn_1295_giraffe_nebula_reel/images/scene-08-philosophical-climax.png": {
+      "mtime": 1789101406.0932481,
+      "size": 2578297,
+      "sha256": "232f6ce6d04861f88bfdd6ce77266ac82dedb1c4051a897db586c04431737114"
+    },
+    "assets/ldn_1295_giraffe_nebula_reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1789101326.3990939,
+      "size": 2915280,
+      "sha256": "de4d3b1a3390580c1ac8bafd7cf657b750c2f353ede1cc38fd34c844ae8c4972"
+    },
+    "assets/ldn_1295_giraffe_nebula_reel/jwst_hh211.jpg": {
+      "mtime": 1789101394.804023,
+      "size": 2293133,
+      "sha256": "7b7cc97a78d9feb986d49c47e03c0b1168514074c838eb30c2dfa4ef39556d76"
+    },
+    "assets/ldn_1295_giraffe_nebula_reel/jwst_l1527.jpg": {
+      "mtime": 1789101366.8074996,
+      "size": 186808,
+      "sha256": "b1eb3ada4c2a1b8709a012c0cbf014ae37e9fc221374e7c0ddb18c166c89b0fb"
+    },
+    "assets/ldn_1295_giraffe_nebula_reel/jwst_l1527_large.jpg": {
+      "mtime": 1789101376.6231437,
+      "size": 4044425,
+      "sha256": "d2cea1eede49199b358d9ebd30e9d32ecb587d8921a44b1d5fbefb6df5ed96f1"
+    },
+    "assets/ldn_1295_giraffe_nebula_reel/jwst_rho_ophiuchi.jpg": {
+      "mtime": 1789101398.7779431,
+      "size": 16612385,
+      "sha256": "4b1bc7a9cf821ba0716bbfdd0ce7aaffd43f6d3d8cb7204506d63e1731b09cb9"
+    },
+    "assets/ldn_1295_giraffe_nebula_reel/original_apod_ldn1295.jpg": {
+      "mtime": 1789100443.889865,
+      "size": 255522,
+      "sha256": "000f0f1438cfc8c991f7b8d044acf395417575598dedf163f8016789b5eb6f29"
+    },
+    "assets/light_year_distance_reel/images/light-year-cover-square-1x1.png": {
+      "mtime": 1789300691.9837074,
+      "size": 1856105,
+      "sha256": "13d8bc42edea0f998dc6bddd25d820f700c87fbb72a6573e7894f5d5812fad4a"
+    },
+    "assets/light_year_distance_reel/images/light-year-reels-cover-9x16.png": {
+      "mtime": 1789300669.409463,
+      "size": 2870398,
+      "sha256": "3f28d3a13794a7b8149b981fae8fc547feae9fe58a05fb5231bbc2d020f56566"
+    },
+    "assets/light_year_distance_reel/images/scene-01-hook.png": {
+      "mtime": 1789300669.3506324,
+      "size": 2870398,
+      "sha256": "3f28d3a13794a7b8149b981fae8fc547feae9fe58a05fb5231bbc2d020f56566"
+    },
+    "assets/light_year_distance_reel/images/scene-02-speed-of-light-earth.png": {
+      "mtime": 1789300827.346278,
+      "size": 2316233,
+      "sha256": "4bde6241b2c8eba957175ed833a3561217644a9d46c3205a1d1ba9e75e9c0a9c"
+    },
+    "assets/light_year_distance_reel/images/scene-03-one-light-year-scale.png": {
+      "mtime": 1789300827.4908516,
+      "size": 2783020,
+      "sha256": "ae21085dc5ec83cf2d2dc0a48dac52039d1b6f3c0e0a875a04b0481b55df7b85"
+    },
+    "assets/light_year_distance_reel/images/scene-04-voyager-human-speed.png": {
+      "mtime": 1789300827.6529558,
+      "size": 3475800,
+      "sha256": "e6702d784c425b8f0dc086bc4e1a19ecfe93d78a9cd1cc462c4cba8fd1ef1908"
+    },
+    "assets/light_year_distance_reel/images/scene-05-proxima-centauri.png": {
+      "mtime": 1789300827.8421206,
+      "size": 1696247,
+      "sha256": "061b22ecce7af7041f6cdb59752cc2752e846d8f87ac77d162ad9df82242bb60"
+    },
+    "assets/light_year_distance_reel/images/scene-06-cosmic-time-machine.png": {
+      "mtime": 1789300827.9470623,
+      "size": 1842593,
+      "sha256": "478ced9a7e78d69ac1dd4144d272c3fc8666b833aa893e347ebc57c8761d63ad"
+    },
+    "assets/light_year_distance_reel/images/scene-07-mamase-outro.png": {
+      "mtime": 1789300827.9539766,
+      "size": 2308379,
+      "sha256": "50525dd0bb5f75656eb832bf2959e73ff803ef006e1dbc7eeb02ad5e19ab1ed8"
+    },
+    "assets/light_year_distance_reel/raw/alpha_centauri_hubble.jpg": {
+      "mtime": 1789298019.0801485,
+      "size": 79343,
+      "sha256": "8d3cda622bd552609dba831f2a15096b35edc27184904fa62fd4315d22326d7d"
+    },
+    "assets/light_year_distance_reel/raw/light_year_base_earth_beam.png": {
+      "mtime": 1789300493.9493258,
+      "size": 1775262,
+      "sha256": "4fff4a210192cf7aaae620335a7730b52e28f7e0d22fe8a6dd441d995b28f828"
+    },
+    "assets/light_year_distance_reel/raw/light_year_clean_base_beam.png": {
+      "mtime": 1789300606.5133965,
+      "size": 1779502,
+      "sha256": "5ad6c28a1bf3b8edec26fa8170288f8d15c41c007502171275d0ea32e6477f79"
+    },
+    "assets/light_year_distance_reel/raw/light_year_cover_base.png": {
+      "mtime": 1789299957.3654788,
+      "size": 3196945,
+      "sha256": "2313bb2145ddf7327bd041a047a6777e953f8a10ed5619291dfed3c56f8bc85a"
+    },
+    "assets/light_year_distance_reel/raw/light_year_master_base.png": {
+      "mtime": 1789300440.3876853,
+      "size": 3161027,
+      "sha256": "e88a3105e980022459f560b8dff1521a12a189ae25bf76fb057ec2d34da6dbd6"
+    },
+    "assets/light_year_distance_reel/raw/light_year_pristine_base.png": {
+      "mtime": 1789300669.129488,
+      "size": 3198278,
+      "sha256": "4839d17ac909a5bc0a6b8eb486c3bfa718d5d896f52076d60363da7bc36b648b"
+    },
+    "assets/light_year_distance_reel/raw/proxima_centauri_eso.jpg": {
+      "mtime": 1789298499.1219566,
+      "size": 479959,
+      "sha256": "94c209286b583af79b4eba5db77dbd7cc31ab13ccf99871d4e7e142ed00bcce6"
+    },
+    "assets/light_year_distance_reel/raw/solar_system_perspective.jpg": {
+      "mtime": 1789298018.234786,
+      "size": 781657,
+      "sha256": "10000764ae804ff7716897697ad43df47d6a4287bb147c60fbd7ef8b5269cfef"
+    },
+    "assets/light_year_distance_reel/raw/test_cover_base_v2.png": {
+      "mtime": 1789300307.2234957,
+      "size": 3038275,
+      "sha256": "54629b32872a1def503f5ef56ed402eaf0f15b7fb1e74a93b1a69d5fd01bcf75"
+    },
+    "assets/light_year_distance_reel/raw/test_cover_base_v3.png": {
+      "mtime": 1789300343.4483335,
+      "size": 3333012,
+      "sha256": "ccfe82742db069f46ceb0e63642a09b051cb3eee6a4fa9d8090d1b87643f6e70"
+    },
+    "assets/light_year_distance_reel/raw/test_earth_crop.png": {
+      "mtime": 1789300767.3626685,
+      "size": 2276002,
+      "sha256": "1f664cd35f381fefaa0fc69ace62a14709b315113d42a6b96348ff07ae73ae21"
+    },
+    "assets/light_year_distance_reel/raw/test_prox_crop.png": {
+      "mtime": 1789300806.305337,
+      "size": 1580221,
+      "sha256": "2c0c1b629f6e6b901486e58b2b2b2283080c2b1001ae989fc1669547d782fd0e"
+    },
+    "assets/light_year_distance_reel/raw/test_sky_blend.png": {
+      "mtime": 1789300163.626806,
+      "size": 978749,
+      "sha256": "00ffb46f4efae236b45ea0215f937ede99531b54c2185a42a5c3f8f17961913a"
+    },
+    "assets/light_year_distance_reel/raw/test_webb_crop.png": {
+      "mtime": 1789300806.415626,
+      "size": 1790911,
+      "sha256": "6bd2db3dc38af3f9f28359e9db3d7a4e6412ab191215e6ab44266599be2ded1d"
+    },
+    "assets/light_year_distance_reel/raw/webb_deep_field.jpg": {
+      "mtime": 1789298324.7074733,
+      "size": 325508,
+      "sha256": "2dae75b6ece8011a019b95955e6933a35064569d31aeb1bb8a54d739dc549ee4"
+    },
+    "assets/logo/auto-clip-logo.png": {
+      "mtime": 1788824187.944364,
+      "size": 1337843,
+      "sha256": "76a671b660aca3d3cc6a0d475f91b2f1355c446938de5f54826f2f0b5fa3bc5e"
+    },
+    "assets/lunar_gateway_reel/images/gateway-cover-square-1x1.png": {
+      "mtime": 1789259632.806295,
+      "size": 1824908,
+      "sha256": "aeb9294e38285411e185fef5a9af8b5de720a312cf7e876f1f1d25b1f19f52cc"
+    },
+    "assets/lunar_gateway_reel/images/gateway-reels-cover-9x16.png": {
+      "mtime": 1789259632.8118603,
+      "size": 2792701,
+      "sha256": "78b82d591a6bb0438190fb3a1fb288adf399606b653bae4f61cb3c9e8eda4f68"
+    },
+    "assets/lunar_gateway_reel/images/scene-01-hook.png": {
+      "mtime": 1789259632.7442951,
+      "size": 2792701,
+      "sha256": "78b82d591a6bb0438190fb3a1fb288adf399606b653bae4f61cb3c9e8eda4f68"
+    },
+    "assets/lunar_gateway_reel/images/scene-02-direct-flight-critique.png": {
+      "mtime": 1789260106.793012,
+      "size": 2869421,
+      "sha256": "f7588cc29ee1adb0aed84fd891a9a761fdfe350284e17e6e1265e59839bad6e6"
+    },
+    "assets/lunar_gateway_reel/images/scene-03-nrho-orbit.png": {
+      "mtime": 1789260107.416022,
+      "size": 2816293,
+      "sha256": "40a11e27d6500d05d51adcc3bb9f125eef81ba81e52225d195e17dd014d497ee"
+    },
+    "assets/lunar_gateway_reel/images/scene-04-ppe-halo-modules.png": {
+      "mtime": 1789260108.182466,
+      "size": 2731296,
+      "sha256": "7ed11c323d5238d7df16fb8df4a5a3849e24ac515e73f50bdc9f7e98d1e71d11"
+    },
+    "assets/lunar_gateway_reel/images/scene-05-staging-docking-hub.png": {
+      "mtime": 1789260108.8602743,
+      "size": 2972992,
+      "sha256": "c1193ba162cbbbcddda8a2e7bd024613e28e950c795fe3c29717f7b6a544faba"
+    },
+    "assets/lunar_gateway_reel/images/scene-06-international-coalition.png": {
+      "mtime": 1789260109.4033375,
+      "size": 3110423,
+      "sha256": "3caea27aee336426d8be6cbfc25c5771171e07e72810ce48a4c694b6763d443c"
+    },
+    "assets/lunar_gateway_reel/images/scene-07-moon-to-mars-testbed.png": {
+      "mtime": 1789260110.036429,
+      "size": 3000465,
+      "sha256": "0c1fe9f093b0c3701e38d4f9ffc29963038b3ca4a39147d33634c414c7bea901"
+    },
+    "assets/lunar_gateway_reel/images/scene-08-gateway-verdict-climax.png": {
+      "mtime": 1789260110.7281544,
+      "size": 2827810,
+      "sha256": "b12239ad17341a62564c64b6bede72139fa92654999c434148090aa1581b0ad2"
+    },
+    "assets/lunar_gateway_reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1789260110.7304187,
+      "size": 2308379,
+      "sha256": "50525dd0bb5f75656eb832bf2959e73ff803ef006e1dbc7eeb02ad5e19ab1ed8"
+    },
+    "assets/lunar_south_pole_reel/images/scene-01-hook.png": {
+      "mtime": 1789266109.6186693,
+      "size": 2870197,
+      "sha256": "0f61b7d56784bd904b4d006d72fc15e931da1d7466cc075e47ceffeb3e2d7fe2"
+    },
+    "assets/lunar_south_pole_reel/images/scene-02-permanently-shadowed-regions.png": {
+      "mtime": 1789266732.8124955,
+      "size": 2858057,
+      "sha256": "0bdd865cce4f6fe38f5137192035fa8310c867445f7c2108dc2c3a221bc61dac"
+    },
+    "assets/lunar_south_pole_reel/images/scene-03-water-ice-evidence.png": {
+      "mtime": 1789266733.5182319,
+      "size": 2538949,
+      "sha256": "e37e63149d753124dbde44657000863a67a9afa143e4fb4a3adf47993119f520"
+    },
+    "assets/lunar_south_pole_reel/images/scene-04-liquid-gold-propellant.png": {
+      "mtime": 1789267528.7243454,
+      "size": 962492,
+      "sha256": "0c24563704a44eb5e45d3b5eb2fc89a3f344bd9aad6ee423b8cdd8b5b0412124"
+    },
+    "assets/lunar_south_pole_reel/images/scene-05-regolith-ice-mining.png": {
+      "mtime": 1789266734.5836391,
+      "size": 1130368,
+      "sha256": "3a5ba108ad7cd69735d441ca89029dc693d0231c49ab688171a26fa3baebe38d"
+    },
+    "assets/lunar_south_pole_reel/images/scene-06-peaks-of-eternal-light.png": {
+      "mtime": 1789266735.6349545,
+      "size": 2402198,
+      "sha256": "cb78d9ac2f413b1ad7a4422a632d3934f8d2bed5d70a8f08e96f19c0000776ac"
+    },
+    "assets/lunar_south_pole_reel/images/scene-07-artemis-south-pole-base.png": {
+      "mtime": 1789266736.697857,
+      "size": 2609253,
+      "sha256": "c46d96cb63426072e83c133caefdebd74f88aeedc49670184fc9768f82d634a9"
+    },
+    "assets/lunar_south_pole_reel/images/scene-08-gateway-to-cosmos.png": {
+      "mtime": 1789266738.706366,
+      "size": 1361005,
+      "sha256": "0aa3f7d8b832abe3a32b37f85737fce1ee477e76a58a17308e3bb993330152ac"
+    },
+    "assets/lunar_south_pole_reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1789266738.719286,
+      "size": 2308379,
+      "sha256": "50525dd0bb5f75656eb832bf2959e73ff803ef006e1dbc7eeb02ad5e19ab1ed8"
+    },
+    "assets/lunar_south_pole_reel/images/south-pole-cover-square-1x1.png": {
+      "mtime": 1789266109.6789446,
+      "size": 1910388,
+      "sha256": "7658d2a41e41842765a12db68b9c9926da6acc9300a226fd5e10ad6bb8535582"
+    },
+    "assets/lunar_south_pole_reel/images/south-pole-reels-cover-9x16.png": {
+      "mtime": 1789266109.6809063,
+      "size": 2870197,
+      "sha256": "0f61b7d56784bd904b4d006d72fc15e931da1d7466cc075e47ceffeb3e2d7fe2"
+    },
+    "assets/lunar_south_pole_reel/raw/artemis3_on_surface.jpg": {
+      "mtime": 1789267338.8504376,
+      "size": 121751,
+      "sha256": "26052e9c15b541adf71bd0979d478a914665e63fc93b1e5728831495ee925341"
+    },
+    "assets/lunar_south_pole_reel/raw/artemis3_on_surface_orig.jpg": {
+      "mtime": 1789267425.0719476,
+      "size": 3722056,
+      "sha256": "1b478571e33e82b4c96153c1e0a148af6a41cf923c1c1fb4941807f8172b7e2f"
+    },
+    "assets/lunar_south_pole_reel/raw/artemis3_starship.jpg": {
+      "mtime": 1789266882.290172,
+      "size": 132550,
+      "sha256": "1ac3a9c6eb2770145789eb44ee31ebf837d2e7646b600fe794d7c79a507f036b"
+    },
+    "assets/lunar_south_pole_reel/raw/artemis3_starship_large.jpg": {
+      "mtime": 1789267295.5211332,
+      "size": 132550,
+      "sha256": "1ac3a9c6eb2770145789eb44ee31ebf837d2e7646b600fe794d7c79a507f036b"
+    },
+    "assets/lunar_south_pole_reel/raw/artemis3_starship_orig.jpg": {
+      "mtime": 1789267304.7883816,
+      "size": 16731423,
+      "sha256": "52fb6a869a5035c147dfb0856b5bc359a9d9c6c6e86250db077f42927fc6f65b"
+    },
+    "assets/lunar_south_pole_reel/raw/artemis_base_camp.png": {
+      "mtime": 1789266569.903822,
+      "size": 14100260,
+      "sha256": "c707ceb219c74adbe4550afb2cbce37c4827df545a0986c2a5ba791d38ae3cd1"
+    },
+    "assets/lunar_south_pole_reel/raw/axiom_first_steps.jpg": {
+      "mtime": 1789267373.1677425,
+      "size": 126523,
+      "sha256": "723736d04660e21c1ca2967cb068a0aecaeb998ccf5196f85d7a88bfcec1718b"
+    },
+    "assets/lunar_south_pole_reel/raw/bluemoon_hls.jpg": {
+      "mtime": 1789266883.8255594,
+      "size": 204582,
+      "sha256": "3e02c89b34b236141bf0a0bddbddb0249a17a303ff1df358bebb0df6c865be65"
+    },
+    "assets/lunar_south_pole_reel/raw/earthrise_lro.jpg": {
+      "mtime": 1789266574.3680918,
+      "size": 27614088,
+      "sha256": "11f24cb21bc34155706d381e89ee0b9e6a73c5ab4ce70802bb9a77eda33afc6d"
+    },
+    "assets/lunar_south_pole_reel/raw/fuel_depot.jpg": {
+      "mtime": 1789267340.203,
+      "size": 117624,
+      "sha256": "97d7ce4060eeeeb0e92e7f5ad931f23f1ddd2fc49b1a424c623aa0b40ff29804"
+    },
+    "assets/lunar_south_pole_reel/raw/isru_plant.jpg": {
+      "mtime": 1789266593.2074645,
+      "size": 91192,
+      "sha256": "61f31902aaa8dc7e6e77c42ea2942c7202018948e8412bf001ae01dd6b913574"
+    },
+    "assets/lunar_south_pole_reel/raw/lunar_isru_concept.jpg": {
+      "mtime": 1789266705.5011365,
+      "size": 152643,
+      "sha256": "0889cf35f2053a217c4a16deee8af5cbb0070eac8944458c09c6d8540b248771"
+    },
+    "assets/lunar_south_pole_reel/raw/resolve_isru.jpg": {
+      "mtime": 1789266766.7822316,
+      "size": 5390656,
+      "sha256": "a17c29413088db8e14f73e252742651971791405054c90839e94db69b4c1794a"
+    },
+    "assets/lunar_south_pole_reel/raw/shackleton_rim.jpg": {
+      "mtime": 1789266575.3540907,
+      "size": 261532,
+      "sha256": "1cbf4a7304f8fe144e14f8dec2c58d85eb663002f962867ca012bb3cf9697387"
+    },
+    "assets/lunar_south_pole_reel/raw/sustained_lunar_base.png": {
+      "mtime": 1789266704.5313177,
+      "size": 5827699,
+      "sha256": "77d6aadce490e6f932693c29482f1365b435210a232d1b50208644543e403433"
+    },
+    "assets/lunar_south_pole_reel/raw/test_crop_starship.png": {
+      "mtime": 1789267405.0360916,
+      "size": 496854,
+      "sha256": "ed81bd990a53b27cf86f793a96faaeea21e00b151fef4c92c3d0e545025615f1"
+    },
+    "assets/lunar_south_pole_reel/raw/viper_drilling.jpg": {
+      "mtime": 1789266566.8174129,
+      "size": 2059859,
+      "sha256": "b2a98eb41503cfb37a61b3c5b468b1037e50638d4ef13b51f5c78ff0d00a27be"
+    },
+    "assets/lunar_south_pole_reel/raw/viper_searching_ice.jpg": {
+      "mtime": 1789266568.662592,
+      "size": 2308192,
+      "sha256": "f045a9ab194302431aa117ccfd8677edcdd40971add79baeca7eb5bf7cb7ec73"
+    },
+    "assets/lz_dark_matter_hint_reel/scene-01-hook.png": {
+      "mtime": 1788672534.4195104,
+      "size": 1917976,
+      "sha256": "29ecbe7ccf2e621354f09fbedbe3d65af699f602d6f16098cacd6c3ae3d0433d"
+    },
+    "assets/lz_dark_matter_hint_reel/scene-02-invisible-matter.png": {
+      "mtime": 1788672535.3364506,
+      "size": 2497844,
+      "sha256": "41d4f5e3006bd491cd6f2049e8910ced54f5467a0eacced3e8cfd52abadc3abc"
+    },
+    "assets/lz_dark_matter_hint_reel/scene-03-underground-shield.png": {
+      "mtime": 1788672535.9641347,
+      "size": 3394597,
+      "sha256": "f74059ff9b0cbdc9b37ba73fad08bfa96135fa673d991a93c096754f11394bb4"
+    },
+    "assets/lz_dark_matter_hint_reel/scene-04-lz-detector.png": {
+      "mtime": 1788672536.559697,
+      "size": 2526426,
+      "sha256": "bd0b0d6033f228385e90c2babd6ae1d3b85cb16fe8f47742d95b593e592ee3a2"
+    },
+    "assets/lz_dark_matter_hint_reel/scene-05-xenon-collision-mechanism.png": {
+      "mtime": 1788672537.771985,
+      "size": 1539106,
+      "sha256": "c717847a1277c463f9f22aa8f9da4742a6d2ff46b380a3ee837a28debe5eecd8"
+    },
+    "assets/lz_dark_matter_hint_reel/scene-06-unexplained-signal.png": {
+      "mtime": 1788672538.0690582,
+      "size": 1194903,
+      "sha256": "e940dbdfc6aba998de1bfcf20f14f127856d28fb7d3c4bc0cd05457bb002ec8d"
+    },
+    "assets/lz_dark_matter_hint_reel/scene-07-wimp-candidate.png": {
+      "mtime": 1788672538.5655801,
+      "size": 3231979,
+      "sha256": "dc92ee3590f4405230fa9ac49562b309c9be2aa87e2d6644e385c4e823eac14c"
+    },
+    "assets/lz_dark_matter_hint_reel/scene-08-not-a-discovery-yet.png": {
+      "mtime": 1788672539.0800042,
+      "size": 2755121,
+      "sha256": "2ba382256d60733880b76c6e9e06e8952a24c26122ccf527cc904ae9c5154d95"
+    },
+    "assets/lz_dark_matter_hint_reel/scene-09-the-ongoing-quest.png": {
+      "mtime": 1788672539.6763165,
+      "size": 3047815,
+      "sha256": "e7cc0723d99623e95f15dd9ae5ebb00fc5b2434fa926d1113e96247c582d4254"
+    },
+    "assets/lz_dark_matter_hint_reel/scene-10-mamase-outro.png": {
+      "mtime": 1788672539.68036,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/mamase-7-strangest-moons/images/01.png": {
+      "mtime": 1789645167.504004,
+      "size": 3349818,
+      "sha256": "e78d125933ce9b4ff46711e79f384dd29664c87ff722519498f283b9ee4b91ff"
+    },
+    "assets/mamase-7-strangest-moons/images/02.png": {
+      "mtime": 1789645168.167198,
+      "size": 3068247,
+      "sha256": "a8fa62c3048b5e5a47f02604fb68013f6eec6411c7496e81fb3e12fac6fe3e42"
+    },
+    "assets/mamase-7-strangest-moons/images/03.png": {
+      "mtime": 1789645168.8189108,
+      "size": 3279520,
+      "sha256": "19f82c9ff6d331a0f675b1644ed4a3aaff1a8c7e629f3143d02b2a6bb37bafd2"
+    },
+    "assets/mamase-7-strangest-moons/images/04.png": {
+      "mtime": 1789645169.5036561,
+      "size": 3199317,
+      "sha256": "552b9d8cfeed6e9728603bbea9a010e7f91ca6e58240d15d6c741067e04c71f5"
+    },
+    "assets/mamase-7-strangest-moons/images/05.png": {
+      "mtime": 1789645170.1798334,
+      "size": 3210744,
+      "sha256": "85d4b9e5ecec8f67f101b674030054a50a5bdfa9aff3cd9e01b0dbbe87a27ab7"
+    },
+    "assets/mamase-7-strangest-moons/images/06.png": {
+      "mtime": 1789645171.0676827,
+      "size": 2733783,
+      "sha256": "d189adda42cdd5fd4229c5f4683535e704aa8898b225181099a124b49725f0f3"
+    },
+    "assets/mamase-7-strangest-moons/images/07.png": {
+      "mtime": 1789645171.8184707,
+      "size": 3208952,
+      "sha256": "2c7df8586fca5592829700c4f2f82180fdbdf01120b5c357ee60e0d7efdd8e13"
+    },
+    "assets/mamase-7-strangest-moons/images/08.png": {
+      "mtime": 1789645172.656516,
+      "size": 3249294,
+      "sha256": "b3c2d973de0b5ec417b772e71d53889c82c4be7ab1ceb1ed7687269d5dfd51a3"
+    },
+    "assets/mamase-7-strangest-moons/images/09.png": {
+      "mtime": 1789645173.2528746,
+      "size": 3349818,
+      "sha256": "e78d125933ce9b4ff46711e79f384dd29664c87ff722519498f283b9ee4b91ff"
+    },
+    "assets/mamase-7-strangest-moons/mamase-reels-end-scence.png": {
+      "mtime": 1789574375.667439,
+      "size": 2777765,
+      "sha256": "552c33d9510de684b13c1b706fab9e701a620efa0f4f41d9a91010e71463c887"
+    },
+    "assets/mamase-reel-fermi-paradox-v1/images/01.png": {
+      "mtime": 1789523270.5672288,
+      "size": 2863145,
+      "sha256": "de51c287d1b7def60c5083c3c2f23d79c561d4317dc416ecc3c0f01fb7dcc07c"
+    },
+    "assets/mamase-reel-fermi-paradox-v1/images/02.png": {
+      "mtime": 1789391747.6921256,
+      "size": 2172360,
+      "sha256": "40d34ec31f3ddec58ddbbd7af0f17451ed3b456fd84dc3dc913da58f5cdd356f"
+    },
+    "assets/mamase-reel-fermi-paradox-v1/images/03.png": {
+      "mtime": 1789113477.812739,
+      "size": 3156975,
+      "sha256": "b4a51c6a391fd60b948fd2afb7b589a7c4acd5cee1185fcdae83fea8c77e793b"
+    },
+    "assets/mamase-reel-fermi-paradox-v1/images/04.png": {
+      "mtime": 1789527508.7469816,
+      "size": 3125722,
+      "sha256": "bf5e3d83256f91892c47bcf149cd15b3da44c50c20af49158667f550e5cb9388"
+    },
+    "assets/mamase-reel-fermi-paradox-v1/images/05.png": {
+      "mtime": 1788598016.7096953,
+      "size": 3046138,
+      "sha256": "71715dee7f8dfa7f82fc17148eb4fe3554bdac946a1252ae0fbf8912afe62b37"
+    },
+    "assets/mamase-reel-fermi-paradox-v1/images/06.png": {
+      "mtime": 1788782264.3593965,
+      "size": 2962207,
+      "sha256": "7bb98e47bb56b6366a8a7afcd4bb21bee4d331282eb278ba360f38ad546facd7"
+    },
+    "assets/mamase-reel-fermi-paradox-v1/images/07.png": {
+      "mtime": 1788617939.44947,
+      "size": 2761771,
+      "sha256": "eab2a846dd79b7d49a2e312ddae9707e685c32d549318cef3dbce5987ad291d8"
+    },
+    "assets/mamase-reel-fermi-paradox-v1/images/08.png": {
+      "mtime": 1789300669.129488,
+      "size": 3198278,
+      "sha256": "4839d17ac909a5bc0a6b8eb486c3bfa718d5d896f52076d60363da7bc36b648b"
+    },
+    "assets/mamase-reel-fermi-paradox-v1/mamase-reels-end-scence.png": {
+      "mtime": 1789523270.572171,
+      "size": 2777765,
+      "sha256": "552c33d9510de684b13c1b706fab9e701a620efa0f4f41d9a91010e71463c887"
+    },
+    "assets/mamase-reel-mars-lost-water/images/01.png": {
+      "mtime": 1789517939.0103095,
+      "size": 2904894,
+      "sha256": "7e7104703f23772aea93e6feb93544bf8e13a345e0cb71ac3a81df3e94d4aa9a"
+    },
+    "assets/mamase-reel-mars-lost-water/images/02.png": {
+      "mtime": 1789517288.5649455,
+      "size": 2936042,
+      "sha256": "a13692e8ada94be665535cd2152e73469baf06e9e2701f016e50a4894696cc35"
+    },
+    "assets/mamase-reel-mars-lost-water/images/03.png": {
+      "mtime": 1789517288.5673883,
+      "size": 2762547,
+      "sha256": "6031bec3850f60b582b82d22848a9e725f1824f790ccad9e0f66423e56f90245"
+    },
+    "assets/mamase-reel-mars-lost-water/images/04.png": {
+      "mtime": 1789517288.5710704,
+      "size": 2898907,
+      "sha256": "0c8c559fc7d7f84c4772c8f527256e63b195e740a9d0ae1096172a5557fcd492"
+    },
+    "assets/mamase-reel-mars-lost-water/images/05.png": {
+      "mtime": 1789517288.5746322,
+      "size": 2886259,
+      "sha256": "8b90a1b57c8d3de03baab24241f8a55a5030a3f34bd76d0ec887ab3b070f9d9c"
+    },
+    "assets/mamase-reel-mars-lost-water/images/06.png": {
+      "mtime": 1789517288.5766711,
+      "size": 1208459,
+      "sha256": "1287ecfc092679a9c8505810bf712bba829555e46457b38fcdb33a9674d302ff"
+    },
+    "assets/mamase-reel-mars-lost-water/images/07.png": {
+      "mtime": 1789517288.580187,
+      "size": 1986287,
+      "sha256": "7796a131881ff07f41e5b68ac9ee0d99eda572b7896d5a46345d437631d7b45e"
+    },
+    "assets/mamase-reel-mars-lost-water/images/08.png": {
+      "mtime": 1789517288.5817425,
+      "size": 1015449,
+      "sha256": "77c3f17850c4b4930f347858106d72d35ad004c0e0519eb7c1b7fe3dbefad7d1"
+    },
+    "assets/mamase-reel-mars-lost-water/images/09.png": {
+      "mtime": 1789519046.1686702,
+      "size": 2598152,
+      "sha256": "2f97e974dd39f52ea8bd49b196fd9a1d719774d28db4340aa68c5e34bd5f727c"
+    },
+    "assets/mamase-reel-mars-lost-water/mamase-reels-end-scence.png": {
+      "mtime": 1789519047.1281185,
+      "size": 2777765,
+      "sha256": "552c33d9510de684b13c1b706fab9e701a620efa0f4f41d9a91010e71463c887"
+    },
+    "assets/mamase-reel-mars-lost-water-v2/images/01.png": {
+      "mtime": 1789519737.1463041,
+      "size": 2904894,
+      "sha256": "7e7104703f23772aea93e6feb93544bf8e13a345e0cb71ac3a81df3e94d4aa9a"
+    },
+    "assets/mamase-reel-mars-lost-water-v2/images/02.png": {
+      "mtime": 1789519737.9884045,
+      "size": 2936042,
+      "sha256": "a13692e8ada94be665535cd2152e73469baf06e9e2701f016e50a4894696cc35"
+    },
+    "assets/mamase-reel-mars-lost-water-v2/images/03.png": {
+      "mtime": 1789519738.7617345,
+      "size": 2762547,
+      "sha256": "6031bec3850f60b582b82d22848a9e725f1824f790ccad9e0f66423e56f90245"
+    },
+    "assets/mamase-reel-mars-lost-water-v2/images/04.png": {
+      "mtime": 1789519739.4542043,
+      "size": 2898907,
+      "sha256": "0c8c559fc7d7f84c4772c8f527256e63b195e740a9d0ae1096172a5557fcd492"
+    },
+    "assets/mamase-reel-mars-lost-water-v2/images/05.png": {
+      "mtime": 1789519739.713525,
+      "size": 1208459,
+      "sha256": "1287ecfc092679a9c8505810bf712bba829555e46457b38fcdb33a9674d302ff"
+    },
+    "assets/mamase-reel-mars-lost-water-v2/images/06.png": {
+      "mtime": 1789519740.2449636,
+      "size": 1986287,
+      "sha256": "7796a131881ff07f41e5b68ac9ee0d99eda572b7896d5a46345d437631d7b45e"
+    },
+    "assets/mamase-reel-mars-lost-water-v2/images/07.png": {
+      "mtime": 1789519740.6133766,
+      "size": 1015449,
+      "sha256": "77c3f17850c4b4930f347858106d72d35ad004c0e0519eb7c1b7fe3dbefad7d1"
+    },
+    "assets/mamase-reel-mars-lost-water-v2/images/08.png": {
+      "mtime": 1789519741.6029003,
+      "size": 2598152,
+      "sha256": "2f97e974dd39f52ea8bd49b196fd9a1d719774d28db4340aa68c5e34bd5f727c"
+    },
+    "assets/mamase-reel-mars-lost-water-v2/mamase-reels-end-scence.png": {
+      "mtime": 1789519742.4799762,
+      "size": 2777765,
+      "sha256": "552c33d9510de684b13c1b706fab9e701a620efa0f4f41d9a91010e71463c887"
+    },
+    "assets/mamase-reel-mars-lost-water-v3/images/01.png": {
+      "mtime": 1789520849.2777297,
+      "size": 2904894,
+      "sha256": "7e7104703f23772aea93e6feb93544bf8e13a345e0cb71ac3a81df3e94d4aa9a"
+    },
+    "assets/mamase-reel-mars-lost-water-v3/images/02.png": {
+      "mtime": 1789520849.2806783,
+      "size": 2936042,
+      "sha256": "a13692e8ada94be665535cd2152e73469baf06e9e2701f016e50a4894696cc35"
+    },
+    "assets/mamase-reel-mars-lost-water-v3/images/03.png": {
+      "mtime": 1789520849.2830262,
+      "size": 2762547,
+      "sha256": "6031bec3850f60b582b82d22848a9e725f1824f790ccad9e0f66423e56f90245"
+    },
+    "assets/mamase-reel-mars-lost-water-v3/images/04.png": {
+      "mtime": 1789520849.285514,
+      "size": 2898907,
+      "sha256": "0c8c559fc7d7f84c4772c8f527256e63b195e740a9d0ae1096172a5557fcd492"
+    },
+    "assets/mamase-reel-mars-lost-water-v3/images/05.png": {
+      "mtime": 1789520849.2882018,
+      "size": 1208459,
+      "sha256": "1287ecfc092679a9c8505810bf712bba829555e46457b38fcdb33a9674d302ff"
+    },
+    "assets/mamase-reel-mars-lost-water-v3/images/06.png": {
+      "mtime": 1789520849.2902002,
+      "size": 1986287,
+      "sha256": "7796a131881ff07f41e5b68ac9ee0d99eda572b7896d5a46345d437631d7b45e"
+    },
+    "assets/mamase-reel-mars-lost-water-v3/images/07.png": {
+      "mtime": 1789520849.2917576,
+      "size": 1015449,
+      "sha256": "77c3f17850c4b4930f347858106d72d35ad004c0e0519eb7c1b7fe3dbefad7d1"
+    },
+    "assets/mamase-reel-mars-lost-water-v3/images/08.png": {
+      "mtime": 1789520849.2950919,
+      "size": 2598152,
+      "sha256": "2f97e974dd39f52ea8bd49b196fd9a1d719774d28db4340aa68c5e34bd5f727c"
+    },
+    "assets/mamase-reel-mars-lost-water-v3/mamase-reels-end-scence.png": {
+      "mtime": 1789520849.297761,
+      "size": 2777765,
+      "sha256": "552c33d9510de684b13c1b706fab9e701a620efa0f4f41d9a91010e71463c887"
+    },
+    "assets/mamase-reel-mars-lost-water-v4/images/01.png": {
+      "mtime": 1789520944.8153322,
+      "size": 2904894,
+      "sha256": "7e7104703f23772aea93e6feb93544bf8e13a345e0cb71ac3a81df3e94d4aa9a"
+    },
+    "assets/mamase-reel-mars-lost-water-v4/images/02.png": {
+      "mtime": 1789520944.8179345,
+      "size": 2936042,
+      "sha256": "a13692e8ada94be665535cd2152e73469baf06e9e2701f016e50a4894696cc35"
+    },
+    "assets/mamase-reel-mars-lost-water-v4/images/03.png": {
+      "mtime": 1789520944.8218663,
+      "size": 2762547,
+      "sha256": "6031bec3850f60b582b82d22848a9e725f1824f790ccad9e0f66423e56f90245"
+    },
+    "assets/mamase-reel-mars-lost-water-v4/images/04.png": {
+      "mtime": 1789520944.8245711,
+      "size": 2898907,
+      "sha256": "0c8c559fc7d7f84c4772c8f527256e63b195e740a9d0ae1096172a5557fcd492"
+    },
+    "assets/mamase-reel-mars-lost-water-v4/images/05.png": {
+      "mtime": 1789520944.8259706,
+      "size": 1208459,
+      "sha256": "1287ecfc092679a9c8505810bf712bba829555e46457b38fcdb33a9674d302ff"
+    },
+    "assets/mamase-reel-mars-lost-water-v4/images/06.png": {
+      "mtime": 1789520944.8274515,
+      "size": 1986287,
+      "sha256": "7796a131881ff07f41e5b68ac9ee0d99eda572b7896d5a46345d437631d7b45e"
+    },
+    "assets/mamase-reel-mars-lost-water-v4/images/07.png": {
+      "mtime": 1789520944.8281803,
+      "size": 1015449,
+      "sha256": "77c3f17850c4b4930f347858106d72d35ad004c0e0519eb7c1b7fe3dbefad7d1"
+    },
+    "assets/mamase-reel-mars-lost-water-v4/images/08.png": {
+      "mtime": 1789520944.8309867,
+      "size": 2598152,
+      "sha256": "2f97e974dd39f52ea8bd49b196fd9a1d719774d28db4340aa68c5e34bd5f727c"
+    },
+    "assets/mamase-reel-mars-lost-water-v4/mamase-reels-end-scence.png": {
+      "mtime": 1789520944.8334103,
+      "size": 2777765,
+      "sha256": "552c33d9510de684b13c1b706fab9e701a620efa0f4f41d9a91010e71463c887"
+    },
+    "assets/mars_lost_water_atmosphere_reel/images/scene-01-hook.png": {
+      "mtime": 1789511836.762757,
+      "size": 2722516,
+      "sha256": "80766065462626a8973015ecaeb7cddab0e1d6d2e5301b5baa0703e33f812d02"
+    },
+    "assets/mars_lost_water_atmosphere_reel/images/scene-02-sediment-valley.png": {
+      "mtime": 1789511837.5450957,
+      "size": 2936042,
+      "sha256": "a13692e8ada94be665535cd2152e73469baf06e9e2701f016e50a4894696cc35"
+    },
+    "assets/mars_lost_water_atmosphere_reel/images/scene-03-ancient-atmosphere.png": {
+      "mtime": 1789511838.2399464,
+      "size": 2762547,
+      "sha256": "6031bec3850f60b582b82d22848a9e725f1824f790ccad9e0f66423e56f90245"
+    },
+    "assets/mars_lost_water_atmosphere_reel/images/scene-04-atmosphere-escaping.png": {
+      "mtime": 1789511838.907086,
+      "size": 2898907,
+      "sha256": "0c8c559fc7d7f84c4772c8f527256e63b195e740a9d0ae1096172a5557fcd492"
+    },
+    "assets/mars_lost_water_atmosphere_reel/images/scene-05-not-just-magnetic-field.png": {
+      "mtime": 1789511839.5283866,
+      "size": 2886259,
+      "sha256": "8b90a1b57c8d3de03baab24241f8a55a5030a3f34bd76d0ec887ab3b070f9d9c"
+    },
+    "assets/mars_lost_water_atmosphere_reel/images/scene-06-maven-orbit-mars.png": {
+      "mtime": 1789511839.7810268,
+      "size": 1208459,
+      "sha256": "1287ecfc092679a9c8505810bf712bba829555e46457b38fcdb33a9674d302ff"
+    },
+    "assets/mars_lost_water_atmosphere_reel/images/scene-07-subsurface-ice-minerals.png": {
+      "mtime": 1789511840.2902339,
+      "size": 1986287,
+      "sha256": "7796a131881ff07f41e5b68ac9ee0d99eda572b7896d5a46345d437631d7b45e"
+    },
+    "assets/mars_lost_water_atmosphere_reel/images/scene-08-world-transformed.png": {
+      "mtime": 1789511840.6564991,
+      "size": 1015449,
+      "sha256": "77c3f17850c4b4930f347858106d72d35ad004c0e0519eb7c1b7fe3dbefad7d1"
+    },
+    "assets/mars_lost_water_atmosphere_reel/images/scene-09-brand-outro.png": {
+      "mtime": 1789511841.510832,
+      "size": 2777765,
+      "sha256": "552c33d9510de684b13c1b706fab9e701a620efa0f4f41d9a91010e71463c887"
+    },
+    "assets/milky_way_andromeda_merger_reel/images/scene-01-hook.png": {
+      "mtime": 1789441705.0210955,
+      "size": 3168503,
+      "sha256": "edf4694f34db0f0a5dd75e0fcf7e4d2079217ba492494d54ff13d74f169caade"
+    },
+    "assets/milky_way_andromeda_merger_reel/images/scene-02-cosmic-collision-course.png": {
+      "mtime": 1789442252.677557,
+      "size": 3833498,
+      "sha256": "e855d558638d14b358644149ad84bf36cb11351a2a867428d1684e3f4d7643f7"
+    },
+    "assets/milky_way_andromeda_merger_reel/images/scene-03-paradox-no-direct-hits.png": {
+      "mtime": 1789442252.996058,
+      "size": 3428982,
+      "sha256": "84bd617bd50e862e1eb1f6126aba3e115928b57eeabd842c40d722644196a220"
+    },
+    "assets/milky_way_andromeda_merger_reel/images/scene-04-empty-void-between-stars.png": {
+      "mtime": 1789442253.3666055,
+      "size": 2464234,
+      "sha256": "3bc9c1925bac6b134fbaf43a64206c8c75addc9a24ff8bd888c6660bd073968c"
+    },
+    "assets/milky_way_andromeda_merger_reel/images/scene-05-future-night-sky-starburst.png": {
+      "mtime": 1789442253.7197332,
+      "size": 3177122,
+      "sha256": "2aa682b35e71e0b475e100854bdf7aedfec053c3a3b5dd4514cd2a31576481f4"
+    },
+    "assets/milky_way_andromeda_merger_reel/images/scene-06-black-hole-dance-merger.png": {
+      "mtime": 1789442254.0965095,
+      "size": 2915084,
+      "sha256": "f49c71a621cce7d6ee34d30f2de42fcecf21827bbcc6bb22fc0ed5129f4e65df"
+    },
+    "assets/milky_way_andromeda_merger_reel/images/scene-07-birth-of-milkomeda.png": {
+      "mtime": 1789442254.6012824,
+      "size": 2782515,
+      "sha256": "fb502643d6eb5725798905268aef46069630c2e4f515e8c60a1319649ec34b48"
+    },
+    "assets/milky_way_andromeda_merger_reel/images/scene-08-brand-outro.png": {
+      "mtime": 1789442254.9963336,
+      "size": 2915280,
+      "sha256": "de4d3b1a3390580c1ac8bafd7cf657b750c2f353ede1cc38fd34c844ae8c4972"
+    },
+    "assets/milky_way_names_reel/scene-01-hook.png": {
+      "mtime": 1788622062.1927662,
+      "size": 3710880,
+      "sha256": "95bcb87e30d45dcc275188b6693dd99fa1a801edbe3b4864317eac05fc1f475a"
+    },
+    "assets/milky_way_names_reel/scene-02-thailand-white-elephant.png": {
+      "mtime": 1788622062.7287803,
+      "size": 2556552,
+      "sha256": "67c5c5d66a15902558bb05cbf8420696ce590cb73099854eeac326d2c95f9b4c"
+    },
+    "assets/milky_way_names_reel/scene-03-west-milky-way.png": {
+      "mtime": 1788622063.2325578,
+      "size": 3844040,
+      "sha256": "04233cfc6ef5afe3e727b2e4fda5bf84faee2274ebb276ed6badd30633b8a9e0"
+    },
+    "assets/milky_way_names_reel/scene-04-east-asia-silver-river.png": {
+      "mtime": 1788622063.668389,
+      "size": 2109288,
+      "sha256": "ece4316e17ee9103d35e4cca00f2ffab1c25a9d92edb8ab73e09911696ee9e0a"
+    },
+    "assets/milky_way_names_reel/scene-05-sweden-vintergatan.png": {
+      "mtime": 1788622064.348437,
+      "size": 3194965,
+      "sha256": "3fe73e15c95f1543f403e278d5bd35a0601919e14e2f82a3d0c797bf33c9edbe"
+    },
+    "assets/milky_way_names_reel/scene-06-finland-birds-pathway.png": {
+      "mtime": 1788622064.8367178,
+      "size": 3581753,
+      "sha256": "1333d8fb940ced9bab59dc7a9578af24fc527901631d956f7003e1ab7734589e"
+    },
+    "assets/milky_way_names_reel/scene-07-arabic-haymakers-way.png": {
+      "mtime": 1788622065.1672037,
+      "size": 4466881,
+      "sha256": "b43eae2d08be3817e3cadbb8d59c5fa81ba6ff5d0e7ecd3ee4e9f6a553e0956f"
+    },
+    "assets/milky_way_names_reel/scene-08-milky-way-our-home.png": {
+      "mtime": 1788622065.7126822,
+      "size": 3603911,
+      "sha256": "1d9c34edd0df9620a3dbaec942c8a7699e85747ec913d44d047332a4a693b726"
+    },
+    "assets/milky_way_names_reel/scene-09-mamase-outro.png": {
+      "mtime": 1788622065.7213311,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/n44_superbubble_reel/scene-01-hook.png": {
+      "mtime": 1788534795.024125,
+      "size": 3238711,
+      "sha256": "cb04070b0ee864bb4f565635460dadefe018d2d4fd2a74f9cc8e7823dbffb96d"
+    },
+    "assets/n44_superbubble_reel/scene-02-hubble-n44.png": {
+      "mtime": 1788534795.2226653,
+      "size": 3457456,
+      "sha256": "d7a56f942ea050389fb846d697b920257daba99faeee8475bdd3dd3b5f17a4eb"
+    },
+    "assets/n44_superbubble_reel/scene-03-large-magellanic-cloud.png": {
+      "mtime": 1788534795.4152803,
+      "size": 3076559,
+      "sha256": "e4a85a80afeed31b424c03d9a0da67e7966fecd03886f9738c49e2d44e180184"
+    },
+    "assets/n44_superbubble_reel/scene-04-superbubble-scale.png": {
+      "mtime": 1788534795.6184099,
+      "size": 3065253,
+      "sha256": "a10cc0a8773bf8080a5dff08bc64a543d3ec87eaec5a4a06bf93172802ec146c"
+    },
+    "assets/n44_superbubble_reel/scene-05-stellar-winds.png": {
+      "mtime": 1788534795.8774505,
+      "size": 3144124,
+      "sha256": "167d9bf1f509435339915f7f60b58e9c31e568eb8441c3e55b4c31de9533df6d"
+    },
+    "assets/n44_superbubble_reel/scene-06-supernova-energy.png": {
+      "mtime": 1788534796.0666122,
+      "size": 2435855,
+      "sha256": "e31daf46d2739836ce41f4e954cc7650a540d816eb73e36ad32717d54f0db625"
+    },
+    "assets/n44_superbubble_reel/scene-07-dense-gas-rim.png": {
+      "mtime": 1788534796.2631586,
+      "size": 3097902,
+      "sha256": "aff7aa34148386c8bb40c90081909b14461a11eb6d63de72e6bb2efdffd6a3fb"
+    },
+    "assets/n44_superbubble_reel/scene-08-stars-of-many-ages.png": {
+      "mtime": 1788534796.4620678,
+      "size": 3225721,
+      "sha256": "a057f216921a11562b873b950691a18dac193006f1891add43fb273e1eff895c"
+    },
+    "assets/n44_superbubble_reel/scene-09-cycle-of-stars.png": {
+      "mtime": 1788534796.654305,
+      "size": 2784334,
+      "sha256": "978200c68e89ccd79d8b0d945572e38d3e55ee798fe241ce3e7924de36086b75"
+    },
+    "assets/n44_superbubble_reel/scene-10-n44-contemplation.png": {
+      "mtime": 1788534796.849751,
+      "size": 2853352,
+      "sha256": "aa9594e5fe4d68e7f94a6a84a86f8c7fc533f8c66edd1fa9d870ec09468c2e4d"
+    },
+    "assets/oort_cloud_reel/images/scene-01-hook.png": {
+      "mtime": 1789204308.5628252,
+      "size": 3271798,
+      "sha256": "4595620482ecd68ffe222f440105b241bede910e4ad182c66e074c6789e2ef14"
+    },
+    "assets/oort_cloud_reel/images/scene-02-heliosphere-bubble.png": {
+      "mtime": 1789204308.7293966,
+      "size": 3109338,
+      "sha256": "c336ccae4a20813adefbd2e5a5faa833cc308a31687421dce209e0d055061aec"
+    },
+    "assets/oort_cloud_reel/images/scene-03-spherical-swarm.png": {
+      "mtime": 1789204308.8628635,
+      "size": 3472484,
+      "sha256": "07a5a38517f97bbf296d93df2bed59c707ceb144d0f9e316489a1dc5aa9d3b67"
+    },
+    "assets/oort_cloud_reel/images/scene-04-distance-scale.png": {
+      "mtime": 1789204309.0156393,
+      "size": 2761191,
+      "sha256": "fd2ee8ddfb4c8f032fe67e69b2ef1bd182f393a95b6ba01d48260a717f0fafb6"
+    },
+    "assets/oort_cloud_reel/images/scene-05-voyager-journey.png": {
+      "mtime": 1789204309.1411057,
+      "size": 3453880,
+      "sha256": "297a1c56784e1df4d9a4dcf82cadced6d988e8fc6e5c29d642b509659a6d071e"
+    },
+    "assets/oort_cloud_reel/images/scene-06-cosmic-freezer.png": {
+      "mtime": 1789204309.3024006,
+      "size": 2634109,
+      "sha256": "8dc6ffaf16bd4fdecf8f7e8105eb00b2a82b54b1810b4488c50aaa7a048d235b"
+    },
+    "assets/oort_cloud_reel/images/scene-07-gravity-boundary.png": {
+      "mtime": 1789204309.4494302,
+      "size": 2955895,
+      "sha256": "603ee9301af6d937f653807486178b9c10021215617dfa10f48bacebf0f83d13"
+    },
+    "assets/oort_cloud_reel/images/scene-08-cosmic-home.png": {
+      "mtime": 1789204309.5916033,
+      "size": 2782515,
+      "sha256": "fb502643d6eb5725798905268aef46069630c2e4f515e8c60a1319649ec34b48"
+    },
+    "assets/oort_cloud_reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1789204309.7512443,
+      "size": 2915280,
+      "sha256": "de4d3b1a3390580c1ac8bafd7cf657b750c2f353ede1cc38fd34c844ae8c4972"
+    },
+    "assets/origin_of_physics_laws_reel/images/scene-01-hook.png": {
+      "mtime": 1789478734.606308,
+      "size": 2350102,
+      "sha256": "7dbdc346bd08fed1cd6369f31c3e9964c245bf658a89a3d8de05c51bfc77497f"
+    },
+    "assets/origin_of_physics_laws_reel/images/scene-02-distant-galaxies-physics.png": {
+      "mtime": 1789478735.264113,
+      "size": 2715496,
+      "sha256": "fa5826b0a9c9fb676f007dd0a16ca26e725286cb43d8fd88d19ea3e34b4afd08"
+    },
+    "assets/origin_of_physics_laws_reel/images/scene-03-cosmic-forge-constants.png": {
+      "mtime": 1789478735.4619427,
+      "size": 3419167,
+      "sha256": "62b854c924e015911fabf5b868422d02cd9b6c0cea0157cd4a3ba9951c932bb2"
+    },
+    "assets/origin_of_physics_laws_reel/images/scene-04-multiverse-anthropic.png": {
+      "mtime": 1789478736.2385786,
+      "size": 2941310,
+      "sha256": "215ba7c2a36d9b071eb86af1b5ad732b597795d3f1b826132fb29dc8713c706b"
+    },
+    "assets/origin_of_physics_laws_reel/images/scene-05-inevitable-geometry-cta.png": {
+      "mtime": 1789478736.9371157,
+      "size": 3077168,
+      "sha256": "d3c7111871ccb8b9caedab8c2d0fafa42691ab62a9024e2defb1a261242e36b5"
+    },
+    "assets/pale_blue_dot_universe_reel/scene-01-hook.png": {
+      "mtime": 1788668935.2819304,
+      "size": 1700501,
+      "sha256": "6498bb56e6f3ee62ea182c7f702506e7ea484871d6354bd55ab5b8655dbf13ea"
+    },
+    "assets/pale_blue_dot_universe_reel/scene-02-solar-system-zoom.png": {
+      "mtime": 1788669010.1787164,
+      "size": 2386038,
+      "sha256": "29ed1264706a20a9b097bf26a17e14026e12390792a64594bc34b9a20a40adbb"
+    },
+    "assets/pale_blue_dot_universe_reel/scene-03-voyager-at-edge.png": {
+      "mtime": 1788668936.464362,
+      "size": 694784,
+      "sha256": "3c25ed578ad0d6243571032acc2e29a5fa088346dbec9de1c9dc4c990d8cb94e"
+    },
+    "assets/pale_blue_dot_universe_reel/scene-04-cagan-turn-camera.png": {
+      "mtime": 1788669011.0836995,
+      "size": 2082987,
+      "sha256": "13c2fb379dd9aa938c13e16e598d27f459999ba8ae08dd4ca1ce47f389b840a0"
+    },
+    "assets/pale_blue_dot_universe_reel/scene-05-pale-blue-dot.png": {
+      "mtime": 1788668938.2245405,
+      "size": 774707,
+      "sha256": "5b719ecfa233bea44bc221d7d6ae0810ac8d2a3288079f554ff244eff36446b9"
+    },
+    "assets/pale_blue_dot_universe_reel/scene-06-earth-miracle-life.png": {
+      "mtime": 1788668938.702373,
+      "size": 3723746,
+      "sha256": "4c13e55a55b8cf631add9bb684a9f37a54fd842f765dff20060d4debcd7e107a"
+    },
+    "assets/pale_blue_dot_universe_reel/scene-07-supernova-stardust.png": {
+      "mtime": 1788668939.2298746,
+      "size": 3382579,
+      "sha256": "84e34c29f623e466534e03cedb277a6d4a56560637f1fce8431791cc3d6d320b"
+    },
+    "assets/pale_blue_dot_universe_reel/scene-08-cosmos-knowing-itself.png": {
+      "mtime": 1788668939.674106,
+      "size": 4289885,
+      "sha256": "232da75573a40a583c0e742ae0e9d5a2a58584b69951be1e8b833b92e1b0819c"
+    },
+    "assets/pale_blue_dot_universe_reel/scene-09-stardust-within.png": {
+      "mtime": 1788668940.101879,
+      "size": 4289824,
+      "sha256": "0ae50f510e712e91dd986f9450b159071f9761cf70f4bd0c9683ea45880f9a7f"
+    },
+    "assets/pale_blue_dot_universe_reel/scene-10-mamase-outro.png": {
+      "mtime": 1788622065.7213311,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/parallel_universe_reel/images/scene-01-hook.png": {
+      "mtime": 1788782263.0956113,
+      "size": 3346253,
+      "sha256": "e22b742cb21b097288f6e0c4d085b6a19d7abc05a2f7707f49d62d2f1f586f28"
+    },
+    "assets/parallel_universe_reel/images/scene-02-relative-state.png": {
+      "mtime": 1788782263.3066,
+      "size": 3229172,
+      "sha256": "6bd1ed7b890c4ae5a83fd2d5180f192baac7936eaae2069659f942b21b1482d9"
+    },
+    "assets/parallel_universe_reel/images/scene-03-superposition.png": {
+      "mtime": 1788782263.5164998,
+      "size": 2709753,
+      "sha256": "a093b2e94ba1c4b5de01af74d70a95910c09aa11a4add3849b3505c3a69408a5"
+    },
+    "assets/parallel_universe_reel/images/scene-04-branching-outcomes.png": {
+      "mtime": 1788782263.7241657,
+      "size": 3294133,
+      "sha256": "c49b0031947f7a81a13385897009d91d0ace0cf6d08b2e640e2f027c94acd245"
+    },
+    "assets/parallel_universe_reel/images/scene-05-decoherence.png": {
+      "mtime": 1788782263.9316876,
+      "size": 3041076,
+      "sha256": "1f2ece4a120a2cec7b8f6931fb33aa25b5151fccc306250d1907700c81688119"
+    },
+    "assets/parallel_universe_reel/images/scene-06-alternate-lives.png": {
+      "mtime": 1788782264.1417394,
+      "size": 3463289,
+      "sha256": "e5275584ea2a43fbe606ed1ae0db2e15ba6e5d44474c81cbd50be68eb831c6be"
+    },
+    "assets/parallel_universe_reel/images/scene-07-unreachable-branches.png": {
+      "mtime": 1788782264.3593965,
+      "size": 2962207,
+      "sha256": "7bb98e47bb56b6366a8a7afcd4bb21bee4d331282eb278ba360f38ad546facd7"
+    },
+    "assets/parallel_universe_reel/images/scene-08-interpretations.png": {
+      "mtime": 1788782264.5641332,
+      "size": 3060620,
+      "sha256": "573ee068ee680936e20f789b200e30e15f5e34f9c57dee33a45c3742c0af47a4"
+    },
+    "assets/parallel_universe_reel/images/scene-09-question.png": {
+      "mtime": 1788782264.7656214,
+      "size": 3269313,
+      "sha256": "1582e9f3315c047f512ab06d6c8a357dbd59562e13d5d46ef02898a53f045460"
+    },
+    "assets/parallel_universe_reel/images/scene-10-brand-outro.png": {
+      "mtime": 1788782262.8250613,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/parker_solar_probe_reel/scene-01-hook.png": {
+      "mtime": 1788530586.8863194,
+      "size": 2912385,
+      "sha256": "a8e1fcb785ad04475785dcc33a6ae269fc6687638bb5d321a8b756bc12ba66d9"
+    },
+    "assets/parker_solar_probe_reel/scene-02-closest-approach.png": {
+      "mtime": 1788530610.1161985,
+      "size": 3129205,
+      "sha256": "dc98a9264ffe9ab58fbcfb61ccdedfe78386bc27e6700740a3c4c2c1b6e264bc"
+    },
+    "assets/parker_solar_probe_reel/scene-03-record-speed.png": {
+      "mtime": 1788530610.2669346,
+      "size": 2361587,
+      "sha256": "39ed1c3aa4ac90fbd84c6c54547ca1decc7e54ec3329d318ae1b1b1cc4b5a824"
+    },
+    "assets/parker_solar_probe_reel/scene-04-corona-mission.png": {
+      "mtime": 1788530610.4055867,
+      "size": 2606245,
+      "sha256": "e365f5639176daaa672a3bc140878765dd8f079dcdec20ed60e333882f58eb2e"
+    },
+    "assets/parker_solar_probe_reel/scene-05-solar-wind-mystery.png": {
+      "mtime": 1788530610.5303721,
+      "size": 2954607,
+      "sha256": "89c6ae6769ae92d5f8731edb110a7e1e48b787e05fdd84e3f846362c421929d0"
+    },
+    "assets/parker_solar_probe_reel/scene-06-heat-shield-closeup.png": {
+      "mtime": 1788530610.6489685,
+      "size": 3278762,
+      "sha256": "20277a225b07c9892a6ea169a8da87728050eb895774b9f79a718c86f8ba9d9a"
+    },
+    "assets/parker_solar_probe_reel/scene-07-hot-outside-cool-inside.png": {
+      "mtime": 1788530610.777772,
+      "size": 2778163,
+      "sha256": "c0306f620b9ca139a1fbcf74a8ebb305ba7c89010801a821767ba3340a09ec16"
+    },
+    "assets/parker_solar_probe_reel/scene-08-autonomous-protection.png": {
+      "mtime": 1788530610.907263,
+      "size": 2798057,
+      "sha256": "b3e506edc3cd7c798d45587086bf377faca06185353a7c90596cdf5cfe9afe38"
+    },
+    "assets/parker_solar_probe_reel/scene-09-cooled-solar-panels.png": {
+      "mtime": 1788530611.0294847,
+      "size": 3084236,
+      "sha256": "33b603b4738a9b3473b43670576b1f70961fc40057e10e2802fca6017c541ebc"
+    },
+    "assets/parker_solar_probe_reel/scene-10-space-weather-earth.png": {
+      "mtime": 1788530611.165336,
+      "size": 2996317,
+      "sha256": "ee75c2b4b2835533f7910b3f5985179fc3aeae66e0c7605ee3b105f1ea070ede"
+    },
+    "assets/planet_nine_reel/images/scene-01-hook.png": {
+      "mtime": 1789190464.573738,
+      "size": 1767892,
+      "sha256": "7c5378659004279c32b5cf20507f7b18611212063af65c35961009033f8afdac"
+    },
+    "assets/planet_nine_reel/images/scene-02-strange-orbits.png": {
+      "mtime": 1789190705.3277502,
+      "size": 827275,
+      "sha256": "6c6ebac4f537a1aaaf45e5a4c25d1535f6b0aa588e0f8c56834ab3ab91d604dc"
+    },
+    "assets/planet_nine_reel/images/scene-03-massive-sculptor.png": {
+      "mtime": 1789190465.0388424,
+      "size": 1577183,
+      "sha256": "5c248411718c316703d86eb8272e15e933d25954d06a168bf390426a7b82640a"
+    },
+    "assets/planet_nine_reel/images/scene-04-distance-scale.png": {
+      "mtime": 1789190616.242658,
+      "size": 2600218,
+      "sha256": "0169be6f88ae9f2b6ec5d0133cec2f99e8239d8a6222c0c1c01d1693208b9f8b"
+    },
+    "assets/planet_nine_reel/images/scene-05-why-unseen.png": {
+      "mtime": 1789190465.3665226,
+      "size": 2929952,
+      "sha256": "7ead9ffebb7612d40a6fe34859449a22e5da29edd41198ab2a7fbfe58aad4379"
+    },
+    "assets/planet_nine_reel/images/scene-06-evidence-vs-hypothesis.png": {
+      "mtime": 1789190465.5241761,
+      "size": 2981737,
+      "sha256": "2a760c1754b741e82660de6fcdd1323611e3ac12b2a72dcc1aacf4047c83a702"
+    },
+    "assets/planet_nine_reel/images/scene-07-vera-rubin-hunt.png": {
+      "mtime": 1789190465.7909071,
+      "size": 3690761,
+      "sha256": "890beb751bded643961512816d5ccc7a46a4067317c93df5d2cd822264bd33d3"
+    },
+    "assets/planet_nine_reel/images/scene-08-cosmic-frontier.png": {
+      "mtime": 1789190465.9195511,
+      "size": 3264888,
+      "sha256": "72b14ae84ee8556731ee887bc77f17964ff92352cdd882e1153d6c82fc2a256c"
+    },
+    "assets/planet_nine_reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1789190466.0858421,
+      "size": 2915280,
+      "sha256": "de4d3b1a3390580c1ac8bafd7cf657b750c2f353ede1cc38fd34c844ae8c4972"
+    },
+    "assets/planetary_defense_china_reel/scene-01-hook.png": {
+      "mtime": 1788617938.7842996,
+      "size": 3171664,
+      "sha256": "83a4218983ff878e7fabdcf1d83d691e4a6fdd34baacc19d05de04f9ef3e4326"
+    },
+    "assets/planetary_defense_china_reel/scene-02-no-immediate-threat.png": {
+      "mtime": 1788617938.9860942,
+      "size": 2598422,
+      "sha256": "28588b1addf0e7f3a7276851b5b69cb544b9755ede3c60f59b0ae80788bc990a"
+    },
+    "assets/planetary_defense_china_reel/scene-03-solar-blind-spot.png": {
+      "mtime": 1788617939.1900911,
+      "size": 2889600,
+      "sha256": "c29c7f76f4e0698ef0e418421703412ab5c4f8f18f02dc16087cab45d1661ba4"
+    },
+    "assets/planetary_defense_china_reel/scene-04-monitoring-network.png": {
+      "mtime": 1788617939.44947,
+      "size": 2761771,
+      "sha256": "eab2a846dd79b7d49a2e312ddae9707e685c32d549318cef3dbce5987ad291d8"
+    },
+    "assets/planetary_defense_china_reel/scene-05-scout-mapping.png": {
+      "mtime": 1788617939.6619341,
+      "size": 3090191,
+      "sha256": "2aecb3df9200d4aca001b1f924e5c343f7cf2ed8fc81b67c2c0ab5fb8dbe9e42"
+    },
+    "assets/planetary_defense_china_reel/scene-06-kinetic-impact.png": {
+      "mtime": 1788617939.8844793,
+      "size": 3313622,
+      "sha256": "eee34e9cc490e101211adba69ca9e0bbdb67feb71075fb442a1e6bd9b64a9c9b"
+    },
+    "assets/planetary_defense_china_reel/scene-07-orbit-deflection.png": {
+      "mtime": 1788617940.0903323,
+      "size": 2677171,
+      "sha256": "3ffd176c93d833cf62e7c7dd29956c45af47f26c26b7d2d9241cf174d8fff906"
+    },
+    "assets/planetary_defense_china_reel/scene-08-post-impact-observation.png": {
+      "mtime": 1788617940.3214283,
+      "size": 2989002,
+      "sha256": "a89cc4c898ea90260d5136067959dc5f9c4f21801a6b3acefc944672577f77ea"
+    },
+    "assets/planetary_defense_china_reel/scene-09-early-warning.png": {
+      "mtime": 1788617940.563069,
+      "size": 2595291,
+      "sha256": "c1c10029990cd7660705d38d24b2021b5f1c24fd4397d72488e3d2df7bda5147"
+    },
+    "assets/planetary_defense_china_reel/scene-10-mamase-outro.png": {
+      "mtime": 1788617938.4479115,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/pluto_demoted_reel/scene-01-hook.png": {
+      "mtime": 1788692625.521734,
+      "size": 2038648,
+      "sha256": "1643c70b7794310aeb8732681805ea2c3fcfc124d08a770e15b705bf71101575"
+    },
+    "assets/pluto_demoted_reel/scene-02-discovery.png": {
+      "mtime": 1788697009.8064435,
+      "size": 4136624,
+      "sha256": "1384538433cc45710591fa87e906694bd5a7d67a260fca58b49e88b4f47e8ccf"
+    },
+    "assets/pluto_demoted_reel/scene-03-strange-orbit.png": {
+      "mtime": 1788697010.8198783,
+      "size": 4065861,
+      "sha256": "19f76db4f141abf574b0dd8ff93cd1c57df39e779b444cebc12e276d52065e74"
+    },
+    "assets/pluto_demoted_reel/scene-04-eris-kuiper-belt.png": {
+      "mtime": 1788696258.444222,
+      "size": 4329357,
+      "sha256": "5e7048018afea45b7812574bef0d65f437d5244ab8800dc786c6178aa1bbc4cb"
+    },
+    "assets/pluto_demoted_reel/scene-05-prague-vote.png": {
+      "mtime": 1788698097.69279,
+      "size": 4207983,
+      "sha256": "e005115094befe6bd600acc30df071cafa4b03e1b30bb1377b72be6bc675dde4"
+    },
+    "assets/pluto_demoted_reel/scene-06-three-criteria.png": {
+      "mtime": 1788699625.557638,
+      "size": 3735120,
+      "sha256": "b38dc7affe4eaa634bb7f33fc5069fceb09c8b7a5645a5a6ad455c66fad9ba1c"
+    },
+    "assets/pluto_demoted_reel/scene-07-dwarf-planet-king.png": {
+      "mtime": 1788699626.2941892,
+      "size": 3788932,
+      "sha256": "82d4b0d49cf25077f06d1baeadb5ac95c54026be062629eff38ec55f6fce1278"
+    },
+    "assets/pluto_downgraded_reel/images/scene-01-hook.png": {
+      "mtime": 1789177046.049503,
+      "size": 2676122,
+      "sha256": "5c75f4f62803ab0d006df174f397d96e7d461bb79265f916f66fa87a4b5b5b0d"
+    },
+    "assets/pluto_downgraded_reel/images/scene-02-ninth-planet.png": {
+      "mtime": 1789177870.812798,
+      "size": 2898112,
+      "sha256": "084c92736862de0c1b29174198ad0223c2a93b7758469706b18355cd2595b949"
+    },
+    "assets/pluto_downgraded_reel/images/scene-03-discovery-eris.png": {
+      "mtime": 1789177870.9548314,
+      "size": 3110673,
+      "sha256": "240be9fe89c3cdbf3143ffac44cc7aae494739688f543acc91ac6631a6d11b84"
+    },
+    "assets/pluto_downgraded_reel/images/scene-04-uncleared-orbit.png": {
+      "mtime": 1789177871.1011796,
+      "size": 2947308,
+      "sha256": "0e026b779e9ad44d779440da4c98487bfa967ffcd686284ee5c472fa173e14d3"
+    },
+    "assets/pluto_downgraded_reel/images/scene-05-protest-2006.png": {
+      "mtime": 1789177871.2396898,
+      "size": 3411531,
+      "sha256": "87bc1acb6907c3f65365d08932dccd984ae580e98aa2812e79ef386f9091d084"
+    },
+    "assets/pluto_downgraded_reel/images/scene-06-pluto-unchanged.png": {
+      "mtime": 1789177871.3878014,
+      "size": 2861409,
+      "sha256": "7e90140f67608868b39eececacb132725a89c249554b081d6fc8cf3e51e27c53"
+    },
+    "assets/pluto_downgraded_reel/images/scene-07-new-horizons-flyby.png": {
+      "mtime": 1789177871.5388813,
+      "size": 2782175,
+      "sha256": "910d1fcb10237848b8da3f03cd66dc26d231c30cf2345a1a69eff3f344d26680"
+    },
+    "assets/pluto_downgraded_reel/images/scene-08-pluto-charon-payoff.png": {
+      "mtime": 1789177871.6767628,
+      "size": 3135690,
+      "sha256": "3a8c2995a26025e2a9f9c2d5d34d850eb64272c6b7f6fe729b3af411278a3119"
+    },
+    "assets/pluto_downgraded_reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1789177871.8379445,
+      "size": 2915280,
+      "sha256": "de4d3b1a3390580c1ac8bafd7cf657b750c2f353ede1cc38fd34c844ae8c4972"
+    },
+    "assets/rogue_planets_reel/images/scene-01-hook.png": {
+      "mtime": 1789396144.125012,
+      "size": 3118153,
+      "sha256": "6764a9e52b5fc86b5b27479369f87518d7d065b0a08a4447ef060c4f8a4f3b7e"
+    },
+    "assets/rogue_planets_reel/images/scene-02-scale-galaxy-ocean.png": {
+      "mtime": 1789397043.1313422,
+      "size": 3471392,
+      "sha256": "5b3e63e6b70843fb50d6815adc4798de285cdb769e773214a470a7214767595a"
+    },
+    "assets/rogue_planets_reel/images/scene-03-gravitational-ejection.png": {
+      "mtime": 1789397043.2456656,
+      "size": 1594299,
+      "sha256": "866493960847a1b660749b2b0937c4cabae19007c28a997c59022c95fa828125"
+    },
+    "assets/rogue_planets_reel/images/scene-04-frozen-world-surface.png": {
+      "mtime": 1789397043.3950744,
+      "size": 3036924,
+      "sha256": "422046625bbf1dbba07bba8e7f8a0e688a8c5ac6131e92f8a5d554aa7785aa6a"
+    },
+    "assets/rogue_planets_reel/images/scene-05-subsurface-ocean-life.png": {
+      "mtime": 1789397079.4267912,
+      "size": 2015784,
+      "sha256": "c094ae781477202c6b146ba3997c27669673d4d091662179c26b698199a8ae47"
+    },
+    "assets/rogue_planets_reel/images/scene-06-gravitational-microlensing.png": {
+      "mtime": 1789397043.699411,
+      "size": 2386949,
+      "sha256": "2646a1fd6ade74845fce348fd2a489522e494c80cfd45f4390a33abd58cdd48f"
+    },
+    "assets/rogue_planets_reel/images/scene-07-cosmic-drift-mystery.png": {
+      "mtime": 1789397043.8332872,
+      "size": 3177122,
+      "sha256": "2aa682b35e71e0b475e100854bdf7aedfec053c3a3b5dd4514cd2a31576481f4"
+    },
+    "assets/rogue_planets_reel/images/scene-08-brand-outro.png": {
+      "mtime": 1789397043.997888,
+      "size": 2915280,
+      "sha256": "de4d3b1a3390580c1ac8bafd7cf657b750c2f353ede1cc38fd34c844ae8c4972"
+    },
+    "assets/roman_dark_universe_reel/images/scene-01-hook.png": {
+      "mtime": 1788765133.0401795,
+      "size": 3526833,
+      "sha256": "8b35fb47e68dd2c8a90b970aee71560cd29150feac2c8cfba2c2fae289b88bd4"
+    },
+    "assets/roman_dark_universe_reel/images/scene-02-launch.png": {
+      "mtime": 1788765133.2464423,
+      "size": 2960859,
+      "sha256": "9bcdc1ae659d811947aaa73d6fa5c1728c65064bf743eb26c2b8be6ca55e4eb0"
+    },
+    "assets/roman_dark_universe_reel/images/scene-03-l2.png": {
+      "mtime": 1788765133.4497125,
+      "size": 2897554,
+      "sha256": "89de8442840861af11dace892a23228cbfc663cd4e5a57c30e77c0b4ceef994a"
+    },
+    "assets/roman_dark_universe_reel/images/scene-04-dark-universe.png": {
+      "mtime": 1788765133.657836,
+      "size": 3035480,
+      "sha256": "17854bf04ed8f800a5386b12a8510d54b147bee466a9abae45221d84e3002044"
+    },
+    "assets/roman_dark_universe_reel/images/scene-05-cosmic-map.png": {
+      "mtime": 1788765133.873389,
+      "size": 3508629,
+      "sha256": "cb2389dfbfc76ee6f3cdcd1e812e4a1cc011c22d81d5faba6edce57066c8cf06"
+    },
+    "assets/roman_dark_universe_reel/images/scene-06-wide-survey.png": {
+      "mtime": 1788765134.081674,
+      "size": 2810670,
+      "sha256": "ba46b1fe36cf054034c9cd804eb8711fdd91f7145ae6edf6daa2b3cdfba01c49"
+    },
+    "assets/roman_dark_universe_reel/images/scene-07-wide-field-camera.png": {
+      "mtime": 1788765134.2833633,
+      "size": 3044842,
+      "sha256": "ce44e2fc83ec9eb4adc0b7896cb213d7707536e0469b156d1fc5fff2602a4490"
+    },
+    "assets/roman_dark_universe_reel/images/scene-08-exoplanets.png": {
+      "mtime": 1788765134.4789834,
+      "size": 2563788,
+      "sha256": "c76bc667ebd64755f88cb87a8374485dcf7e5aaf8af11d68c7ea8e9cddd49d76"
+    },
+    "assets/roman_dark_universe_reel/images/scene-09-first-light.png": {
+      "mtime": 1788765134.68601,
+      "size": 2810670,
+      "sha256": "ba46b1fe36cf054034c9cd804eb8711fdd91f7145ae6edf6daa2b3cdfba01c49"
+    },
+    "assets/roman_dark_universe_reel/images/scene-10-mamase-outro.png": {
+      "mtime": 1788765134.8854158,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/saturn_decagon_reel/scene-01-hook.png": {
+      "mtime": 1788587387.0276651,
+      "size": 665281,
+      "sha256": "8fbb12895964182923f898adf1315846d31419178dc7efc2e90c46b2a594f781"
+    },
+    "assets/saturn_decagon_reel/scene-02-north-hexagon.png": {
+      "mtime": 1788587387.030649,
+      "size": 2677061,
+      "sha256": "0bbc43eab0cce7aa699a1b5d92d039daf0ded49ae75efde17bdd61b1e15ae1de"
+    },
+    "assets/saturn_decagon_reel/scene-03-cassini-south-pole.png": {
+      "mtime": 1788587387.0345144,
+      "size": 2777079,
+      "sha256": "a8f60f0c0cdfe8c82da5786a35fefdd86f633da30b2223c041d3a535ad820400"
+    },
+    "assets/saturn_decagon_reel/scene-04-hubble-decagon.png": {
+      "mtime": 1788587387.3914301,
+      "size": 731658,
+      "sha256": "0b558ad103123f1dc307e0f9a6b2ae829170446eb4e648028905db4df5e5c947"
+    },
+    "assets/saturn_decagon_reel/scene-05-fluid-dynamics.png": {
+      "mtime": 1788587387.4525478,
+      "size": 56681,
+      "sha256": "db45c079a3e49d33bae67812a37247117c47572f2ea6625df684660a24ecca17"
+    },
+    "assets/saturn_decagon_reel/scene-06-seasonal-cycle.png": {
+      "mtime": 1788587387.594569,
+      "size": 227250,
+      "sha256": "ffc2ea92ec21177159fb978945a9e2eb03ba5bca80e2e0b36b4b4c953673b87c"
+    },
+    "assets/saturn_decagon_reel/scene-07-cosmic-dual-geometry.png": {
+      "mtime": 1788587388.0188665,
+      "size": 1377429,
+      "sha256": "935ec424c41b9eff7b588567f5ea45061f02981392df19983d7d32887c8c5297"
+    },
+    "assets/saturn_decagon_reel/scene-08-philosophical-climax.png": {
+      "mtime": 1788587388.1344478,
+      "size": 219895,
+      "sha256": "4013da01ba2bb86b6b24b8096e72001528d23b02d4923bcf6dc471d1890a94a8"
+    },
+    "assets/saturn_decagon_reel/scene-09-mamase-outro.png": {
+      "mtime": 1788587388.1366363,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/scene-01-bg-1080x1920.png": {
+      "mtime": 1788859414.4308667,
+      "size": 58609,
+      "sha256": "13be4907fd99104261307f78e05c04f5183828cf83fb38b7bdf24522beecec1f"
+    },
+    "assets/scene-01-bg-only.png": {
+      "mtime": 1788859088.2301712,
+      "size": 56762,
+      "sha256": "3da8848b0c8f19a397096e635f3dd630c2e4f2eea568ff854173567f99643b1d"
+    },
+    "assets/scene-01-full-ai-final.png": {
+      "mtime": 1788859219.006419,
+      "size": 509417,
+      "sha256": "1070c4ad97789da160769466bd84bcd4fc3504e174fecaed45ec877db2f0d252"
+    },
+    "assets/scene-01-full-ai.png": {
+      "mtime": 1788859218.9057233,
+      "size": 51134,
+      "sha256": "5f393a5e9367d7c1be2fe2ecaac8bd4af81893cdec53a0327455453e0dd4b58d"
+    },
+    "assets/scene-01-google-maps-1080x1920.png": {
+      "mtime": 1788859430.6389616,
+      "size": 1611648,
+      "sha256": "4ce3974791413e215a69ae5b0dd1b8245b79e02e84cd3a04ceed4f85df0a085b"
+    },
+    "assets/scene-01-google-maps-chonburi-exact.png": {
+      "mtime": 1788860890.7820587,
+      "size": 1645752,
+      "sha256": "1eeef6e4f0f561f5f8854a9b2e40e1bd39cf06ebf2cb4e9acf29a1741cc6b65a"
+    },
+    "assets/scene-01-google-maps-kanit-gold.png": {
+      "mtime": 1788859572.7526503,
+      "size": 1618964,
+      "sha256": "3825174e1036ad71a7f9a96def2e554724e4d5d58b69efb11693c7ed69e667c0"
+    },
+    "assets/scene-01-google-maps-motion-safe.png": {
+      "mtime": 1788865672.6743195,
+      "size": 1595657,
+      "sha256": "4ce7b1e75467f2d0262bd684d320e576b8606570a23f016524a131a5537ef7a4"
+    },
+    "assets/scene-01-google-maps-reference-match.png": {
+      "mtime": 1788859523.5602212,
+      "size": 1567127,
+      "sha256": "ade09a8d5cfa3b4ee33ec4dcefbb789124781b076efb2e4399f3e22c7ae68f81"
+    },
+    "assets/scene-01-google-maps.png": {
+      "mtime": 1788859307.6636157,
+      "size": 509296,
+      "sha256": "572a27ffc27b64a03bec01557a1d08372bdfa8cb4e1b13b1dc91a7774950c67e"
+    },
+    "assets/seven_stars_dyson_sphere_reel/images/scene-01-hook.png": {
+      "mtime": 1789470664.9495015,
+      "size": 3138988,
+      "sha256": "72a87e7b15427b4e268ab81eae25978f5e5598c03bc6fca5145398532107f275"
+    },
+    "assets/seven_stars_dyson_sphere_reel/images/scene-02-thermodynamics-waste-heat.png": {
+      "mtime": 1789470991.6903992,
+      "size": 2410805,
+      "sha256": "eff299798fa0c3679eb22e2a6ff0f6fc6a58947188c4aab25b761fde8448f5a1"
+    },
+    "assets/seven_stars_dyson_sphere_reel/images/scene-03-dyson-sphere-swarm-concept.png": {
+      "mtime": 1789204308.8628635,
+      "size": 3472484,
+      "sha256": "07a5a38517f97bbf296d93df2bed59c707ceb144d0f9e316489a1dc5aa9d3b67"
+    },
+    "assets/seven_stars_dyson_sphere_reel/images/scene-04-kardashev-scale-type-two.png": {
+      "mtime": 1789470992.4305134,
+      "size": 3106344,
+      "sha256": "45117551cf2ea3334b89fe9cd7ce6f7df82f193d4c22edae87acd5038ff2c5f6"
+    },
+    "assets/seven_stars_dyson_sphere_reel/images/scene-05-jwst-deep-observation.png": {
+      "mtime": 1789470993.1066928,
+      "size": 2752646,
+      "sha256": "cbef493cd8e3c57a55a3b2041dce200a04967b5be137f20d5972acfb27ac605c"
+    },
+    "assets/seven_stars_dyson_sphere_reel/images/scene-06-twist-background-agn-galaxy.png": {
+      "mtime": 1789470993.7396245,
+      "size": 2909752,
+      "sha256": "2f8f28e7793ad20bfc2262593bf7e5c2248912e6d957d60277b50ac1fdfb3c2c"
+    },
+    "assets/seven_stars_dyson_sphere_reel/images/scene-07-sagans-wisdom-night-sky.png": {
+      "mtime": 1789470994.020341,
+      "size": 4280725,
+      "sha256": "db0309c538561e74025d8c814a140b1d821c0c0ab55492aaa033a28ece48e10c"
+    },
+    "assets/seven_stars_dyson_sphere_reel/images/scene-08-brand-outro.png": {
+      "mtime": 1789463883.429166,
+      "size": 2777765,
+      "sha256": "552c33d9510de684b13c1b706fab9e701a620efa0f4f41d9a91010e71463c887"
+    },
+    "assets/solar_storm_documentary/scene_01_key_art.png": {
+      "mtime": 1788513666.349777,
+      "size": 2962246,
+      "sha256": "f0bacd7d611853fbb9e02844516ac4e43cee5e166dabf5ca8dd594141b467e54"
+    },
+    "assets/solar_storm_documentary/scene_02_serene_sun.png": {
+      "mtime": 1788508902.310293,
+      "size": 2988376,
+      "sha256": "054656215c5e5b89ac7e11b692438ef1dbecb108012db4a1fb7f52bbd2c7a9f1"
+    },
+    "assets/solar_storm_documentary/scene_03_sunspot_loops.png": {
+      "mtime": 1788508903.3677092,
+      "size": 3364260,
+      "sha256": "748816ac7f8090571685827b93427f75a82d3056de769bd99a11d3e80926eb96"
+    },
+    "assets/solar_storm_documentary/scene_04_solar_flare.png": {
+      "mtime": 1788508904.6237063,
+      "size": 2678814,
+      "sha256": "65d4be13c0f46b0e45d3053d1f6776f59bb188f1162b9a313947e2ff14bc2c65"
+    },
+    "assets/solar_storm_documentary/scene_05_cme_expansion.png": {
+      "mtime": 1788508906.036169,
+      "size": 2607134,
+      "sha256": "4ec37c4ef47d3dbd64025fd5667ef916282031145a7ea4b9f9599cf55c6558e6"
+    },
+    "assets/solar_storm_documentary/scene_06_interplanetary_transit.png": {
+      "mtime": 1788508907.384921,
+      "size": 2690091,
+      "sha256": "1b36ea171b86ce582bce05b903b95e143b995ba698b78519983c3a35a35774bd"
+    },
+    "assets/solar_storm_documentary/scene_07_earth_magnetosphere.png": {
+      "mtime": 1788508908.7075982,
+      "size": 2689676,
+      "sha256": "f63b291b48dfe2b1d6a25feb5ea79059256f33f47fa658df31b428c355849f36"
+    },
+    "assets/solar_storm_documentary/scene_08_magnetosphere_compression.png": {
+      "mtime": 1788508910.0275097,
+      "size": 3019648,
+      "sha256": "dda5c1048f9c6a66a0c8e44bfa19b60ce4c5297051127ea29c007d48e06f4bbf"
+    },
+    "assets/solar_storm_documentary/scene_09_lake_aurora.png": {
+      "mtime": 1788508911.1795068,
+      "size": 2899320,
+      "sha256": "f3a717164e602ae965df6ea971da778f6fd857e5902189fef67d542ac61b7186"
+    },
+    "assets/solar_storm_documentary/scene_10_carrington_telegraph_office.png": {
+      "mtime": 1788508912.3723178,
+      "size": 2707456,
+      "sha256": "49ba88ee4f2abd31b3fb06fe04b02d433a26a9895b71596316df01d74f17984d"
+    },
+    "assets/solar_storm_documentary/scene_11_telegraph_sparks.png": {
+      "mtime": 1788508913.818395,
+      "size": 2385691,
+      "sha256": "453c2c9cdb67d52cdcace7f9e8e82dcfc3225b923d5834f01a3e3aa78c8fb16c"
+    },
+    "assets/solar_storm_documentary/scene_12_modern_earth_orbit.png": {
+      "mtime": 1788508915.4657958,
+      "size": 2638849,
+      "sha256": "66829af8ea4f87611f570357d195d6a396af95d1600b7d2a9e4794cc49308555"
+    },
+    "assets/solar_storm_documentary/scene_13_satellite_aurora.png": {
+      "mtime": 1788508917.1551437,
+      "size": 3016401,
+      "sha256": "a09590306cf1ca836fe792dff19d5584967fdc1264deca1b394b18ea99b7fca7"
+    },
+    "assets/solar_storm_documentary/scene_14_cargo_ship_night.png": {
+      "mtime": 1788508918.157052,
+      "size": 3463008,
+      "sha256": "225481269b9c8e27790130eb9b5ad31d76e0ebba079735a543020db34d3a4fb6"
+    },
+    "assets/solar_storm_documentary/scene_15_aircraft_cockpit_aurora.png": {
+      "mtime": 1788508919.4157512,
+      "size": 2478920,
+      "sha256": "ac7b2693ba432fe26ccc975bb1be556a5604cf7600a7590a8851440772a3a90e"
+    },
+    "assets/solar_storm_documentary/scene_16_datacenter_servers.png": {
+      "mtime": 1788508920.9994435,
+      "size": 2250249,
+      "sha256": "869b5627fc4146601e178b37e9cd5d29557335d8d728323c90f0ee6dfc47a8bc"
+    },
+    "assets/solar_storm_documentary/scene_17_power_substation.png": {
+      "mtime": 1788508922.376245,
+      "size": 2608651,
+      "sha256": "6d5c8764056b708c0abea537fd6754961a2e0651969c3d4d8816c16a0e009fc9"
+    },
+    "assets/solar_storm_documentary/scene_18_power_transformer.png": {
+      "mtime": 1788508923.5665514,
+      "size": 4295382,
+      "sha256": "37cbe58dbaa6a346fa419d97a89349bd58a2274045509834b3529a2744c23a8b"
+    },
+    "assets/solar_storm_documentary/scene_19_city_rolling_blackout.png": {
+      "mtime": 1788508924.3754518,
+      "size": 2305047,
+      "sha256": "eed348fb5a56a7c2f4b19ff09915f7fbbfdbccd8e5cac437ced201639c738193"
+    },
+    "assets/solar_storm_documentary/scene_20_financial_noc_infrastructure.png": {
+      "mtime": 1788508925.1774228,
+      "size": 3101167,
+      "sha256": "540cd0403e381f30dacf9710840a2d550fc645a5c209b11a079fb4e3abe8ac3d"
+    },
+    "assets/solar_storm_documentary/scene_21_city_skyline_aurora.png": {
+      "mtime": 1788508926.3252966,
+      "size": 3790924,
+      "sha256": "094a5ea39e1601af2b5f8cb6bc6ecaab48619959f613ec37e172244ba322188e"
+    },
+    "assets/solar_storm_documentary/scene_22_low_orbit_satellite.png": {
+      "mtime": 1788508927.1006463,
+      "size": 2136673,
+      "sha256": "745455d56145da4560f536ea6e92a44c22e8fa64cd2a192209f694f10274e803"
+    },
+    "assets/solar_storm_documentary/scene_23_space_weather_center.png": {
+      "mtime": 1788508928.1004083,
+      "size": 2839631,
+      "sha256": "ac57514e5f7293dc0188d888618019b03e7d976178fdc35e403f5c3f20bf6629"
+    },
+    "assets/solar_storm_documentary/scene_24_solar_observing_spacecraft.png": {
+      "mtime": 1788508928.717326,
+      "size": 424791,
+      "sha256": "b924cbd0c848bfb3a51e017a34aa42e7722b9934fac7a1da836ac28a691a7ef9"
+    },
+    "assets/solar_storm_documentary/scene_25_cme_scientific_model.png": {
+      "mtime": 1788508929.3266013,
+      "size": 1824763,
+      "sha256": "75bd9abc03ba41e406d0fa8e417431bb64a37a1cc11ececbe921c6bbe79c5459"
+    },
+    "assets/solar_storm_documentary/scene_26_power_grid_control_room.png": {
+      "mtime": 1788508930.5728614,
+      "size": 3112004,
+      "sha256": "5202aa320c7ddd32e5e2b0e57afa09102986085fe1a6424ae1c7bae3588101b6"
+    },
+    "assets/solar_storm_documentary/scene_27_earth_magnetic_shield.png": {
+      "mtime": 1788508931.6047478,
+      "size": 3134544,
+      "sha256": "43d94ddbf11f1e8a80475be6ec243e470c97193dd38d30cb868cc59236523bba"
+    },
+    "assets/solar_storm_documentary/scene_28_emergency_preparedness.png": {
+      "mtime": 1788515220.0896266,
+      "size": 2068831,
+      "sha256": "c1f93575fe8c4e37be09c6a2012034fc231eb240b83ab24983a772ba6d3726d4"
+    },
+    "assets/solar_storm_documentary/scene_29_peaceful_orbital_sunrise.png": {
+      "mtime": 1788508933.920207,
+      "size": 1517058,
+      "sha256": "067dadbce21d49ad0a615d66e0ee7a0c4c12f9a411fbe54638b3cd7f08c3b04d"
+    },
+    "assets/solar_storm_documentary/scene_30_mamase_channel_outro.png": {
+      "mtime": 1788508935.785432,
+      "size": 895411,
+      "sha256": "70e0db6f71c4e2cd9a4c59b6efa9c5bb6a44ecb87acd96383e507bb35c3d6621"
+    },
+    "assets/solar_storm_documentary/variants/scene_02_serene_sun_close.png": {
+      "mtime": 1788514725.8438094,
+      "size": 2326127,
+      "sha256": "973f739711bb624927c536a87fa87c665bd66f744c4930894d0b83a6b8205aba"
+    },
+    "assets/solar_storm_documentary/variants/scene_02_serene_sun_medium.png": {
+      "mtime": 1788514725.067591,
+      "size": 3009166,
+      "sha256": "b60ce321937a8b7f6d07deb5f370db6a942add93f87b1b0ea0523f229019d9b6"
+    },
+    "assets/solar_storm_documentary/variants/scene_03_sunspot_loops_close.png": {
+      "mtime": 1788514727.0781772,
+      "size": 2363804,
+      "sha256": "21c059edebb4c51c931dd30e26d4e4696bed6bc56710a50c1df08b3a3e15bf1e"
+    },
+    "assets/solar_storm_documentary/variants/scene_03_sunspot_loops_medium.png": {
+      "mtime": 1788514726.3557343,
+      "size": 3112863,
+      "sha256": "ef517072cd9eb2d6fe6e77b7f49b48cf0c0cb196a5fbc63d76d59106fbd1e7f7"
+    },
+    "assets/solar_storm_documentary/variants/scene_06_interplanetary_transit_close.png": {
+      "mtime": 1788514728.90248,
+      "size": 2100692,
+      "sha256": "60b63a0388edf521c5f3658fd9d268664f663ba4ad1f0322eb52cad7674ac771"
+    },
+    "assets/solar_storm_documentary/variants/scene_06_interplanetary_transit_medium.png": {
+      "mtime": 1788514727.908519,
+      "size": 2333624,
+      "sha256": "6cc5d88848d164fb10648127ada32ecb34967a3f29d64ad8f9ef2528f787ccb7"
+    },
+    "assets/solar_storm_documentary/variants/scene_07_earth_magnetosphere_close.png": {
+      "mtime": 1788514730.8428545,
+      "size": 2277329,
+      "sha256": "083e63737c3b3837ef0d5ad32bfb36e0aee4c5f541b74782dd82b3acbae651de"
+    },
+    "assets/solar_storm_documentary/variants/scene_07_earth_magnetosphere_medium.png": {
+      "mtime": 1788514729.9211557,
+      "size": 2453939,
+      "sha256": "3dfe5fc120931ab1cd6c19efe9b1d30fb174fddd87dc328a6c328040b42b0406"
+    },
+    "assets/solar_storm_documentary/variants/scene_10_carrington_telegraph_office_close.png": {
+      "mtime": 1788514732.89799,
+      "size": 1950893,
+      "sha256": "df14cf294e883ed5a5ede6a6221b32b894c2701f4850b553168821cc081e7829"
+    },
+    "assets/solar_storm_documentary/variants/scene_10_carrington_telegraph_office_medium.png": {
+      "mtime": 1788514731.7960274,
+      "size": 2326796,
+      "sha256": "c50260560c790006e614c7465775570d7613f8c2f52d8bf34dd78469d0321789"
+    },
+    "assets/solar_storm_documentary/variants/scene_11_telegraph_sparks_close.png": {
+      "mtime": 1788514735.1143317,
+      "size": 1930681,
+      "sha256": "f69f74f36acc7055ef99ab9e00ea60824984fc311a2c109a438856ef5bdaa83c"
+    },
+    "assets/solar_storm_documentary/variants/scene_11_telegraph_sparks_medium.png": {
+      "mtime": 1788514734.0527864,
+      "size": 2157614,
+      "sha256": "d396e1afcd3331291e4ffcab756a8c8e0ec0b93754a9f0f2bad0e647874376b2"
+    },
+    "assets/solar_storm_documentary/variants/scene_12_modern_earth_orbit_close.png": {
+      "mtime": 1788514736.760689,
+      "size": 2383501,
+      "sha256": "a177e5e5e6a5d939a130fd3c00415e6db39874b6dfd57a26262c0908f27d7cfe"
+    },
+    "assets/solar_storm_documentary/variants/scene_12_modern_earth_orbit_medium.png": {
+      "mtime": 1788514735.877983,
+      "size": 2816171,
+      "sha256": "4a5ce18afc497e9b9df15b07ed7ab5f479f7d2f6f795260b535df5fba10d0203"
+    },
+    "assets/solar_storm_documentary/variants/scene_14_cargo_ship_night_close.png": {
+      "mtime": 1788514737.8461778,
+      "size": 3005078,
+      "sha256": "31b890de44d91ac8f62176f6421af88d748b7a9f652b0dbadb73a6264d507caf"
+    },
+    "assets/solar_storm_documentary/variants/scene_14_cargo_ship_night_medium.png": {
+      "mtime": 1788514737.2902758,
+      "size": 3192490,
+      "sha256": "85dfd6803fd8de283073643b10f0e490a5b170a71b535af81b682cc10cfd1dc8"
+    },
+    "assets/solar_storm_documentary/variants/scene_15_aircraft_cockpit_aurora_close.png": {
+      "mtime": 1788514740.3707032,
+      "size": 1625170,
+      "sha256": "4b8f017e3d83354268ead1ddf056da3e3759c8ac1df6d676d8941af9622876fd"
+    },
+    "assets/solar_storm_documentary/variants/scene_15_aircraft_cockpit_aurora_medium.png": {
+      "mtime": 1788514738.954475,
+      "size": 2150758,
+      "sha256": "a034d7fec701ccf5cc8f5225b42621131a2005c789474dd1c8ad107e701bddb7"
+    },
+    "assets/solar_storm_documentary/variants/scene_16_datacenter_servers_close.png": {
+      "mtime": 1788514742.1751432,
+      "size": 1869055,
+      "sha256": "628a388cbc07d60b8153e305e082f76027d598bcc26b02d9f75824c538f6c2db"
+    },
+    "assets/solar_storm_documentary/variants/scene_16_datacenter_servers_medium.png": {
+      "mtime": 1788514741.3303506,
+      "size": 2128578,
+      "sha256": "16c3a23cdc6b736357f1e20609bc42497a195961ffb2c7e029188f75831788b4"
+    },
+    "assets/solar_storm_documentary/variants/scene_17_power_substation_close.png": {
+      "mtime": 1788514743.1910176,
+      "size": 1847700,
+      "sha256": "b4f879bbd77846c0f2eb9d9e6b884d71e322215151a1b5ce9fc9ff238fd7af83"
+    },
+    "assets/solar_storm_documentary/variants/scene_17_power_substation_medium.png": {
+      "mtime": 1788514742.718222,
+      "size": 2221701,
+      "sha256": "6a57717a0a6e35754e1859be319fea76ad4d9e2df29564f6633b2576fb609c55"
+    },
+    "assets/solar_storm_documentary/variants/scene_18_power_transformer_close.png": {
+      "mtime": 1788514744.0528336,
+      "size": 3762543,
+      "sha256": "0408103e49dcd76434d421e43bfd3a3f02030c2c7431c3ef93cbf60bf72a0783"
+    },
+    "assets/solar_storm_documentary/variants/scene_18_power_transformer_medium.png": {
+      "mtime": 1788514743.5751846,
+      "size": 3954418,
+      "sha256": "2e3bb9ecef9184b824261d700702de570ab1080cf2e322357eb6412d246fa22c"
+    },
+    "assets/solar_storm_documentary/variants/scene_19_city_rolling_blackout_close.png": {
+      "mtime": 1788514745.2609372,
+      "size": 2041299,
+      "sha256": "975870cca3d737ece20f449f0f34d23c4a88aa2f64367c09319f74746f66abdd"
+    },
+    "assets/solar_storm_documentary/variants/scene_19_city_rolling_blackout_medium.png": {
+      "mtime": 1788514744.5727236,
+      "size": 2020678,
+      "sha256": "33da1da6c977f70f00f17905d2dbb8f33fef0669725b3cbca7110e525c754da6"
+    },
+    "assets/solar_storm_documentary/variants/scene_20_financial_noc_infrastructure_close.png": {
+      "mtime": 1788514746.5866833,
+      "size": 2395546,
+      "sha256": "bb820e1a522c0e789115ba65068bbf4f4d990fa3dcc98314f83231816b771477"
+    },
+    "assets/solar_storm_documentary/variants/scene_20_financial_noc_infrastructure_medium.png": {
+      "mtime": 1788514745.8412848,
+      "size": 2822935,
+      "sha256": "e998d2e1776619f7a5b26737922ed603a997f11ea61baaeabcf48a6359c86711"
+    },
+    "assets/solar_storm_documentary/variants/scene_21_city_skyline_aurora_close.png": {
+      "mtime": 1788514747.5000937,
+      "size": 3105259,
+      "sha256": "8995a32ecb4999a5a1c8f2b5d78b41cc27324bf9d40d8751fcfb6a88c2e27459"
+    },
+    "assets/solar_storm_documentary/variants/scene_21_city_skyline_aurora_medium.png": {
+      "mtime": 1788514747.0156343,
+      "size": 3502235,
+      "sha256": "06995394c6eef262646bc39dfeac2269ddf46e04476d755bc37c756eccd2aa47"
+    },
+    "assets/solar_storm_documentary/variants/scene_23_space_weather_center_close.png": {
+      "mtime": 1788514749.4170997,
+      "size": 2138315,
+      "sha256": "8537c1fd23c34e14331bfa7de50919f29bca63e37ffddb4eb460db1547a7fdd2"
+    },
+    "assets/solar_storm_documentary/variants/scene_23_space_weather_center_medium.png": {
+      "mtime": 1788514748.2865126,
+      "size": 2454961,
+      "sha256": "7e8ebc4fc24924093a3d8e609003f31218acda39abe05d376ba19f419c6a5d08"
+    },
+    "assets/solar_storm_documentary/variants/scene_26_power_grid_control_room_close.png": {
+      "mtime": 1788514751.2405455,
+      "size": 2220849,
+      "sha256": "6030a4c122740f4cd1f13ef85db5b5104c6beb122696a1204b1066078eec59c0"
+    },
+    "assets/solar_storm_documentary/variants/scene_26_power_grid_control_room_medium.png": {
+      "mtime": 1788514750.2056994,
+      "size": 2801618,
+      "sha256": "dc39e9fa6418555f25d3aa55165ab9806b4ab6e3747e15e9eacd0e873d766aa1"
+    },
+    "assets/solar_storm_documentary/variants/scene_28_emergency_preparedness_close.png": {
+      "mtime": 1788515221.2169557,
+      "size": 1868898,
+      "sha256": "48f860123b2251829750c3d9dfe0d0bbe62a54cc0fe9a406135b6e91925bbe92"
+    },
+    "assets/solar_storm_documentary/variants/scene_28_emergency_preparedness_medium.png": {
+      "mtime": 1788515220.6688395,
+      "size": 2031177,
+      "sha256": "2c5b6fd9fd6326f3a7540f6d4bb8113711e7131d9792ceeda3ea8547f1d44ae5"
+    },
+    "assets/speed_of_light_reel/images/scene-01-hook.png": {
+      "mtime": 1789298653.9397383,
+      "size": 3774181,
+      "sha256": "56e872a9f09cc6346cae03a0ff999c058343520be83de72058aa7eca12dfe0a8"
+    },
+    "assets/speed_of_light_reel/images/scene-02-mass-near-light-speed.png": {
+      "mtime": 1789298652.4092646,
+      "size": 3356483,
+      "sha256": "04c6363b8081f395e170919168ccdfeec38333ab0ade12129b46316ad45801ff"
+    },
+    "assets/speed_of_light_reel/images/scene-03-energy-rises.png": {
+      "mtime": 1789298652.558861,
+      "size": 3391956,
+      "sha256": "18b4cfd49b31a3454b366b8d85379e0f307d228b436d7ba792cfbdbb751cf881"
+    },
+    "assets/speed_of_light_reel/images/scene-04-infinite-energy-limit.png": {
+      "mtime": 1789298652.7056744,
+      "size": 3439389,
+      "sha256": "b8aab74734e443ea95abf10bb58b35ab04446322b251747a392b6ede1c5bc7a5"
+    },
+    "assets/speed_of_light_reel/images/scene-05-causality.png": {
+      "mtime": 1789298652.8472168,
+      "size": 3245794,
+      "sha256": "40a213321a8ba928cb95ab1af9fff9628b1655c840f586e5a9e6de172a8541d6"
+    },
+    "assets/speed_of_light_reel/images/scene-06-expanding-space.png": {
+      "mtime": 1789298652.9978995,
+      "size": 3409441,
+      "sha256": "2c5ce50e675e804dab5c05ef63afb90d651cfad594179c81d8d9f7ce66ba1175"
+    },
+    "assets/speed_of_light_reel/images/scene-07-light-limit.png": {
+      "mtime": 1789298653.1442287,
+      "size": 3460490,
+      "sha256": "b39d4932e60ef38f765d9f9fdef545ca101011dc761cd0486239fcb351a8d42d"
+    },
+    "assets/speed_of_light_reel/images/scene-08-outro.png": {
+      "mtime": 1789298653.1531277,
+      "size": 2308379,
+      "sha256": "50525dd0bb5f75656eb832bf2959e73ff803ef006e1dbc7eeb02ad5e19ab1ed8"
+    },
+    "assets/starship_v3_flight_12_reel/scene-01-hook.png": {
+      "mtime": 1788671963.5055346,
+      "size": 3909939,
+      "sha256": "ce64a4a6a000a12a250f6f10a3fa36c29e68b8a03af45c08d94ffe783de1207f"
+    },
+    "assets/starship_v3_flight_12_reel/scene-02-v3-debut-liftoff.png": {
+      "mtime": 1788671963.765612,
+      "size": 2126883,
+      "sha256": "4abf99a1e5880f02fea1276f7fa3dbe3e976f32ed2508429375eb6246fed4850"
+    },
+    "assets/starship_v3_flight_12_reel/scene-03-raptor3-fury.png": {
+      "mtime": 1788671963.9617918,
+      "size": 2746662,
+      "sha256": "254a5949ead73fce335933c75c7a901579fcdd44b4fa94f8b60787255a5e49e0"
+    },
+    "assets/starship_v3_flight_12_reel/scene-04-staging-anomaly.png": {
+      "mtime": 1788671964.1518314,
+      "size": 2110215,
+      "sha256": "d52b7fe62475eff7679d946484318f4ebcd4085b5f3a10ad0be604919ecc3a0f"
+    },
+    "assets/starship_v3_flight_12_reel/scene-05-booster-splashdown.png": {
+      "mtime": 1788671964.3614378,
+      "size": 2736322,
+      "sha256": "ea297311e9233849db33d43eb55454985a117e39364b06c8887909a1a3074fef"
+    },
+    "assets/starship_v3_flight_12_reel/scene-06-starship-orbital-insertion.png": {
+      "mtime": 1788671964.3641903,
+      "size": 3016237,
+      "sha256": "04f08566f73c3f5a3dc14d68a68e99217a42f7c385859fd5c60a13a63864995d"
+    },
+    "assets/starship_v3_flight_12_reel/scene-07-starlink-payload-deploy.png": {
+      "mtime": 1788671964.6096828,
+      "size": 2302181,
+      "sha256": "0d9b7b3bd33156fcfafb93be276dad6b856382fc6d66340194c856abd3463455"
+    },
+    "assets/starship_v3_flight_12_reel/scene-08-hypersonic-plasma-reentry.png": {
+      "mtime": 1788671964.8403475,
+      "size": 1910559,
+      "sha256": "2c727cc138d64c1f3b2800b1ad504f67bd967ef7748fc870c09b470e24161061"
+    },
+    "assets/starship_v3_flight_12_reel/scene-09-moon-mars-refueling-future.png": {
+      "mtime": 1788671964.960105,
+      "size": 1304203,
+      "sha256": "1402b3878620bc40bab3b3865d01ccf5bd854d0d8cc7932c0eeae95ba62bdb93"
+    },
+    "assets/starship_v3_flight_12_reel/scene-10-mamase-outro.png": {
+      "mtime": 1788671964.9619386,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/stellar_flyby_reel/images/scene-01-hook.png": {
+      "mtime": 1789213190.4272246,
+      "size": 3178543,
+      "sha256": "c717f329642bea2c042d8d87d93dadd09da7d77ccbd177b91a765817148cd898"
+    },
+    "assets/stellar_flyby_reel/images/scene-02-core-revelation.png": {
+      "mtime": 1789213190.5630224,
+      "size": 3018782,
+      "sha256": "dbc0469b749f830d3836d8df063155892e111476aacc67eedd369f2d14b46d60"
+    },
+    "assets/stellar_flyby_reel/images/scene-03-moving-solar-system.png": {
+      "mtime": 1789213190.6993124,
+      "size": 3428982,
+      "sha256": "84bd617bd50e862e1eb1f6126aba3e115928b57eeabd842c40d722644196a220"
+    },
+    "assets/stellar_flyby_reel/images/scene-04-breaching-oort-cloud.png": {
+      "mtime": 1789213190.8347995,
+      "size": 3425712,
+      "sha256": "8f87e5722335aba0ad5eaab4db0dc5351f595152af00e0d031c4cc07355a55ff"
+    },
+    "assets/stellar_flyby_reel/images/scene-05-domino-effect-comets.png": {
+      "mtime": 1789213190.9702497,
+      "size": 3087427,
+      "sha256": "1ac3b9f1e11473fe2d7fb4cf5f8b1143cef9ea6f56366df29953b31c9b0eda47"
+    },
+    "assets/stellar_flyby_reel/images/scene-06-gliese-710-threat.png": {
+      "mtime": 1789213191.0972612,
+      "size": 3417601,
+      "sha256": "373a5947ddd04d7968832696a8c034dbf1ac15bdac521f020b1f14c8be2d96e1"
+    },
+    "assets/stellar_flyby_reel/images/scene-07-sky-view-earth.png": {
+      "mtime": 1789213191.2451766,
+      "size": 2880678,
+      "sha256": "c57e9a6d8e2b843259ad44135f1b95589c575e2355c2673b753e03f54fd8adfb"
+    },
+    "assets/stellar_flyby_reel/images/scene-08-mamase-cosmic-voyage.png": {
+      "mtime": 1789213191.3789537,
+      "size": 3459304,
+      "sha256": "f686bbd25582c2b3ce9bbc13c97dc770fc925442064f372e73b050bce4b98641"
+    },
+    "assets/stellar_flyby_reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1789213191.5419073,
+      "size": 2915280,
+      "sha256": "de4d3b1a3390580c1ac8bafd7cf657b750c2f353ede1cc38fd34c844ae8c4972"
+    },
+    "assets/thai_java_zone_why_java_alive_reel/images/scene-01-hook.png": {
+      "mtime": 1788692709.0901618,
+      "size": 398226,
+      "sha256": "3ad11652d359d1eaeed2a1e74e1b106e30c426d03958c418102815e7b59bbb2d"
+    },
+    "assets/thai_java_zone_why_java_alive_reel/images/scene-02-stability.png": {
+      "mtime": 1788692711.8447628,
+      "size": 316830,
+      "sha256": "c60218ea75c46fa7780a96ba4c4f9fcf97156104405cc30e5d79e82d024f3303"
+    },
+    "assets/thai_java_zone_why_java_alive_reel/images/scene-03-enterprise-ecosystem.png": {
+      "mtime": 1788692714.2872877,
+      "size": 599844,
+      "sha256": "ed25bf92b4d1f72ce2b5a9ec16a85faef4d48334bffba06b04160c64917ce0d2"
+    },
+    "assets/thai_java_zone_why_java_alive_reel/images/scene-04-modern-performance.png": {
+      "mtime": 1788692716.7497582,
+      "size": 470645,
+      "sha256": "3f22d54024ed1d62bf77f5ecbc310a5213f5982c56e1af4925925f3c4e2feb45"
+    },
+    "assets/thai_java_zone_why_java_alive_reel/images/scene-05-scale-and-maintainability.png": {
+      "mtime": 1788692719.1834414,
+      "size": 510307,
+      "sha256": "18263aadb00702cca5974a5faa987885b342fecc9cbbbef122979c12f33dfe3c"
+    },
+    "assets/thai_java_zone_why_java_alive_reel/images/scene-06-real-world-usage.png": {
+      "mtime": 1788692721.6819196,
+      "size": 508782,
+      "sha256": "85f05526b5649a12d9e8a4b6a793d643ba1e48922be9b4e3665e46e09688a5d7"
+    },
+    "assets/thai_java_zone_why_java_alive_reel/images/scene-07-conclusion.png": {
+      "mtime": 1788692724.0355022,
+      "size": 382096,
+      "sha256": "b9674624d46a99c4aad8d547890060cddf9f88196fdbc0fefb22eeab83857476"
+    },
+    "assets/tianwen-2-quasi-satellite-reel/images/scene-01-hook.png": {
+      "mtime": 1788598016.5734606,
+      "size": 3259326,
+      "sha256": "d5a92bffeef52abe1da692e4d750fc7a8902a81240458dc9efa2781dcaeb206d"
+    },
+    "assets/tianwen-2-quasi-satellite-reel/images/scene-02-quasi-satellite.png": {
+      "mtime": 1788598016.7096953,
+      "size": 3046138,
+      "sha256": "71715dee7f8dfa7f82fc17148eb4fe3554bdac946a1252ae0fbf8912afe62b37"
+    },
+    "assets/tianwen-2-quasi-satellite-reel/images/scene-03-billion-km-journey.png": {
+      "mtime": 1788598016.844485,
+      "size": 3066653,
+      "sha256": "210219fe10e2f65fb27ec0000e475ecb7f968ecf79807703ee18a92505006433"
+    },
+    "assets/tianwen-2-quasi-satellite-reel/images/scene-04-close-approach.png": {
+      "mtime": 1788598016.9848843,
+      "size": 3323606,
+      "sha256": "364d293e93da8763d31433efadfedb6b1be7ed619f1d4f53c134f9360fc0baa9"
+    },
+    "assets/tianwen-2-quasi-satellite-reel/images/scene-05-surface-study.png": {
+      "mtime": 1788598017.1243002,
+      "size": 3255126,
+      "sha256": "6c429c732a15d4b71a31ab039f7cb5b8af60c6465a0bc04cbc53ec3f69a87326"
+    },
+    "assets/tianwen-2-quasi-satellite-reel/images/scene-06-hover-sampling.png": {
+      "mtime": 1788598017.2652547,
+      "size": 3169105,
+      "sha256": "972e0067b69e6220c0ef4585edc06ee69ef471dbce0271956044b6b6e03320ba"
+    },
+    "assets/tianwen-2-quasi-satellite-reel/images/scene-07-anchor-sampling.png": {
+      "mtime": 1788598017.4004345,
+      "size": 3141464,
+      "sha256": "bd0628e3bdcc579ee06aaeb7c888d8cebfbd96da13180eacbe0c14364a16ef2c"
+    },
+    "assets/tianwen-2-quasi-satellite-reel/images/scene-08-earth-return.png": {
+      "mtime": 1788598017.5276992,
+      "size": 2890664,
+      "sha256": "4c5f4f95c6430de515258ec1f58c951ffe9a3848df8ed1c043c4681ba99d62c1"
+    },
+    "assets/tianwen-2-quasi-satellite-reel/images/scene-09-311p-next-leg.png": {
+      "mtime": 1788598017.6599562,
+      "size": 2930816,
+      "sha256": "9103a3aea792b98800ccd914a85a76402d7de5c8fb8db1f6b136d5ed0b5f3cf9"
+    },
+    "assets/tianwen-2-quasi-satellite-reel/images/scene-10-mamase-outro.png": {
+      "mtime": 1788598017.6658127,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/tno-time-capsule-reel/images/scene-01-hook.png": {
+      "mtime": 1788929623.4763744,
+      "size": 1441192,
+      "sha256": "d3bce380ddd849f4709eb8cdacd9f0c50afd5a73ff7993071fcaa9b400f4505a"
+    },
+    "assets/tno-time-capsule-reel/images/scene-02-frozen-frontier.png": {
+      "mtime": 1788929664.9701219,
+      "size": 686979,
+      "sha256": "2c0f26dd9e9ac5e42cc0c49434d231203d34c9b71ee1a7c3b8877c056ef14f76"
+    },
+    "assets/tno-time-capsule-reel/images/scene-03-absolute-zero.png": {
+      "mtime": 1788929710.0391293,
+      "size": 1743190,
+      "sha256": "23dc5908863485c1161d894d26b33fc90a615d1c0c4fe55f273cb3de177ee491"
+    },
+    "assets/tno-time-capsule-reel/images/scene-04-hubble-webb-collaboration.png": {
+      "mtime": 1788929755.3643482,
+      "size": 1023861,
+      "sha256": "1c6baabd22212669387f497eaf96fb092e5fd7571b64a79dc41958e2d265c627"
+    },
+    "assets/tno-time-capsule-reel/images/scene-05-75-spectra-analysis.png": {
+      "mtime": 1788929799.744811,
+      "size": 1211424,
+      "sha256": "c39fc3d54ab0a8bfbbf84e961ec2642284ebcbb55190c5f8610ceaf5f93c8952"
+    },
+    "assets/tno-time-capsule-reel/images/scene-06-solar-system-birth.png": {
+      "mtime": 1788929845.0648608,
+      "size": 1240954,
+      "sha256": "d887b85d3e9985b2a6d901e18e17b6f010a4df1e26dde183fb162867840af367"
+    },
+    "assets/tno-time-capsule-reel/images/scene-07-planetary-migration.png": {
+      "mtime": 1788929889.7152472,
+      "size": 508580,
+      "sha256": "904ab4632a9497f928818c459c1accde6951565cc088cdfdf5a02011bce2aa86"
+    },
+    "assets/tno-time-capsule-reel/images/scene-08-understanding-our-roots.png": {
+      "mtime": 1788929935.246445,
+      "size": 635931,
+      "sha256": "4445ffe835c66dd2a5ca853f6c02fc59274a124f7738824f86236bd67cd9bde9"
+    },
+    "assets/tno-time-capsule-reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1788929661.9966528,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/ton_618_ultramassive_black_hole_reel/images/scene-01-hook.png": {
+      "mtime": 1789096572.8325312,
+      "size": 2432405,
+      "sha256": "d16bdd65cf9a8ec0a2d33878cd6dbea43f3da48c8ec5d0bc7cd6d95b4bf57453"
+    },
+    "assets/ton_618_ultramassive_black_hole_reel/images/scene-02-familiar-scale.png": {
+      "mtime": 1789096629.9713607,
+      "size": 3104158,
+      "sha256": "106f9d41634fc0c20dbeb70cc448ca97ec2bd8c9f4c19654459a2958c347fc4a"
+    },
+    "assets/ton_618_ultramassive_black_hole_reel/images/scene-03-sagittarius-a.png": {
+      "mtime": 1789096629.9756303,
+      "size": 2615579,
+      "sha256": "79ea282035c158f6c2eb3073e16a5859136dd993595d914bd1dab0e860a3bd14"
+    },
+    "assets/ton_618_ultramassive_black_hole_reel/images/scene-04-monster-ton618.png": {
+      "mtime": 1789096629.9821515,
+      "size": 3106843,
+      "sha256": "016c0cb8504ca6918c2d66ac8f460c6ab50944070701e54fb5fc49ca8799424f"
+    },
+    "assets/ton_618_ultramassive_black_hole_reel/images/scene-05-swallowing-solar-system.png": {
+      "mtime": 1789096629.986236,
+      "size": 2716848,
+      "sha256": "1e7d5daac62fdd1e37cbc0f27401d197c8a991a1c2aa5e087abee0669d836b21"
+    },
+    "assets/ton_618_ultramassive_black_hole_reel/images/scene-06-blinding-quasar.png": {
+      "mtime": 1789096629.9934344,
+      "size": 2956030,
+      "sha256": "ac0b07f84370a03f322aac57c329bcdce41c690da0c497a435f023ee89596b80"
+    },
+    "assets/ton_618_ultramassive_black_hole_reel/images/scene-07-cosmic-time-machine.png": {
+      "mtime": 1789096629.999193,
+      "size": 3039787,
+      "sha256": "f7e3478037da231f66afe3af654aa43927527b0fc7a4e86d6ac1b10fce608b76"
+    },
+    "assets/ton_618_ultramassive_black_hole_reel/images/scene-08-philosophical-insight.png": {
+      "mtime": 1789096630.009781,
+      "size": 4289885,
+      "sha256": "232da75573a40a583c0e742ae0e9d5a2a58584b69951be1e8b833b92e1b0819c"
+    },
+    "assets/ton_618_ultramassive_black_hole_reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1789099650.4190197,
+      "size": 2915280,
+      "sha256": "de4d3b1a3390580c1ac8bafd7cf657b750c2f353ede1cc38fd34c844ae8c4972"
+    },
+    "assets/uranus_40_years_myth_reel/images/scene-01-hook.png": {
+      "mtime": 1789469438.3626938,
+      "size": 2838685,
+      "sha256": "d775b343d96b3631f50556ca3780eb6d8be438001ed082d93f0ade1b85fe8993"
+    },
+    "assets/uranus_40_years_myth_reel/images/scene-02-voyager2-uranus-flyby.png": {
+      "mtime": 1789469738.5616584,
+      "size": 3354171,
+      "sha256": "fc510fa58c784fdc7877d0f489f3ea147f7ddaf17ffe4233a40925183c31f240"
+    },
+    "assets/uranus_40_years_myth_reel/images/scene-03-rolling-sideways-impact.png": {
+      "mtime": 1789469740.523798,
+      "size": 2654562,
+      "sha256": "901a9ec98a8441d7a01e000a9613b3a6720a452a63551746ef07def6dc168c6e"
+    },
+    "assets/uranus_40_years_myth_reel/images/scene-04-black-rings-miranda-cliff.png": {
+      "mtime": 1789469742.4633617,
+      "size": 2948496,
+      "sha256": "13b918567e14b3516af862848d95928b14fc6ba446ea082d65e763d40bb64525"
+    },
+    "assets/uranus_40_years_myth_reel/images/scene-05-hot-ocean-diamond-rain.png": {
+      "mtime": 1789469742.7583978,
+      "size": 523074,
+      "sha256": "932df1085fd2e929909a944970ec3119ac145e34d1f49b833280f3c6379c4e1b"
+    },
+    "assets/uranus_40_years_myth_reel/images/scene-06-solar-storm-sick-planet.png": {
+      "mtime": 1789469744.8256023,
+      "size": 2898907,
+      "sha256": "0c8c559fc7d7f84c4772c8f527256e63b195e740a9d0ae1096172a5557fcd492"
+    },
+    "assets/uranus_40_years_myth_reel/images/scene-07-quiet-giant-deep-mystery.png": {
+      "mtime": 1789469746.3082051,
+      "size": 3133201,
+      "sha256": "381cddea62037f796bc724bd971fd19569cfdbc40ae2906b42f397b0bbe0a5d6"
+    },
+    "assets/uranus_40_years_myth_reel/images/scene-08-brand-outro.png": {
+      "mtime": 1789463883.429166,
+      "size": 2777765,
+      "sha256": "552c33d9510de684b13c1b706fab9e701a620efa0f4f41d9a91010e71463c887"
+    },
+    "assets/venus-day-longer-than-year-reel/images/scene-01-hook.png": {
+      "mtime": 1788857652.8906405,
+      "size": 3071759,
+      "sha256": "fdbff8e069da6f1d8046db5d9b85c7c9b75b521441ae8cc69c3cbd675d4a4a25"
+    },
+    "assets/venus-day-longer-than-year-reel/images/scene-02-orbit-vs-rotation.png": {
+      "mtime": 1788857653.4351861,
+      "size": 2720194,
+      "sha256": "2d3b9b36cda1d905a24e1bcfbbae72c11c05e650ca908ec39ee86ae9b78ebdb7"
+    },
+    "assets/venus-day-longer-than-year-reel/images/scene-03-day-vs-year.png": {
+      "mtime": 1788857653.9800737,
+      "size": 2820056,
+      "sha256": "21131290adceeddfb4c0f0c2acf24d8fb8a026c94e0d947c480bc64d06808fbe"
+    },
+    "assets/venus-day-longer-than-year-reel/images/scene-04-slow-rotation-mystery.png": {
+      "mtime": 1788857654.5826526,
+      "size": 2844469,
+      "sha256": "72bb34ab6e3534420f456935f0846f3700afca81fb4a3f8d1f07831ea94867d1"
+    },
+    "assets/venus-day-longer-than-year-reel/images/scene-05-retrograde-sunrise.png": {
+      "mtime": 1788857655.1847394,
+      "size": 2548406,
+      "sha256": "8c1d172d74ca3145c3fa9b9b88a87e8fade36410b78c646dd232b8d82a57f6e6"
+    },
+    "assets/venus-day-longer-than-year-reel/images/scene-06-solar-day.png": {
+      "mtime": 1788857655.821013,
+      "size": 2435496,
+      "sha256": "36969bf372a64a74bbdbf58859c26360804448490bd5c4e6da80b01c07707db0"
+    },
+    "assets/venus-day-longer-than-year-reel/images/scene-07-hostile-twin.png": {
+      "mtime": 1788857656.3440247,
+      "size": 3051624,
+      "sha256": "f084f212d0b01b0b7ce08a38ece03feebe440dedd1a03bce52e5e850bf1a1a43"
+    },
+    "assets/venus-day-longer-than-year-reel/images/scene-08-long-sunset.png": {
+      "mtime": 1788857656.9310174,
+      "size": 2594116,
+      "sha256": "0c6e61144750942df5ea2374e43605fbc2dc093f1c13e021424021ae470dd1ff"
+    },
+    "assets/venus-day-longer-than-year-reel/images/scene-09-cosmic-rhythms.png": {
+      "mtime": 1788857657.473857,
+      "size": 2850586,
+      "sha256": "124b69ea6e93d3e5b24356ac5f63ad04ed3da5b61cfdbcd682aacb9e9354f3a0"
+    },
+    "assets/venus-day-longer-than-year-reel/images/scene-10-mamase-outro.png": {
+      "mtime": 1788857580.9157574,
+      "size": 1758428,
+      "sha256": "723ade6dc37dfe9e4c5f04761857b352d0f4c85a59229b2e53478e04c5ae9eb9"
+    },
+    "assets/venus_bright_evening_reel/images/scene-01-hook.png": {
+      "mtime": 1789187686.0294275,
+      "size": 2557340,
+      "sha256": "2d95adf8423bc3045859186a5b297aa95b3150f6d5f5fcd3cd50565083ac888d"
+    },
+    "assets/venus_bright_evening_reel/images/scene-02-bright-star.png": {
+      "mtime": 1789187686.1986084,
+      "size": 2486634,
+      "sha256": "a1dd67fb589e34975c962ce398b80521e7f1d3ed784bc190599f3c9d7ce062da"
+    },
+    "assets/venus_bright_evening_reel/images/scene-03-albedo-clouds.png": {
+      "mtime": 1789187686.372685,
+      "size": 2017723,
+      "sha256": "71a028e2cae304c4bb2757578cfb092e24fde639e33140e0594bfccede0caa7e"
+    },
+    "assets/venus_bright_evening_reel/images/scene-04-peak-brilliancy.png": {
+      "mtime": 1789187686.5181155,
+      "size": 2826676,
+      "sha256": "41ef2815a837308dc84137ad7c546f8f73dd80446c506b29fe5fd99b3cf396bc"
+    },
+    "assets/venus_bright_evening_reel/images/scene-05-lunar-occultation.png": {
+      "mtime": 1789187686.6788208,
+      "size": 2422381,
+      "sha256": "c7ce1b498cd42466bea9c0c5af9bf8bf656356cb45f96b54b17e1297e61c0caa"
+    },
+    "assets/venus_bright_evening_reel/images/scene-06-setting-horizon.png": {
+      "mtime": 1789187686.8914702,
+      "size": 2093327,
+      "sha256": "1590b060b5e77a22528d9edb0d459066048ea1a1643fbad2bd3065c6cdecfb80"
+    },
+    "assets/venus_bright_evening_reel/images/scene-07-observatory-viewpoint.png": {
+      "mtime": 1789187753.9963028,
+      "size": 2107861,
+      "sha256": "9fbbb507a659037ccc36606ddadadab5f53180c7c920fdb8bcaf36c4746d4412"
+    },
+    "assets/venus_bright_evening_reel/images/scene-08-earth-venus-cosmic.png": {
+      "mtime": 1789187687.1818373,
+      "size": 2847489,
+      "sha256": "ab00f444a18bdbc6794b719fb07164eace0a8d269f40a9e3288decaba28466b7"
+    },
+    "assets/venus_bright_evening_reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1789187687.3430424,
+      "size": 2915280,
+      "sha256": "de4d3b1a3390580c1ac8bafd7cf657b750c2f353ede1cc38fd34c844ae8c4972"
+    },
+    "assets/voyager1_reel/images/scene-01-hook.png": {
+      "mtime": 1789219076.1877625,
+      "size": 2643031,
+      "sha256": "d7c24719c76465b7981c243df6af2e7ac611ebd80275d3bc70e5928b9dc22897"
+    },
+    "assets/voyager1_reel/images/scene-02-interstellar-distance.png": {
+      "mtime": 1789220340.7785206,
+      "size": 3475589,
+      "sha256": "dd59de12a85eca67ff188c1ac39abb0fb3c35526880d336966a190e07ef6e26c"
+    },
+    "assets/voyager1_reel/images/scene-03-light-speed-delay.png": {
+      "mtime": 1789220340.9567716,
+      "size": 3141227,
+      "sha256": "6bc4b038013581683989345f1f21def58a17393168c647885045612039bfcd2a"
+    },
+    "assets/voyager1_reel/images/scene-04-refrigerator-bulb-power.png": {
+      "mtime": 1789220341.0251703,
+      "size": 744643,
+      "sha256": "acacae643b04a64d92c5e0c85cc6369a8511daaa529227322f0beef87bf5f74c"
+    },
+    "assets/voyager1_reel/images/scene-05-attowatt-signal-earth.png": {
+      "mtime": 1789220341.282442,
+      "size": 2337012,
+      "sha256": "d001cce9385b4077a34e1372e8a6dcd6e9adc6d3e6d66d3dc875c3c0ecabfd20"
+    },
+    "assets/voyager1_reel/images/scene-06-dsn-giant-dishes.png": {
+      "mtime": 1789220341.6720378,
+      "size": 2787226,
+      "sha256": "fd4ba27e40d216b856820a3b6b55cf14522812986416acb12571595b969ab4ba"
+    },
+    "assets/voyager1_reel/images/scene-07-golden-record-humanity.png": {
+      "mtime": 1789220341.9285536,
+      "size": 3023056,
+      "sha256": "23b5ddb4d58d6ac817c097f7e98639722c78b09b7f0f23d65ec479a881175b6f"
+    },
+    "assets/voyager1_reel/images/scene-08-silent-voyage-milkyway.png": {
+      "mtime": 1789220342.081907,
+      "size": 3369629,
+      "sha256": "402273e5d012014e609af96a1619fcee646bd44c88211eae00af2ea684f1adb5"
+    },
+    "assets/voyager1_reel/images/scene-09-mamase-outro.png": {
+      "mtime": 1789219122.008929,
+      "size": 2308379,
+      "sha256": "50525dd0bb5f75656eb832bf2959e73ff803ef006e1dbc7eeb02ad5e19ab1ed8"
+    },
+    "assets/voyager1_reel/images/voyager1-cover-square-1x1.png": {
+      "mtime": 1789219076.423295,
+      "size": 1543915,
+      "sha256": "3852830588045b7a454fe49362d94950d9fb9739d6071bbfe289929defc60bea"
+    },
+    "assets/voyager1_reel/images/voyager1-reels-cover-9x16.png": {
+      "mtime": 1789219076.3284566,
+      "size": 2643031,
+      "sha256": "d7c24719c76465b7981c243df6af2e7ac611ebd80275d3bc70e5928b9dc22897"
+    },
+    "assets/voyager1_reel/raw/dss43_canberra_70m.jpg": {
+      "mtime": 1789220200.732334,
+      "size": 321574,
+      "sha256": "c7ee5e77c4e9528916e2ba8a9c07cf906ea3e935f80e88a354b86f854d00cff1"
+    },
+    "assets/voyager1_reel/raw/golden_record_cover.jpg": {
+      "mtime": 1789220199.4673202,
+      "size": 4073030,
+      "sha256": "89f8666e15f201cf4d428bc3e4d9bd11e064cedcac212a13f2124bc556055cff"
+    },
+    "assets/voyager1_reel/raw/goldstone_70m.jpg": {
+      "mtime": 1789220292.7515547,
+      "size": 7384876,
+      "sha256": "24ae61b71e9a3f0965ebb4a09b44fada6e9c4c90aaca8d519ddec2f25bb5e841"
+    },
+    "assets/voyager1_reel/raw/pale_blue_dot.png": {
+      "mtime": 1789220031.048667,
+      "size": 538822,
+      "sha256": "68d0f037a448dc099e893b8cbf4d303ffa4b4289903c764f737101d6ad7555dd"
+    },
+    "assets/voyager1_reel/raw/voyager_model.png": {
+      "mtime": 1789220201.0505302,
+      "size": 387753,
+      "sha256": "b5cbe168e298b12727cc13ed66a9ed49307497e38815fbcc753b414c389eb761"
+    },
+    "assets/where_space_begins_reel/images/scene-01-hook.png": {
+      "mtime": 1788849400.243148,
+      "size": 2452064,
+      "sha256": "0a55bf5e851087d752a8e83c689c6c3f699c837bfee939a496a463b121a41867"
+    },
+    "assets/where_space_begins_reel/images/scene-02-atmosphere.png": {
+      "mtime": 1788849404.2534916,
+      "size": 2345827,
+      "sha256": "1eefd6da31b24cd86e968fd653640f614588fc7daf390ed7159bee7779818f0c"
+    },
+    "assets/where_space_begins_reel/images/scene-03-karman.png": {
+      "mtime": 1788849407.0744588,
+      "size": 2073738,
+      "sha256": "bbbbd00dfbc4824c6896023202154ce23c4a9c82fea5d4414f832f6d62dd7f98"
+    },
+    "assets/where_space_begins_reel/images/scene-04-aerodynamics.png": {
+      "mtime": 1788849410.6818469,
+      "size": 1999890,
+      "sha256": "025e251322aef2f74d794530750295d8c3a567e19d85bd5295e2713c6ed16ac4"
+    },
+    "assets/where_space_begins_reel/images/scene-05-usaf.png": {
+      "mtime": 1788849413.2467291,
+      "size": 1941736,
+      "sha256": "4346b3d87cf2bfcee3896f4d35d64695d317ee9913f4531b250ae3bbf8045ed2"
+    },
+    "assets/where_space_begins_reel/images/scene-06-iss.png": {
+      "mtime": 1788849415.9672968,
+      "size": 2758799,
+      "sha256": "9bd70412e5621167b499c74ce57cff315e64adfcc3ac52bf76783daea9150b63"
+    },
+    "assets/where_space_begins_reel/images/scene-07-mamase-outro.png": {
+      "mtime": 1788847577.358042,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/where_space_begins_reel 2/images/scene-01-hook.png": {
+      "mtime": 1788847675.0,
+      "size": 13957,
+      "sha256": "18ff7ec88a37c820777e2ad41a7bfdf99f9798710df344f30a03ed33a3d1b6cc"
+    },
+    "assets/where_space_begins_reel 2/images/scene-02-atmosphere.png": {
+      "mtime": 1788847675.0,
+      "size": 14456,
+      "sha256": "f97a6d657654ab99e7f636dafbd702c9f47d2b615db49aa26f9385996d255099"
+    },
+    "assets/where_space_begins_reel 2/images/scene-03-karman.png": {
+      "mtime": 1788847675.0,
+      "size": 14301,
+      "sha256": "65e50eb2e659db7d268d9a4c7a7d22b41d4ef8420a4d12e9fc2357ea89f324e0"
+    },
+    "assets/where_space_begins_reel 2/images/scene-04-aerodynamics.png": {
+      "mtime": 1788847675.0,
+      "size": 14577,
+      "sha256": "4e47d8c90dbe61a01a2f7e76960f2c6edcd1f23ae72ee23e5975e8d76295a52e"
+    },
+    "assets/where_space_begins_reel 2/images/scene-05-usaf.png": {
+      "mtime": 1788847675.0,
+      "size": 14073,
+      "sha256": "5a5f7c1cc9e962b2bb9dc5fd4cb4c029f07fdb1ce4d5eefac3608d4305a9b02a"
+    },
+    "assets/where_space_begins_reel 2/images/scene-06-iss.png": {
+      "mtime": 1788847675.0,
+      "size": 13978,
+      "sha256": "d7f6cacdc934529fb08d9a22e578c5e7e38734d64900e22c9bf00631f4a2bb6e"
+    },
+    "assets/where_space_begins_reel 2/images/scene-07-mamase-outro.png": {
+      "mtime": 1788847577.0,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/where_space_begins_reel 3/images/scene-01-hook.png": {
+      "mtime": 1788849400.0,
+      "size": 2452064,
+      "sha256": "0a55bf5e851087d752a8e83c689c6c3f699c837bfee939a496a463b121a41867"
+    },
+    "assets/where_space_begins_reel 3/images/scene-02-atmosphere.png": {
+      "mtime": 1788849404.0,
+      "size": 2345827,
+      "sha256": "1eefd6da31b24cd86e968fd653640f614588fc7daf390ed7159bee7779818f0c"
+    },
+    "assets/where_space_begins_reel 3/images/scene-03-karman.png": {
+      "mtime": 1788849407.0,
+      "size": 2073738,
+      "sha256": "bbbbd00dfbc4824c6896023202154ce23c4a9c82fea5d4414f832f6d62dd7f98"
+    },
+    "assets/where_space_begins_reel 3/images/scene-04-aerodynamics.png": {
+      "mtime": 1788849410.0,
+      "size": 1999890,
+      "sha256": "025e251322aef2f74d794530750295d8c3a567e19d85bd5295e2713c6ed16ac4"
+    },
+    "assets/where_space_begins_reel 3/images/scene-05-usaf.png": {
+      "mtime": 1788849413.0,
+      "size": 1941736,
+      "sha256": "4346b3d87cf2bfcee3896f4d35d64695d317ee9913f4531b250ae3bbf8045ed2"
+    },
+    "assets/where_space_begins_reel 3/images/scene-06-iss.png": {
+      "mtime": 1788849415.0,
+      "size": 2758799,
+      "sha256": "9bd70412e5621167b499c74ce57cff315e64adfcc3ac52bf76783daea9150b63"
+    },
+    "assets/where_space_begins_reel 3/images/scene-07-mamase-outro.png": {
+      "mtime": 1788847577.0,
+      "size": 2005926,
+      "sha256": "0909b7059f7a0b37419e8cf3055fcfa77a745cc7f86834fc7640a3c7fd1ec6be"
+    },
+    "assets/wormholes_reel/images/scene-01-hook.png": {
+      "mtime": 1789428200.6073158,
+      "size": 3071139,
+      "sha256": "17135c55e5264cb75d85c0afb33c9c8fdf624cab5bef7569bf8ed41b0cac40f8"
+    },
+    "assets/wormholes_reel/images/scene-02-concept-folded-spacetime.png": {
+      "mtime": 1789428725.9515316,
+      "size": 3185980,
+      "sha256": "4603c2d3274e397bfede3e0242a89c9ece46859f9034090bbef5432311010a36"
+    },
+    "assets/wormholes_reel/images/scene-03-einstein-rosen-bridge.png": {
+      "mtime": 1789428726.0979166,
+      "size": 3098076,
+      "sha256": "8b4feca085a40ad92d248b642c3af066baf6d4bcb23713b95d8ad0b79770dce7"
+    },
+    "assets/wormholes_reel/images/scene-04-instant-collapse.png": {
+      "mtime": 1789428726.2523873,
+      "size": 2743613,
+      "sha256": "9bbd99f0bb95a804b19b10ce38befedb0799a61509e50315165aafcf43551623"
+    },
+    "assets/wormholes_reel/images/scene-05-exotic-negative-matter.png": {
+      "mtime": 1789428726.395838,
+      "size": 3918631,
+      "sha256": "386567dc40670e3eb305c9ce1d17c8acbf61416a302f71f9ecfa3ec6e3c1b8ef"
+    },
+    "assets/wormholes_reel/images/scene-06-never-observed-reality.png": {
+      "mtime": 1789428726.5605698,
+      "size": 2620225,
+      "sha256": "500d589e23a75f15db50e18d14c0bc03f1be50df7fa7eaccbd9eaa656de6ece9"
+    },
+    "assets/wormholes_reel/images/scene-07-future-cosmic-frontier.png": {
+      "mtime": 1789428726.718402,
+      "size": 3251604,
+      "sha256": "c3266303beac15ada76c13007d850073341ddff730beab7477f5ce46ef879cec"
+    },
+    "assets/wormholes_reel/images/scene-08-brand-outro.png": {
+      "mtime": 1789428726.8936558,
+      "size": 2915280,
+      "sha256": "de4d3b1a3390580c1ac8bafd7cf657b750c2f353ede1cc38fd34c844ae8c4972"
+    },
+    "assets/apollo-11-reel/images/scene-01.png": {
+      "mtime": 1789632393.6486676,
+      "size": 2883760,
+      "sha256": "00cf2c934555d3af2ffd4204697263d19e8eb0881cead3b34f9bfe0b266db8fe"
+    },
+    "assets/apollo-11-reel/images/scene-02.png": {
+      "mtime": 1789632393.6592915,
+      "size": 978749,
+      "sha256": "00ffb46f4efae236b45ea0215f937ede99531b54c2185a42a5c3f8f17961913a"
+    },
+    "assets/apollo-11-reel/images/scene-03.png": {
+      "mtime": 1789632393.6738405,
+      "size": 2600218,
+      "sha256": "0169be6f88ae9f2b6ec5d0133cec2f99e8239d8a6222c0c1c01d1693208b9f8b"
+    },
+    "assets/apollo-11-reel/images/scene-04.png": {
+      "mtime": 1789632393.6883793,
+      "size": 3106843,
+      "sha256": "016c0cb8504ca6918c2d66ac8f460c6ab50944070701e54fb5fc49ca8799424f"
+    },
+    "assets/apollo-11-reel/images/scene-05.png": {
+      "mtime": 1789632393.6932235,
+      "size": 1999890,
+      "sha256": "025e251322aef2f74d794530750295d8c3a567e19d85bd5295e2713c6ed16ac4"
+    },
+    "assets/apollo-11-reel/images/scene-06.png": {
+      "mtime": 1789632393.7037485,
+      "size": 3356483,
+      "sha256": "04c6363b8081f395e170919168ccdfeec38333ab0ade12129b46316ad45801ff"
+    },
+    "assets/apollo-11-reel/images/scene-07.png": {
+      "mtime": 1789632393.7111142,
+      "size": 3016237,
+      "sha256": "04f08566f73c3f5a3dc14d68a68e99217a42f7c385859fd5c60a13a63864995d"
+    },
+    "assets/apollo-11-reel/images/scene-08.png": {
+      "mtime": 1789632393.717249,
+      "size": 2739903,
+      "sha256": "0575bf360f8c5be6bd16798af66b1740629c8789625b24416c363a4d75482e24"
+    }
+  },
+  "last_updated": "2026-09-17T11:41:34.672424+00:00"
+}

@@ -5,6 +5,7 @@ import queue
 import shutil
 import sqlite3
 import uuid
+from typing import Any
 from datetime import date
 from pathlib import Path
 
@@ -336,6 +337,28 @@ def preview_podcast_bgm(request: Request, track_id: str) -> FileResponse:
         raise HTTPException(404, public_error(AppError("BGM_NOT_FOUND", "ไม่พบเพลง BGM ที่เลือก"))) from exc
 
 
+@router.post("/bgm/upload")
+def upload_bgm_track(bgm_file: UploadFile = File(...)) -> dict[str, Any]:
+    ext = Path(bgm_file.filename).suffix.lower()
+    if ext not in {".mp3", ".wav", ".m4a", ".aac", ".ogg", ".flac"}:
+        raise HTTPException(400, public_error(AppError("INVALID_AUDIO_FORMAT", "รองรับเฉพาะไฟล์เสียง .mp3, .wav, .m4a, .aac, .ogg, .flac")))
+    import re
+    import shutil
+    from app.services.bgm_service import SOUNDS_DIR
+    SOUNDS_DIR.mkdir(parents=True, exist_ok=True)
+    raw_stem = Path(bgm_file.filename).stem
+    clean_stem = re.sub(r'[^a-zA-Z0-9_\-\u0e00-\u0e7f]', '_', raw_stem).strip('_') or "custom_bgm"
+    target = SOUNDS_DIR / f"{clean_stem}{ext}"
+    with target.open("wb") as out:
+        shutil.copyfileobj(bgm_file.file, out)
+    return {
+        "id": target.name,
+        "name": f"🎵 {target.name}",
+        "filename": target.name,
+        "url": f"/api/podcast/bgm-preview/{target.name}",
+    }
+
+
 @router.post("/podcast/jobs", status_code=202)
 def create_podcast_job(
     request: Request,
@@ -398,7 +421,7 @@ def create_quick_reel(
     speed: float = Form(1.10),
     style_prompt: str | None = Form(None),
     motion: str = Form("static"),
-    fit: str = Form("cover"),
+    fit: str = Form("contain"),
     hook_enabled: bool = Form(False),
     hook_text: str = Form(""),
     hook_position: str = Form("top"),
@@ -478,6 +501,25 @@ def delete_quick_reel(request: Request, job_id: str) -> dict:
         return request.app.state.quick_reel_service.delete_job(job_id)
     except AppError as exc:
         raise HTTPException(404 if exc.code == "JOB_NOT_FOUND" else 400, public_error(exc)) from exc
+
+
+@router.post("/quick-reel/{job_id}/remotion")
+async def remotion_quick_reel(request: Request, job_id: str) -> dict:
+    try:
+        body = await request.json()
+        motion = str(body.get("motion", "")).strip()
+        fit = body.get("fit")
+        if fit is not None:
+            fit = str(fit).strip()
+        if not motion and not fit:
+            raise AppError("INVALID_MOTION", "กรุณาระบุ motion หรือ fit ที่ต้องการเปลี่ยน")
+        service = request.app.state.quick_reel_service
+        return await asyncio.to_thread(service.remotion_quick_reel, job_id, motion, fit=fit)
+    except AppError as exc:
+        raise HTTPException(400, public_error(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(500, public_error(AppError("REMOTION_FAILED", str(exc)))) from exc
+
 
 
 @router.post("/jobs", status_code=202)
@@ -623,6 +665,15 @@ def get_video(request: Request, job_id: str) -> FileResponse:
         raise HTTPException(500, public_error(AppError("INTERNAL_ERROR", "Completed video is unavailable")))
     filename = f"{record.project_id}.mp4" if record.project_id else "final.mp4"
     return FileResponse(path, media_type="video/mp4", filename=filename)
+
+
+@router.get("/jobs/{job_id}/thumbnail")
+def get_job_thumbnail(request: Request, job_id: str) -> FileResponse:
+    path = request.app.state.job_service.thumbnail(job_id)
+    if not path or not path.is_file():
+        raise HTTPException(404, "Thumbnail not found")
+    media_type = "image/png" if path.suffix.lower() == ".png" else "image/jpeg"
+    return FileResponse(path, media_type=media_type, headers={"Cache-Control": "public, max-age=86400"})
 
 
 @router.get("/jobs/{job_id}/english-audio")

@@ -1,0 +1,167 @@
+{
+  "project": {
+    "id": "mamase-dyson-sphere-civilization-energy-reel-v1",
+    "title": "Dyson Sphere — ถ้าอารยธรรมหนึ่งใช้พลังงานทั้งดวงดาวได้?",
+    "language": "th-TH",
+    "resolution": "1080x1920",
+    "fps": 30
+  },
+  "voice": {
+    "provider": "google-gemini",
+    "voice": "Fenrir",
+    "speed": 1.05,
+    "language": "th-TH",
+    "style_prompt": "Read aloud in a natural, playful, conversational Thai voice. Sound relaxed, confident, and slightly cheeky, like casually telling a fascinating story to a close friend. Keep the energy lively but effortless — never sound like a news presenter, announcer, or formal narrator. Use natural changes in pitch and rhythm. Occasionally stretch or emphasize important words for personality. Add small pauses before surprising moments, as if building anticipation. The delivery should feel spontaneous and human, with a subtle smile in the voice. Keep the pacing medium to slightly fast, but do not rush."
+  },
+  "scenes": [
+    {
+      "id": "scene-01-hook",
+      "role": "hook",
+      "image": "images/scene-01-hook.png",
+      "narration": "ถ้ามนุษย์ต้องการพลังงานมากกว่าที่โลกทั้งใบผลิตได้ เราอาจต้องสร้างโรงไฟฟ้าที่ล้อมดาวฤกษ์ทั้งดวง",
+      "tts_text": "ถ้ามนุษย์ต้องการพลังงานมากกว่าที่โลกทั้งใบผลิตได้ เราอาจต้องสร้างโรงไฟฟ้าที่ล้อมดาวฤกษ์ทั้งดวง",
+      "subtitle": "ถ้ามนุษย์ต้องการพลังงานมากกว่าที่โลกผลิตได้\\nเราอาจต้องสร้างโรงไฟฟ้า 'ล้อมดาวฤกษ์ทั้งดวง'",
+      "keywords": [
+        "Dyson Sphere",
+        "ล้อมดาวทั้งดวง"
+      ],
+      "sfx": "reveal",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-02-not-solid-ball",
+      "image": "images/scene-02-not-solid-ball.png",
+      "narration": "แนวคิดนี้เรียกว่า Dyson Sphere แต่ที่เป็นไปได้มากกว่า ไม่ใช่ลูกบอลเหล็กยักษ์ครอบดวงอาทิตย์แบบในหนัง",
+      "tts_text": "แนวคิดนี้เรียกว่า ไดสัน สเฟียร์ แต่ที่เป็นไปได้มากกว่า ไม่ใช่ลูกบอลเหล็กยักษ์ครอบดวงอาทิตย์แบบในหนัง",
+      "subtitle": "แนวคิดนี้เรียกว่า 'Dyson Sphere'\\nแต่ไม่ใช่ลูกบอลเหล็กยักษ์ครอบดวงอาทิตย์แบบในหนัง",
+      "keywords": [
+        "Dyson Sphere",
+        "ไม่ใช่ลูกบอลตัน"
+      ],
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-03-dyson-swarm",
+      "image": "images/scene-03-dyson-swarm.png",
+      "narration": "มันอาจเป็นยานหรือแผงรับพลังงานจำนวนมหาศาล บินโคจรรอบดาวเป็นฝูงที่เรียกว่า Dyson Swarm",
+      "tts_text": "มันอาจเป็นยานหรือแผงรับพลังงานจำนวนมหาศาล บินโคจรรอบดาวเป็นฝูงที่เรียกว่า ไดสัน สวอร์ม",
+      "subtitle": "มันคือแผงรับพลังงานนับล้านชิ้น บินล้อมดาว\\nที่เรียกว่า 'Dyson Swarm'",
+      "keywords": [
+        "Dyson Swarm",
+        "พลังงานจากดาว"
+      ],
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-04-kardashev-type-two",
+      "image": "images/scene-04-kardashev-type-two.png",
+      "narration": "ถ้าอารยธรรมหนึ่งเก็บพลังงานจากดาวของตัวเองได้ในระดับมหาศาล พวกเขาจะเข้าใกล้อารยธรรมระดับ Type II ในมาตรา Kardashev",
+      "tts_text": "ถ้าอารยธรรมหนึ่งเก็บพลังงานจากดาวของตัวเองได้ในระดับมหาศาล พวกเขาจะเข้าใกล้อารยธรรมระดับ ไทป์ทู ในมาตรา คาร์ดาเชฟ",
+      "subtitle": "นี่คือ 'อารยธรรมระดับ 2' (Type II)\\nตามมาตราคาร์ดาเชฟ",
+      "keywords": [
+        "Type II",
+        "Kardashev"
+      ],
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-05-thermodynamics-waste-heat",
+      "image": "images/scene-05-thermodynamics-waste-heat.png",
+      "narration": "แต่มีปัญหาอย่างหนึ่ง ต่อให้เทคโนโลยีก้าวหน้าแค่ไหน พลังงานที่ใช้แล้วก็ยังต้องปล่อยออกมาเป็นความร้อน",
+      "tts_text": "แต่มีปัญหาอย่างหนึ่ง ต่อให้เทคโนโลยีก้าวหน้าแค่ไหน พลังงานที่ใช้แล้วก็ยังต้องปล่อยออกมาเป็นความร้อน",
+      "subtitle": "แต่ตามกฎฟิสิกส์ การใช้พลังงาน\\nย่อมต้องปล่อย 'ความร้อนเหลือทิ้ง' เสมอ",
+      "keywords": [
+        "ความร้อน",
+        "พลังงาน"
+      ],
+      "sfx": "reveal",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-06-infrared-technosignature",
+      "image": "images/scene-06-infrared-technosignature.png",
+      "narration": "นั่นทำให้นักดาราศาสตร์มีไอเดียว่า ถ้า Dyson Sphere มีอยู่จริง ดาวดวงนั้นอาจปล่อยรังสีอินฟราเรดมากผิดปกติ",
+      "tts_text": "นั่นทำให้นักดาราศาสตร์มีไอเดียว่า ถ้า ไดสัน สเฟียร์ มีอยู่จริง ดาวดวงนั้นอาจปล่อยรังสีอินฟราเรดมากผิดปกติ",
+      "subtitle": "ดาวที่มี Dyson Sphere\\nอาจปล่อย 'รังสีอินฟราเรด' สูงผิดปกติ",
+      "keywords": [
+        "อินฟราเรด",
+        "ร่องรอย"
+      ],
+      "motion": "cinematic_push_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.14,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-07-dust-and-false-positives",
+      "image": "images/scene-07-dust-and-false-positives.png",
+      "narration": "เราพบดาวบางดวงที่มีสัญญาณน่าสนใจแล้ว แต่ฝุ่นและปรากฏการณ์ธรรมชาติก็สร้างสัญญาณคล้ายกันได้ จึงยังไม่มี Dyson Sphere ที่ยืนยันได้",
+      "tts_text": "เราพบดาวบางดวงที่มีสัญญาณน่าสนใจแล้ว แต่ฝุ่นและปรากฏการณ์ธรรมชาติก็สร้างสัญญาณคล้ายกันได้ จึงยังไม่มี ไดสัน สเฟียร์ ที่ยืนยันได้",
+      "subtitle": "พบดาวต้องสงสัยแล้ว แต่ฝุ่นธรรมชาติก็สร้างสัญญาณได้\\nจึง 'ยังไม่สามารถยืนยันได้'",
+      "keywords": [
+        "ยังไม่ยืนยัน",
+        "ธรรมชาติ"
+      ],
+      "motion": "documentary_pan",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "smooth_left"
+    },
+    {
+      "id": "scene-08-payoff-search-for-heat",
+      "image": "images/scene-08-payoff-search-for-heat.png",
+      "narration": "เพราะฉะนั้นการตามหาเอเลี่ยน อาจไม่จำเป็นต้องรอให้พวกเขาส่งข้อความหาเรา แค่ตามหาความร้อนจากเทคโนโลยีของพวกเขาก็ได้",
+      "tts_text": "เพราะฉะนั้นการตามหาเอเลี่ยน อาจไม่จำเป็นต้องรอให้พวกเขาส่งข้อความหาเรา แค่ตามหาความร้อนจากเทคโนโลยีของพวกเขาก็ได้",
+      "subtitle": "การตามหาอารยธรรมต่างดาว\\nอาจดูจาก 'รอยนิ้วมือความร้อน' (Technosignature)",
+      "keywords": [
+        "ตามหาเอเลี่ยน",
+        "Technosignature"
+      ],
+      "sfx": "reveal",
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.12,
+      "focus": "center",
+      "transition": "fade"
+    },
+    {
+      "id": "scene-09-brand-outro",
+      "image": "images/scene-09-brand-outro.png",
+      "narration": "แล้วถ้าวันหนึ่งเราเจอดาวที่หายไปจากแสงปกติ แต่สว่างจ้าผิดปกติในอินฟราเรด…พี่พีว่ามันจะเป็นฝุ่น หรือใครบางคนกำลังใช้พลังงานของดาวทั้งดวง?",
+      "tts_text": "แล้วถ้าวันหนึ่งเราเจอดาวที่หายไปจากแสงปกติ แต่สว่างจ้าผิดปกติในอินฟราเรด…พี่พีว่ามันจะเป็นฝุ่น หรือใครบางคนกำลังใช้พลังงานของดาวทั้งดวง?",
+      "subtitle": "แล้วถ้าวันหนึ่งเราเจอดาวที่สว่างจ้าในอินฟราเรด…\\nคุณว่ามันจะเป็นฝุ่น หรือใครกำลังใช้พลังงานของดาวทั้งดวง?",
+      "keywords": [
+        "ฝุ่น?",
+        "อารยธรรม?"
+      ],
+      "show_subtitle": true,
+      "motion": "slow_zoom_in",
+      "motion_speed": "slow",
+      "motion_intensity": 0.1,
+      "focus": "center",
+      "transition": "none"
+    }
+  ]
+}

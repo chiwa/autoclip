@@ -592,6 +592,95 @@ def retry_job(request: Request, job_id: str) -> dict:
     return {"jobId": record.job_id, "status": record.status}
 
 
+@router.get("/jobs/{job_id}/scenes")
+def get_job_scenes(request: Request, job_id: str) -> dict:
+    try:
+        return request.app.state.job_service.get_scenes(job_id)
+    except AppError as exc:
+        raise HTTPException(404 if exc.code == "JOB_NOT_FOUND" else 400, public_error(exc)) from exc
+
+
+@router.get("/jobs/{job_id}/scenes/{scene_id}/image")
+def get_job_scene_image(request: Request, job_id: str, scene_id: str) -> FileResponse:
+    try:
+        path, media_type = request.app.state.job_service.get_scene_asset(job_id, scene_id, "image")
+        return FileResponse(path, media_type=media_type, headers={"Cache-Control": "no-cache"})
+    except AppError as exc:
+        raise HTTPException(404 if exc.code in {"JOB_NOT_FOUND", "ASSET_NOT_FOUND"} else 400, public_error(exc)) from exc
+
+
+@router.get("/jobs/{job_id}/scenes/{scene_id}/audio")
+def get_job_scene_audio(request: Request, job_id: str, scene_id: str) -> FileResponse:
+    try:
+        path, media_type = request.app.state.job_service.get_scene_asset(job_id, scene_id, "audio")
+        return FileResponse(path, media_type=media_type, headers={"Cache-Control": "no-cache"})
+    except AppError as exc:
+        raise HTTPException(404 if exc.code in {"JOB_NOT_FOUND", "ASSET_NOT_FOUND"} else 400, public_error(exc)) from exc
+
+
+@router.post("/jobs/{job_id}/scenes/{scene_id}/edit")
+async def edit_job_scene(
+    request: Request,
+    job_id: str,
+    scene_id: str,
+    narration: str | None = Form(None),
+    subtitle: str | None = Form(None),
+    motion: str | None = Form(None),
+    image: UploadFile | None = File(None),
+) -> dict:
+    try:
+        content_type = request.headers.get("content-type", "")
+        img_bytes = None
+        img_filename = None
+        if "application/json" in content_type:
+            body = await request.json()
+            narration = body.get("narration")
+            subtitle = body.get("subtitle")
+            motion = body.get("motion")
+        else:
+            if image and image.filename:
+                img_bytes = await image.read()
+                img_filename = image.filename
+
+        return request.app.state.job_service.edit_scene(
+            job_id,
+            scene_id,
+            narration=narration,
+            subtitle=subtitle,
+            motion=motion,
+            image_bytes=img_bytes,
+            image_filename=img_filename,
+        )
+    except AppError as exc:
+        raise HTTPException(404 if exc.code == "JOB_NOT_FOUND" else 400, public_error(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(500, public_error(AppError("EDIT_SCENE_FAILED", str(exc)))) from exc
+
+
+@router.post("/jobs/{job_id}/re-render")
+def rerender_job(request: Request, job_id: str) -> dict:
+    try:
+        record = request.app.state.job_service.re_render(job_id)
+        return {"jobId": record.job_id, "status": record.status}
+    except AppError as exc:
+        raise HTTPException(404 if exc.code == "JOB_NOT_FOUND" else 400, public_error(exc)) from exc
+
+
+@router.post("/jobs/{job_id}/swap-cover")
+async def swap_podcast_cover(
+    request: Request,
+    job_id: str,
+    image: UploadFile = File(...),
+) -> dict:
+    try:
+        img_bytes = await image.read()
+        return request.app.state.job_service.swap_podcast_cover(job_id, img_bytes, image.filename or "cover.png")
+    except AppError as exc:
+        raise HTTPException(404 if exc.code == "JOB_NOT_FOUND" else 400, public_error(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(500, public_error(AppError("SWAP_COVER_FAILED", str(exc)))) from exc
+
+
 @router.get("/jobs/{job_id}/events")
 def job_events(request: Request, job_id: str) -> StreamingResponse:
     service = request.app.state.job_service

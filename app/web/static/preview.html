@@ -597,6 +597,51 @@
 
       <!-- Right Column: Content Metadata, Channels, Publication, English Track -->
       <div class="studio-info-col">
+        <!-- Scene Editor Panel (Standard & Multi-scene Reel) -->
+        <section id="sceneEditorPanel" class="studio-panel" hidden>
+          <div class="studio-panel-head">
+            <div>
+              <span class="eyebrow">SELECTIVE EDIT &amp; FAST RE-RENDER</span>
+              <h2>🎬 แก้ไขวิดีโอแยกซีน (Scene Editor)</h2>
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <button type="button" id="btnRerenderAllDirty" class="button" style="background: linear-gradient(135deg, #00c853, #00b0ff); font-weight: 700; border: none; box-shadow: 0 4px 15px rgba(0, 200, 83, 0.35);" disabled>
+                ⚡ Re-render เฉพาะซีนที่แก้ (<span id="dirtyCount">0</span>)
+              </button>
+            </div>
+          </div>
+
+          <p style="font-size: 0.85rem; color: var(--muted); margin: -6px 0 16px;">
+            แก้ไขคำพากย์, สลับรูปภาพ, หรือเปลี่ยนการเคลื่อนไหวเฉพาะซีนที่ต้องการได้ทันที ระบบจะ Render ใหม่เฉพาะซีนที่แก้ไข ส่วนซีนอื่นๆ จะดึงจาก Cache มาต่อทันที ไม่ต้องรันใหม่ทั้งหมด
+          </p>
+
+          <div id="scenesList" class="scenes-editor-list" style="display: flex; flex-direction: column; gap: 14px;">
+            <!-- Rendered dynamically by preview.js -->
+          </div>
+          
+          <div id="rerenderStatus" class="motion-feedback" style="margin-top: 12px; font-size: 0.9rem;" aria-live="polite"></div>
+        </section>
+
+        <!-- Fast Podcast Cover Swap Panel -->
+        <section id="podcastCoverSwapCard" class="studio-panel" hidden>
+          <div class="studio-panel-head">
+            <div>
+              <span class="eyebrow">FAST COVER SWAP (3-5 วินาที)</span>
+              <h2>🖼️ เปลี่ยนรูปภาพหน้าปก Podcast</h2>
+            </div>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--muted); margin: -6px 0 16px;">
+            ต้องการเปลี่ยนภาพปกวิดีโอ? อัปโหลดภาพใหม่แล้วสร้างวิดีโอได้ทันที โดยไม่ต้องรอเจนเสียงใหม่ (ใช้เวลาเพียง 3-5 วินาที):
+          </p>
+          <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <input type="file" id="podcastNewCoverInput" accept="image/png,image/jpeg,image/webp" style="display: none;">
+            <button type="button" id="btnChoosePodcastCover" class="button secondary">📁 เลือกไฟล์ภาพใหม่...</button>
+            <span id="podcastCoverFilename" style="font-size: 0.85rem; color: var(--soft);">ยังไม่ได้เลือกไฟล์</span>
+            <button type="button" id="btnApplyPodcastCover" class="button" style="display: none; background: linear-gradient(135deg, #00c853, #00b0ff); border: none; font-weight: 700;">⚡ เปลี่ยนปกและสร้างวิดีโอใหม่ (3 วิ)</button>
+          </div>
+          <div id="podcastCoverStatus" class="motion-feedback" style="margin-top: 10px;"></div>
+        </section>
+
         <!-- Publishing Metadata Panel -->
         <section class="studio-panel">
           <div class="studio-panel-head">

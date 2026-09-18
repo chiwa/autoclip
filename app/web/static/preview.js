@@ -506,6 +506,13 @@ async function initPreview() {
       }
     }
 
+    try {
+      initPodcastCoverSwap(jobId, job);
+      initSceneEditor(jobId, job);
+    } catch (e) {
+      console.warn('Edit tools init warning:', e);
+    }
+
     const previewLoading = document.querySelector('#previewLoading');
     if (previewLoading) previewLoading.hidden = true;
     const previewContent = document.querySelector('#previewContent');
@@ -518,6 +525,375 @@ async function initPreview() {
     }
     const previewLoading = document.querySelector('#previewLoading');
     if (previewLoading) previewLoading.hidden = true;
+  }
+}
+
+function initPodcastCoverSwap(jobId, job) {
+  const isPodcast = job.metadata?.projectType === 'podcast' || job.project_id?.startsWith('podcast-');
+  const card = document.querySelector('#podcastCoverSwapCard');
+  if (!card) return;
+  if (!isPodcast) {
+    card.hidden = true;
+    return;
+  }
+  card.hidden = false;
+
+  const fileInput = document.querySelector('#podcastNewCoverInput');
+  const chooseBtn = document.querySelector('#btnChoosePodcastCover');
+  const filenameSpan = document.querySelector('#podcastCoverFilename');
+  const applyBtn = document.querySelector('#btnApplyPodcastCover');
+  const statusEl = document.querySelector('#podcastCoverStatus');
+
+  chooseBtn.onclick = () => fileInput.click();
+  fileInput.onchange = () => {
+    const file = fileInput.files?.[0];
+    if (file) {
+      filenameSpan.textContent = `${file.name} (${formatBytes(file.size)})`;
+      applyBtn.style.display = 'inline-flex';
+    } else {
+      filenameSpan.textContent = 'ยังไม่ได้เลือกไฟล์';
+      applyBtn.style.display = 'none';
+    }
+  };
+
+  applyBtn.onclick = async () => {
+    const file = fileInput.files?.[0];
+    if (!file) return;
+    applyBtn.disabled = true;
+    applyBtn.textContent = '⏳ กำลังอัปโหลดและเรนเดอร์...';
+    statusEl.className = 'motion-feedback';
+    statusEl.textContent = 'กำลังส่งรูปภาพใหม่และเริ่ม Fast Remux...';
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    try {
+      const res = await fetch(`/api/jobs/${jobId}/swap-cover`, {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok) throw (data.detail || data);
+
+      statusEl.className = 'motion-feedback success';
+      statusEl.textContent = '⚡ กำลังเรนเดอร์วิดีโอใหม่ (ประมาณ 3-5 วินาที)...';
+
+      const evt = new EventSource(`/api/jobs/${jobId}/events`);
+      evt.addEventListener('progress', (e) => {
+        try {
+          const d = JSON.parse(e.data);
+          statusEl.textContent = `⏳ ${d.currentStep || 'กำลังเรนเดอร์'} (${d.progress}%)`;
+        } catch (_) {}
+      });
+      evt.addEventListener('completed', () => {
+        evt.close();
+        statusEl.className = 'motion-feedback success';
+        statusEl.textContent = '✓ เปลี่ยนรูปภาพปกและเรนเดอร์วิดีโอสำเร็จแล้ว!';
+        applyBtn.disabled = false;
+        applyBtn.textContent = '⚡ เปลี่ยนปกและสร้างวิดีโอใหม่ (3 วิ)';
+        window.AutoClipSound?.playSuccess();
+        const video = document.querySelector('#video');
+        if (video) {
+          video.src = `/api/jobs/${jobId}/video?t=${Date.now()}`;
+          video.load();
+        }
+      });
+      evt.addEventListener('failed', (e) => {
+        evt.close();
+        statusEl.className = 'motion-feedback error';
+        statusEl.textContent = 'เกิดข้อผิดพลาดในการเปลี่ยนปก';
+        applyBtn.disabled = false;
+        applyBtn.textContent = '⚡ ลองใหม่อีกครั้ง';
+        window.AutoClipSound?.playError();
+      });
+    } catch (err) {
+      statusEl.className = 'motion-feedback error';
+      statusEl.textContent = `ผิดพลาด: ${err.message || err}`;
+      applyBtn.disabled = false;
+      applyBtn.textContent = '⚡ ลองใหม่อีกครั้ง';
+    }
+  };
+}
+
+async function initSceneEditor(jobId, job) {
+  const panel = document.querySelector('#sceneEditorPanel');
+  const listEl = document.querySelector('#scenesList');
+  const btnRerender = document.querySelector('#btnRerenderAllDirty');
+  const dirtyCountSpan = document.querySelector('#dirtyCount');
+  const statusEl = document.querySelector('#rerenderStatus');
+  if (!panel || !listEl) return;
+
+  const isPodcast = job.metadata?.projectType === 'podcast' || job.project_id?.startsWith('podcast-');
+  if (isPodcast) {
+    panel.hidden = true;
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/jobs/${jobId}/scenes`);
+    if (!res.ok) {
+      panel.hidden = true;
+      return;
+    }
+    const data = await res.json();
+    if (!data.scenes || data.scenes.length === 0) {
+      panel.hidden = true;
+      return;
+    }
+
+    panel.hidden = false;
+    listEl.innerHTML = '';
+
+    const dirtyMap = new Map();
+
+    const updateDirtyUI = () => {
+      const count = dirtyMap.size;
+      dirtyCountSpan.textContent = String(count);
+      btnRerender.disabled = count === 0;
+    };
+
+    data.scenes.forEach((scene) => {
+      const card = document.createElement('div');
+      card.className = 'scene-card';
+      card.id = `card-${scene.id}`;
+
+      // Left: Thumbnail
+      const thumbCol = document.createElement('div');
+      thumbCol.className = 'scene-thumb-col';
+      const img = document.createElement('img');
+      img.className = 'scene-thumb-img';
+      img.src = scene.imageUrl ? `${scene.imageUrl}?t=${Date.now()}` : '/static/auto-clip-logo.png';
+      img.alt = scene.title;
+      img.onerror = () => { img.src = '/static/auto-clip-logo.png'; };
+
+      const changeImgBtn = document.createElement('button');
+      changeImgBtn.type = 'button';
+      changeImgBtn.className = 'scene-thumb-change-btn';
+      changeImgBtn.textContent = '🔄 เปลี่ยนรูป';
+
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/png,image/jpeg,image/webp';
+      fileInput.style.display = 'none';
+
+      changeImgBtn.onclick = () => fileInput.click();
+      fileInput.onchange = () => {
+        const file = fileInput.files?.[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            img.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+
+          const current = dirtyMap.get(scene.id) || {};
+          current.imageFile = file;
+          dirtyMap.set(scene.id, current);
+          card.classList.add('dirty');
+          const pill = card.querySelector('.scene-status-pill');
+          if (pill) {
+            pill.className = 'scene-status-pill dirty';
+            pill.textContent = '🟡 เปลี่ยนรูปภาพ';
+          }
+          updateDirtyUI();
+        }
+      };
+
+      thumbCol.append(img, changeImgBtn, fileInput);
+
+      // Middle: Body (Title, Status, Narration Text, Audio)
+      const bodyCol = document.createElement('div');
+      bodyCol.className = 'scene-body-col';
+
+      const headRow = document.createElement('div');
+      headRow.className = 'scene-head-row';
+      const titleBadge = document.createElement('span');
+      titleBadge.className = 'scene-title-badge';
+      titleBadge.textContent = `${scene.title} (${scene.id})`;
+
+      const statusPill = document.createElement('span');
+      statusPill.className = 'scene-status-pill cached';
+      statusPill.textContent = '🟢 พร้อมใช้ (Cached)';
+
+      headRow.append(titleBadge, statusPill);
+
+      const textarea = document.createElement('textarea');
+      textarea.className = 'scene-textarea';
+      textarea.value = scene.narration || '';
+      textarea.placeholder = 'บทพากย์สำหรับซีนนี้...';
+
+      textarea.oninput = () => {
+        const current = dirtyMap.get(scene.id) || {};
+        const isChanged = textarea.value.trim() !== (scene.narration || '').trim();
+        if (isChanged) {
+          current.narration = textarea.value.trim();
+          dirtyMap.set(scene.id, current);
+          card.classList.add('dirty');
+          statusPill.className = 'scene-status-pill dirty';
+          statusPill.textContent = '🟡 แก้ไขคำพากย์';
+        } else {
+          delete current.narration;
+          if (!current.imageFile && !current.motion) {
+            dirtyMap.delete(scene.id);
+            card.classList.remove('dirty');
+            statusPill.className = 'scene-status-pill cached';
+            statusPill.textContent = '🟢 พร้อมใช้ (Cached)';
+          }
+        }
+        updateDirtyUI();
+      };
+
+      const audioRow = document.createElement('div');
+      audioRow.className = 'scene-audio-row';
+      if (scene.audioUrl) {
+        const playBtn = document.createElement('button');
+        playBtn.type = 'button';
+        playBtn.className = 'scene-audio-btn';
+        playBtn.textContent = '🔊 ฟังเสียงซีนนี้';
+        let currentAudio = null;
+        playBtn.onclick = () => {
+          if (currentAudio && !currentAudio.paused) {
+            currentAudio.pause();
+            playBtn.textContent = '🔊 ฟังเสียงซีนนี้';
+            return;
+          }
+          currentAudio = new Audio(`${scene.audioUrl}?t=${Date.now()}`);
+          playBtn.textContent = '⏹️ กำลังเล่น...';
+          currentAudio.play();
+          currentAudio.onended = () => {
+            playBtn.textContent = '🔊 ฟังเสียงซีนนี้';
+          };
+        };
+        audioRow.append(playBtn);
+      }
+
+      bodyCol.append(headRow, textarea, audioRow);
+
+      // Right: Motion & Quick Save
+      const actionsCol = document.createElement('div');
+      actionsCol.className = 'scene-actions-col';
+
+      const motionLabel = document.createElement('label');
+      motionLabel.style.fontSize = '11px';
+      motionLabel.style.color = 'var(--muted)';
+      motionLabel.textContent = 'Motion:';
+
+      const motionSelect = document.createElement('select');
+      motionSelect.className = 'scene-motion-select';
+      [
+        { val: 'gentle_float', label: '🌌 Gentle Float' },
+        { val: 'hook_punch_in', label: '💥 Hook Punch' },
+        { val: 'cinematic_push_in', label: '🎬 Push In' },
+        { val: 'cinematic_pull_out', label: '🔭 Pull Out' },
+        { val: 'breathing_pulse', label: '🫁 Breathing' },
+        { val: 'slow_zoom_in', label: '🔍 Slow Zoom' },
+        { val: 'none', label: '⏹️ Static' },
+      ].forEach((opt) => {
+        const o = document.createElement('option');
+        o.value = opt.val;
+        o.textContent = opt.label;
+        if (opt.val === scene.motion) o.selected = true;
+        motionSelect.appendChild(o);
+      });
+
+      motionSelect.onchange = () => {
+        const current = dirtyMap.get(scene.id) || {};
+        if (motionSelect.value !== scene.motion) {
+          current.motion = motionSelect.value;
+          dirtyMap.set(scene.id, current);
+          card.classList.add('dirty');
+          statusPill.className = 'scene-status-pill dirty';
+          statusPill.textContent = '🟡 เปลี่ยน Motion';
+        } else {
+          delete current.motion;
+          if (!current.narration && !current.imageFile) {
+            dirtyMap.delete(scene.id);
+            card.classList.remove('dirty');
+            statusPill.className = 'scene-status-pill cached';
+            statusPill.textContent = '🟢 พร้อมใช้ (Cached)';
+          }
+        }
+        updateDirtyUI();
+      };
+
+      actionsCol.append(motionLabel, motionSelect);
+
+      card.append(thumbCol, bodyCol, actionsCol);
+      listEl.append(card);
+    });
+
+    btnRerender.onclick = async () => {
+      if (dirtyMap.size === 0) return;
+      btnRerender.disabled = true;
+      btnRerender.textContent = '⏳ กำลังบันทึกการแก้ไข...';
+      statusEl.className = 'motion-feedback';
+      statusEl.textContent = `กำลังอัปเดต ${dirtyMap.size} ซีนที่แก้ไข...`;
+
+      try {
+        for (const [scId, changes] of dirtyMap.entries()) {
+          const formData = new FormData();
+          if (changes.narration !== undefined) formData.append('narration', changes.narration);
+          if (changes.motion !== undefined) formData.append('motion', changes.motion);
+          if (changes.imageFile) formData.append('image', changes.imageFile);
+
+          const editRes = await fetch(`/api/jobs/${jobId}/scenes/${scId}/edit`, {
+            method: 'POST',
+            body: formData,
+          });
+          if (!editRes.ok) {
+            const errData = await editRes.json();
+            throw new Error(errData.detail?.message || `บันทึกซีน ${scId} ไม่สำเร็จ`);
+          }
+        }
+
+        statusEl.textContent = '⚡ กำลังประกอบร่างและ Re-render เฉพาะซีนที่แก้ไข...';
+        btnRerender.textContent = '⚡ กำลัง Re-render...';
+
+        const rerenderRes = await fetch(`/api/jobs/${jobId}/re-render`, { method: 'POST' });
+        if (!rerenderRes.ok) {
+          const errData = await rerenderRes.json();
+          throw new Error(errData.detail?.message || 'สั่ง Re-render ไม่สำเร็จ');
+        }
+
+        const evt = new EventSource(`/api/jobs/${jobId}/events`);
+        evt.addEventListener('progress', (e) => {
+          try {
+            const d = JSON.parse(e.data);
+            statusEl.textContent = `⏳ ${d.currentStep || 'กำลังประมวลผล'} (${d.progress}%)`;
+          } catch (_) {}
+        });
+        evt.addEventListener('completed', () => {
+          evt.close();
+          statusEl.className = 'motion-feedback success';
+          statusEl.textContent = '✓ Re-render เสร็จสิ้นแล้ว! อัปเดตวิดีโอเรียบร้อย';
+          dirtyMap.clear();
+          updateDirtyUI();
+          window.AutoClipSound?.playSuccess();
+
+          const video = document.querySelector('#video');
+          if (video) {
+            video.src = `/api/jobs/${jobId}/video?t=${Date.now()}`;
+            video.load();
+          }
+          setTimeout(() => initSceneEditor(jobId, job), 1200);
+        });
+        evt.addEventListener('failed', (e) => {
+          evt.close();
+          statusEl.className = 'motion-feedback error';
+          statusEl.textContent = 'เกิดข้อผิดพลาดในการ Re-render';
+          btnRerender.disabled = false;
+          btnRerender.textContent = '⚡ ลอง Re-render ใหม่อีกครั้ง';
+          window.AutoClipSound?.playError();
+        });
+      } catch (err) {
+        statusEl.className = 'motion-feedback error';
+        statusEl.textContent = `ผิดพลาด: ${err.message || err}`;
+        btnRerender.disabled = false;
+        btnRerender.textContent = '⚡ ลองใหม่อีกครั้ง';
+      }
+    };
+  } catch (err) {
+    console.warn('Scene editor init error:', err);
   }
 }
 

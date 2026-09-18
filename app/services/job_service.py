@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import math
+import shutil
 import zipfile
 import logging
 import threading
@@ -1552,3 +1553,405 @@ class JobService:
         self._progress(job_id, JobStatus.RECEIVED, 5, "กำลังเริ่มประมวลผลใหม่อีกครั้ง...")
         self.executor.submit(self._process, job_id, workspace)
         return record
+
+    def _update_input_zip(self, workspace: Workspace) -> None:
+        zip_path = workspace.source / "input.zip"
+        temp_zip = workspace.source / "input.tmp.zip"
+        with zipfile.ZipFile(temp_zip, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+            for file_path in sorted(workspace.extracted.rglob("*")):
+                if file_path.is_file() and not file_path.name.startswith("."):
+                    arcname = file_path.relative_to(workspace.extracted).as_posix()
+                    zf.write(file_path, arcname)
+        temp_zip.replace(zip_path)
+
+    def get_scenes(self, job_id: str) -> dict:
+        record = self.restore(job_id)
+        if not record:
+            raise AppError("JOB_NOT_FOUND", "ไม่พบงานนี้")
+        workspace = self.workspaces.get(job_id)
+        if not workspace.root.is_dir():
+            raise AppError("WORKSPACE_NOT_FOUND", "ไม่พบ workspace ของงานนี้")
+
+        # 1. Standard Reel
+        script_file = workspace.extracted / "script.json"
+        if not script_file.is_file() and (workspace.source / "input.zip").is_file():
+            try:
+                with zipfile.ZipFile(workspace.source / "input.zip") as zf:
+                    zf.extractall(workspace.extracted)
+            except Exception:
+                pass
+
+        if script_file.is_file():
+            try:
+                data = json.loads(script_file.read_text(encoding="utf-8"))
+            except Exception as exc:
+                raise AppError("INVALID_SCRIPT", f"ไม่สามารถอ่าน script.json: {exc}") from exc
+
+            scenes_raw = data.get("scenes", [])
+            scenes_out = []
+            for idx, sc in enumerate(scenes_raw):
+                sc_id = sc.get("id") or f"scene-{idx+1:02d}"
+                audio_file = workspace.generated_audio / f"{sc_id}.wav"
+                video_file = workspace.rendered_scenes / f"{sc_id}.mp4"
+                img_rel = sc.get("image", "")
+                img_file = workspace.extracted / img_rel if img_rel else None
+                has_image = bool(img_file and img_file.is_file())
+
+                scenes_out.append({
+                    "id": sc_id,
+                    "index": idx,
+                    "title": f"Scene {idx + 1}",
+                    "narration": sc.get("narration") or sc.get("tts_text") or "",
+                    "subtitle": sc.get("subtitle") or sc.get("narration") or "",
+                    "image": img_rel,
+                    "motion": sc.get("motion") or "gentle_float",
+                    "transition": sc.get("transition") or "none",
+                    "hasAudio": bool(audio_file.is_file() and audio_file.stat().st_size > 1000),
+                    "hasVideo": bool(video_file.is_file() and video_file.stat().st_size > 1000),
+                    "hasImage": has_image,
+                    "imageUrl": f"/api/jobs/{job_id}/scenes/{sc_id}/image" if has_image else None,
+                    "audioUrl": f"/api/jobs/{job_id}/scenes/{sc_id}/audio" if audio_file.is_file() else None,
+                })
+            return {
+                "jobId": job_id,
+                "projectType": "reel",
+                "projectTitle": data.get("project", {}).get("title") or (record.metadata or {}).get("projectTitle") or "-",
+                "sceneCount": len(scenes_out),
+                "scenes": scenes_out,
+            }
+
+        # 2. Quick Reel
+        qr_settings = workspace.source / "quick-reel-settings.json"
+        if qr_settings.is_file():
+            try:
+                cfg = json.loads(qr_settings.read_text(encoding="utf-8"))
+            except Exception:
+                cfg = {}
+            img_count = cfg.get("imageCount", 1)
+            scenes_out = []
+            for i in range(1, img_count + 1):
+                img_path = workspace.source / f"image-{i:03d}.png"
+                if not img_path.is_file():
+                    img_path = workspace.source / f"framed-{i:03d}.png"
+                scenes_out.append({
+                    "id": f"scene-{i:02d}",
+                    "index": i - 1,
+                    "title": f"Image {i}",
+                    "narration": cfg.get("tts") or "",
+                    "image": img_path.name if img_path.is_file() else "",
+                    "motion": cfg.get("motion") or "gentle_float",
+                    "hasImage": img_path.is_file(),
+                    "imageUrl": f"/api/jobs/{job_id}/thumbnail",
+                    "hasAudio": (workspace.source / "narration.wav").is_file(),
+                })
+            return {
+                "jobId": job_id,
+                "projectType": "quick-reel",
+                "projectTitle": cfg.get("topic") or (record.metadata or {}).get("projectTitle") or "Quick Reel",
+                "sceneCount": len(scenes_out),
+                "scenes": scenes_out,
+            }
+
+        # 3. Podcast
+        pc_settings = workspace.source / "podcast-settings.json"
+        if pc_settings.is_file():
+            try:
+                cfg = json.loads(pc_settings.read_text(encoding="utf-8"))
+            except Exception:
+                cfg = {}
+            has_cover = bool(list(workspace.source.glob("cover.*")))
+            return {
+                "jobId": job_id,
+                "projectType": "podcast",
+                "projectTitle": cfg.get("title") or (record.metadata or {}).get("projectTitle") or "YouTube Podcast",
+                "sceneCount": 1,
+                "scenes": [{
+                    "id": "podcast-cover",
+                    "index": 0,
+                    "title": "Podcast Cover",
+                    "narration": "Full episode audio track",
+                    "hasImage": has_cover,
+                    "imageUrl": f"/api/jobs/{job_id}/thumbnail",
+                    "hasAudio": (workspace.output / "podcast-master.wav").is_file(),
+                }],
+            }
+
+        raise AppError("UNSUPPORTED_JOB_TYPE", "ประเภทงานนี้ยังไม่รองรับการแยกซีน")
+
+    def get_scene_asset(self, job_id: str, scene_id: str, asset_type: str) -> tuple[Path, str]:
+        workspace = self.workspaces.get(job_id)
+        if not workspace.root.is_dir():
+            raise AppError("WORKSPACE_NOT_FOUND", "ไม่พบ workspace")
+
+        if asset_type == "audio":
+            target = workspace.generated_audio / f"{scene_id}.wav"
+            if target.is_file():
+                return target, "audio/wav"
+            qr_audio = workspace.source / "narration.wav"
+            if qr_audio.is_file():
+                return qr_audio, "audio/wav"
+            raise AppError("ASSET_NOT_FOUND", f"ไม่พบไฟล์เสียงสำหรับ {scene_id}")
+
+        if asset_type == "image":
+            script_file = workspace.extracted / "script.json"
+            if script_file.is_file():
+                try:
+                    data = json.loads(script_file.read_text(encoding="utf-8"))
+                    for sc in data.get("scenes", []):
+                        if sc.get("id") == scene_id:
+                            img_rel = sc.get("image", "")
+                            if img_rel:
+                                img_path = workspace.extracted / img_rel
+                                if img_path.is_file():
+                                    ext = img_path.suffix.lower()
+                                    mime = "image/png" if ext == ".png" else ("image/webp" if ext == ".webp" else "image/jpeg")
+                                    return img_path, mime
+                except Exception:
+                    pass
+            for candidate in (workspace.extracted / "images").glob(f"{scene_id}.*"):
+                if candidate.is_file():
+                    ext = candidate.suffix.lower()
+                    mime = "image/png" if ext == ".png" else ("image/webp" if ext == ".webp" else "image/jpeg")
+                    return candidate, mime
+            thumb = self.thumbnail(job_id)
+            if thumb and thumb.is_file():
+                ext = thumb.suffix.lower()
+                mime = "image/png" if ext == ".png" else ("image/webp" if ext == ".webp" else "image/jpeg")
+                return thumb, mime
+
+            raise AppError("ASSET_NOT_FOUND", f"ไม่พบไฟล์ภาพสำหรับ {scene_id}")
+
+        raise AppError("INVALID_ASSET_TYPE", f"asset_type '{asset_type}' ไม่ถูกต้อง")
+
+    def edit_scene(
+        self,
+        job_id: str,
+        scene_id: str,
+        narration: str | None = None,
+        subtitle: str | None = None,
+        motion: str | None = None,
+        image_bytes: bytes | None = None,
+        image_filename: str | None = None,
+    ) -> dict:
+        record = self.restore(job_id)
+        if not record:
+            raise AppError("JOB_NOT_FOUND", "ไม่พบงานนี้")
+        workspace = self.workspaces.get(job_id)
+        if not workspace.root.is_dir():
+            raise AppError("WORKSPACE_NOT_FOUND", "ไม่พบ workspace")
+
+        script_file = workspace.extracted / "script.json"
+        if not script_file.is_file():
+            raise AppError("INVALID_SCRIPT", "ไม่พบไฟล์ script.json ใน workspace")
+
+        try:
+            data = json.loads(script_file.read_text(encoding="utf-8"))
+        except Exception as exc:
+            raise AppError("INVALID_SCRIPT", f"ไม่สามารถอ่าน script.json: {exc}") from exc
+
+        scenes = data.get("scenes", [])
+        target_scene = None
+        for idx, sc in enumerate(scenes):
+            if sc.get("id") == scene_id:
+                target_scene = sc
+                break
+
+        if not target_scene:
+            raise AppError("SCENE_NOT_FOUND", f"ไม่พบซีน {scene_id}")
+
+        audio_invalidated = False
+        video_invalidated = False
+
+        # 1. Update narration
+        if narration is not None:
+            new_narration = narration.strip()
+            old_narration = (target_scene.get("narration") or target_scene.get("tts_text") or "").strip()
+            if new_narration != old_narration:
+                target_scene["narration"] = new_narration
+                if "tts_text" in target_scene:
+                    target_scene["tts_text"] = new_narration
+                if subtitle is not None:
+                    target_scene["subtitle"] = subtitle.strip()
+                elif target_scene.get("subtitle") in {old_narration, "", None}:
+                    target_scene["subtitle"] = new_narration
+
+                audio_path = workspace.generated_audio / f"{scene_id}.wav"
+                if audio_path.is_file():
+                    audio_path.unlink()
+                    audio_invalidated = True
+
+                video_path = workspace.rendered_scenes / f"{scene_id}.mp4"
+                if video_path.is_file():
+                    video_path.unlink()
+                    video_invalidated = True
+
+                srt_path = workspace.subtitles / f"{scene_id}.srt"
+                if srt_path.is_file():
+                    srt_path.unlink()
+
+        # 2. Update subtitle explicitly
+        elif subtitle is not None:
+            new_sub = subtitle.strip()
+            if new_sub != (target_scene.get("subtitle") or ""):
+                target_scene["subtitle"] = new_sub
+                video_path = workspace.rendered_scenes / f"{scene_id}.mp4"
+                if video_path.is_file():
+                    video_path.unlink()
+                    video_invalidated = True
+                srt_path = workspace.subtitles / f"{scene_id}.srt"
+                if srt_path.is_file():
+                    srt_path.unlink()
+
+        # 3. Update motion
+        if motion is not None:
+            new_motion = motion.strip()
+            if new_motion != (target_scene.get("motion") or ""):
+                target_scene["motion"] = new_motion
+                video_path = workspace.rendered_scenes / f"{scene_id}.mp4"
+                if video_path.is_file():
+                    video_path.unlink()
+                    video_invalidated = True
+
+        # 4. Update image
+        if image_bytes and len(image_bytes) > 0:
+            ext = Path(image_filename or "scene.png").suffix.lower() or ".png"
+            if ext not in {".png", ".jpg", ".jpeg", ".webp"}:
+                ext = ".png"
+            images_dir = workspace.extracted / "images"
+            images_dir.mkdir(parents=True, exist_ok=True)
+            new_img_filename = f"{scene_id}{ext}"
+            new_img_path = images_dir / new_img_filename
+            new_img_path.write_bytes(image_bytes)
+            target_scene["image"] = f"images/{new_img_filename}"
+
+            # Keep audio untouched, invalidate video only
+            video_path = workspace.rendered_scenes / f"{scene_id}.mp4"
+            if video_path.is_file():
+                video_path.unlink()
+                video_invalidated = True
+
+        # Invalidate final video and cached thumbnail
+        final_mp4 = workspace.output / "final.mp4"
+        if final_mp4.is_file():
+            backup_mp4 = workspace.output / f"final.backup-{int(time.time())}.mp4"
+            try:
+                shutil.copy2(final_mp4, backup_mp4)
+            except Exception:
+                pass
+            final_mp4.unlink()
+
+        thumb = workspace.source / "thumbnail.jpg"
+        if thumb.is_file():
+            thumb.unlink()
+
+        script_file.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+        self._update_input_zip(workspace)
+
+        return {
+            "status": "SCENE_UPDATED",
+            "jobId": job_id,
+            "sceneId": scene_id,
+            "audioInvalidated": audio_invalidated,
+            "videoInvalidated": video_invalidated,
+            "scene": target_scene,
+        }
+
+    def re_render(self, job_id: str) -> JobRecord:
+        record = self.restore(job_id)
+        if not record:
+            raise AppError("JOB_NOT_FOUND", "ไม่พบงานที่ต้องการ re-render")
+        workspace = self.workspaces.get(job_id)
+        if not workspace.root.is_dir():
+            raise AppError("WORKSPACE_NOT_FOUND", "ไม่พบ workspace")
+
+        podcast_script = workspace.source / "script.txt"
+        podcast_covers = sorted(
+            path for path in workspace.source.glob("cover.*")
+            if path.suffix.lower() in {".png", ".jpg", ".jpeg", ".webp"}
+        )
+        if podcast_script.is_file() and podcast_covers:
+            return self.retry(job_id)
+
+        if not (workspace.source / "input.zip").is_file():
+            raise AppError("PACKAGE_NOT_FOUND", "ไม่พบไฟล์ต้นฉบับสำหรับ re-render")
+
+        self.registry.update(
+            job_id,
+            JobStatus.RECEIVED,
+            5,
+            "กำลัง Re-render เฉพาะซีนที่มีการแก้ไข...",
+            error=None,
+        )
+        current = self.registry.get(job_id)
+        if self.persistence and current:
+            self.persistence.upsert_job(current)
+
+        self._investigation_log(job_id, "job_rerender_started", render_engine=record.render_engine or "")
+        self._log(job_id, "INFO", "⚡ กำลัง Re-render เฉพาะซีนที่มีการแก้ไข (Reusing cached scenes)...")
+        self._progress(job_id, JobStatus.RECEIVED, 5, "กำลัง Re-render เฉพาะซีนที่มีการแก้ไข...")
+        self.executor.submit(self._process, job_id, workspace)
+        return current or record
+
+    def swap_podcast_cover(self, job_id: str, image_bytes: bytes, filename: str) -> dict:
+        record = self.restore(job_id)
+        if not record:
+            raise AppError("JOB_NOT_FOUND", "ไม่พบงาน Podcast นี้")
+        workspace = self.workspaces.get(job_id)
+        if not workspace.root.is_dir():
+            raise AppError("WORKSPACE_NOT_FOUND", "ไม่พบ workspace")
+
+        ext = Path(filename).suffix.lower()
+        if ext not in {".png", ".jpg", ".jpeg", ".webp"}:
+            ext = ".png"
+
+        for old_cover in workspace.source.glob("cover.*"):
+            try:
+                old_cover.unlink()
+            except Exception:
+                pass
+
+        new_cover_path = workspace.source / f"cover{ext}"
+        new_cover_path.write_bytes(image_bytes)
+
+        thumb = workspace.source / "thumbnail.jpg"
+        if thumb.is_file():
+            thumb.unlink()
+        cycle_mp4 = workspace.source / "motion_cycle.mp4"
+        if cycle_mp4.is_file():
+            cycle_mp4.unlink()
+
+        config_path = workspace.source / "podcast-settings.json"
+        config = json.loads(config_path.read_text(encoding="utf-8")) if config_path.is_file() else {}
+
+        self.registry.update(
+            job_id,
+            JobStatus.RECEIVED,
+            10,
+            "กำลังอัปเดตรูปปกใหม่และเรนเดอร์วิดีโอ (Fast Cover Swap)...",
+            error=None,
+        )
+        self._log(job_id, "INFO", "🖼️ กำลังเปลี่ยนภาพปก Podcast และเรนเดอร์วิดีโอใหม่ทันใจ...")
+
+        self.executor.submit(
+            self._process_podcast,
+            job_id,
+            record.project_id or f"podcast-{uuid.uuid4().hex[:8]}",
+            str(config.get("title") or "YouTube Podcast"),
+            (workspace.source / "script.txt").read_text(encoding="utf-8") if (workspace.source / "script.txt").is_file() else "",
+            (workspace.source / "script-en.txt").read_text(encoding="utf-8") if (workspace.source / "script-en.txt").is_file() else "",
+            new_cover_path,
+            workspace,
+            str(config.get("voice") or self.settings.podcast.default_voice),
+            float(config.get("speed") or self.settings.podcast.default_speed),
+            str(config.get("thaiStylePrompt") or self.settings.podcast.default_style_prompt),
+            str(config.get("englishStylePrompt") or self.settings.podcast.default_english_style_prompt),
+            bool(config.get("enableSubtitles", True)),
+            str(config.get("description") or ""),
+            str(config.get("hashtags") or ""),
+            None,
+            str(config.get("bgmTrack") or self.settings.podcast.default_bgm_track),
+            float(config.get("bgmVolume", self.settings.podcast.default_bgm_volume)),
+            str(config.get("focus") or "center"),
+        )
+        return {"status": "COVER_SWAPPED", "jobId": job_id}
+

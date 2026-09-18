@@ -40,8 +40,7 @@ if (!window.AutoClipSound) {
       }, { once: true, passive: true });
     });
 
-    // เสียงสำเร็จ: "ติ้งต่อง" (Bright pleasant Ding-Dong chime)
-    // Note 1 (Ding): E5 (659.25 Hz), Note 2 (Dong): C5 (523.25 Hz)
+    // เสียงสำเร็จ: "ตึง-ตึง-ตึง-ตึ๊งงง" (Long, rich resonant 4-note chime with sustained bell decay ~2.5s)
     function playSuccess() {
       if (!isEnabled()) return;
       try {
@@ -50,71 +49,53 @@ if (!window.AutoClipSound) {
         const t = ac.currentTime;
 
         const master = ac.createGain();
-        master.gain.setValueAtTime(0.35, t);
+        master.gain.setValueAtTime(0.48, t);
         master.connect(ac.destination);
 
-        // --- Note 1 ("ติ้ง"): Starts at t ---
-        const ding = ac.createOscillator();
-        const dingGain = ac.createGain();
-        const dingHarmonic = ac.createOscillator();
-        const dingHarmonicGain = ac.createGain();
+        // 4 notes sequence: C5 (523.25 Hz), E5 (659.25 Hz), G5 (783.99 Hz), C6 (1046.50 Hz)
+        const notes = [
+          { freq: 523.25, time: 0.00, dur: 0.50, gain: 0.55 }, // ตึง 1
+          { freq: 659.25, time: 0.22, dur: 0.50, gain: 0.60 }, // ตึง 2
+          { freq: 783.99, time: 0.44, dur: 0.55, gain: 0.65 }, // ตึง 3
+          { freq: 1046.50, time: 0.68, dur: 1.85, gain: 0.75 }, // ตึ๊งงง (หางเสียงยาวกังวาน)
+        ];
 
-        ding.type = 'sine';
-        ding.frequency.setValueAtTime(659.25, t); // E5
-        dingGain.gain.setValueAtTime(0.0001, t);
-        dingGain.gain.exponentialRampToValueAtTime(0.55, t + 0.012);
-        dingGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.38);
+        notes.forEach(({ freq, time, dur, gain }) => {
+          const noteTime = t + time;
+          const osc = ac.createOscillator();
+          const oscGain = ac.createGain();
+          const harmonic = ac.createOscillator();
+          const harmonicGain = ac.createGain();
 
-        dingHarmonic.type = 'sine';
-        dingHarmonic.frequency.setValueAtTime(1318.5, t); // 2nd harmonic
-        dingHarmonicGain.gain.setValueAtTime(0.0001, t);
-        dingHarmonicGain.gain.exponentialRampToValueAtTime(0.12, t + 0.012);
-        dingHarmonicGain.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, noteTime);
+          oscGain.gain.setValueAtTime(0.0001, noteTime);
+          oscGain.gain.exponentialRampToValueAtTime(gain, noteTime + 0.015);
+          oscGain.gain.exponentialRampToValueAtTime(0.0001, noteTime + dur);
 
-        ding.connect(dingGain);
-        dingGain.connect(master);
-        dingHarmonic.connect(dingHarmonicGain);
-        dingHarmonicGain.connect(master);
+          // Harmonic for rich crystal chime sound
+          harmonic.type = 'sine';
+          harmonic.frequency.setValueAtTime(freq * 2, noteTime);
+          harmonicGain.gain.setValueAtTime(0.0001, noteTime);
+          harmonicGain.gain.exponentialRampToValueAtTime(gain * 0.22, noteTime + 0.012);
+          harmonicGain.gain.exponentialRampToValueAtTime(0.0001, noteTime + Math.min(dur * 0.6, 0.6));
 
-        ding.start(t);
-        dingHarmonic.start(t);
-        ding.stop(t + 0.4);
-        dingHarmonic.stop(t + 0.25);
+          osc.connect(oscGain);
+          oscGain.connect(master);
+          harmonic.connect(harmonicGain);
+          harmonicGain.connect(master);
 
-        // --- Note 2 ("ต่อง"): Starts at t + 0.20s ---
-        const t2 = t + 0.20;
-        const dong = ac.createOscillator();
-        const dongGain = ac.createGain();
-        const dongHarmonic = ac.createOscillator();
-        const dongHarmonicGain = ac.createGain();
-
-        dong.type = 'sine';
-        dong.frequency.setValueAtTime(523.25, t2); // C5
-        dongGain.gain.setValueAtTime(0.0001, t2);
-        dongGain.gain.exponentialRampToValueAtTime(0.65, t2 + 0.015);
-        dongGain.gain.exponentialRampToValueAtTime(0.0001, t2 + 0.75);
-
-        dongHarmonic.type = 'sine';
-        dongHarmonic.frequency.setValueAtTime(1046.5, t2); // 2nd harmonic
-        dongHarmonicGain.gain.setValueAtTime(0.0001, t2);
-        dongHarmonicGain.gain.exponentialRampToValueAtTime(0.15, t2 + 0.015);
-        dongHarmonicGain.gain.exponentialRampToValueAtTime(0.0001, t2 + 0.4);
-
-        dong.connect(dongGain);
-        dongGain.connect(master);
-        dongHarmonic.connect(dongHarmonicGain);
-        dongHarmonicGain.connect(master);
-
-        dong.start(t2);
-        dongHarmonic.start(t2);
-        dong.stop(t2 + 0.8);
-        dongHarmonic.stop(t2 + 0.45);
+          osc.start(noteTime);
+          harmonic.start(noteTime);
+          osc.stop(noteTime + dur + 0.05);
+          harmonic.stop(noteTime + dur * 0.6 + 0.05);
+        });
       } catch (e) {
         console.warn('AutoClipSound: Failed to play success chime', e);
       }
     }
 
-    // เสียงไม่สำเร็จ: "Alert / เตือน" (Distinct double warning alert pulse)
+    // เสียงไม่สำเร็จ / เกิดข้อผิดพลาด: 5 จังหวะเตือนชัดเจน (5-pulse distinct error warning)
     function playError() {
       if (!isEnabled()) return;
       try {
@@ -123,42 +104,41 @@ if (!window.AutoClipSound) {
         const t = ac.currentTime;
 
         const master = ac.createGain();
-        master.gain.setValueAtTime(0.32, t);
+        master.gain.setValueAtTime(0.42, t);
         master.connect(ac.destination);
 
         const filter = ac.createBiquadFilter();
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(850, t);
+        filter.frequency.setValueAtTime(950, t);
         filter.connect(master);
 
-        // Pulse 1: Eb4 (311.13 Hz)
-        const osc1 = ac.createOscillator();
-        const gain1 = ac.createGain();
-        osc1.type = 'triangle';
-        osc1.frequency.setValueAtTime(311.13, t);
-        gain1.gain.setValueAtTime(0.0001, t);
-        gain1.gain.linearRampToValueAtTime(0.75, t + 0.015);
-        gain1.gain.exponentialRampToValueAtTime(0.0001, t + 0.13);
+        // 5 pulses of warning tone (E4 -> Eb4 -> D4 -> C#4 -> C4 with longer tail)
+        const pulses = [
+          { freq: 329.63, offset: 0.00, dur: 0.14 }, // Pulse 1
+          { freq: 311.13, offset: 0.18, dur: 0.14 }, // Pulse 2
+          { freq: 293.66, offset: 0.36, dur: 0.14 }, // Pulse 3
+          { freq: 277.18, offset: 0.54, dur: 0.14 }, // Pulse 4
+          { freq: 261.63, offset: 0.72, dur: 0.42 }, // Pulse 5 (ยาวชัดเจน)
+        ];
 
-        osc1.connect(gain1);
-        gain1.connect(filter);
-        osc1.start(t);
-        osc1.stop(t + 0.14);
+        pulses.forEach(({ freq, offset, dur }) => {
+          const startTime = t + offset;
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
 
-        // Pulse 2: C4 (261.63 Hz) - lower tone warning
-        const t2 = t + 0.15;
-        const osc2 = ac.createOscillator();
-        const gain2 = ac.createGain();
-        osc2.type = 'triangle';
-        osc2.frequency.setValueAtTime(261.63, t2);
-        gain2.gain.setValueAtTime(0.0001, t2);
-        gain2.gain.linearRampToValueAtTime(0.85, t2 + 0.015);
-        gain2.gain.exponentialRampToValueAtTime(0.0001, t2 + 0.30);
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, startTime);
 
-        osc2.connect(gain2);
-        gain2.connect(filter);
-        osc2.start(t2);
-        osc2.stop(t2 + 0.32);
+          gain.gain.setValueAtTime(0.0001, startTime);
+          gain.gain.linearRampToValueAtTime(0.85, startTime + 0.015);
+          gain.gain.exponentialRampToValueAtTime(0.0001, startTime + dur);
+
+          osc.connect(gain);
+          gain.connect(filter);
+
+          osc.start(startTime);
+          osc.stop(startTime + dur + 0.05);
+        });
       } catch (e) {
         console.warn('AutoClipSound: Failed to play error alert', e);
       }

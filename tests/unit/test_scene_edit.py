@@ -209,3 +209,38 @@ def test_swap_podcast_cover(tmp_path):
         assert not (workspace.source / "motion_cycle.mp4").exists()
         # Verify new cover written
         assert (workspace.source / "cover.jpg").read_bytes() == b"NEW-COVER-BYTES"
+
+
+def test_quick_reel_scenes_and_edit(tmp_path):
+    settings = load_settings()
+    settings.app.workspace = tmp_path / "workspaces"
+    settings.app.workspace.mkdir(parents=True, exist_ok=True)
+    wm = WorkspaceManager(settings.app.workspace)
+    job_id = "test-qr-edit"
+    workspace = wm.create(job_id)
+
+    qr_cfg = {
+        "topic": "Quick Reel Test",
+        "description": "Desc",
+        "tts": "ข้อความ Quick Reel เดิม",
+        "script": "ข้อความ Quick Reel เดิม",
+        "voice": "Fenrir",
+        "speed": 1.05,
+        "motion": "gentle_float",
+        "fit": "contain",
+        "imageCount": 1,
+    }
+    (workspace.source / "quick-reel-settings.json").write_text(json.dumps(qr_cfg), encoding="utf-8")
+    (workspace.source / "image-001.png").write_bytes(b"RAW-IMG")
+    (workspace.source / "framed-001.png").write_bytes(b"FRAMED-IMG")
+    (workspace.generated_audio / "scene-01.wav").write_bytes(b"WAV" * 100)
+
+    service = JobService(settings)
+    record = JobRecord(job_id=job_id, status=JobStatus.COMPLETED, progress=100, current_step="Ready", metadata={"projectType": "quick-reel"})
+    service.registry.set(record)
+
+    # 1. get_scenes for Quick Reel
+    scenes_data = service.get_scenes(job_id)
+    assert scenes_data["projectType"] == "quick-reel"
+    assert scenes_data["sceneCount"] == 1
+    assert scenes_data["scenes"][0]["id"] == "scene-01"

@@ -1187,3 +1187,246 @@ class QuickReelService:
             "message": f"เปลี่ยน Motion เป็น {selected_motion} สำเร็จแล้ว",
         }
 
+    def edit_quick_reel(
+        self,
+        job_id: str,
+        new_script: str | None = None,
+        new_motion: str | None = None,
+        fit: str | None = None,
+        image_bytes: bytes | None = None,
+        image_filename: str | None = None,
+    ) -> dict:
+        record = self.job_service.restore(job_id)
+        if not record:
+            raise AppError("JOB_NOT_FOUND", "ไม่พบงาน Quick Reel นี้")
+        workspace = self.job_service.workspaces.get(job_id)
+        if not workspace.root.is_dir():
+            raise AppError("WORKSPACE_NOT_FOUND", "ไม่พบ workspace ของงานนี้")
+
+        settings_file = workspace.source / "quick-reel-settings.json"
+        settings_data: dict = {}
+        if settings_file.is_file():
+            try:
+                settings_data = json.loads(settings_file.read_text(encoding="utf-8"))
+            except Exception:
+                pass
+
+        target_width = TARGET_WIDTH
+        target_height = TARGET_HEIGHT
+        current_fit = settings_data.get("fit", "contain")
+        selected_fit = fit.strip().lower() if fit else current_fit
+        if selected_fit not in {"cover", "contain"}:
+            selected_fit = "contain"
+
+        framed_image = workspace.source / "framed-001.png"
+
+        # 1. Handle Image Replacement
+        if image_bytes and len(image_bytes) > 0:
+            ext = Path(image_filename or "image.png").suffix.lower() or ".png"
+            if ext not in {".png", ".jpg", ".jpeg", ".webp"}:
+                ext = ".png"
+            for old_img in workspace.source.glob("image-001.*"):
+                try:
+                    old_img.unlink()
+                except Exception:
+                    pass
+            new_raw_image = workspace.source / f"image-001{ext}"
+            new_raw_image.write_bytes(image_bytes)
+
+            try:
+                with Image.open(new_raw_image) as im:
+                    orig_w, orig_h = im.size
+                    if orig_w > orig_h:
+                        target_width = 1920
+                        target_height = 1080
+            except Exception:
+                pass
+
+            self.prepare_image(new_raw_image, framed_image, fit=selected_fit, target_width=target_width, target_height=target_height)
+            if settings_data.get("hookEnabled"):
+                self.apply_hook_overlay(
+                    framed_image,
+                    settings_data.get("hookText", ""),
+                    settings_data.get("hookPosition", "top"),
+                    framed_image,
+                )
+            thumb = workspace.source / "thumbnail.jpg"
+            if thumb.is_file():
+                thumb.unlink()
+        elif framed_image.is_file():
+            try:
+                with Image.open(framed_image) as im:
+                    target_width, target_height = im.size
+            except Exception:
+                pass
+
+        settings_data["fit"] = selected_fit
+
+        # 2. Handle Script / Narration
+        clean_audio = workspace.generated_audio / "scene-01.wav"
+        if not clean_audio.is_file():
+            clean_audio = workspace.generated_audio / "quick-reel-narration.wav"
+
+        audio_invalidated = False
+        if new_script is not None and new_script.strip() and new_script.strip() != settings_data.get("script", "").strip():
+            script_text = new_script.strip()
+            voice = settings_data.get("voice") or self.settings.quick_reel.default_voice
+            speed = float(settings_data.get("speed") or self.settings.quick_reel.default_speed)
+            style_prompt = settings_data.get("stylePrompt") or self.settings.quick_reel.default_style_prompt
+
+            tts_provider = create_tts_provider("google-gemini", self.settings)
+            narration_processor = NarrationAudioProcessor(self.ffmpeg, self.ffprobe, self.settings)
+
+            raw_audio = workspace.generated_audio / "scene-01.wav"
+            self._synthesize_narration(tts_provider, script_text, raw_audio, voice, speed, style_prompt)
+            clean_audio, audio_duration = self._process_narration(narration_processor, raw_audio)
+            settings_data["script"] = script_text
+            audio_invalidated = True
+        else:
+            if not clean_audio.is_file():
+                raise AppError("AUDIO_NOT_FOUND", "ไม่พบไฟล์เสียงบรรยายเดิม")
+            audio_duration = self.ffprobe.duration(clean_audio)
+            script_text = settings_data.get("script", "")
+
+        # 3. Subtitles
+        sub_path = workspace.subtitles / "scene-01.srt"
+        has_subs = settings_data.get("subtitlesEnabled", True)
+        if has_subs:
+            SubtitleRenderer().write(script_text, audio_duration, sub_path, start_seconds=0.0, end_seconds=audio_duration)
+
+        # 4. Motion
+        motion_map = {
+            "none": "none",
+            "static": "none",
+            "gentle_float": "gentle_float",
+            "cosmic_float": "gentle_float",
+            "cinematic_push_in": "cinematic_push_in",
+            "cinematic_pull_out": "cinematic_pull_out",
+            "hook_punch_in": "hook_punch_in",
+            "documentary_pan": "documentary_pan",
+            "pan_up": "pan_up",
+            "drift_diagonal": "drift_diagonal",
+            "breathing_pulse": "breathing_pulse",
+            "slow_zoom": "slow_zoom_in",
+            "slow_zoom_in": "slow_zoom_in",
+            "zoom": "slow_zoom_in",
+        }
+        effective_motion = new_motion if new_motion else settings_data.get("motion", "none")
+        selected_motion = motion_map.get(effective_motion, "none")
+        settings_data["motion"] = selected_motion
+
+        # 5. Render Scene
+        render_profile = RenderProfile(target_width, target_height, 30, "libx264", "yuv420p")
+        scene_renderer = SceneRenderer(self.ffmpeg, self.settings, render_profile)
+
+        fast_motions = {"cinematic_push_in", "cinematic_pull_out", "hook_punch_in", "documentary_pan", "pan_up", "drift_diagonal"}
+        motion_speed = "normal" if selected_motion in fast_motions else "slow"
+        motion_intensity = 0.18 if selected_motion in {"cinematic_push_in", "hook_punch_in"} else (0.12 if selected_motion in {"gentle_float", "breathing_pulse"} else 0.15)
+
+        scene_model = Scene(
+            id="scene-01",
+            image=framed_image.name,
+            narration=script_text,
+            tts_text=script_text,
+            subtitle=script_text if has_subs else "",
+            motion=selected_motion,
+            motion_speed=motion_speed,
+            motion_intensity=motion_intensity,
+            focus="center",
+            transition="none",
+            show_subtitle=has_subs,
+        )
+
+        scene_output = workspace.rendered_scenes / "scene-01.mp4"
+        scene_renderer.render(
+            scene_model, framed_image, clean_audio,
+            subtitle=sub_path if has_subs else None,
+            duration=audio_duration, output=scene_output,
+        )
+
+        # 6. Compose Final Video
+        final_output = workspace.output / "final.mp4"
+        title = settings_data.get("title", "")
+        description = settings_data.get("description", "")
+        bgm_enabled = settings_data.get("bgmEnabled", False)
+        bgm_track = settings_data.get("bgmTrack", "cosmic_drift")
+        bgm_volume = float(settings_data.get("bgmVolume", 0.10))
+
+        resolved_bgm: Path | None = None
+        if bgm_enabled:
+            custom_bgm_candidates = sorted(list(workspace.source.glob("bgm.*")))
+            if custom_bgm_candidates and custom_bgm_candidates[0].is_file():
+                resolved_bgm = custom_bgm_candidates[0]
+            else:
+                resolved_bgm = resolve_podcast_bgm(self.settings.app.workspace, bgm_track)
+
+        meta_args = build_ffmpeg_metadata_args(
+            title=title,
+            description=description or title,
+            artist="AutoClip Quick Reel",
+        )
+
+        if resolved_bgm and resolved_bgm.is_file():
+            audio_filter = (
+                f"[0:a]volume=1.0[n];[1:a]volume={bgm_volume},"
+                "afade=t=in:st=0:d=0.5[bg];[bg][n]sidechaincompress=threshold=0.02:ratio=8:attack=20:release=300[duck];"
+                "[n][duck]amix=inputs=2:duration=first:normalize=0,loudnorm=I=-16:LRA=11:TP=-1.5[a]"
+            )
+            self.ffmpeg.run(
+                [
+                    "-y", "-i", str(scene_output),
+                    "-stream_loop", "-1", "-i", str(resolved_bgm),
+                    "-filter_complex", audio_filter,
+                    "-map", "0:v", "-map", "[a]",
+                    "-c:v", "copy", "-c:a", "aac", "-ar", "48000", "-ac", "2",
+                    "-shortest", "-movflags", "+faststart",
+                    *meta_args, str(final_output)
+                ],
+                "QUICK_REEL_COMPOSITION_FAILED",
+            )
+        else:
+            self.ffmpeg.run(
+                [
+                    "-y", "-i", str(scene_output),
+                    "-map", "0:v", "-map", "0:a",
+                    "-c", "copy",
+                    "-movflags", "+faststart",
+                    *meta_args, str(final_output)
+                ],
+                "QUICK_REEL_COMPOSITION_FAILED",
+            )
+
+        probe = self.ffprobe.probe(final_output)
+        v_stream = next(s for s in probe["streams"] if s.get("codec_type") == "video")
+        dur = round(float(probe["format"]["duration"]), 3)
+
+        settings_file.write_text(json.dumps(settings_data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        cur_meta = dict(record.metadata or {})
+        qr_meta = dict(cur_meta.get("quickReel") or {})
+        qr_meta["motion"] = selected_motion
+        cur_meta["quickReel"] = qr_meta
+        cur_meta["durationSeconds"] = dur
+        cur_meta["resolution"] = f"{v_stream['width']}x{v_stream['height']}"
+        cur_meta["outputFormat"] = "youtube" if v_stream['width'] > v_stream['height'] else "vertical"
+        cur_meta["fileSizeBytes"] = final_output.stat().st_size
+        record.metadata = cur_meta
+
+        self.job_service.registry.set(record)
+        if self.persistence:
+            self.persistence.upsert_job(record)
+
+        self._log(job_id, "SUCCESS", "อัปเดต Quick Reel เรียบร้อยแล้ว")
+
+        return {
+            "status": "QUICK_REEL_UPDATED",
+            "jobId": job_id,
+            "sceneId": "scene-01",
+            "audioInvalidated": audio_invalidated,
+            "videoInvalidated": True,
+            "videoUrl": f"/api/jobs/{job_id}/video",
+            "durationSeconds": dur,
+            "message": "แก้ไข Quick Reel สำเร็จแล้ว",
+        }
+
+

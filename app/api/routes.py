@@ -642,6 +642,18 @@ async def edit_job_scene(
                 img_bytes = await image.read()
                 img_filename = image.filename
 
+        workspace = request.app.state.job_service.workspaces.get(job_id)
+        if (workspace.source / "quick-reel-settings.json").is_file():
+            service = request.app.state.quick_reel_service
+            return await asyncio.to_thread(
+                service.edit_quick_reel,
+                job_id,
+                new_script=narration,
+                new_motion=motion,
+                image_bytes=img_bytes,
+                image_filename=img_filename,
+            )
+
         return request.app.state.job_service.edit_scene(
             job_id,
             scene_id,

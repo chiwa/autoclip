@@ -6,10 +6,11 @@ import shutil
 import sqlite3
 import uuid
 from typing import Any
+from urllib.parse import quote
 from datetime import date
 from pathlib import Path
 
-from fastapi import APIRouter, File, Form, HTTPException, Request, UploadFile
+from fastapi import APIRouter, File, Form, HTTPException, Request, Response, UploadFile
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
@@ -753,6 +754,22 @@ def save_video_metadata(request: Request, job_id: str, body: VideoMetadataReques
         description=full_desc if full_desc != "-" else "",
     )
     return metadata["videoMetadata"]
+
+@router.get("/jobs/{job_id}/export-json")
+def export_job_json(request: Request, job_id: str, download: bool = False):
+    try:
+        data, filename = request.app.state.job_service.export_job_json(job_id)
+    except AppError as exc:
+        raise HTTPException(400, public_error(exc)) from exc
+
+    if download:
+        content = json.dumps(data, ensure_ascii=False, indent=2).encode("utf-8")
+        encoded_filename = quote(filename)
+        headers = {
+            "Content-Disposition": f'attachment; filename="{encoded_filename}"; filename*=utf-8\'\'{encoded_filename}'
+        }
+        return Response(content=content, media_type="application/json; charset=utf-8", headers=headers)
+    return data
 
 @router.get("/jobs/{job_id}/video")
 def get_video(request: Request, job_id: str) -> FileResponse:

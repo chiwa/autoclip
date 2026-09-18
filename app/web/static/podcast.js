@@ -229,6 +229,118 @@
     setTimeout(() => applyPodcastJson({ quiet: true }), 0);
   });
 
+  function buildPodcastJsonFromForm() {
+    const title = titleInput?.value?.trim() || '';
+    const desc = $('#podcastDescription')?.value?.trim() || '';
+    const rawHashtags = $('#podcastHashtags')?.value?.trim() || '';
+    const hashtags = rawHashtags ? rawHashtags.split(/\s+/).filter(Boolean) : [];
+    const voiceVal = voiceSelect?.value || 'Enceladus';
+    const speedVal = Number(speedSlider?.value || 0.95);
+    const thaiScript = scriptInput?.value?.trim() || '';
+    const thaiStyle = styleInput?.value?.trim() || '';
+    const hasEnglish = Boolean(enableEnglishAudio?.checked);
+    const englishScript = englishScriptInput?.value?.trim() || '';
+    const englishStyle = englishStyleInput?.value?.trim() || '';
+    const bgmTrack = bgmSelect?.value || 'none';
+    const bgmVol = Number(bgmVolume?.value || 0.12);
+
+    const data = {
+      title: title,
+      caption: {
+        thai: desc,
+        english: ''
+      },
+      hashtags: hashtags,
+      tts: {
+        thai: {
+          voice: voiceVal,
+          speed: speedVal,
+          style: thaiStyle,
+          script: thaiScript
+        }
+      },
+      audio: {
+        generate_english_audio: hasEnglish,
+        bgm_track: bgmTrack,
+        bgm_volume: bgmVol
+      }
+    };
+    if (hasEnglish || englishScript) {
+      data.tts.english = {
+        voice: voiceVal,
+        speed: speedVal,
+        style: englishStyle,
+        script: englishScript
+      };
+    }
+    return data;
+  }
+
+  function downloadPodcastJson(data, filename) {
+    const jsonStr = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  const btnViewPodcastJson = $('#btnViewPodcastJson');
+  const btnExportPodcastJson = $('#btnExportPodcastJson');
+  const jsonViewDialog = $('#jsonViewDialog');
+  const jsonDialogCode = $('#jsonDialogCode');
+  const btnCopyJsonDialog = $('#btnCopyJsonDialog');
+  const btnDownloadJsonDialog = $('#btnDownloadJsonDialog');
+  const btnCloseJsonDialog = $('#btnCloseJsonDialog');
+  const btnCloseJsonDialogFooter = $('#btnCloseJsonDialogFooter');
+
+  let currentPodcastJson = null;
+
+  if (btnViewPodcastJson && jsonViewDialog) {
+    btnViewPodcastJson.addEventListener('click', () => {
+      currentPodcastJson = buildPodcastJsonFromForm();
+      if (jsonDialogCode) jsonDialogCode.textContent = JSON.stringify(currentPodcastJson, null, 2);
+      jsonViewDialog.showModal();
+    });
+
+    btnCloseJsonDialog?.addEventListener('click', () => jsonViewDialog.close());
+    btnCloseJsonDialogFooter?.addEventListener('click', () => jsonViewDialog.close());
+    jsonViewDialog.addEventListener('click', (e) => {
+      if (e.target === jsonViewDialog) jsonViewDialog.close();
+    });
+
+    btnCopyJsonDialog?.addEventListener('click', async () => {
+      if (!currentPodcastJson) return;
+      try {
+        await navigator.clipboard.writeText(JSON.stringify(currentPodcastJson, null, 2));
+        const orig = btnCopyJsonDialog.textContent;
+        btnCopyJsonDialog.textContent = '✓ คัดลอกแล้ว!';
+        setTimeout(() => { btnCopyJsonDialog.textContent = orig; }, 2000);
+      } catch (_) {
+        alert('คัดลอกไม่สำเร็จ');
+      }
+    });
+
+    btnDownloadJsonDialog?.addEventListener('click', () => {
+      if (!currentPodcastJson) currentPodcastJson = buildPodcastJsonFromForm();
+      const titleName = currentPodcastJson.title ? currentPodcastJson.title.replace(/[\\/*?:"<>|]/g, '').trim().replace(/\s+/g, '-') : 'podcast';
+      downloadPodcastJson(currentPodcastJson, `${titleName || 'podcast'}.json`);
+    });
+  }
+
+  if (btnExportPodcastJson) {
+    btnExportPodcastJson.addEventListener('click', () => {
+      const data = buildPodcastJsonFromForm();
+      const titleName = data.title ? data.title.replace(/[\\/*?:"<>|]/g, '').trim().replace(/\s+/g, '-') : 'podcast';
+      downloadPodcastJson(data, `${titleName || 'podcast'}.json`);
+    });
+  }
+
+
   const tabThaiStyle = $('#tabThaiStyle');
   const tabEnglishStyle = $('#tabEnglishStyle');
   const panelThaiStyle = $('#panelThaiStyle');

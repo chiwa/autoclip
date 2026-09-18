@@ -1,7 +1,11 @@
+import json
+import shutil
 from fastapi.testclient import TestClient
 
 from app.main import app
 from app.infrastructure.tts.providers import DummyTtsProvider
+from app.domain.models import JobRecord
+from app.domain.enums import JobStatus
 
 
 client = TestClient(app)
@@ -175,3 +179,41 @@ def test_retry_non_failed_job():
 def test_job_thumbnail_missing_returns_404():
     response = client.get("/api/jobs/non-existent-job/thumbnail")
     assert response.status_code == 404
+
+
+def test_export_job_json_api():
+    registry = app.state.job_service.registry
+    wm = app.state.job_service.workspaces
+    job_id = "test-export-api-job"
+    shutil.rmtree(wm.get(job_id).root, ignore_errors=True)
+    ws = wm.create(job_id)
+    try:
+        ws.source.mkdir(parents=True, exist_ok=True)
+        qr_data = {
+            "topic": "ทดสอบ API Export",
+            "description": "คำอธิบาย",
+            "voice": "Iapetus",
+            "speed": 1.10,
+            "motion": "gentle_float",
+            "tts": "สวัสดีครับ",
+        }
+        (ws.source / "quick-reel-settings.json").write_text(json.dumps(qr_data), encoding="utf-8")
+        registry.set(JobRecord(job_id=job_id, status=JobStatus.COMPLETED, progress=100, current_step="Done"))
+
+        # JSON view
+        res = client.get(f"/api/jobs/{job_id}/export-json")
+        assert res.status_code == 200
+        data = res.json()
+        assert data["topic"] == "ทดสอบ API Export"
+        assert data["voice"]["voice"] == "Iapetus"
+
+        # Download mode
+        res_dl = client.get(f"/api/jobs/{job_id}/export-json?download=1")
+        assert res_dl.status_code == 200
+        assert "attachment" in res_dl.headers["content-disposition"]
+        assert res_dl.headers["content-type"].startswith("application/json")
+    finally:
+        shutil.rmtree(ws.root, ignore_errors=True)
+
+
+

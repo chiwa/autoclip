@@ -95,6 +95,67 @@ let source=null,lastFile=null,previewScript=null,previewDirty=false,manuallyScro
 document.addEventListener('change',event=>{if(event.target?.id==='videoTtsVoice'&&previewScript){previewScript.voice=previewScript.voice||{};previewScript.voice.voice=event.target.value;previewScript.reel_tts=previewScript.reel_tts||{};previewScript.reel_tts.voice=event.target.value}});
 file.onchange=async()=>{lastFile=file.files[0]||null;info.textContent=lastFile?`${lastFile.name} · ${(lastFile.size/1024/1024).toFixed(2)} MB`:'No file selected';generate.disabled=true;if(!lastFile)return;const body=new FormData();body.append('file',lastFile);const box=$('#packagePreview'),list=$('#previewScenes'),errorBox=$('#previewError');box.hidden=false;list.textContent='กำลังอ่าน script.json และเตรียมภาพ Preview…';errorBox.hidden=true;try{const r=await fetch('/api/package-preview',{method:'POST',body}),data=await r.json();if(!r.ok)throw data.detail||data;previewScript=data.script;applyReelTtsControls(previewScript.reel_tts||savedReelTts);$('#previewProject').textContent=`${previewScript.project.title} · ${previewScript.scenes.length} scenes`;list.replaceChildren(...previewScript.scenes.map((scene,index)=>{const card=document.createElement('article');card.className='scene-card';const image=data.imagePreviews?.[scene.id];card.innerHTML=`<div class="scene-number">${String(index+1).padStart(2,'0')}</div><div class="scene-body"><h3>${scene.id}</h3>${image?`<img src="${image}" alt="${scene.id}">`:''}<label>Narration<textarea data-key="narration" rows="3">${scene.narration}</textarea></label><label>Subtitle<textarea data-key="subtitle" rows="2">${scene.subtitle||scene.narration}</textarea></label><div class="tts-options"><label>Motion<select data-key="motion"><option>none</option><option>slow_zoom_in</option><option>slow_zoom_out</option><option>pan_left_to_right</option><option>pan_right_to_left</option><option>pan_up</option><option>pan_down</option><option>cinematic_push_in</option><option>cinematic_pull_out</option><option>documentary_pan</option><option>gentle_float</option></select></label><label>Transition<input data-key="transition" value="${scene.transition||'fade'}"></label></div><div class="scene-tts-preview"><button type="button" class="button secondary scene-tts-button">ฟังเสียงฉากนี้ (${index===0?'Hook':'Normal'})</button><audio class="scene-tts-audio" controls preload="none" hidden></audio><span class="muted scene-tts-status" role="status"></span></div></div>`;card.querySelector('[data-key="motion"]').value=scene.motion;card.querySelectorAll('[data-key]').forEach(el=>el.oninput=()=>{scene[el.dataset.key]=el.value});const playButton=card.querySelector('.scene-tts-button'),audio=card.querySelector('.scene-tts-audio'),audioStatus=card.querySelector('.scene-tts-status');playButton.onclick=async()=>{const speechText=(scene.tts_text||scene.narration||'').trim();if(!speechText){audioStatus.textContent='ไม่มีข้อความสำหรับสร้างเสียง';return}playButton.disabled=true;audioStatus.textContent='กำลังสร้างเสียง…';try{const ttsBody=new FormData(),config=readReelTtsControls(),mode=index===0?'hook':'normal';ttsBody.append('text',speechText);ttsBody.append('provider',$('#videoTtsProvider')?.value||'google-gemini');ttsBody.append('voice',config.voice);ttsBody.append('speed',String(config[mode].speed));ttsBody.append('style_prompt',config[mode].style);const ttsResponse=await fetch('/api/tts',{method:'POST',body:ttsBody});if(!ttsResponse.ok){const errorData=await ttsResponse.json();throw errorData.detail||errorData}const blob=await ttsResponse.blob();if(audio.dataset.objectUrl)URL.revokeObjectURL(audio.dataset.objectUrl);const objectUrl=URL.createObjectURL(blob);audio.dataset.objectUrl=objectUrl;audio.src=objectUrl;audio.hidden=false;audioStatus.textContent='พร้อมฟังเสียง';await audio.play()}catch(error){audioStatus.textContent=`${error?.code||'TTS_GENERATION_FAILED'}: ${error?.message||'สร้างเสียงไม่สำเร็จ'}`}finally{playButton.disabled=false}};return card}));generate.disabled=false}catch(e){list.replaceChildren();errorBox.textContent=`${e.code||'PACKAGE_INVALID'}: ${e.message||'ไม่สามารถอ่าน ZIP ได้'}`;errorBox.hidden=false}}
 document.addEventListener('input',event=>{if(event.target?.dataset?.key&&previewScript)previewDirty=true;if(event.target?.dataset?.key!=='subtitle'||!previewScript)return;const card=event.target.closest('.scene-card');const index=card?[...$('#previewScenes').children].indexOf(card):-1;if(index>=0)previewScript.scenes[index].show_subtitle=true});
+function downloadPackageScriptJson(obj, filename) {
+  const jsonStr = JSON.stringify(obj, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+const btnViewPackageJson = $('#btnViewPackageJson');
+const btnExportPackageJson = $('#btnExportPackageJson');
+const jsonViewDialog = $('#jsonViewDialog');
+const jsonDialogCode = $('#jsonDialogCode');
+const btnCopyJsonDialog = $('#btnCopyJsonDialog');
+const btnDownloadJsonDialog = $('#btnDownloadJsonDialog');
+const btnCloseJsonDialog = $('#btnCloseJsonDialog');
+const btnCloseJsonDialogFooter = $('#btnCloseJsonDialogFooter');
+if (btnViewPackageJson && jsonViewDialog) {
+  btnViewPackageJson.addEventListener('click', () => {
+    if (!previewScript) {
+      alert('ยังไม่ได้อัปโหลดหรือเปิดแพ็กเกจ');
+      return;
+    }
+    if (jsonDialogCode) jsonDialogCode.textContent = JSON.stringify(previewScript, null, 2);
+    jsonViewDialog.showModal();
+  });
+  btnCloseJsonDialog?.addEventListener('click', () => jsonViewDialog.close());
+  btnCloseJsonDialogFooter?.addEventListener('click', () => jsonViewDialog.close());
+  jsonViewDialog.addEventListener('click', (e) => {
+    if (e.target === jsonViewDialog) jsonViewDialog.close();
+  });
+  btnCopyJsonDialog?.addEventListener('click', async () => {
+    if (!previewScript) return;
+    try {
+      await navigator.clipboard.writeText(JSON.stringify(previewScript, null, 2));
+      const orig = btnCopyJsonDialog.textContent;
+      btnCopyJsonDialog.textContent = '✓ คัดลอกแล้ว!';
+      setTimeout(() => { btnCopyJsonDialog.textContent = orig; }, 2000);
+    } catch (_) {
+      alert('คัดลอกไม่สำเร็จ');
+    }
+  });
+  btnDownloadJsonDialog?.addEventListener('click', () => {
+    if (!previewScript) return;
+    const titleName = previewScript.project?.title ? previewScript.project.title.replace(/[\\/*?:"<>|]/g, '').trim().replace(/\s+/g, '-') : 'script';
+    downloadPackageScriptJson(previewScript, `${titleName || 'script'}.json`);
+  });
+}
+if (btnExportPackageJson) {
+  btnExportPackageJson.addEventListener('click', () => {
+    if (!previewScript) {
+      alert('ยังไม่ได้อัปโหลดหรือเปิดแพ็กเกจ');
+      return;
+    }
+    const titleName = previewScript.project?.title ? previewScript.project.title.replace(/[\\/*?:"<>|]/g, '').trim().replace(/\s+/g, '-') : 'script';
+    downloadPackageScriptJson(previewScript, `${titleName || 'script'}.json`);
+  });
+}
 logs.addEventListener('scroll',()=>{manuallyScrolled=logs.scrollHeight-logs.scrollTop-logs.clientHeight>40});
 technicalLogs?.addEventListener('scroll',()=>{technicalManuallyScrolled=technicalLogs.scrollHeight-technicalLogs.scrollTop-technicalLogs.clientHeight>40});
 function updateSnapshot(job){state.textContent=job.status;percent.textContent=`${job.progress}%`;progress.value=job.progress;step.textContent=job.currentStep;appendTechnical({timestamp:new Date().toISOString(),level:'STATE',message:`${job.status} · ${job.progress}% · ${job.currentStep||''}`});if(job.logs)renderLogs(job.logs);if(job.status==='FAILED')showFailure(job.error,job.currentStep)}

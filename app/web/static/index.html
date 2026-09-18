@@ -62,7 +62,11 @@
               <span class="eyebrow" style="font-size: 0.72rem; margin-bottom: 4px;">PACKAGE REVIEW</span>
               <h3 class="studio-card-title">ตรวจสอบ Scenes ก่อนสร้างวิดีโอ</h3>
             </div>
-            <span id="previewProject" class="muted" style="font-size: 0.85rem;"></span>
+            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+              <span id="previewProject" class="muted" style="font-size: 0.85rem;"></span>
+              <button type="button" id="btnViewPackageJson" class="button secondary small" title="ดู script.json"><span>👁️</span> ดู JSON</button>
+              <button type="button" id="btnExportPackageJson" class="button secondary small" title="ดาวน์โหลด script.json"><span>⬇️</span> Export JSON</button>
+            </div>
           </div>
           <div id="previewTabs" class="preview-tabs" role="tablist"></div>
           <div id="previewScenes" class="scene-list"></div>
@@ -195,12 +199,38 @@
   <!-- Thai TTS is available on the dedicated /tts page; legacy selectors remain
        documented here for clients that still reference the original home UI. -->
   <!-- Text to Speech ภาษาไทย id="ttsText" <audio id="ttsAudio" controls> id="ttsDownload" -->
+
+  <!-- JSON Viewer Dialog Modal -->
+  <dialog id="jsonViewDialog" class="studio-dialog">
+    <div class="studio-dialog-card">
+      <div class="studio-dialog-head">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.25rem;">📄</span>
+          <h3 class="studio-dialog-title" id="jsonDialogTitle">Package script.json</h3>
+        </div>
+        <button type="button" class="studio-dialog-close" id="btnCloseJsonDialog" aria-label="Close">✕</button>
+      </div>
+      <div class="studio-dialog-toolbar">
+        <span id="jsonDialogStatus" class="muted" style="font-size: 0.85rem;">script.json ของแพ็กเกจนี้ (อัปเดตตามการแก้ไขซีนแบบเรียลไทม์)</span>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" id="btnCopyJsonDialog" class="button secondary small">📋 คัดลอก JSON</button>
+          <button type="button" id="btnDownloadJsonDialog" class="button secondary small">⬇️ ดาวน์โหลด .json</button>
+        </div>
+      </div>
+      <div class="studio-dialog-body">
+        <pre class="json-preview-pre"><code id="jsonDialogCode"></code></pre>
+      </div>
+      <div class="studio-dialog-footer">
+        <button type="button" class="button secondary" id="btnCloseJsonDialogFooter">ปิด</button>
+      </div>
+    </div>
+  </dialog>
 </main>
 
 <script src="/static/nav.js?v=5"></script>
 <script src="/static/channels.js?v=1"></script>
 <script>AutoClipChannels.mount('#channelPicker');</script>
-<script src="/static/app.js?v=25"></script>
+<script src="/static/app.js?v=26"></script>
 </body>
 </html>
 

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import math
+import re
 import shutil
 import zipfile
 import logging
@@ -1954,4 +1955,130 @@ class JobService:
             str(config.get("focus") or "center"),
         )
         return {"status": "COVER_SWAPPED", "jobId": job_id}
+
+    def export_job_json(self, job_id: str) -> tuple[dict, str]:
+        """Export the job's configuration/script as a clean, importable JSON structure.
+        Returns (json_data, recommended_filename).
+        """
+        record = self.restore(job_id)
+        if not record:
+            raise AppError("JOB_NOT_FOUND", "ไม่พบข้อมูลงานนี้")
+
+        workspace = self.workspaces.get(job_id)
+        if not workspace.root.is_dir():
+            raise AppError("WORKSPACE_NOT_FOUND", "ไม่พบโฟลเดอร์สำหรับงานนี้")
+
+        def _safe_filename(name: str, fallback: str = "export") -> str:
+            cleaned = re.sub(r'[\\/*?:"<>|]', "", name).strip()
+            cleaned = re.sub(r"\s+", "-", cleaned)
+            return cleaned if cleaned else fallback
+
+        # 1. Quick Reel
+        qr_settings_path = workspace.source / "quick-reel-settings.json"
+        if qr_settings_path.is_file():
+            try:
+                cfg = json.loads(qr_settings_path.read_text(encoding="utf-8"))
+            except Exception:
+                cfg = {}
+
+            topic = cfg.get("topic") or (record.metadata or {}).get("projectTitle") or "Quick Reel"
+            voice_cfg = {
+                "provider": "google",
+                "voice": cfg.get("voice", "Iapetus"),
+                "speed": cfg.get("speed", 1.10),
+            }
+            if cfg.get("style_prompt"):
+                voice_cfg["style_prompt"] = cfg["style_prompt"]
+
+            tts_val = cfg.get("tts_segments") if cfg.get("tts_segments") else cfg.get("tts", "")
+
+            export_data = {
+                "topic": topic,
+                "description": cfg.get("description", ""),
+                "voice": voice_cfg,
+                "motion": cfg.get("motion", "gentle_float"),
+                "tts": tts_val,
+            }
+            if cfg.get("hashtags"):
+                export_data["hashtags"] = cfg["hashtags"]
+
+            safe_name = _safe_filename(topic, f"quick-reel-{job_id[:8]}")
+            return export_data, f"{safe_name}.json"
+
+        # 2. Podcast
+        pc_settings_path = workspace.source / "podcast-settings.json"
+        if pc_settings_path.is_file():
+            try:
+                cfg = json.loads(pc_settings_path.read_text(encoding="utf-8"))
+            except Exception:
+                cfg = {}
+
+            title = cfg.get("title") or (record.metadata or {}).get("projectTitle") or "YouTube Podcast"
+            thai_script_file = workspace.source / "script.txt"
+            thai_script = thai_script_file.read_text(encoding="utf-8") if thai_script_file.is_file() else ""
+            en_file = workspace.source / "script-en.txt"
+            en_script = en_file.read_text(encoding="utf-8") if en_file.is_file() else ""
+
+            tags_raw = cfg.get("hashtags", "")
+            if isinstance(tags_raw, str):
+                hashtags = [t.strip() for t in tags_raw.split() if t.strip()]
+            elif isinstance(tags_raw, list):
+                hashtags = [str(t).strip() for t in tags_raw if str(t).strip()]
+            else:
+                hashtags = []
+
+            export_data = {
+                "title": title,
+                "caption": {
+                    "thai": cfg.get("description", ""),
+                    "english": "",
+                },
+                "hashtags": hashtags,
+                "tts": {
+                    "thai": {
+                        "voice": cfg.get("voice", "Enceladus"),
+                        "speed": cfg.get("speed", 0.95),
+                        "style": cfg.get("thaiStylePrompt", ""),
+                        "script": thai_script,
+                    }
+                },
+                "audio": {
+                    "generate_english_audio": bool(en_script),
+                    "bgm_track": cfg.get("bgmTrack", "none"),
+                    "bgm_volume": cfg.get("bgmVolume", 0.12),
+                },
+            }
+            if en_script:
+                export_data["tts"]["english"] = {
+                    "voice": cfg.get("voice", "Enceladus"),
+                    "speed": cfg.get("speed", 0.95),
+                    "style": cfg.get("englishStylePrompt", ""),
+                    "script": en_script,
+                }
+
+            safe_name = _safe_filename(title, f"podcast-{job_id[:8]}")
+            return export_data, f"{safe_name}.json"
+
+        # 3. Standard Reel (script.json)
+        script_file = workspace.extracted / "script.json"
+        if not script_file.is_file():
+            script_file = workspace.source / "script.json"
+        if script_file.is_file():
+            try:
+                data = json.loads(script_file.read_text(encoding="utf-8"))
+            except Exception:
+                data = {}
+            title = data.get("project", {}).get("title") or (record.metadata or {}).get("projectTitle") or "reel"
+            safe_name = _safe_filename(title, f"reel-{job_id[:8]}")
+            return data, f"{safe_name}.json"
+
+        # 4. Fallback from metadata
+        if record.metadata and "videoMetadata" in record.metadata:
+            vm = record.metadata["videoMetadata"]
+            title = vm.get("title", f"job-{job_id[:8]}")
+            safe_name = _safe_filename(title, f"job-{job_id[:8]}")
+            return vm, f"{safe_name}.json"
+
+        raise AppError("JSON_NOT_AVAILABLE", "ไม่มีข้อมูล JSON สำหรับ Export ในงานนี้")
+
 

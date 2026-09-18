@@ -353,6 +353,11 @@
   },
   "tts": ["บทพูดช่วงแรก", "บทพูดช่วงถัดไป"]
 }' style="font-family: ui-monospace, monospace; font-size: 12.5px; line-height: 1.45; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(140,115,255,0.35); background: rgba(0,0,0,0.35); color: #c8adff;"></textarea>
+          <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+            <button type="button" id="btnViewQuickReelJson" class="button secondary small" title="ดูโครงสร้าง JSON จากฟอร์ม"><span>👁️</span> ดู JSON จากฟอร์ม</button>
+            <button type="button" id="btnExportQuickReelJson" class="button secondary small" title="ดาวน์โหลดไฟล์ .json จากฟอร์ม"><span>⬇️</span> Export JSON</button>
+            <button type="button" id="btnCopyQuickReelJson" class="button secondary small" title="คัดลอก JSON จากฟอร์ม"><span>📋</span> คัดลอก JSON</button>
+          </div>
         </div>
 
         <!-- 1. ภาพหลัก -->
@@ -640,6 +645,32 @@
       </div>
     </div>
   </div>
+
+  <!-- JSON Viewer Dialog Modal -->
+  <dialog id="jsonViewDialog" class="studio-dialog">
+    <div class="studio-dialog-card">
+      <div class="studio-dialog-head">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.25rem;">📄</span>
+          <h3 class="studio-dialog-title" id="jsonDialogTitle">Quick Reel JSON</h3>
+        </div>
+        <button type="button" class="studio-dialog-close" id="btnCloseJsonDialog" aria-label="Close">✕</button>
+      </div>
+      <div class="studio-dialog-toolbar">
+        <span id="jsonDialogStatus" class="muted" style="font-size: 0.85rem;">โครงสร้าง JSON ตามข้อมูลปัจจุบันในฟอร์ม</span>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" id="btnCopyJsonDialog" class="button secondary small">📋 คัดลอก JSON</button>
+          <button type="button" id="btnDownloadJsonDialog" class="button secondary small">⬇️ ดาวน์โหลด .json</button>
+        </div>
+      </div>
+      <div class="studio-dialog-body">
+        <pre class="json-preview-pre"><code id="jsonDialogCode"></code></pre>
+      </div>
+      <div class="studio-dialog-footer">
+        <button type="button" class="button secondary" id="btnCloseJsonDialogFooter">ปิด</button>
+      </div>
+    </div>
+  </dialog>
 </main>
 
 
@@ -845,6 +876,117 @@
       jsonImport.style.borderColor = 'rgba(140,115,255,0.4)';
     }
   });
+
+  function buildQuickReelJsonFromForm() {
+    const topic = topicInput?.value?.trim() || '';
+    const desc = descInput?.value?.trim() || '';
+    const voiceVal = voiceSelect?.value || 'Iapetus';
+    const speedVal = Number(speedInput?.value || 1.10);
+    const styleVal = quickReelTtsStyle?.value?.trim() || '';
+    const motionVal = selectedMotion || 'gentle_float';
+
+    let ttsVal = scriptInput?.value?.trim() || '';
+    if (importedTtsSegments && Array.isArray(importedTtsSegments) && importedTtsSegments.length > 0) {
+      if (scriptInput?.value === importedTtsJoined) {
+        ttsVal = importedTtsSegments;
+      }
+    }
+
+    const voiceObj = {
+      provider: 'google',
+      voice: voiceVal,
+      speed: speedVal,
+    };
+    if (styleVal) voiceObj.style_prompt = styleVal;
+
+    return {
+      topic: topic,
+      description: desc,
+      voice: voiceObj,
+      motion: motionVal,
+      tts: ttsVal,
+    };
+  }
+
+  function downloadQuickReelJson(data, filename) {
+    const jsonStr = JSON.stringify(data, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  const btnViewQuickReelJson = document.querySelector('#btnViewQuickReelJson');
+  const btnExportQuickReelJson = document.querySelector('#btnExportQuickReelJson');
+  const btnCopyQuickReelJson = document.querySelector('#btnCopyQuickReelJson');
+  const jsonViewDialog = document.querySelector('#jsonViewDialog');
+  const jsonDialogCode = document.querySelector('#jsonDialogCode');
+  const btnCopyJsonDialog = document.querySelector('#btnCopyJsonDialog');
+  const btnDownloadJsonDialog = document.querySelector('#btnDownloadJsonDialog');
+  const btnCloseJsonDialog = document.querySelector('#btnCloseJsonDialog');
+  const btnCloseJsonDialogFooter = document.querySelector('#btnCloseJsonDialogFooter');
+
+  let currentQuickReelJson = null;
+
+  if (btnViewQuickReelJson && jsonViewDialog) {
+    btnViewQuickReelJson.addEventListener('click', () => {
+      currentQuickReelJson = buildQuickReelJsonFromForm();
+      if (jsonDialogCode) jsonDialogCode.textContent = JSON.stringify(currentQuickReelJson, null, 2);
+      jsonViewDialog.showModal();
+    });
+
+    btnCloseJsonDialog?.addEventListener('click', () => jsonViewDialog.close());
+    btnCloseJsonDialogFooter?.addEventListener('click', () => jsonViewDialog.close());
+    jsonViewDialog.addEventListener('click', (e) => {
+      if (e.target === jsonViewDialog) jsonViewDialog.close();
+    });
+
+    btnCopyJsonDialog?.addEventListener('click', async () => {
+      if (!currentQuickReelJson) return;
+      try {
+        await navigator.clipboard.writeText(JSON.stringify(currentQuickReelJson, null, 2));
+        const orig = btnCopyJsonDialog.textContent;
+        btnCopyJsonDialog.textContent = '✓ คัดลอกแล้ว!';
+        setTimeout(() => { btnCopyJsonDialog.textContent = orig; }, 2000);
+      } catch (_) {
+        alert('คัดลอกไม่สำเร็จ');
+      }
+    });
+
+    btnDownloadJsonDialog?.addEventListener('click', () => {
+      if (!currentQuickReelJson) currentQuickReelJson = buildQuickReelJsonFromForm();
+      const topicName = currentQuickReelJson.topic ? currentQuickReelJson.topic.replace(/[\\/*?:"<>|]/g, '').trim().replace(/\s+/g, '-') : 'quick-reel';
+      downloadQuickReelJson(currentQuickReelJson, `${topicName || 'quick-reel'}.json`);
+    });
+  }
+
+  if (btnExportQuickReelJson) {
+    btnExportQuickReelJson.addEventListener('click', () => {
+      const data = buildQuickReelJsonFromForm();
+      const topicName = data.topic ? data.topic.replace(/[\\/*?:"<>|]/g, '').trim().replace(/\s+/g, '-') : 'quick-reel';
+      downloadQuickReelJson(data, `${topicName || 'quick-reel'}.json`);
+    });
+  }
+
+  if (btnCopyQuickReelJson) {
+    btnCopyQuickReelJson.addEventListener('click', async () => {
+      const data = buildQuickReelJsonFromForm();
+      try {
+        await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+        const orig = btnCopyQuickReelJson.innerHTML;
+        btnCopyQuickReelJson.innerHTML = '<span>✓</span> คัดลอกแล้ว!';
+        setTimeout(() => { btnCopyQuickReelJson.innerHTML = orig; }, 2000);
+      } catch (_) {
+        alert('คัดลอกไม่สำเร็จ');
+      }
+    });
+  }
+
 
   let selectedFit = 'contain';
   let selectedMotion = 'static';

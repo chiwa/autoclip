@@ -4,7 +4,7 @@
 <body><main>
 <header><a class="brand" href="/"><img class="brand-logo" src="/static/auto-clip-logo.png" alt="AutoClip">AutoClip</a><nav class="app-nav"><a href="/">สร้างวิดีโอ</a><a href="/ai">สร้างด้วย AI</a><a href="/podcast">สร้าง Podcast</a><a class="active" href="/zodiac-weekly">🔮 ดวง 12 ราศี</a><a href="/zodiac-history">Weekly History</a><a href="/reels-history">Reels History</a><a href="/podcast-history">Podcast History</a></nav></header>
 <section class="tool-card zodiac-hero"><span class="eyebrow">คนเหนือดวง · WEEKLY BATCH</span><h1>JSON เดียว ได้วิดีโอครบ 12 ราศี</h1><p class="muted">ระบบใส่วันที่ลงภาพต้นแบบ สร้างเสียง และเรนเดอร์ MP4 แยกแต่ละราศี พร้อมข้อมูลสำหรับเผยแพร่</p></section>
-<section class="tool-card"><div class="section-heading"><div><span class="step-chip">STEP 1</span><h2>สร้างหรือ Import weekly-zodiac-batch.json</h2></div><button id="example" class="button secondary">โหลดตัวอย่าง JSON</button></div>
+<section class="tool-card"><div class="section-heading"><div><span class="step-chip">STEP 1</span><h2>สร้างหรือ Import weekly-zodiac-batch.json</h2></div><div style="display: flex; gap: 8px; flex-wrap: wrap;"><button id="example" class="button secondary">โหลดตัวอย่าง JSON</button><button type="button" id="btnViewZodiacJson" class="button secondary"><span>👁️</span> ดู JSON</button><button type="button" id="btnExportZodiacJson" class="button secondary"><span>⬇️</span> Export JSON</button></div></div>
 <div class="zodiac-ai-builder"><div><strong>✨ ให้ DeepSeek ช่วยสร้างร่างครบ 12 ราศี</strong><p class="muted">เลือกช่วงวันที่ให้ชัดเจน ระบบจะค้นข้อมูลประจำช่วงนั้นและเติม JSON ให้ตรวจแก้ก่อนสร้างวิดีโอ</p></div><div class="zodiac-week-fields"><label>ตั้งแต่วันที่<input id="aiStart" type="date"></label><label>ถึงวันที่<input id="aiEnd" type="date"></label><button id="aiDraft" class="button primary">สร้าง JSON ด้วย DeepSeek</button></div><p id="aiStatus" class="muted"></p><details id="aiLogDetails" class="zodiac-ai-log-details" hidden><summary class="zodiac-ai-log-summary">📋 ดู Log Request / Response (DeepSeek)</summary><div class="zodiac-ai-log-body"><div class="zodiac-ai-log-head"><span id="aiLogMeta" class="muted"></span><button type="button" id="copyAiLog" class="button secondary small">คัดลอก Log</button></div><div class="zodiac-ai-log-block"><strong>📤 Request:</strong><pre id="aiLogReq" class="zodiac-ai-log-pre"></pre></div><div class="zodiac-ai-log-block"><strong>📥 Response:</strong><pre id="aiLogResp" class="zodiac-ai-log-pre"></pre></div></div></details></div>
 <label class="file-drop">เลือกไฟล์ JSON<input id="file" type="file" accept="application/json,.json"></label>
 <textarea id="json" class="zodiac-json" spellcheck="false" placeholder='วาง JSON ที่นี่ หรือกด “โหลดตัวอย่าง JSON”'></textarea>
@@ -13,12 +13,43 @@
 <section id="result" class="tool-card" hidden><div class="section-heading"><div><span class="step-chip">LIVE BATCH</span><h2 id="batchTitle">กำลังสร้าง 12 ราศี</h2><p id="summary" class="muted"></p></div></div>
 <div class="actions batch-actions"><a id="allVideos" class="button primary disabled">Download All MP4</a><a id="allPackages" class="button secondary">Download All ZIP</a><a id="csv" class="button secondary">Download Upload CSV</a><a id="allMetadata" class="button secondary">Export All Metadata</a><button id="copyTitles" class="button secondary">Copy All Titles</button><button id="regen" class="button secondary">Regenerate Metadata</button><button id="retry" class="button secondary">Retry Failed</button></div>
 <div id="cards" class="zodiac-results"></div></section>
+
+<!-- JSON Viewer Dialog Modal -->
+<dialog id="jsonViewDialog" class="studio-dialog">
+  <div class="studio-dialog-card">
+    <div class="studio-dialog-head">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-size: 1.25rem;">🔮</span>
+        <h3 class="studio-dialog-title">Weekly Zodiac JSON</h3>
+      </div>
+      <button type="button" class="studio-dialog-close" id="btnCloseJsonDialog" aria-label="Close">✕</button>
+    </div>
+    <div class="studio-dialog-toolbar">
+      <span class="muted" style="font-size: 0.85rem;">โครงสร้าง JSON สำหรับ Weekly 12 ราศี</span>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" id="btnCopyJsonDialog" class="button secondary small">📋 คัดลอก JSON</button>
+        <button type="button" id="btnDownloadJsonDialog" class="button secondary small">⬇️ ดาวน์โหลด .json</button>
+      </div>
+    </div>
+    <div class="studio-dialog-body">
+      <pre class="json-preview-pre"><code id="jsonDialogCode"></code></pre>
+    </div>
+    <div class="studio-dialog-footer">
+      <button type="button" class="button secondary" id="btnCloseJsonDialogFooter">ปิด</button>
+    </div>
+  </div>
+</dialog>
 </main><script>
 const $=s=>document.querySelector(s);let batch=null,timer=null,master=null;
 function showError(message=''){const box=$('#error');box.hidden=!message;box.textContent=message}
 async function jsonFetch(url,options){const response=await fetch(url,options);const data=await response.json().catch(()=>({}));if(!response.ok){const msg=data.detail?.message||(typeof data.detail==='string'?data.detail:'')||data.detail?.[0]?.msg||data.message||'ระบบทำงานไม่สำเร็จ';throw new Error(msg)}return data}
 async function loadMaster(){master=await jsonFetch('/api/zodiac/master');$('#masterSection').hidden=false;$('#master').replaceChildren(...master.zodiacs.map(z=>{const card=document.createElement('article');card.className='zodiac-master-card';card.innerHTML=`<img src="${z.previewUrl}" alt="${z.name_th}"><strong>ราศี${z.name_th}</strong><span>${z.birth_range_th}</span>`;return card}))}
 $('#example').onclick=async()=>{const value=await jsonFetch('/api/zodiac/example');delete value.help;delete value.master;$('#json').value=JSON.stringify(value,null,2)};
+const btnViewZodiacJson=$('#btnViewZodiacJson'),btnExportZodiacJson=$('#btnExportZodiacJson'),jsonViewDialog=$('#jsonViewDialog'),jsonDialogCode=$('#jsonDialogCode'),btnCopyJsonDialog=$('#btnCopyJsonDialog'),btnDownloadJsonDialog=$('#btnDownloadJsonDialog'),btnCloseJsonDialog=$('#btnCloseJsonDialog'),btnCloseJsonDialogFooter=$('#btnCloseJsonDialogFooter');
+function getZodiacJsonText(){const raw=($('#json').value||'').trim();if(!raw)return'';try{return JSON.stringify(JSON.parse(raw),null,2)}catch(_){return raw}}
+function downloadZodiacJson(text){const blob=new Blob([text],{type:'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='weekly-zodiac-batch.json';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}
+if(btnViewZodiacJson&&jsonViewDialog){btnViewZodiacJson.onclick=()=>{const text=getZodiacJsonText();if(!text){alert('ยังไม่มีข้อมูล JSON กรุณาวาง JSON หรือกด "โหลดตัวอย่าง JSON" ก่อน');return}jsonDialogCode.textContent=text;jsonViewDialog.showModal()};btnCloseJsonDialog?.addEventListener('click',()=>jsonViewDialog.close());btnCloseJsonDialogFooter?.addEventListener('click',()=>jsonViewDialog.close());jsonViewDialog.addEventListener('click',e=>{if(e.target===jsonViewDialog)jsonViewDialog.close()});btnCopyJsonDialog?.addEventListener('click',async()=>{const text=getZodiacJsonText();if(!text)return;try{await navigator.clipboard.writeText(text);const orig=btnCopyJsonDialog.textContent;btnCopyJsonDialog.textContent='✓ คัดลอกแล้ว!';setTimeout(()=>{btnCopyJsonDialog.textContent=orig},2000)}catch(_){alert('คัดลอกไม่สำเร็จ')}});btnDownloadJsonDialog?.addEventListener('click',()=>{const text=getZodiacJsonText();if(text)downloadZodiacJson(text)})}
+if(btnExportZodiacJson){btnExportZodiacJson.onclick=()=>{const text=getZodiacJsonText();if(!text){alert('ยังไม่มีข้อมูล JSON กรุณาวาง JSON หรือกด "โหลดตัวอย่าง JSON" ก่อน');return}downloadZodiacJson(text)}};
 function localIso(d){const offset=d.getTimezoneOffset();return new Date(d.getTime()-offset*60000).toISOString().slice(0,10)}
 function defaultWeek(){const now=new Date(),day=(now.getDay()+6)%7,start=new Date(now);start.setDate(now.getDate()-day);const end=new Date(start);end.setDate(start.getDate()+6);$('#aiStart').value=localIso(start);$('#aiEnd').value=localIso(end)}
 $('#aiStart').onchange=()=>{if(!$('#aiStart').value)return;const start=new Date($('#aiStart').value+'T12:00:00'),end=new Date(start);end.setDate(start.getDate()+6);$('#aiEnd').value=localIso(end)};

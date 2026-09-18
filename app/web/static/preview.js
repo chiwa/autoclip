@@ -76,6 +76,61 @@ async function initPreview() {
     const downloadLinks = [document.querySelector('#download'), document.querySelector('#topDownloadBtn')];
     downloadLinks.forEach(a => { if (a) a.href = `/api/jobs/${jobId}/video`; });
 
+    const exportJsonLink = document.querySelector('#btnExportJson');
+    if (exportJsonLink) exportJsonLink.href = `/api/jobs/${jobId}/export-json?download=1`;
+
+    const downloadJsonDialogLink = document.querySelector('#btnDownloadJsonDialog');
+    if (downloadJsonDialogLink) downloadJsonDialogLink.href = `/api/jobs/${jobId}/export-json?download=1`;
+
+    const btnViewJson = document.querySelector('#btnViewJson');
+    const jsonViewDialog = document.querySelector('#jsonViewDialog');
+    const jsonDialogCode = document.querySelector('#jsonDialogCode');
+    const btnCopyJsonDialog = document.querySelector('#btnCopyJsonDialog');
+    const btnCloseJsonDialog = document.querySelector('#btnCloseJsonDialog');
+    const btnCloseJsonDialogFooter = document.querySelector('#btnCloseJsonDialogFooter');
+    let loadedJsonText = '';
+
+    if (btnViewJson && jsonViewDialog) {
+      btnViewJson.addEventListener('click', async () => {
+        jsonViewDialog.showModal();
+        if (!loadedJsonText) {
+          if (jsonDialogCode) jsonDialogCode.textContent = 'กำลังโหลดข้อมูล JSON...';
+          try {
+            const res = await fetch(`/api/jobs/${jobId}/export-json`);
+            if (!res.ok) {
+              const err = await res.json().catch(() => ({}));
+              throw new Error(err.detail?.message || err.detail || 'ไม่สามารถดึงข้อมูล JSON ได้');
+            }
+            const data = await res.json();
+            loadedJsonText = JSON.stringify(data, null, 2);
+            if (jsonDialogCode) jsonDialogCode.textContent = loadedJsonText;
+          } catch (e) {
+            if (jsonDialogCode) jsonDialogCode.textContent = `เกิดข้อผิดพลาด: ${e.message}`;
+          }
+        } else {
+          if (jsonDialogCode) jsonDialogCode.textContent = loadedJsonText;
+        }
+      });
+
+      btnCloseJsonDialog?.addEventListener('click', () => jsonViewDialog.close());
+      btnCloseJsonDialogFooter?.addEventListener('click', () => jsonViewDialog.close());
+      jsonViewDialog.addEventListener('click', (e) => {
+        if (e.target === jsonViewDialog) jsonViewDialog.close();
+      });
+
+      btnCopyJsonDialog?.addEventListener('click', async () => {
+        if (!loadedJsonText) return;
+        try {
+          await navigator.clipboard.writeText(loadedJsonText);
+          const orig = btnCopyJsonDialog.textContent;
+          btnCopyJsonDialog.textContent = '✓ คัดลอกแล้ว!';
+          setTimeout(() => { btnCopyJsonDialog.textContent = orig; }, 2000);
+        } catch (_) {
+          alert('คัดลอกไม่สำเร็จ');
+        }
+      });
+    }
+
     const titleText = metadata.projectTitle || vm.title || '-';
     setText('#projectTitle', titleText);
     document.title = `AutoClip · ${titleText}`;

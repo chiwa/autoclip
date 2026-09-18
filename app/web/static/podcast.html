@@ -267,9 +267,11 @@
           <div id="panelImportJson" class="script-panel" role="tabpanel" aria-labelledby="tabImportJson" hidden>
             <label for="podcastJsonInput">Podcast JSON</label>
             <textarea id="podcastJsonInput" rows="12" spellcheck="false" placeholder='วาง JSON ที่มี title, caption, hashtags, tts.thai, tts.english และ audio ที่นี่'></textarea>
-            <div class="actions" style="margin-top: 12px;">
+            <div class="actions" style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
               <button id="btnApplyPodcastJson" type="button" class="button secondary">Auto Fill จาก JSON</button>
               <button id="btnClearPodcastJson" type="button" class="button secondary">ล้าง JSON</button>
+              <button id="btnViewPodcastJson" type="button" class="button secondary"><span>👁️</span> ดู JSON จากฟอร์ม</button>
+              <button id="btnExportPodcastJson" type="button" class="button secondary"><span>⬇️</span> Export JSON จากฟอร์ม</button>
             </div>
             <p id="podcastJsonStatus" class="muted" role="status">ระบบจะเติมเฉพาะข้อมูลในฟอร์ม ไม่อัปโหลดภาพปกหรือไฟล์ BGM</p>
           </div>
@@ -435,11 +437,37 @@
       </div>
     </div>
   </form>
+
+  <!-- JSON Viewer Dialog Modal -->
+  <dialog id="jsonViewDialog" class="studio-dialog">
+    <div class="studio-dialog-card">
+      <div class="studio-dialog-head">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.25rem;">📄</span>
+          <h3 class="studio-dialog-title" id="jsonDialogTitle">Podcast JSON</h3>
+        </div>
+        <button type="button" class="studio-dialog-close" id="btnCloseJsonDialog" aria-label="Close">✕</button>
+      </div>
+      <div class="studio-dialog-toolbar">
+        <span id="jsonDialogStatus" class="muted" style="font-size: 0.85rem;">โครงสร้าง JSON ตามข้อมูลปัจจุบันในฟอร์ม Podcast</span>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" id="btnCopyJsonDialog" class="button secondary small">📋 คัดลอก JSON</button>
+          <button type="button" id="btnDownloadJsonDialog" class="button secondary small">⬇️ ดาวน์โหลด .json</button>
+        </div>
+      </div>
+      <div class="studio-dialog-body">
+        <pre class="json-preview-pre"><code id="jsonDialogCode"></code></pre>
+      </div>
+      <div class="studio-dialog-footer">
+        <button type="button" class="button secondary" id="btnCloseJsonDialogFooter">ปิด</button>
+      </div>
+    </div>
+  </dialog>
 </main>
 
 <script src="/static/nav.js?v=5"></script>
 <script src="/static/channels.js?v=1"></script>
 <script>AutoClipChannels.mount('#channelPicker');</script>
-<script src="/static/podcast.js?v=5"></script>
+<script src="/static/podcast.js?v=6"></script>
 </body>
 </html>

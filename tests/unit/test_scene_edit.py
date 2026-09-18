@@ -244,3 +244,78 @@ def test_quick_reel_scenes_and_edit(tmp_path):
     assert scenes_data["projectType"] == "quick-reel"
     assert scenes_data["sceneCount"] == 1
     assert scenes_data["scenes"][0]["id"] == "scene-01"
+
+
+def test_export_job_json_all_types(tmp_path):
+    settings = load_settings()
+    settings.app.workspace = tmp_path / "workspaces"
+    settings.app.workspace.mkdir(parents=True, exist_ok=True)
+    wm = WorkspaceManager(settings.app.workspace)
+    service = JobService(settings)
+
+    # 1. Quick Reel export
+    qr_id = "job-qr-export"
+    qr_ws = wm.create(qr_id)
+    qr_ws.source.mkdir(parents=True, exist_ok=True)
+    qr_data = {
+        "topic": "สุดยอด เทคนิค AI",
+        "description": "แคปชั่นเด็ด",
+        "voice": "Iapetus",
+        "speed": 1.10,
+        "style_prompt": "โทนลึกลับ",
+        "motion": "gentle_float",
+        "tts": "สวัสดีชาวโลก",
+        "tts_segments": ["สวัสดีชาวโลก", "ตอนที่สอง"],
+    }
+    (qr_ws.source / "quick-reel-settings.json").write_text(json.dumps(qr_data), encoding="utf-8")
+    service.registry.set(JobRecord(job_id=qr_id, status=JobStatus.COMPLETED, progress=100, current_step="Done"))
+
+    exported_qr, qr_fn = service.export_job_json(qr_id)
+    assert exported_qr["topic"] == "สุดยอด เทคนิค AI"
+    assert exported_qr["tts"] == ["สวัสดีชาวโลก", "ตอนที่สอง"]
+    assert exported_qr["voice"]["voice"] == "Iapetus"
+    assert qr_fn == "สุดยอด-เทคนิค-AI.json"
+
+    # 2. Podcast export
+    pc_id = "job-pc-export"
+    pc_ws = wm.create(pc_id)
+    pc_ws.source.mkdir(parents=True, exist_ok=True)
+    pc_data = {
+        "title": "เจาะลึกจักรวาล EP1",
+        "description": "เรื่องเล่าดวงดาว",
+        "hashtags": "#Podcast #Space",
+        "voice": "Enceladus",
+        "speed": 0.95,
+        "thaiStylePrompt": "นุ่มนวล",
+        "englishStylePrompt": "Calm",
+        "bgmTrack": "ambient",
+        "bgmVolume": 0.15,
+    }
+    (pc_ws.source / "podcast-settings.json").write_text(json.dumps(pc_data), encoding="utf-8")
+    (pc_ws.source / "script.txt").write_text("บทพูดยาวภาษาไทย", encoding="utf-8")
+    (pc_ws.source / "script-en.txt").write_text("English long script", encoding="utf-8")
+    service.registry.set(JobRecord(job_id=pc_id, status=JobStatus.COMPLETED, progress=100, current_step="Done"))
+
+    exported_pc, pc_fn = service.export_job_json(pc_id)
+    assert exported_pc["title"] == "เจาะลึกจักรวาล EP1"
+    assert exported_pc["caption"]["thai"] == "เรื่องเล่าดวงดาว"
+    assert exported_pc["hashtags"] == ["#Podcast", "#Space"]
+    assert exported_pc["tts"]["thai"]["script"] == "บทพูดยาวภาษาไทย"
+    assert exported_pc["tts"]["english"]["script"] == "English long script"
+    assert pc_fn == "เจาะลึกจักรวาล-EP1.json"
+
+    # 3. Standard Reel export
+    rl_id = "job-rl-export"
+    rl_ws = wm.create(rl_id)
+    rl_ws.extracted.mkdir(parents=True, exist_ok=True)
+    rl_script = {
+        "project": {"title": "Standard Reel Story", "resolution": "1080x1920"},
+        "scenes": [{"id": "scene-01", "narration": "Hello Reel"}],
+    }
+    (rl_ws.extracted / "script.json").write_text(json.dumps(rl_script), encoding="utf-8")
+    service.registry.set(JobRecord(job_id=rl_id, status=JobStatus.COMPLETED, progress=100, current_step="Done"))
+
+    exported_rl, rl_fn = service.export_job_json(rl_id)
+    assert exported_rl["project"]["title"] == "Standard Reel Story"
+    assert rl_fn == "Standard-Reel-Story.json"
+

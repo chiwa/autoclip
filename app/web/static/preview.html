@@ -522,7 +522,9 @@
           <span class="studio-badge success">สร้างสำเร็จ ✓</span>
         </div>
       </div>
-      <div class="studio-top-right" style="display: flex; gap: 8px; align-items: center;">
+      <div class="studio-top-right" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+        <button type="button" id="btnViewJson" class="button secondary small" title="ดูโครงสร้าง JSON"><span>👁️</span> ดู JSON</button>
+        <a id="btnExportJson" class="button secondary small" download title="ดาวน์โหลดไฟล์ .json"><span>⬇️</span> Export JSON</a>
         <a class="button secondary small" href="/">สร้างวิดีโอใหม่ (Generate Another Video)</a>
         <a id="topDownloadBtn" class="button" download>⬇️ Download MP4</a>
       </div>
@@ -745,11 +747,37 @@
     <section id="channelCard"></section>
     <section id="publicationCard"></section>
   </div>
+
+  <!-- JSON Viewer Dialog Modal -->
+  <dialog id="jsonViewDialog" class="studio-dialog">
+    <div class="studio-dialog-card">
+      <div class="studio-dialog-head">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.25rem;">📄</span>
+          <h3 class="studio-dialog-title" id="jsonDialogTitle">Project JSON</h3>
+        </div>
+        <button type="button" class="studio-dialog-close" id="btnCloseJsonDialog" aria-label="Close">✕</button>
+      </div>
+      <div class="studio-dialog-toolbar">
+        <span id="jsonDialogStatus" class="muted" style="font-size: 0.85rem;">โครงสร้าง JSON ที่สามารถนำไป Import หรือใช้งานต่อได้</span>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" id="btnCopyJsonDialog" class="button secondary small">📋 คัดลอก JSON</button>
+          <a id="btnDownloadJsonDialog" class="button secondary small" download>⬇️ ดาวน์โหลด .json</a>
+        </div>
+      </div>
+      <div class="studio-dialog-body">
+        <pre class="json-preview-pre"><code id="jsonDialogCode">กำลังโหลดข้อมูล...</code></pre>
+      </div>
+      <div class="studio-dialog-footer">
+        <button type="button" class="button secondary" id="btnCloseJsonDialogFooter">ปิด</button>
+      </div>
+    </div>
+  </dialog>
 </main>
 
 <script src="/static/nav.js?v=5"></script>
 <script src="/static/channels.js?v=1"></script>
-<script src="/static/preview.js?v=15"></script>
+<script src="/static/preview.js?v=16"></script>
 </body>
 </html>
 

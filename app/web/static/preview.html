@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>AutoClip · Studio Video Preview</title>
   <link rel="icon" type="image/png" href="/static/auto-clip-logo.png">
-  <link rel="stylesheet" href="/static/style.css?v=25">
+  <link rel="stylesheet" href="/static/style.css?v=27">
   <style>
     .studio-page {
       width: min(1280px, 100%);
@@ -524,7 +524,7 @@
       </div>
       <div class="studio-top-right" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
         <button type="button" id="btnViewJson" class="button secondary small" title="ดูโครงสร้าง JSON"><span>👁️</span> ดู JSON</button>
-        <a id="btnExportJson" class="button secondary small" download title="ดาวน์โหลดไฟล์ .json"><span>⬇️</span> Export JSON</a>
+        <button type="button" id="btnExportJson" class="button secondary small" title="ดาวน์โหลดไฟล์ .json"><span>⬇️</span> Export JSON</button>
         <a class="button secondary small" href="/">สร้างวิดีโอใหม่ (Generate Another Video)</a>
         <a id="topDownloadBtn" class="button" download>⬇️ Download MP4</a>
       </div>
@@ -762,7 +762,7 @@
         <span id="jsonDialogStatus" class="muted" style="font-size: 0.85rem;">โครงสร้าง JSON ที่สามารถนำไป Import หรือใช้งานต่อได้</span>
         <div style="display: flex; gap: 8px;">
           <button type="button" id="btnCopyJsonDialog" class="button secondary small">📋 คัดลอก JSON</button>
-          <a id="btnDownloadJsonDialog" class="button secondary small" download>⬇️ ดาวน์โหลด .json</a>
+          <button type="button" id="btnDownloadJsonDialog" class="button secondary small">⬇️ ดาวน์โหลด .json</button>
         </div>
       </div>
       <div class="studio-dialog-body">
@@ -777,7 +777,7 @@
 
 <script src="/static/nav.js?v=5"></script>
 <script src="/static/channels.js?v=1"></script>
-<script src="/static/preview.js?v=16"></script>
+<script src="/static/preview.js?v=17"></script>
 </body>
 </html>
 

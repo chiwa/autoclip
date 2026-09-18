@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>AutoClip · Quick Reel</title>
   <link rel="icon" type="image/png" href="/static/auto-clip-logo.png">
-  <link rel="stylesheet" href="/static/style.css?v=24">
+  <link rel="stylesheet" href="/static/style.css?v=27">
   <link rel="stylesheet" href="/static/workspace.css?v=2">
   <style>
     .qr-stats {
@@ -934,16 +934,29 @@
   let currentQuickReelJson = null;
 
   if (btnViewQuickReelJson && jsonViewDialog) {
-    btnViewQuickReelJson.addEventListener('click', () => {
+    btnViewQuickReelJson.addEventListener('click', (e) => {
+      e.preventDefault();
       currentQuickReelJson = buildQuickReelJsonFromForm();
       if (jsonDialogCode) jsonDialogCode.textContent = JSON.stringify(currentQuickReelJson, null, 2);
-      jsonViewDialog.showModal();
+      jsonViewDialog.setAttribute('open', '');
+      if (typeof jsonViewDialog.showModal === 'function') {
+        try { jsonViewDialog.showModal(); } catch (_) {}
+      }
+      jsonViewDialog.style.display = 'block';
     });
 
-    btnCloseJsonDialog?.addEventListener('click', () => jsonViewDialog.close());
-    btnCloseJsonDialogFooter?.addEventListener('click', () => jsonViewDialog.close());
+    const closeQuickReelModal = () => {
+      if (typeof jsonViewDialog.close === 'function') {
+        try { jsonViewDialog.close(); } catch (_) {}
+      }
+      jsonViewDialog.removeAttribute('open');
+      jsonViewDialog.style.display = 'none';
+    };
+
+    btnCloseJsonDialog?.addEventListener('click', closeQuickReelModal);
+    btnCloseJsonDialogFooter?.addEventListener('click', closeQuickReelModal);
     jsonViewDialog.addEventListener('click', (e) => {
-      if (e.target === jsonViewDialog) jsonViewDialog.close();
+      if (e.target === jsonViewDialog) closeQuickReelModal();
     });
 
     btnCopyJsonDialog?.addEventListener('click', async () => {
@@ -966,7 +979,8 @@
   }
 
   if (btnExportQuickReelJson) {
-    btnExportQuickReelJson.addEventListener('click', () => {
+    btnExportQuickReelJson.addEventListener('click', (e) => {
+      e.preventDefault();
       const data = buildQuickReelJsonFromForm();
       const topicName = data.topic ? data.topic.replace(/[\\/*?:"<>|]/g, '').trim().replace(/\s+/g, '-') : 'quick-reel';
       downloadQuickReelJson(data, `${topicName || 'quick-reel'}.json`);

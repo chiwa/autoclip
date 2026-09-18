@@ -1,4 +1,9 @@
-const jobId = location.pathname.match(/^\/jobs\/([^/]+)\/preview$/)?.[1];
+const getJobId = () => {
+  const m = location.pathname.match(/\/jobs\/([^/]+)/);
+  if (m && m[1] && m[1] !== 'undefined') return m[1];
+  return new URLSearchParams(location.search).get('job_id') || '';
+};
+const jobId = getJobId();
 
 try {
   if (sessionStorage.getItem('autoclip_notify_success')) {
@@ -47,6 +52,111 @@ function setupCopyButton(btn, getValue) {
   };
 }
 
+// Setup JSON View & Export independently of initPreview network status
+function setupJsonTools() {
+  const btnView = document.querySelector('#btnViewJson');
+  const btnExport = document.querySelector('#btnExportJson');
+  const dialog = document.querySelector('#jsonViewDialog');
+  const codeEl = document.querySelector('#jsonDialogCode');
+  const btnCopy = document.querySelector('#btnCopyJsonDialog');
+  const btnDownload = document.querySelector('#btnDownloadJsonDialog');
+  const btnClose = document.querySelector('#btnCloseJsonDialog');
+  const btnCloseFooter = document.querySelector('#btnCloseJsonDialogFooter');
+
+  function doExport() {
+    if (!jobId) {
+      alert('ไม่พบ Job ID สำหรับ Export JSON');
+      return;
+    }
+    window.location.href = `/api/jobs/${encodeURIComponent(jobId)}/export-json?download=1`;
+  }
+
+  if (btnExport) {
+    btnExport.onclick = (e) => {
+      e.preventDefault();
+      doExport();
+    };
+  }
+  if (btnDownload) {
+    btnDownload.onclick = (e) => {
+      e.preventDefault();
+      doExport();
+    };
+  }
+
+  let cachedJson = null;
+  function openModal() {
+    if (!dialog) return;
+    dialog.setAttribute('open', '');
+    if (typeof dialog.showModal === 'function') {
+      try { dialog.showModal(); } catch (_) {}
+    }
+    dialog.style.display = 'block';
+
+    if (!cachedJson) {
+      if (codeEl) codeEl.textContent = 'กำลังโหลดข้อมูล JSON...';
+      fetch(`/api/jobs/${encodeURIComponent(jobId)}/export-json`)
+        .then(r => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          return r.json();
+        })
+        .then(d => {
+          cachedJson = d;
+          if (codeEl) codeEl.textContent = JSON.stringify(d, null, 2);
+        })
+        .catch(err => {
+          if (codeEl) codeEl.textContent = `เกิดข้อผิดพลาด: ${err.message || err}`;
+        });
+    } else {
+      if (codeEl) codeEl.textContent = JSON.stringify(cachedJson, null, 2);
+    }
+  }
+
+  function closeModal() {
+    if (!dialog) return;
+    if (typeof dialog.close === 'function') {
+      try { dialog.close(); } catch (_) {}
+    }
+    dialog.removeAttribute('open');
+    dialog.style.display = 'none';
+  }
+
+  if (btnView) {
+    btnView.onclick = (e) => {
+      e.preventDefault();
+      openModal();
+    };
+  }
+  if (btnClose) btnClose.onclick = closeModal;
+  if (btnCloseFooter) btnCloseFooter.onclick = closeModal;
+  if (dialog) {
+    dialog.onclick = (e) => {
+      if (e.target === dialog) closeModal();
+    };
+  }
+
+  if (btnCopy) {
+    btnCopy.onclick = async () => {
+      const txt = codeEl ? codeEl.textContent : '';
+      if (!txt) return;
+      try {
+        await navigator.clipboard.writeText(txt);
+        const prev = btnCopy.textContent;
+        btnCopy.textContent = '✓ คัดลอกแล้ว!';
+        setTimeout(() => { btnCopy.textContent = prev; }, 2000);
+      } catch (_) {
+        alert('คัดลอกไม่สำเร็จ');
+      }
+    };
+  }
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', setupJsonTools);
+} else {
+  setupJsonTools();
+}
+
 async function initPreview() {
   if (!jobId) return;
   try {
@@ -75,61 +185,6 @@ async function initPreview() {
 
     const downloadLinks = [document.querySelector('#download'), document.querySelector('#topDownloadBtn')];
     downloadLinks.forEach(a => { if (a) a.href = `/api/jobs/${jobId}/video`; });
-
-    const exportJsonLink = document.querySelector('#btnExportJson');
-    if (exportJsonLink) exportJsonLink.href = `/api/jobs/${jobId}/export-json?download=1`;
-
-    const downloadJsonDialogLink = document.querySelector('#btnDownloadJsonDialog');
-    if (downloadJsonDialogLink) downloadJsonDialogLink.href = `/api/jobs/${jobId}/export-json?download=1`;
-
-    const btnViewJson = document.querySelector('#btnViewJson');
-    const jsonViewDialog = document.querySelector('#jsonViewDialog');
-    const jsonDialogCode = document.querySelector('#jsonDialogCode');
-    const btnCopyJsonDialog = document.querySelector('#btnCopyJsonDialog');
-    const btnCloseJsonDialog = document.querySelector('#btnCloseJsonDialog');
-    const btnCloseJsonDialogFooter = document.querySelector('#btnCloseJsonDialogFooter');
-    let loadedJsonText = '';
-
-    if (btnViewJson && jsonViewDialog) {
-      btnViewJson.addEventListener('click', async () => {
-        jsonViewDialog.showModal();
-        if (!loadedJsonText) {
-          if (jsonDialogCode) jsonDialogCode.textContent = 'กำลังโหลดข้อมูล JSON...';
-          try {
-            const res = await fetch(`/api/jobs/${jobId}/export-json`);
-            if (!res.ok) {
-              const err = await res.json().catch(() => ({}));
-              throw new Error(err.detail?.message || err.detail || 'ไม่สามารถดึงข้อมูล JSON ได้');
-            }
-            const data = await res.json();
-            loadedJsonText = JSON.stringify(data, null, 2);
-            if (jsonDialogCode) jsonDialogCode.textContent = loadedJsonText;
-          } catch (e) {
-            if (jsonDialogCode) jsonDialogCode.textContent = `เกิดข้อผิดพลาด: ${e.message}`;
-          }
-        } else {
-          if (jsonDialogCode) jsonDialogCode.textContent = loadedJsonText;
-        }
-      });
-
-      btnCloseJsonDialog?.addEventListener('click', () => jsonViewDialog.close());
-      btnCloseJsonDialogFooter?.addEventListener('click', () => jsonViewDialog.close());
-      jsonViewDialog.addEventListener('click', (e) => {
-        if (e.target === jsonViewDialog) jsonViewDialog.close();
-      });
-
-      btnCopyJsonDialog?.addEventListener('click', async () => {
-        if (!loadedJsonText) return;
-        try {
-          await navigator.clipboard.writeText(loadedJsonText);
-          const orig = btnCopyJsonDialog.textContent;
-          btnCopyJsonDialog.textContent = '✓ คัดลอกแล้ว!';
-          setTimeout(() => { btnCopyJsonDialog.textContent = orig; }, 2000);
-        } catch (_) {
-          alert('คัดลอกไม่สำเร็จ');
-        }
-      });
-    }
 
     const titleText = metadata.projectTitle || vm.title || '-';
     setText('#projectTitle', titleText);

@@ -301,16 +301,29 @@
   let currentPodcastJson = null;
 
   if (btnViewPodcastJson && jsonViewDialog) {
-    btnViewPodcastJson.addEventListener('click', () => {
+    const closePodcastModal = () => {
+      if (typeof jsonViewDialog.close === 'function') {
+        try { jsonViewDialog.close(); } catch (_) {}
+      }
+      jsonViewDialog.removeAttribute('open');
+      jsonViewDialog.style.display = 'none';
+    };
+
+    btnViewPodcastJson.addEventListener('click', (e) => {
+      e.preventDefault();
       currentPodcastJson = buildPodcastJsonFromForm();
       if (jsonDialogCode) jsonDialogCode.textContent = JSON.stringify(currentPodcastJson, null, 2);
-      jsonViewDialog.showModal();
+      jsonViewDialog.setAttribute('open', '');
+      if (typeof jsonViewDialog.showModal === 'function') {
+        try { jsonViewDialog.showModal(); } catch (_) {}
+      }
+      jsonViewDialog.style.display = 'block';
     });
 
-    btnCloseJsonDialog?.addEventListener('click', () => jsonViewDialog.close());
-    btnCloseJsonDialogFooter?.addEventListener('click', () => jsonViewDialog.close());
+    btnCloseJsonDialog?.addEventListener('click', closePodcastModal);
+    btnCloseJsonDialogFooter?.addEventListener('click', closePodcastModal);
     jsonViewDialog.addEventListener('click', (e) => {
-      if (e.target === jsonViewDialog) jsonViewDialog.close();
+      if (e.target === jsonViewDialog) closePodcastModal();
     });
 
     btnCopyJsonDialog?.addEventListener('click', async () => {
@@ -333,7 +346,8 @@
   }
 
   if (btnExportPodcastJson) {
-    btnExportPodcastJson.addEventListener('click', () => {
+    btnExportPodcastJson.addEventListener('click', (e) => {
+      e.preventDefault();
       const data = buildPodcastJsonFromForm();
       const titleName = data.title ? data.title.replace(/[\\/*?:"<>|]/g, '').trim().replace(/\s+/g, '-') : 'podcast';
       downloadPodcastJson(data, `${titleName || 'podcast'}.json`);

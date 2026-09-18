@@ -116,18 +116,31 @@ const btnDownloadJsonDialog = $('#btnDownloadJsonDialog');
 const btnCloseJsonDialog = $('#btnCloseJsonDialog');
 const btnCloseJsonDialogFooter = $('#btnCloseJsonDialogFooter');
 if (btnViewPackageJson && jsonViewDialog) {
-  btnViewPackageJson.addEventListener('click', () => {
+  const closePackageModal = () => {
+    if (typeof jsonViewDialog.close === 'function') {
+      try { jsonViewDialog.close(); } catch (_) {}
+    }
+    jsonViewDialog.removeAttribute('open');
+    jsonViewDialog.style.display = 'none';
+  };
+
+  btnViewPackageJson.addEventListener('click', (e) => {
+    e.preventDefault();
     if (!previewScript) {
       alert('ยังไม่ได้อัปโหลดหรือเปิดแพ็กเกจ');
       return;
     }
     if (jsonDialogCode) jsonDialogCode.textContent = JSON.stringify(previewScript, null, 2);
-    jsonViewDialog.showModal();
+    jsonViewDialog.setAttribute('open', '');
+    if (typeof jsonViewDialog.showModal === 'function') {
+      try { jsonViewDialog.showModal(); } catch (_) {}
+    }
+    jsonViewDialog.style.display = 'block';
   });
-  btnCloseJsonDialog?.addEventListener('click', () => jsonViewDialog.close());
-  btnCloseJsonDialogFooter?.addEventListener('click', () => jsonViewDialog.close());
+  btnCloseJsonDialog?.addEventListener('click', closePackageModal);
+  btnCloseJsonDialogFooter?.addEventListener('click', closePackageModal);
   jsonViewDialog.addEventListener('click', (e) => {
-    if (e.target === jsonViewDialog) jsonViewDialog.close();
+    if (e.target === jsonViewDialog) closePackageModal();
   });
   btnCopyJsonDialog?.addEventListener('click', async () => {
     if (!previewScript) return;
@@ -147,7 +160,8 @@ if (btnViewPackageJson && jsonViewDialog) {
   });
 }
 if (btnExportPackageJson) {
-  btnExportPackageJson.addEventListener('click', () => {
+  btnExportPackageJson.addEventListener('click', (e) => {
+    e.preventDefault();
     if (!previewScript) {
       alert('ยังไม่ได้อัปโหลดหรือเปิดแพ็กเกจ');
       return;

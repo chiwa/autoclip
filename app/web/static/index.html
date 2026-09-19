@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>AutoClip · Studio</title>
   <link rel="icon" type="image/png" href="/static/auto-clip-logo.png">
-  <link rel="stylesheet" href="/static/style.css?v=27">
+  <link rel="stylesheet" href="/static/style.css?v=28">
   <link rel="stylesheet" href="/static/workspace.css?v=2">
 </head>
 <body>
@@ -52,7 +52,10 @@
             📁 อัปโหลดไฟล์ ZIP Package
             <input id="file" type="file" accept=".zip,application/zip">
           </label>
-          <div id="fileInfo" class="muted" style="font-size: 0.88rem;">No file selected</div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; flex-wrap: wrap; gap: 8px;">
+            <div id="fileInfo" class="muted" style="font-size: 0.88rem;">No file selected</div>
+            <button type="button" id="btnViewStudioJsonFormat" class="button primary small" data-open-json-format="studio" title="ดูรูปแบบโครงสร้าง script.json สำหรับ AutoClip Package"><span>📖</span> ดู JSON Format</button>
+          </div>
         </div>
 
         <!-- Package Preview Card (Scenes) -->
@@ -64,7 +67,8 @@
             </div>
             <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
               <span id="previewProject" class="muted" style="font-size: 0.85rem;"></span>
-              <button type="button" id="btnViewPackageJson" class="button secondary small" title="ดู script.json"><span>👁️</span> ดู JSON</button>
+              <button type="button" class="button primary small" data-open-json-format="studio" title="ดูรูปแบบโครงสร้าง script.json"><span>📖</span> ดู JSON Format</button>
+              <button type="button" id="btnViewPackageJson" class="button secondary small" title="ดู script.json"><span>👁️</span> ดู JSON จากแพ็กเกจ</button>
               <button type="button" id="btnExportPackageJson" class="button secondary small" title="ดาวน์โหลด script.json"><span>⬇️</span> Export JSON</button>
             </div>
           </div>
@@ -229,6 +233,7 @@
 
 <script src="/static/nav.js?v=6"></script>
 <script src="/static/channels.js?v=1"></script>
+<script src="/static/json-formats.js?v=1"></script>
 <script>AutoClipChannels.mount('#channelPicker');</script>
 <script src="/static/app.js?v=27"></script>
 </body>

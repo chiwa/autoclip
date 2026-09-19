@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>AutoClip · Quick Reel</title>
   <link rel="icon" type="image/png" href="/static/auto-clip-logo.png">
-  <link rel="stylesheet" href="/static/style.css?v=27">
+  <link rel="stylesheet" href="/static/style.css?v=28">
   <link rel="stylesheet" href="/static/workspace.css?v=2">
   <style>
     .qr-stats {
@@ -354,6 +354,7 @@
   "tts": ["บทพูดช่วงแรก", "บทพูดช่วงถัดไป"]
 }' style="font-family: ui-monospace, monospace; font-size: 12.5px; line-height: 1.45; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(140,115,255,0.35); background: rgba(0,0,0,0.35); color: #c8adff;"></textarea>
           <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+            <button type="button" id="btnViewQuickReelJsonFormat" class="button primary small" data-open-json-format="quick-reel" title="ดูรูปแบบ JSON Format ที่ถูกต้องสำหรับ Quick Reel"><span>📖</span> ดู JSON Format</button>
             <button type="button" id="btnViewQuickReelJson" class="button secondary small" title="ดูโครงสร้าง JSON จากฟอร์ม"><span>👁️</span> ดู JSON จากฟอร์ม</button>
             <button type="button" id="btnExportQuickReelJson" class="button secondary small" title="ดาวน์โหลดไฟล์ .json จากฟอร์ม"><span>⬇️</span> Export JSON</button>
             <button type="button" id="btnCopyQuickReelJson" class="button secondary small" title="คัดลอก JSON จากฟอร์ม"><span>📋</span> คัดลอก JSON</button>
@@ -674,7 +675,7 @@
 </main>
 
 
-<script src="/static/nav.js?v=6"></script><script src="/static/channels.js?v=1"></script>
+<script src="/static/nav.js?v=6"></script><script src="/static/channels.js?v=1"></script><script src="/static/json-formats.js?v=1"></script>
 <script>
 (() => {
   const form = document.querySelector('#quickReelForm');

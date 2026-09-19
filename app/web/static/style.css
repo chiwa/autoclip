@@ -777,5 +777,66 @@ output#speedValue{display:inline-block;min-width:52px;margin-left:10px;padding:4
   gap: 8px;
 }
 
-
-
+/* JSON Format Reference Dialog Styles */
+.format-nav-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 10px 0 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow-x: auto;
+}
+.format-tab-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--muted, #8ca0ba);
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 0.86rem;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.format-tab-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+.format-tab-btn.active {
+  background: rgba(140, 115, 255, 0.25);
+  border-color: #8c73ff;
+  color: #fff;
+  font-weight: 600;
+}
+.format-meta-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.format-note-box {
+  padding: 10px 14px;
+  background: rgba(140, 115, 255, 0.08);
+  border: 1px solid rgba(140, 115, 255, 0.25);
+  border-radius: 8px;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: #d8ccff;
+  margin-bottom: 8px;
+}
+.format-fields-box {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: #b0c2de;
+  max-height: 120px;
+  overflow-y: auto;
+}
+.format-fields-box strong {
+  color: #55d7ff;
+  font-family: ui-monospace, monospace;
+}
